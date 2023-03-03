@@ -3,32 +3,32 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MyPageModule } from './myPage/myPage.module';
-import { TypeOrmConfigService } from '../config/config.typeorm';
-import { PartyModule } from './party/party.module';
-import { AuthModule } from './auth/auth.module';
-import { WishlistModule } from './wishlist/wishlist.module';
-import { ApplylistModule } from './applyList/applyList.module';
-import { ReveiwModule } from './review/reveiw.module';
-import { AdminModule } from './admin/admin.module';
+import { UserModule } from './modules/user/user.module';
+import { TypeOrmConfigService } from './config/config.typeorm';
+import { PartyModule } from './modules/party/party.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { WishlistModule } from './modules/wish-list/wish-list.module';
+import { ApplylistModule } from './modules/applyList/applyList.module';
+import { ReveiwModule } from './modules/review/reveiw.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass: TypeOrmConfigService,
-      inject: [ConfigService],
-    }),
-    MyPageModule,
-    PartyModule,
-    AuthModule,
-    WishlistModule,
-    ApplylistModule,
-    ReveiwModule,
-    AdminModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            useClass: TypeOrmConfigService,
+            inject: [ConfigService],
+        }),
+        UserModule,
+        PartyModule,
+        AuthModule,
+        WishlistModule,
+        ApplylistModule,
+        ReveiwModule,
+        AdminModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
