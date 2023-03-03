@@ -5,8 +5,8 @@ import { AdminService } from './admin.service';
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
-@Get('reviews')
-async getAllReviews() {
-    return await this.adminService.getAllReviews();
-}
+    @Get('reviews')
+    async getAllReviews() {
+        return await this.adminService.getAllReviews();
+    }
 }
