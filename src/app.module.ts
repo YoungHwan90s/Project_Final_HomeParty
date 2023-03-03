@@ -7,10 +7,12 @@ import { UserModule } from './modules/user/user.module';
 import { TypeOrmConfigService } from './config/config.typeorm';
 import { PartyModule } from './modules/party/party.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { WishlistModule } from './modules/wish-list/wish-list.module';
 import { ApplylistModule } from './modules/applyList/applyList.module';
 import { ReveiwModule } from './modules/review/reveiw.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { imageUploadModule } from './modules/image-upload/image-upload.module';
+import { ImageUploadController } from './modules/image-upload/image-upload.controller';
+import { TagModule } from './modules/tag/tag.module';
 
 @Module({
     imports: [
@@ -23,12 +25,13 @@ import { AdminModule } from './modules/admin/admin.module';
         UserModule,
         PartyModule,
         AuthModule,
-        WishlistModule,
         ApplylistModule,
         ReveiwModule,
         AdminModule,
+        imageUploadModule,
+        TagModule,
     ],
-    controllers: [AppController],
+    controllers: [AppController, ImageUploadController],
     providers: [AppService],
 })
 export class AppModule {}

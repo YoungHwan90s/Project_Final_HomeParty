@@ -3,31 +3,26 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    Index,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from "typeorm";
   
-  @Entity({ schema: "Sparta_Final_Project", name: "applyLists" })
-  export class ApplyList {
+  @Entity({ schema: "Sparta_Final_Project", name: "parties" })
+  export class Thumbnail {
     @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number;
   
-    @Index({ unique: true })
-    @Column("varchar", { length: 10 })
-    userId: string;
+    @Column("varchar", { length: 100 })
+    thumbnamil: string;
   
-    @Column("varchar", { length: 10 })
-    name: string;
-  
-    @Column("varchar", { length: 20, select: false })
-    password: string;
+    @Column("int")
+    partyId: number;
   
     @CreateDateColumn()
     createdAt: Date;
   
     @UpdateDateColumn()
-    updatedAt: Date | null;
+    updatedAt: Date;
   
     @DeleteDateColumn()
     deletedAt: Date | null;

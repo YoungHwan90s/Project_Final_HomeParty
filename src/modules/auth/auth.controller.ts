@@ -5,34 +5,17 @@ import { AuthService } from './auth.service';
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Post('/login')
-    async abc() {
-        return await this.authService.abc();
-    }
-    @Post('/kakao-login')
-    async efg() {
-        return await this.authService.efg();
-    }
+    // @Post('/login')
+
+    // @Post('/kakao-login')
     
-    @Post('/sign-up')
-    async hij() {
-        return await this.authService.hij();
-    }
+    // @Post('/sign-up')
     
-    @Post('/find-email') \
-    async klm() {
-        return await this.authService.klm();
-    }
+    // @Post('/find-email')
     
-    @Post('/find-password')
-    async nop() {
-        return await this.authService.nop();
-    }
+    // @Post('/find-password')
     
-    @Patch('/reset-password')
-    async qrs() {
-        return await this.authService.qrs();
-    }
+    // @Patch('/reset-password')
 }
 
 

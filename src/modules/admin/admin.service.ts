@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Review } from 'src/modules/review/reveiw.entity';
+import { Review } from 'src/modules/review/entity/reveiw.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -9,6 +9,4 @@ export class AdminService {
         @InjectRepository(Review) private userRepository: Repository<Review>,
         ) {}
 
-    async getAllReviews() {
-    }
 }

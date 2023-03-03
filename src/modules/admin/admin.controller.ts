@@ -1,12 +1,23 @@
-import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
-@Get('reviews')
-async getAllReviews() {
-    return await this.adminService.getAllReviews();
-}
+// // 리뷰조회
+// @Get('/review')
+
+// // 리뷰 삭제
+// @Delete('/review/:reviewId')
+
+// // 태그 추가
+// @Post('/tag')
+
+// // 태그 조회
+// @Get('/tag')
+
+// // 태그 삭제
+// @Delete('/tag/:tagId')
+
 }
