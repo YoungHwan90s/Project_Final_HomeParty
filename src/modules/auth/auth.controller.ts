@@ -17,5 +17,3 @@ export class AuthController {
     
     // @Patch('/reset-password')
 }
-
-

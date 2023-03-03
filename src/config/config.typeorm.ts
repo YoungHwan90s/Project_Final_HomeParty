@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { ApplyList } from 'src/modules/applyList/applyList.entity';
 import { Party } from 'src/modules/party/entity/party.entity';
 import { Thumbnail } from 'src/modules/party/entity/thumbnail.entity';
 import { Review } from 'src/modules/review/entity/reveiw.entity';
@@ -19,7 +18,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>("DATABASE_USERNAME"),
       password: this.configService.get<string>("DATABASE_PASSWORD"),
       database: this.configService.get<string>("DATABASE_NAME"),
-      entities: [ApplyList, Party, Thumbnail, User, Review],
+      entities: [Party, Thumbnail, User, Review],
       synchronize: true,
     };
   }
