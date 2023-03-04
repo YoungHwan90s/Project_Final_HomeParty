@@ -10,8 +10,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ReveiwModule } from './modules/review/reveiw.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { imageUploadModule } from './modules/image-upload/image-upload.module';
-import { ImageUploadController } from './modules/image-upload/image-upload.controller';
 import { TagModule } from './modules/tag/tag.module';
+import { PassportModule } from '@nestjs/passport';
+// import { JwtModule } from '@nestjs/jwt';
+// import { JwtConfigService } from './config/config.jwt';
 
 @Module({
     imports: [
@@ -21,15 +23,22 @@ import { TagModule } from './modules/tag/tag.module';
             useClass: TypeOrmConfigService,
             inject: [ConfigService],
         }),
+        // JwtModule.registerAsync({
+        //     // AuthMilddleware에서도 사용할 수 있게 import
+        //     imports: [ConfigModule],
+        //     useClass: JwtConfigService,
+        //     inject: [ConfigService],
+        //   }),
         UserModule,
         PartyModule,
         AuthModule,
+        PassportModule,
         ReveiwModule,
         AdminModule,
         imageUploadModule,
         TagModule,
     ],
-    controllers: [AppController, ImageUploadController],
+    controllers: [AppController],
     providers: [AppService],
 })
 export class AppModule {}
