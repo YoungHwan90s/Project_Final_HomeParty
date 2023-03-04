@@ -1,16 +1,12 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
-
-  @IsOptional()
-  @IsNumber()
-  readonly kakaologinId: number;
 
   @IsString()
   readonly email: string;
 
   @IsString()
-  readonly password: string;
+  password: string;
 
   @IsString()
   readonly confirmPassword: string;
@@ -30,7 +26,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  readonly rigion: string;
+  readonly region: string;
 
   @IsOptional()
   @IsString()

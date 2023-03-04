@@ -17,9 +17,8 @@ export class User {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
-    @Index({ unique: true })
-    @Column('int')
-    kakaologinId: number | null;
+    @Column('varchar', { nullable: true, length: 30 })
+    kakaologinEmail: string | null;
 
     @Column('varchar', { length: 20 })
     email: string;
@@ -36,19 +35,19 @@ export class User {
     @Column('int')
     phone: number;
 
-    @Column('varchar', { length: 50 })
+    @Column('varchar', { nullable: true, length: 50 })
     birthday: string | null;
 
-    @Column('varchar', { length: 5 })
+    @Column('varchar', { nullable: true, length: 5 })
     region: string | null;
 
-    @Column('varchar', { length: 100 })
+    @Column('varchar', { nullable: true, length: 100 })
     address: string | null;
 
-    @Column('varchar', { length: 100 })
+    @Column('varchar', { nullable: true, length: 100 })
     profile: string | null;
 
-    @Column('varchar', { length: 1000 })
+    @Column('varchar', { nullable: true, length: 1000 })
     introduction: string | null;
 
     @CreateDateColumn()

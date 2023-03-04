@@ -1,4 +1,5 @@
-import { Controller, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -9,7 +10,11 @@ export class AuthController {
 
     // @Post('/kakao-login')
     
-    // @Post('/sign-up')
+    @Post('/sign-up')
+    async createUser(@Body() data: CreateUserDto) {
+        console.log(data)
+        return await this.authService.createUser(data)
+    }
     
     // @Post('/find-email')
     
