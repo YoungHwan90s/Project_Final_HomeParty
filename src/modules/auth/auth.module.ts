@@ -5,7 +5,10 @@ import { User } from '../user/entity/user.entity';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local-strategy';
-import { UserModule } from '../user/user.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtConfigService } from 'src/config/config.jwt';
+import { JwtStrategy } from './strategies/jwt-strategy';
 
 @Module({
     imports: [
@@ -13,19 +16,13 @@ import { UserModule } from '../user/user.module';
         PassportModule.register({
             session: false,
         }),
+        JwtModule.registerAsync({
+        imports: [ConfigModule],
+        useClass: JwtConfigService,
+        inject: [ConfigService],
+}),
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy],
+    providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}
-
-// imports: [TypeOrmModule.forFeature([User])],
-// controllers: [AuthController],
-// providers: [AuthService]
-// })
-
-// JwtModule.registerAsync({
-//   imports: [ConfigModule],
-//   // useClass: JwtConfigService,
-//   inject: [ConfigService],
-// }),

@@ -4,13 +4,18 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/entity/user.entity';
 import bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { promisify } from 'util';
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private userRepository: Repository<User>,
+        private jwtService: JwtService,
+    ) {}
 
     async createUser(data: CreateUserDto) {
-        const existUser = await this.findUserByEmail(data.email);
+        const existUser = await this.getUser(data.email);
 
         if (existUser) {
             throw new ConflictException('입력하신 이메일로 가입된 회원이 존재합니다.');
@@ -35,18 +40,21 @@ export class AuthService {
         return;
     }
 
-    async findUserByEmail(email: string) {
-        return await this.userRepository.findOne({
-            where: { email, deletedAt: null },
-            select: ['password'],
-        });
+    async getUser(data: any): Promise<User> {
+        let where = {};
+        if (data.includes('@')) {
+            where = { email: data, deletedAt: null };
+        } else {
+            where = { id: data, deletedAt: null };
+        }
+        return await this.userRepository.findOne({ where });
     }
 
     async validateUser(email: string, password: string) {
         try {
             const user = await this.userRepository.findOne({
                 where: { email, deletedAt: null },
-                select: ['email', 'password'],
+                select: ['id', 'email', 'password'],
             });
 
             if (!user) {
@@ -63,20 +71,53 @@ export class AuthService {
         }
     }
 
-    // async login(data: LoginDto) {
-    //     const user = await this.validateUser(data.email);
-    //     const comparePassword =  await bcrypt.compare(data.password, user.password);
+    async login(user: any): Promise<any> {
+        const accessToken = await this.generateAccessToken(user.id);
+        const refreshToken = await this.generateRefreshToken();
 
-    //     if (!comparePassword) {
-    //         throw new UnauthorizedException("비밀번호가 일치하지 않습니다.")
-    //     }
+        return { accessToken, refreshToken };
+    }
 
-    //     const accessToken = sign(user.id)
-    //     const refreshToken = refresh()
+    async generateAccessToken(id: number): Promise<string> {
+        const payload = { id };
+        return this.jwtService.sign(payload);
+    }
 
-    //     redisClient.setEx(user.id, 86400, refreshToken);
+    async generateRefreshToken() {
+        return this.jwtService.sign({}, { expiresIn: '1d' });
+    }
 
-    //     return { accessToken, refreshToken };
+    async verifyAccessToken(token: string): Promise<any>{
+        try {
+            const decoded = await this.jwtService.verify(token);
+            return {
+                type: true,
+                id: decoded.id,
+            };
+        } catch (error) {
+            return {
+                type: false,
+                message: error.message,
+            };
+        }
+    }
 
-    // }
+    async verifyRrefreshToken(refreshToken: string, id: number): Promise<boolean> {
+        try {
+            // const getAsync = promisify(redisClient.get).bind(redisClient);
+            // const redisRefreshToken = await getAsync(id);
+
+            // if(!redisRefreshToken) {
+            //     return false
+            // }
+
+            // if (refreshToken === redisRefreshToken) {
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+        } catch (err) {
+            return false;
+        }
+    }
 }
