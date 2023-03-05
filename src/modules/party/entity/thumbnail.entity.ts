@@ -3,11 +3,13 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from "typeorm";
+import { Party } from "./party.entity";
   
-  @Entity({ schema: "Sparta_Final_Project", name: "parties" })
+  @Entity({ schema: "Sparta_Final_Project", name: "thumbnails" })
   export class Thumbnail {
     @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number;
@@ -26,4 +28,8 @@ import {
   
     @DeleteDateColumn()
     deletedAt: Date | null;
+
+    // 썸네일 <-> 파티: 다대일 관계
+    @ManyToOne(() => Party, (party) => party.thumbnail)
+    party: Party;
   }

@@ -12,6 +12,7 @@ import { Review } from '../../review/entity/reveiw.entity';
 import { WishList } from '../../user/entity/wish-list.entity';
 import { PartyMember } from './party-member.entity';
 import { PartyTagMapping } from './party-tag-mapping.entity';
+import { Thumbnail } from './thumbnail.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'parties' })
 export class Party {
@@ -69,5 +70,9 @@ export class Party {
     // 파티 <-> 파티-태그-맵핑: 일대다 관계
     @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.party)
     partyTagMapping: PartyTagMapping[];
+
+    // 파티 <-> 썸네일: 일대다 관계
+    @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party)
+    thumbnail: Thumbnail[];
 
 }
