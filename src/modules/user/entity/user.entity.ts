@@ -32,8 +32,8 @@ export class User {
     @Column('varchar', { length: 2 })
     sex: string;
 
-    @Column('int')
-    phone: number;
+    @Column('varchar', { length: 20 })
+    phone: string;
 
     @Column('varchar', { nullable: true, length: 50 })
     birthday: string | null;
