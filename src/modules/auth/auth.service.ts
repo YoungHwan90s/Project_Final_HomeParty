@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -17,40 +22,55 @@ export class AuthService {
     ) {}
 
     async createUser(data: CreateUserDto) {
-        const existUser = await this.getUser(data.email);
+        try {
+            const existUser = await this.getUser(data.email);
 
-        if (existUser) {
-            throw new ConflictException('입력하신 이메일로 가입된 회원이 존재합니다.');
+            if (existUser) {
+                throw new ConflictException('입력하신 이메일로 가입된 회원이 존재합니다.');
+            }
+
+            if (!existUser) {
+                const hashedPassword = await bcrypt.hash(data.password, 10);
+                data.password = hashedPassword;
+
+                await this.userRepository.insert({
+                    email: data.email,
+                    password: data.password,
+                    name: data.name,
+                    sex: data.sex,
+                    phone: data.phone,
+                    birthday: data.birthday,
+                    region: data.region,
+                    address: data.address,
+                    profile: data.profile,
+                    introduction: data.introduction,
+                });
+            }
+            return;
+        } catch (error) {
+            console.log(error);
+            throw new BadRequestException('잘못된 요청입니다.');
         }
-
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        data.password = hashedPassword;
-
-        await this.userRepository.insert({
-            email: data.email,
-            password: data.password,
-            name: data.name,
-            sex: data.sex,
-            phone: data.phone,
-            birthday: data.birthday,
-            region: data.region,
-            address: data.address,
-            profile: data.profile,
-            introduction: data.introduction,
-        });
-
-        return;
     }
 
     async getUser(data: any): Promise<User> {
-        let where = {};
+        try {
+            let where = {};
 
-        if (typeof data === 'number') {
-            where = { id: data, deletedAt: null };
-        } else {
-            where = { email: data, deletedAt: null };
+            // 인자 값 id 일 때
+            if (typeof data === 'number') {
+                where = { id: data, deletedAt: null };
+            }
+            // 인자 값 email 일 때
+            if (data.includes('@')) {
+                where = { email: data, deletedAt: null };
+            }
+
+            return await this.userRepository.findOne({ where });
+        } catch (error) {
+            console.log(error.message);
+            throw new BadRequestException('잘못된 요청입니다.');
         }
-        return await this.userRepository.findOne({ where });
     }
 
     async validateUser(email: string, password: string) {
@@ -71,6 +91,7 @@ export class AuthService {
             return user;
         } catch (error) {
             console.log(error);
+            throw new BadRequestException('잘못된 요청입니다.');
         }
     }
 
@@ -127,22 +148,22 @@ export class AuthService {
         }
     }
 
-    async findEmail(data: FindEmailDto) {
+    async findEmail(data: FindEmailDto): Promise<string> {
         const user = await this.userRepository.findOne({
             where: { name: data.name, phone: data.phone },
-            select: ['email']
+            select: ['email'],
         });
-    
-        const email = user.email
+
+        const email = user.email;
         const index = email.indexOf('@');
 
         let secureEmail = null;
-        
+
         if (index <= 3) {
-            secureEmail = email.substring(0, index - 2) + '***' + email.substring(index)
-          } else {
-            secureEmail = email.substring(0, index - 3) + '***' + email.substring(index)
-          }
-          return secureEmail
+            secureEmail = email.substring(0, index - 2) + '**' + email.substring(index);
+        } else {
+            secureEmail = email.substring(0, index - 3) + '***' + email.substring(index);
+        }
+        return secureEmail;
     }
 }
