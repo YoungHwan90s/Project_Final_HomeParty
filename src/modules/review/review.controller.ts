@@ -1,4 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { UpdateReviewDto } from './dto/update-review.dto';
 import { ReviewService } from './review.service';
 
 @Controller('review')
@@ -6,15 +8,36 @@ export class ReviewController {
     constructor(private readonly partyService: ReviewService) {}
 
 // // 리뷰 등록
-// @Post('/:partyId')
+@Post('/:partyId')
+async write(
+    @Param('partyId') partyId: number,
+    @Body() data: CreateReviewDto){
+    return await this.partyService.writeReview(data.userId, partyId, data.rating , data.review)
+}
 
 // // 리뷰 조회
-// @Get('/:partyId')
+@Get('/:partyId')
+async readReview(@Param('partyId')partyId:number){
+    return await this.partyService.readReview(partyId)
+}
 
 // // 리뷰 수정
-// @Patch('/:reviewId')
+@Patch('/:reviewId')
+async updateReview(
+    @Param('reviewId')reviewId: number,
+    @Body() data: UpdateReviewDto){
+        return await this.partyService.updateReview(
+            reviewId,
+            data.rating,
+            data.review,
+        )
+    }
 
 // // 리뷰 삭제
-// @Delete('/:reviewId')
+@Delete('/:reviewId')
+async deleteReview(
+    @Param('reviewId')reviewId: number){
+        return await this.partyService.deleteReview(reviewId)
+    }
 
 }

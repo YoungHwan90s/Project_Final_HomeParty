@@ -22,7 +22,7 @@ import { User } from "../../user/entity/user.entity";
     partyId: number;
   
     @Column("int")
-    rating: string;
+    rating: number;
   
     @Column("varchar", { length: 1000 })
     review: string;

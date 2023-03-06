@@ -5,9 +5,6 @@ export class CreateReviewDto {
   readonly userId: number;
 
   @IsNumber()
-  readonly partyId: number;
-
-  @IsNumber()
   readonly rating: number;
 
   @IsString()
