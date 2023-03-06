@@ -18,7 +18,7 @@ export class CreateUserDto {
   readonly sex: string;
 
   @IsString()
-  readonly phone: number;
+  readonly phone: string;
 
   @IsOptional()
   @IsString()

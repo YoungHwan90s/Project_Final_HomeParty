@@ -12,8 +12,11 @@ import { AdminModule } from './modules/admin/admin.module';
 import { imageUploadModule } from './modules/image-upload/image-upload.module';
 import { TagModule } from './modules/tag/tag.module';
 import { PassportModule } from '@nestjs/passport';
-// import { JwtModule } from '@nestjs/jwt';
-// import { JwtConfigService } from './config/config.jwt';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { RedisConfigService } from './config/config.redis';
+import { CacheModule } from './modules/cache/cache.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtConfigService } from './config/config.jwt';
 
 @Module({
     imports: [
@@ -23,12 +26,17 @@ import { PassportModule } from '@nestjs/passport';
             useClass: TypeOrmConfigService,
             inject: [ConfigService],
         }),
-        // JwtModule.registerAsync({
-        //     // AuthMilddleware에서도 사용할 수 있게 import
-        //     imports: [ConfigModule],
-        //     useClass: JwtConfigService,
-        //     inject: [ConfigService],
-        //   }),
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useClass: JwtConfigService,
+            inject: [ConfigService],
+        }),
+        RedisModule.forRootAsync({
+            imports: [ConfigModule],
+            useClass: RedisConfigService,
+            inject: [ConfigService],
+        }),
+        CacheModule,
         UserModule,
         PartyModule,
         AuthModule,
