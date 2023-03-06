@@ -5,13 +5,15 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/entity/user.entity';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { promisify } from 'util';
+import { CacheService } from '../cache/cache.service';
+import { FindEmailDto } from './dto/find-email.dto';
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         private jwtService: JwtService,
+        private readonly cacheService: CacheService,
     ) {}
 
     async createUser(data: CreateUserDto) {
@@ -42,10 +44,11 @@ export class AuthService {
 
     async getUser(data: any): Promise<User> {
         let where = {};
-        if (data.includes('@')) {
-            where = { email: data, deletedAt: null };
-        } else {
+
+        if (typeof data === 'number') {
             where = { id: data, deletedAt: null };
+        } else {
+            where = { email: data, deletedAt: null };
         }
         return await this.userRepository.findOne({ where });
     }
@@ -75,6 +78,8 @@ export class AuthService {
         const accessToken = await this.generateAccessToken(user.id);
         const refreshToken = await this.generateRefreshToken();
 
+        await this.cacheService.set(user.id, refreshToken);
+
         return { accessToken, refreshToken };
     }
 
@@ -87,7 +92,7 @@ export class AuthService {
         return this.jwtService.sign({}, { expiresIn: '1d' });
     }
 
-    async verifyAccessToken(token: string): Promise<any>{
+    async verifyAccessToken(token: string) {
         try {
             const decoded = await this.jwtService.verify(token);
             return {
@@ -95,29 +100,49 @@ export class AuthService {
                 id: decoded.id,
             };
         } catch (error) {
+            const decoded = await this.jwtService.verify(token, { ignoreExpiration: true });
             return {
                 type: false,
+                id: decoded.id,
                 message: error.message,
             };
         }
     }
 
-    async verifyRrefreshToken(refreshToken: string, id: number): Promise<boolean> {
+    async verifyRefreshToken(refreshToken: string, id: string): Promise<boolean> {
         try {
-            // const getAsync = promisify(redisClient.get).bind(redisClient);
-            // const redisRefreshToken = await getAsync(id);
+            const redisRefreshToken = await this.cacheService.get(id);
 
-            // if(!redisRefreshToken) {
-            //     return false
-            // }
+            if (!redisRefreshToken) {
+                return false;
+            }
 
-            // if (refreshToken === redisRefreshToken) {
-            //     return true;
-            // } else {
-            //     return false;
-            // }
+            if (refreshToken === redisRefreshToken) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (err) {
             return false;
         }
+    }
+
+    async findEmail(data: FindEmailDto) {
+        const user = await this.userRepository.findOne({
+            where: { name: data.name, phone: data.phone },
+            select: ['email']
+        });
+    
+        const email = user.email
+        const index = email.indexOf('@');
+
+        let secureEmail = null;
+        
+        if (index <= 3) {
+            secureEmail = email.substring(0, index - 2) + '***' + email.substring(index)
+          } else {
+            secureEmail = email.substring(0, index - 3) + '***' + email.substring(index)
+          }
+          return secureEmail
     }
 }
