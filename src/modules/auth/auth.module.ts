@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtConfigService } from 'src/config/config.jwt';
 import { JwtStrategy } from './strategies/jwt-strategy';
+import { CacheService } from '../cache/cache.service';
 
 @Module({
     imports: [
@@ -17,12 +18,13 @@ import { JwtStrategy } from './strategies/jwt-strategy';
             session: false,
         }),
         JwtModule.registerAsync({
-        imports: [ConfigModule],
-        useClass: JwtConfigService,
-        inject: [ConfigService],
-}),
+            imports: [ConfigModule],
+            useClass: JwtConfigService,
+            inject: [ConfigService],
+        }),
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy],
+    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService],
+    exports: [AuthService]
 })
 export class AuthModule {}
