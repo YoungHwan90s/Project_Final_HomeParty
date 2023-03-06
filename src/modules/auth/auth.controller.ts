@@ -7,35 +7,39 @@ import {
     Req,
     Request,
     Res,
-    Response,
     UseGuards,
     Get,
 } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
+import { FindEmailDto } from './dto/find-email.dto';
 import { LocalAuthGuard } from './guards/auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+    ) {}
 
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     @HttpCode(200)
-    async login(@Request() req, @Response() res) {
+    async login(@Request() req, @Res() res) {
         const { accessToken, refreshToken } = await this.authService.login(req.user);
 
-        res.header('Authorization', `Bearer ${accessToken}`);
-        res.header('Refresh-token', refreshToken);
+        res.setHeader('authorization', `Bearer ${accessToken}`);
+        res.header('refreshtoken', refreshToken);
 
         res.json({});
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('profile')
-    getProfile() {
-        return "what"
+    getProfile(@Req() req) {
+        const { id } = req.user;
+        console.log('profile', id);
+        return 'what';
     }
 
     // @Post('/kakao-login')
@@ -46,7 +50,10 @@ export class AuthController {
         return await this.authService.createUser(data);
     }
 
-    // @Post('/find-email')
+    @Get('/find-email')
+    findEmail(@Body() data: FindEmailDto) {
+        return this.authService.findEmail(data);
+    }
 
     // @Post('/find-password')
 
