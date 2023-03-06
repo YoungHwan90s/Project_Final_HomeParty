@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { PartyMember } from 'src/modules/party/entity/party-member.entity';
+import { PartyTagMapping } from 'src/modules/party/entity/party-tag-mapping.entity';
 import { Party } from 'src/modules/party/entity/party.entity';
 import { Thumbnail } from 'src/modules/party/entity/thumbnail.entity';
 import { Review } from 'src/modules/review/entity/reveiw.entity';
+import { Tag } from 'src/modules/tag/entity/tag.entity';
 import { User } from 'src/modules/user/entity/user.entity';
+import { WishList } from 'src/modules/user/entity/wish-list.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -18,7 +22,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>("DATABASE_USERNAME"),
       password: this.configService.get<string>("DATABASE_PASSWORD"),
       database: this.configService.get<string>("DATABASE_NAME"),
-      entities: [Party, Thumbnail, User, Review],
+      entities: [Party, PartyMember, PartyTagMapping, Tag, Thumbnail, User, WishList, Review],
       synchronize: true,
     };
   }
