@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { PartyService } from './party.service';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
@@ -20,7 +20,10 @@ export class PartyController {
 // @Patch('/party/:partyId')
 
 // // 파티 삭제
-// @Delete('/party/:partyId')
+@Delete('/party/:partyId')
+async deleteParty(@Param('partyId') partyId: number) {
+    return await this.partyService.deleteParty(partyId);
+}
 
 // // 파티 신청
 // @Post('/party/apply/:partyId')

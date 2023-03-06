@@ -13,5 +13,12 @@ export class PartyService {
         @InjectRepository(PartyMember) private PartyMembersRepository: Repository<PartyMember>,
       ) {}
 
+    async deleteParty(id: number, partyId: number) {
+      //지금 로그인되어있는 유저id와 삭제하려는 파티id를 파티테이블에서 조회하고 
+      //있으면 그걸 softdelete 하셈 없으면 error 뜨게해
+      return await this.partyRepository.softDelete(partyId);
+
+      
+    }
       
 }
