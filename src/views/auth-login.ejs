@@ -1,1 +1,21 @@
 <h2>로그인 화면</h2>
+
+<script>
+    function login() {
+        const loginInfo = {
+            email: $('#input-email').val(),
+            password: $('#input-password').val(),
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/auth/login',
+            data: loginInfo,
+            success: function (response) {
+                window.location.href = '/';
+            },
+            error: function (response) {
+                customAlert(error.responseJSON.errorMessage);
+            },
+        });
+    }
+</script>
