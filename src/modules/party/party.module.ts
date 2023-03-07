@@ -7,13 +7,14 @@ import { PartyService } from './party.service';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { PartyTagMapping } from './entity/party-tag-mapping.entity';
 import { AuthModule } from '../auth/auth.module';
+import { PartyRepository } from './party.repository';
 
 @Module({
-  imports: [
-          TypeOrmModule.forFeature([Party, Thumbnail, PartyMember, PartyTagMapping]),
-          AuthModule
-        ],
-  controllers: [PartyController],
-  providers: [PartyService]
+    imports: [
+        TypeOrmModule.forFeature([Party, Thumbnail, PartyMember, PartyTagMapping]),
+        AuthModule,
+    ],
+    controllers: [PartyController],
+    providers: [PartyService, PartyRepository],
 })
 export class PartyModule {}

@@ -1,24 +1,25 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Tag } from '../tag/entity/tag.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
+import { PartyRepository } from './party.repository';
 
 @Injectable()
 export class PartyService {
     constructor(
-        @InjectRepository(Party) private partyRepository: Repository<Party>,
+        @InjectRepository(Party) private partyRepository: PartyRepository,
         @InjectRepository(Thumbnail) private ThumbnailRepository: Repository<Thumbnail>,
         @InjectRepository(PartyMember) private PartyMembersRepository: Repository<PartyMember>,
+        @InjectRepository(Tag) private TagRepository: Repository<Tag>,
     ) {}
 
     async getParties() {
-        return await this.partyRepository.find({
-            where: { deletedAt: null },
-        });
+        return await this.partyRepository.getParty();
     }
 
     async getPartyById(partyId: number) {
