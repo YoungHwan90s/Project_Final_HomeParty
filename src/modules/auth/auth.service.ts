@@ -24,12 +24,12 @@ export class AuthService {
         try {
             const user = await this.userRepository.findOne({
                 where: { email, deletedAt: null },
+                select: ['password']
             });
 
             if (!user) {
                 throw new UnauthorizedException('회원이 존재하지 않습니다.');
             }
-
             const comparePassword = await bcrypt.compare(password, user.password);
             if (!comparePassword) {
                 throw new UnauthorizedException('비밀번호가 틀렸습니다.');
