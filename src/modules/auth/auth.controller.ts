@@ -87,7 +87,7 @@ export class AuthController {
         }
     }
 
-    @Post('/reset-password')
+    @Patch('/reset-password')
     @HttpCode(200)
     async authenticateNumber(@Body() data: ResetPasswordDTO) {
         return this.userService.resetPassword(data);
