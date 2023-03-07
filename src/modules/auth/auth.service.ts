@@ -29,14 +29,12 @@ export class AuthService {
             if (!user) {
                 throw new UnauthorizedException('회원이 존재하지 않습니다.');
             }
-
             const comparePassword = await bcrypt.compare(password, user.password);
             if (!comparePassword) {
                 throw new UnauthorizedException('비밀번호가 틀렸습니다.');
             }
             return user;
         } catch (error) {
-            console.log(error);
             throw new BadRequestException('잘못된 요청입니다.');
         }
     }

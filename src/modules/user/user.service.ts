@@ -61,7 +61,6 @@ export class UserService {
 
             return await this.userRepository.findOne({ where });
         } catch (error) {
-            console.log(error.message);
             throw new BadRequestException('잘못된 요청입니다.');
         }
     }
