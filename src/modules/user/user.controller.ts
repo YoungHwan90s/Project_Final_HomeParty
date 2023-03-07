@@ -7,6 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get('/')
     @HttpCode(200)
     async getUserInfo(@Req() req, @Res() res) {

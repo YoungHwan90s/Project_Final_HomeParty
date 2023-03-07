@@ -68,55 +68,33 @@
             type: 'GET',
             url: `/user`,
             success: function (response) {
-                const userInfo = response.user
-                
-                const email = userInfo.email
-                const name = userInfo.name
-                const password = userInfo.password
-                const confirmPassword = userInfo.confirmPassword
-                const sex = userInfo.sex
-                const birthday = userInfo.birthday
-                const phone = userInfo.phone
-                const region = userInfo.region
-                const address = userInfo.address
-                const profile = userInfo.profile
-                const introduction = userInfo.introduction
-                
-                $('#email1').append(userInfo.email)
-                $('#name1').append(userInfo.name)
-                $('#password1').append(userInfo.password)
-                $('#confirmPassword1').append(userInfo.password)
-                $('#sex1').append(userInfo.sex)
-                $('#birthday1').append(userInfo.birthday)
-                $('#phone1').append(userInfo.phone)
-                $('#region1').append(userInfo.region)
-                $('#address1').append(userInfo.address)
-                $('#profile1').append(userInfo.profile)
-                $('#introduction1').append(userInfo.introduction)
+                Object.entries(response.user).forEach(([key, value]) => {
+                    $(`#${key}1`).append(value);
+                })
             }
         });
     }
 
     function userEdit() {
-        const name = $('#name').val()
-        const password = $('#password').val()
-        const confirmPassword = $('#confirmPassword').val()
-        const sex = $('#sex').val()
-        const birthday = $('#birthday').val()
-        const phone = $('#phone').val()
-        const region = $('#region').val()
-        const address = $('#address').val()
-        const profile = $('#profile').val()
-        const introduction = $('#introduction').val()
-
-        const userData = { name, password, confirmPassword, sex, phone, region, address, profile, introduction }
-
+        const userData = {
+            name: $('#name').val(),
+            password: $('#password').val(),
+            confirmPassword: $('#confirmPassword').val(),
+            sex: $('#sex').val(),
+            birthday: $('#birthday').val(),
+            phone: $('#phone').val(),
+            region: region = $('#region').val(),
+            address: $('#address').val(),
+            profile: $('#profile').val(),
+            introduction: $('#introduction').val()
+        };
         $.ajax({
             type: 'PATCH',
             url: `/user`,
             data: userData,
             success: function (response) {
                 alert('정보 수정 완료')
+                window.location.href = "/user-edit"
             },
             error: function (error) {
                 customAlert(error.responseJSON.errorMessage);
