@@ -8,6 +8,7 @@ import {
     Patch,
     Post,
 } from '@nestjs/common';
+
 import { PartyService } from './party.service';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
@@ -37,20 +38,9 @@ export class PartyController {
     // 파티 수정
     @Patch(':partyId')
     async updateParty(@Param('partyId') partyId: number, @Body() party: UpdatePartyDto) {
-        try {
-            // const { id } = req.user
-            const userId = 1;
-            await this.partyService.updateParty(userId, partyId, party);
-            return { success: true };
-        } catch (error) {
-            if (error instanceof NotFoundException) {
-                throw new NotFoundException(error.message);
-            } else if (error instanceof InternalServerErrorException) {
-                throw new InternalServerErrorException(error.message);
-            } else {
-                throw error;
-            }
-        }
+        const userId = 1;
+        await this.partyService.updateParty(userId, partyId, party);
+        return { success: true };
     }
 
     // // 파티 삭제
@@ -59,22 +49,14 @@ export class PartyController {
     // 파티 신청
     @Post('apply/:partyId')
     async applyParty(@Param('partyId') partyId: number) {
-        try {
-            let userId = Number(1);
-            return await this.partyService.applyParty(partyId, userId);
-        } catch (error) {
-            throw new InternalServerErrorException(error.message);
-        }
+        let userId = Number(1);
+        return await this.partyService.applyParty(partyId, userId);
     }
 
     // 파티 신청자 목록 조회
     @Get('/:partyId/members')
     async getPartyMembers(@Param('partyId') partyId: number) {
-        try {
-            return await this.partyService.getPartyMembers(partyId);
-        } catch (error) {
-            throw new InternalServerErrorException(error.message);
-        }
+        return await this.partyService.getPartyMembers(partyId);
     }
 
     // // 파티 신청 취소

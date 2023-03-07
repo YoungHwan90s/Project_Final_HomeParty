@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Party } from './entity/party.entity';
-import { PartyMember } from './entity/party-member.entity';
-import { Thumbnail } from './entity/thumbnail.entity';
 
 @Injectable()
 export class PartyRepository extends Repository<Party> {
@@ -11,10 +9,9 @@ export class PartyRepository extends Repository<Party> {
     }
 
     async getParty() {
-        const result = await this.createQueryBuilder()
-            .select('party')
-            .from(Party, 'party')
-            .getRawMany();
+        const result = await this.createQueryBuilder('party')
+            .leftJoinAndSelect('party.partyMember', 'partyMember')
+            .getMany();
         return result;
     }
 }
