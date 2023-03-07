@@ -1,1 +1,23 @@
 <h2>이메일 찾기</h2>
+
+<script>
+    function findEmail() {
+        const userInfo = {
+            name: $('#input-name').val(),
+            phone: $('#input-phone').val(),
+        };
+        $.ajax({
+            type: 'GET',
+            url: '/auth/find-email',
+            data: userInfo,
+            success: function (response) {
+                customAlert(`고객님의 계정: ${response}`, function () {
+                    window.location.href = '/login';
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.errorMessage);
+            },
+        });
+    }
+</script>
