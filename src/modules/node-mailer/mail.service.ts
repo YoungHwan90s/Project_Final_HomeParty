@@ -5,21 +5,21 @@ import { ConflictException, Injectable } from '@nestjs/common';
 export class MailService {
     constructor(private readonly mailerService: MailerService) {}
 
-    sendHello(email): boolean {
+    sendMail(email, authenticationCdoe): boolean {
         this.mailerService
             .sendMail({
                 to: email,
                 from: 'noreplay@gmail.com',
                 subject: 'Hello',
                 text: 'Hello World',
-                html: '<b>Hello World</b>',
+                html: `<b>인증번호 ${authenticationCdoe}</b>`,
             })
             .then((result) => {
                 console.log(result);
             })
-            .catch((error) => {
-                new ConflictException(error);
-            });
+            // .catch((error) => {
+            //     new ConflictException(error);
+            // });
         return true;
     }
 }
