@@ -41,24 +41,28 @@ export class AuthController {
         res.header('authorization', `Bearer ${accessToken}`);
         res.header('refreshtoken', refreshToken);
 
-        return;
+        return res.json({});
     }
 
     @Post('/sign-up')
     @HttpCode(201)
-    async createUser(@Body() data: CreateUserDto) {
-        return await this.userService.createUser(data);
+    async createUser(@Res() res, @Body() data: CreateUserDto) {
+        await this.userService.createUser(data);
+
+        return res.json({});
     }
 
-    @Get('/find-email')
+    @Post('/find-email')
     @HttpCode(200)
-    async findEmail(@Body() data: FindEmailDto) {
-        return this.authService.findEmail(data);
+    async findEmail(@Res() res, @Req() req, @Body() data: FindEmailDto) {
+        const email = await this.authService.findEmail(data);
+
+        return res.json({ email });
     }
 
     @Post('/email-authenticate')
     @HttpCode(200)
-    async FindPasswordDTO(@Body() data: AuthenticateEmailDto) {
+    async FindPasswordDTO(@Res() res, @Body() data: AuthenticateEmailDto) {
         const user = await this.userService.getUser(data.email);
 
         if (user) {
@@ -68,12 +72,13 @@ export class AuthController {
 
             this.mailService.sendMail(data.email, randomNum);
         }
-        return;
+
+        return res.json({});
     }
 
     @Post('/code-authentication')
     @HttpCode(200)
-    async authenticateCode(@Body() data: AuthenticateCodeDto) {
+    async authenticateCode(@Res() res, @Body() data: AuthenticateCodeDto) {
         const authenticationCode = await this.cacheService.get(data.email);
 
         // 인증번호가 다를 때 에러
@@ -83,13 +88,16 @@ export class AuthController {
 
         if (authenticationCode == data.userAuthenticationCode) {
             await this.cacheService.del(data.email);
-            return;
+
+            return res.json({});
         }
     }
 
     @Patch('/reset-password')
     @HttpCode(200)
-    async authenticateNumber(@Body() data: ResetPasswordDTO) {
-        return this.userService.resetPassword(data);
+    async authenticateNumber(@Res() res, @Body() data: ResetPasswordDTO) {
+        await this.userService.resetPassword(data);
+
+        return res.json({});
     }
 }

@@ -1,5 +1,17 @@
 <h2>로그인 화면</h2>
 
+<div>
+    <label for="exampleInputMobile">이메일</label>
+    <input type="text" class="form-control mt-2" id="input-email" placeholder="이메일입력해" />
+</div>
+
+<div>
+    <label for="exampleInputMobile">비번</label>
+    <input type="text" class="form-control mt-2" id="input-password" placeholder="비밀번호 입력해" />
+</div>
+
+<button onclick="login()">로그인</button>
+
 <script>
     function login() {
         const loginInfo = {
@@ -13,8 +25,10 @@
             success: function (response) {
                 window.location.href = '/';
             },
-            error: function (response) {
-                customAlert(error.responseJSON.errorMessage);
+            error: function (error) {
+                customAlert(error.responseJSON.message, function() {
+                    window.location.reload()
+                });
             },
         });
     }
