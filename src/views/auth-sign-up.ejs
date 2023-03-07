@@ -1,1 +1,33 @@
-<h2>회원가입 화면</h2>
+<h2>회원가입 페이지</h2>
+
+<script>
+    function signUp() {
+        const userInfo = {
+            email: $('#input-email').val(),
+            password: $('#input-password').val(),
+            confirmPassword: $('#input-confirmPassword').val(),
+            name: $('#input-name').val(),
+            sex: $('#input-sex').val(),
+            phone: $('#input-phone').val(),
+            birthday: $('#input-birthday').val(),
+            region: $('#input-region').val(),
+            address: $('#input-address').val(),
+            profile: $('#input-profile').val(),
+            introduction: $('#input-introduction').val(),
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/auth/sign-up',
+            data: userInfo,
+            success: function (response) {
+                customAlert('회원가입을 축하드립니다!', function () {
+                    window.location.href - '/login';
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.errorMessage);
+            },
+        });
+    }
+    
+</script>
