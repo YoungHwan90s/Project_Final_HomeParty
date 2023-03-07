@@ -30,16 +30,6 @@ export class ReviewService {
       return { statusCode: 500, message: "서버 오류가 발생했습니다." };
     }
   }
-  // async writeReview(userId: number, partyId: number, rating: number, review: string) {      
-  //   await this.reviewRepository.insert({
-  //     userId,
-  //     partyId,
-  //     rating,
-  //     review,
-  //   });
-  
-  //   return { statusCode: 201, message: "등록 되었습니다." };;
-  // }
 
   async readReview(partyId: number) {
     const reviews = await this.reviewRepository.find({
