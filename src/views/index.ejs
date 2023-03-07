@@ -31,11 +31,12 @@
     <body>
         <%- include('header.ejs') %> 
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %>
-        <% if (components === 'login') { %> <%-include('login.ejs') %><% } %>
+        <% if (components === 'login') { %> <%-include('auth-login.ejs') %><% } %>
         <% if (components === 'sign-up') { %> <%-include('auth-sign-up.ejs') %><% } %>
-        <% if (components === 'find-email') { %> <%-include('find-email.ejs') %><% } %>
-        <% if (components === 'find-password') { %> <%-include('find-password.ejs') %><% } %>
-        <% if (components === 'reset-password') { %> <%-include('reset-password.ejs') %><% } %>
+        <% if (components === 'find-email') { %> <%-include('auth-find-email.ejs') %><% } %>
+        <% if (components === 'find-password') { %> <%-include('auth-find-password.ejs') %><% } %>
+        <% if (components === 'authentication') { %> <%-include('auth-authentication.ejs') %><% } %>
+        <% if (components === 'email-password') { %> <%-include('reset-password.ejs') %><% } %>
         <% if (components === 'user-menu') { %> <%-include('user-menu.ejs') %><% } %>
         <% if (components === 'user-edit') { %> <%-include('user-edit.ejs') %><% } %>
         <% if (components === 'wish-list') { %> <%-include('wish-list.ejs') %><% } %>

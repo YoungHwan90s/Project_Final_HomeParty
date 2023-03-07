@@ -1,7 +1,7 @@
 import { Controller, Get, Render, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller()
+@Controller('/api')
 export class AppController {
     constructor(private readonly appService: AppService) {}
     
@@ -17,6 +17,12 @@ export class AppController {
         return { components: 'sign-up' };
     }
 
+    @Get('/login')
+    @Render('index')
+    login(@Req() req): { components: string } {
+        return { components: 'login' };
+    }
+
     @Get('/find-email')
     @Render('index')
     findemail(@Req() req): { components: string } {
@@ -27,6 +33,12 @@ export class AppController {
     @Render('index')
     findpassword(@Req() req): { components: string } {
         return { components: 'find-password' };
+    }
+
+    @Get('/authentication')
+    @Render('index')
+    authentication(@Req() req): { components: string } {
+        return { components: 'authentication' };
     }
 
     @Get('/reset-password')

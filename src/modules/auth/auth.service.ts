@@ -21,35 +21,27 @@ export class AuthService {
     ) {}
 
     async validateUser(email: string, password: string) {
-        try {
-            const user = await this.userRepository.findOne({
-                where: { email, deletedAt: null },
-            });
+        const user = await this.userRepository.findOne({
+            where: { email, deletedAt: null },
+        });
 
-            if (!user) {
-                throw new UnauthorizedException('회원이 존재하지 않습니다.');
-            }
-            const comparePassword = await bcrypt.compare(password, user.password);
-            if (!comparePassword) {
-                throw new UnauthorizedException('비밀번호가 틀렸습니다.');
-            }
-            return user;
-        } catch (error) {
-            throw new BadRequestException('잘못된 요청입니다.');
+        if (!user) {
+            throw new UnauthorizedException('회원이 존재하지 않습니다.');
         }
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (!comparePassword) {
+            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+        }
+        return user;
     }
 
     async login(user: any): Promise<any> {
-        try {
-            const accessToken = await this.generateAccessToken(user.id);
-            const refreshToken = await this.generateRefreshToken();
+        const accessToken = await this.generateAccessToken(user.id);
+        const refreshToken = await this.generateRefreshToken();
 
-            await this.cacheService.set(user.id, refreshToken);
+        await this.cacheService.set(user.id, refreshToken);
 
-            return { accessToken, refreshToken };
-        } catch (error) {
-            throw new HttpException('로그인에 실패하였습니다.', 400);
-        }
+        return { accessToken, refreshToken };
     }
 
     async generateAccessToken(id: number): Promise<string> {
@@ -97,25 +89,21 @@ export class AuthService {
     }
 
     async findEmail(data: FindEmailDto): Promise<string> {
-        try {
-            const user = await this.userRepository.findOne({
-                where: { name: data.name, phone: data.phone },
-                select: ['email'],
-            });
+        const user = await this.userRepository.findOne({
+            where: { name: data.name, phone: data.phone },
+            select: ['email'],
+        });
 
-            const email = user.email;
-            const index = email.indexOf('@');
+        const email = user.email;
+        const index = email.indexOf('@');
 
-            let secureEmail = null;
+        let secureEmail = null;
 
-            if (index <= 3) {
-                secureEmail = email.substring(0, index - 2) + '**' + email.substring(index);
-            } else {
-                secureEmail = email.substring(0, index - 3) + '***' + email.substring(index);
-            }
-            return secureEmail;
-        } catch (error) {
-            throw new HttpException('요청에 실패하였습니다.', 400);
+        if (index <= 3) {
+            secureEmail = email.substring(0, index - 2) + '**' + email.substring(index);
+        } else {
+            secureEmail = email.substring(0, index - 3) + '***' + email.substring(index);
         }
+        return secureEmail;
     }
 }
