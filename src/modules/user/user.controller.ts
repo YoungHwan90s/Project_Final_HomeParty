@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Param, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Param, UseGuards, Req, HttpCode, HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto} from './dto/update-user.dto'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -10,23 +10,38 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/')
-    async getUserInfo(@Req() req): Promise<User> {
-        const { id } = req.user
-        return await this.userService.getUserById(id);
+    @HttpCode(200)
+    async getUserInfo(@Req() req) {
+        try {
+            const user = req.user
+            return user
+        } catch (error) {
+            throw new HttpException(error.message, 403)
+        }
     }
 
     @UseGuards(JwtAuthGuard)
     @Patch('/')
-    async updateUser(@Req() req, @Body() data: UpdateUserDto): Promise<void> {
-        const { id } = req. user
-        return await this.userService.updateUser(id, data);
+    @HttpCode(201)
+    async updateUser(@Req() req, @Body() data: UpdateUserDto) {
+        try {
+            const user = req.user
+            return await this.userService.updateUser(user, data);
+        } catch (error) {
+            throw new HttpException(error.message, 400)
+        }
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('/')
+    @HttpCode(204)
     async deleteUser(@Req() req) {
-        const { id } = req.user
-        return await this.userService.deleteUser(id)
+        try {
+            const { id } = req.user
+            return await this.userService.deleteUser(id)
+        } catch (error) {
+            throw new HttpException(error.message, 400)
+        }   
     }
 
     // @Get('/wish-list')
