@@ -1,7 +1,14 @@
-import { IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class ResetPasswordDTO {
 
-  @IsNumber()
-  readonly authenticationCdoe: number;
+  @IsString()
+  readonly email: string;
+
+  @IsString()
+  readonly password: string;
+
+  @IsString()
+  readonly confirmPassword: string;
+  
 }
