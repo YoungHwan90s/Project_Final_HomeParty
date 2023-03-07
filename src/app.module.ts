@@ -17,6 +17,8 @@ import { RedisConfigService } from './config/config.redis';
 import { CacheModule } from './modules/cache/cache.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/config.jwt';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { MailerConfigService } from './config/config.nodemailer';
 
 @Module({
     imports: [
@@ -36,6 +38,11 @@ import { JwtConfigService } from './config/config.jwt';
             useClass: RedisConfigService,
             inject: [ConfigService],
         }),
+        MailerModule.forRootAsync({
+            imports: [ConfigModule],
+            useClass: MailerConfigService,
+            inject: [ConfigService],
+          }),
         CacheModule,
         UserModule,
         PartyModule,
