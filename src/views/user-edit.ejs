@@ -1,31 +1,143 @@
 <h1>마이페이지 유저정보 및 수정 화면</h1>
-<h2>Welcome <%= user.name %>!</h2>
+
+<label>이메일</label>
+<input id="email">
+<div id="email1"></div>
+</br>
+
+<label>이름</label>
+<input id="name">
+<div id="name1"></div>
+</br>
+
+<label>비밀번호</label>
+<input id="password">
+<div id="password1"></div>
+</br>
+
+<label>비밀번호 확인</label>
+<input id="confirmPassword">
+<div id="confirmPassword1"></div>
+</br>
+
+<label>성별</label>
+<input id="sex">
+<div id="sex1"></div>
+</br>
+
+<label>생일</label>
+<input id="birthday">
+<div id="birthday1"></div>
+</br>
+
+<label>핸드폰번호</label>
+<input id="phone">
+<div id="phone1"></div>
+</br>
+
+<label>지역</label>
+<input id="region">
+<div id="region1"></div>
+</br>
+
+<label>주소</label>
+<input id="address">
+<div id="address1"></div>
+</br>
+
+<label>프로필</label>
+<input id="profile">
+<div id="profile1"></div>
+</br>
+
+<label>자기소개</label>
+<input id="introduction">
+<div id="introduction1"></div>
+</br>
+
+<label>버튼</label>
+<button onclick="userEdit()">수정</button>
+<button onclick="getUser()">조회</button>
+<button onclick="deleteUser()">삭제</button>
+
 
 <script>
 
+    function getUser() {
+        $.ajax({
+            type: 'GET',
+            url: `/user`,
+            success: function (response) {
+                const userInfo = response.user
+                
+                const email = userInfo.email
+                const name = userInfo.name
+                const password = userInfo.password
+                const confirmPassword = userInfo.confirmPassword
+                const sex = userInfo.sex
+                const birthday = userInfo.birthday
+                const phone = userInfo.phone
+                const region = userInfo.region
+                const address = userInfo.address
+                const profile = userInfo.profile
+                const introduction = userInfo.introduction
+                
+                $('#email1').append(userInfo.email)
+                $('#name1').append(userInfo.name)
+                $('#password1').append(userInfo.password)
+                $('#confirmPassword1').append(userInfo.password)
+                $('#sex1').append(userInfo.sex)
+                $('#birthday1').append(userInfo.birthday)
+                $('#phone1').append(userInfo.phone)
+                $('#region1').append(userInfo.region)
+                $('#address1').append(userInfo.address)
+                $('#profile1').append(userInfo.profile)
+                $('#introduction1').append(userInfo.introduction)
+            }
+        });
+    }
+
     function userEdit() {
-        const name = $("#name").val()
-        const password = $("#password").val()
-        const confirmPassword = $("#confirmPassword").val()
-        const sex = $("#sex").val()
-        const phone = $("#phone").val()
-        const region = $("#region").val()
-        const address = $("#address").val()
-        const profile = $("#profile").val()
-        const introduction = $("#introduction").val()
+        const name = $('#name').val()
+        const password = $('#password').val()
+        const confirmPassword = $('#confirmPassword').val()
+        const sex = $('#sex').val()
+        const birthday = $('#birthday').val()
+        const phone = $('#phone').val()
+        const region = $('#region').val()
+        const address = $('#address').val()
+        const profile = $('#profile').val()
+        const introduction = $('#introduction').val()
 
         const userData = { name, password, confirmPassword, sex, phone, region, address, profile, introduction }
-        console.log(userData)
 
         $.ajax({
-            url: `/user`,
             type: 'PATCH',
+            url: `/user`,
             data: userData,
-            success: function onData(data) {
-                window.location.href = '/'
-                alert('정보 수정 완료', data)
-            }
-        })
+            success: function (response) {
+                alert('정보 수정 완료')
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.errorMessage);
+            },
+        });
+    }
+
+    function deleteUser() {
+        let result = confirm('탈퇴하시겠습니까?');
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/user`,
+                success: function (response) {
+                    alert('회원 탈퇴');
+                    window.location.href = "/"
+                }
+            })
+        } else {
+            alert('탈퇴 취소')
+        }
     }
 
 </script>

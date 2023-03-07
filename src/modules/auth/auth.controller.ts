@@ -41,7 +41,7 @@ export class AuthController {
         res.header('authorization', `Bearer ${accessToken}`);
         res.header('refreshtoken', refreshToken);
 
-        return;
+        return res.json({})
     }
 
     @Post('/sign-up')
