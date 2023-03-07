@@ -1,58 +1,33 @@
-<div class="register-background">
-    <div class="register-wrap">
-        <div class="register-form">
-            <div class="register-title-wrap">
-                <p>회원가입</p>
-            </div>
-            <div class="register-name-wrap">
-                <input id="name" class="register-name-input" placeholder="이름 : 영문, 숫자, 한글 또는 각각 포함하여 3글자 이상 30글자 이하" />
-            </div>
-            <div class="register-nickname-wrap">
-                <input id="nickname" class="register-nickname-input" placeholder="닉네임 : 영문, 숫자, 한글 또는 각각 포함하여 2글자 이상 30글자 이하, 중복 X" />
-            </div>
-            <div class="register-email-wrap">
-                <input id="email" class="register-email-input" placeholder="이메일 : 이메일 양식('@'), 중복 X" />
-            </div>
-            <div class="register-password-wrap">
-                <input
-                    type="password"
-                    id="password"
-                    class="register-password-input"
-                    placeholder="비밀번호 : 영문, 숫자 또는 각각 포함하여 8자리 이상"
-                />
-            </div>
-            <div class="register-password-check-wrap">
-                <input
-                    type="password"
-                    id="password-check"
-                    class="register-password-check-input"
-                    placeholder="비밀번호확인"
-                />
-            </div>
-            <div class="register-phone-wrap">
-                <input id="phone" class="register-phone-input" placeholder="휴대폰번호 : 숫자 11자리" />
-            </div>
-            <div class="error-message-wrap"></div>
-            <div class="register-btn-wrap">
-                <button type="button" onclick="register()">가입하기</button>
-            </div>
-        </div>
-    </div>
-</div>
+<h2>회원가입 페이지</h2>
 
-
-<div class="join_row">
-    <h3 class="join_title"><label for="pswd1">비밀번호</label></h3>
-    <span class="ps_box int_pass" id="pswd1Img">
-        <input type="password" id="pswd1" name="pswd1" class="int" title="비밀번호 입력" aria-describedby="pswd1Msg" maxlength="20">
-        <span class="lbl"><span id="pswd1Span" class="step_txt"></span></span>
-    </span>
-    <span class="error_next_box" id="pswd1Msg" style="display:none" aria-live="assertive">5~12자의 영문 소문자, 숫자와 특수기호(_)만 사용 가능합니다.</span>
-
-    <h3 class="join_title"><label for="pswd2">비밀번호 재확인</label></h3>
-    <span class="ps_box int_pass_check" id="pswd2Img">
-        <input type="password" id="pswd2" name="pswd2" class="int" title="비밀번호 재확인 입력" aria-describedby="pswd2Blind" maxlength="20">
-        <span id="pswd2Blind" class="wa_blind">설정하려는 비밀번호가 맞는지 확인하기 위해 다시 입력 해주세요.</span>
-    </span>
-    <span class="error_next_box" id="pswd2Msg" style="display:none" aria-live="assertive"></span>
-</div>
+<script>
+    function signUp() {
+        const userInfo = {
+            email: $('#input-email').val(),
+            password: $('#input-password').val(),
+            confirmPassword: $('#input-confirmPassword').val(),
+            name: $('#input-name').val(),
+            sex: $('#input-sex').val(),
+            phone: $('#input-phone').val(),
+            birthday: $('#input-birthday').val(),
+            region: $('#input-region').val(),
+            address: $('#input-address').val(),
+            profile: $('#input-profile').val(),
+            introduction: $('#input-introduction').val(),
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/auth/sign-up',
+            data: userInfo,
+            success: function (response) {
+                customAlert('회원가입을 축하드립니다!', function () {
+                    window.location.href - '/login';
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.errorMessage);
+            },
+        });
+    }
+    
+</script>
