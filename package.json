@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@liaoliaots/nestjs-redis": "^9.0.5",
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -42,6 +43,7 @@
     "ioredis": "^5.3.1",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.1.2",
+    "nodemailer": "^6.9.1",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "redis": "^4.6.5",
