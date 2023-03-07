@@ -24,7 +24,6 @@ export class AuthService {
         try {
             const user = await this.userRepository.findOne({
                 where: { email, deletedAt: null },
-                select: ['password']
             });
 
             if (!user) {
@@ -36,7 +35,6 @@ export class AuthService {
             }
             return user;
         } catch (error) {
-            console.log(error);
             throw new BadRequestException('잘못된 요청입니다.');
         }
     }
