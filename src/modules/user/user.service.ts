@@ -92,36 +92,27 @@ export class UserService {
 
 
     async updateUser(user: object, data: UpdateUserDto) {
-        try {
-            if (data.password !== data.confirmPassword) {
-                throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
-            } else {
-                const hashedPassword = await bcrypt.hash(data.password, 10);
+        if (data.password !== data.confirmPassword) {
+            throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
+        } else {
+            const hashedPassword = await bcrypt.hash(data.password, 10);
 
-                return this.userRepository.update(user['id'], {
-                    password: hashedPassword,
-                    name: data.name,
-                    sex: data.sex,
-                    phone: data.phone,
-                    birthday: data.birthday,
-                    region: data.region,
-                    address: data.address,
-                    profile: data.profile,
-                    introduction: data.introduction,    
-                });
-            }
-        } catch (error) {
-            console.log(error)
-            throw new BadRequestException('잘못된 요청입니다.');
+            return this.userRepository.update(user['id'], {
+                password: hashedPassword,
+                name: data.name,
+                sex: data.sex,
+                phone: data.phone,
+                birthday: data.birthday,
+                region: data.region,
+                address: data.address,
+                profile: data.profile,
+                introduction: data.introduction,    
+            });
         }
     }
 
     async deleteUser(id: number) {
-        try {
-            return this.userRepository.softDelete(id);
-        } catch (error) {
-            throw new BadRequestException('잘못된 요청입니다.')
-        }
+        return this.userRepository.softDelete(id);
     }
 
     private async checkPassword(id: number, password: string) {

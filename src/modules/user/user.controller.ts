@@ -12,36 +12,24 @@ export class UserController {
     @Get('/')
     @HttpCode(200)
     async getUserInfo(@Req() req) {
-        try {
-            const user = req.user
-            return user
-        } catch (error) {
-            throw new HttpException(error.message, 403)
-        }
+        const user = req.user
+        return user
     }
 
     @UseGuards(JwtAuthGuard)
     @Patch('/')
     @HttpCode(201)
     async updateUser(@Req() req, @Body() data: UpdateUserDto) {
-        try {
-            const user = req.user
-            return await this.userService.updateUser(user, data);
-        } catch (error) {
-            throw new HttpException(error.message, 400)
-        }
+        const user = req.user
+        return await this.userService.updateUser(user, data);
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('/')
     @HttpCode(204)
     async deleteUser(@Req() req) {
-        try {
-            const { id } = req.user
-            return await this.userService.deleteUser(id)
-        } catch (error) {
-            throw new HttpException(error.message, 400)
-        }   
+        const { id } = req.user
+        return await this.userService.deleteUser(id) 
     }
 
     // @Get('/wish-list')
