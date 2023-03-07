@@ -1,7 +1,7 @@
 <h2>파티 상세페이지 호스트 화면</h2>
 <div class="party-host-detail-review"></div>
 <div class="party-host-detail-review-title">
-    <h2>리뷰</h2>
+    <h2> 👍리뷰</h2>
 </div>
 <div id="reviews-container">
     <!-- 리뷰 데이터가 출력될 공간 -->
@@ -24,6 +24,7 @@
     <div class="review-userId"></div>
     <div class="input-star">
         <span class="star">
+          ★★★★★
             <span>★★★★★</span>
             <input  type="range" oninput="drawStar(this)" value="1" step="1" min="0" max="10">
           </span>
@@ -40,16 +41,17 @@ $(function() {
 
     // 서버로 데이터 전송
     function review(){
-        let reviewadd = $('#input-review').val();
-        let star = $('#star').val();
+      const partyId = '파티 ID';
+        const reviewadd = $('#input-review').val();//  리뷰 내용
+        const rating = $('.input-star input[type="range"]').val(); // 별점
 
         $.ajax({
       type: 'POST',
-      url: '/review/:partyId',
+      url: '/review/${partyId}',
       data: {
         reviewadd,
-        star,
-        
+        rating,
+        partyId,       
       },
       success: function(response) {
         // 서버로부터 응답 받은 후 처리할 코드 작성
