@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundError } from 'rxjs';
 import { Repository } from 'typeorm';
@@ -12,30 +12,43 @@ export class UserService {
       ) {}
 
     async getUserById(id: number): Promise<User> {
-        return await this.userRepository.findOne({
-            where: { id }
-        });
+        try {
+            return await this.userRepository.findOne({
+                where: { id }
+            });
+        } catch (error) {
+            error.status = 401
+            throw new UnauthorizedException('로그인 후 이용 바랍니다.')
+        }
     }
 
     async updateUser(id: number, data: UpdateUserDto): Promise<void> {
-        const user = await this.getUserById(id);
-        
-        await this.userRepository.update(id, {
-            // email: data.email,
-            password: data.password,
-            name: data.name,
-            sex: data.sex,
-            phone: data.phone,
-            birthday: data.birthday,
-            region: data.region,
-            address: data.address,
-            profile: data.profile,
-            introduction: data.introduction,    
-        });
+        try {
+            const user = await this.getUserById(id);
+            await this.userRepository.update(id, {
+                password: data.password,
+                name: data.name,
+                sex: data.sex,
+                phone: data.phone,
+                birthday: data.birthday,
+                region: data.region,
+                address: data.address,
+                profile: data.profile,
+                introduction: data.introduction,    
+            });
+        } catch (error) {
+            error.status = 400
+            throw new ConflictException('이메일은 수정할 수 없습니다.')
+        }
     }
 
     async deleteUser(id: number) {
-        return this.userRepository.softDelete(id);
+        try {
+            return this.userRepository.softDelete(id);
+        } catch (error) {
+            error.status = 400
+            throw new ConflictException('유효하지 않은 요청입니다.')
+        }
     }
 
     private async checkPassword(id: number, password: string) {
