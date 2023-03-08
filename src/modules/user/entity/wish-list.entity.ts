@@ -21,6 +21,6 @@ export class WishList {
     user: User;
 
     // 장바구니 <-> 파티: 일대일 관계
-    @OneToOne(() => Party, party => party.wishList)
+    @OneToOne(() => Party, (party) => party.wishList)
     party: Party;
 }

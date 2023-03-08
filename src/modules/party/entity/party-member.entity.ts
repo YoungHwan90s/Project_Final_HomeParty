@@ -31,7 +31,7 @@ export class PartyMember {
     deletedAt: Date | null;
 
     // 파티멤버 <-> 파티: 다대일 관계
-    @ManyToOne(() => Party, (partyMember) => partyMember.partyMember)
+    @ManyToOne(() => Party, (party) => party.partyMember)
     party: Party;
 
     // 파티멤버 <-> 유저: 다대일 관계
