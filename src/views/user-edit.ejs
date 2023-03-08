@@ -1,1 +1,31 @@
-<h2>마이페이지 유저정보 및 수정 화면</h2>
+<h1>마이페이지 유저정보 및 수정 화면</h1>
+<h2>Welcome <%= user.name %>!</h2>
+
+<script>
+
+    function userEdit() {
+        const name = $("#name").val()
+        const password = $("#password").val()
+        const confirmPassword = $("#confirmPassword").val()
+        const sex = $("#sex").val()
+        const phone = $("#phone").val()
+        const region = $("#region").val()
+        const address = $("#address").val()
+        const profile = $("#profile").val()
+        const introduction = $("#introduction").val()
+
+        const userData = { name, password, confirmPassword, sex, phone, region, address, profile, introduction }
+        console.log(userData)
+
+        $.ajax({
+            url: `/user`,
+            type: 'PATCH',
+            data: userData,
+            success: function onData(data) {
+                window.location.href = '/'
+                alert('정보 수정 완료', data)
+            }
+        })
+    }
+
+</script>

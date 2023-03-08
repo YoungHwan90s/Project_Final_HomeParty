@@ -1,13 +1,12 @@
 import {
-    BadRequestException,
     ConflictException,
-    HttpException,
-    Injectable,
+    Injectable, NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -72,5 +71,42 @@ export class UserService {
                 password: hashedPassword,
             },
         );
+      }
+    
+        async updateUser(user: object, data: UpdateUserDto) {
+            if (data.password !== data.confirmPassword) {
+                throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
+            } else {
+                const hashedPassword = await bcrypt.hash(data.password, 10);
+
+                return this.userRepository.update(user['id'], {
+                    password: hashedPassword,
+                    name: data.name,
+                    sex: data.sex,
+                    phone: data.phone,
+                    birthday: data.birthday,
+                    region: data.region,
+                    address: data.address,
+                    profile: data.profile,
+                    introduction: data.introduction,    
+                });
+            }
+        }
+
+        async deleteUser(id: number) {
+            return this.userRepository.softDelete(id);
+        }
+
+        private async checkPassword(id: number, password: string) {
+            const user = await this.userRepository.findOne({
+                where: { id, deletedAt: null },
+                select: [ "password" ],
+            });
+            if (!user) {
+                throw new NotFoundException(`User not found. id: ${id}`);
+            }
+            if (user.password !== password.toString()) {
+                throw new UnauthorizedException(`User password is not correct. id: ${id}`);
+            }
+        }
     }
-}
