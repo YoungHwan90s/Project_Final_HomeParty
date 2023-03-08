@@ -9,9 +9,9 @@ export class MailService {
         this.mailerService
             .sendMail({
                 to: email,
-                from: 'noreplay@gmail.com',
-                subject: 'Hello',
-                text: 'Hello World',
+                from: 'noreplyhomeparty@gmail.com',
+                subject: '홈파티 인증번호',
+                text: '홈파티 인증번호 입력해',
                 html: `<b>인증번호 ${authenticationCdoe}</b>`,
             })
             .then((result) => {

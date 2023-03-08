@@ -20,10 +20,10 @@ export class PartyController {
 // @Patch('/party/:partyId')
 
 // // 파티 삭제
-@Delete('/party/:partyId')
-async deleteParty(@Param('partyId') partyId: number) {
-    return await this.partyService.deleteParty(partyId, data.password);
-}
+// @Delete('/party/:partyId')
+// async deleteParty(@Param('partyId') partyId: number) {
+//     return await this.partyService.deleteParty(partyId, data.password);
+// }
 
 // // 파티 신청
 // @Post('/party/apply/:partyId')

@@ -20,7 +20,7 @@ export class User {
     @Column('varchar', { nullable: true, length: 30 })
     kakaologinEmail: string | null;
 
-    @Column('varchar', { length: 20 })
+    @Column('varchar', { length: 50 })
     email: string;
 
     @Column('varchar', { length: 100 })
