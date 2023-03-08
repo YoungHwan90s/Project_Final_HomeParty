@@ -14,9 +14,6 @@ export class PartyService {
       ) {}
 
     // async deleteParty(id: number, partyId: number) {
-    //   // if(this.partyRepository.getId(partyId)) {
-    //     throw new UnauthorizedException(
-    // async deleteParty(id: number, partyId: number) {
     //   if(this.partyRepository.getId(partyId)) {
     //     throw new UnauthorizedException(
           
@@ -26,5 +23,4 @@ export class PartyService {
 
     // }
       
-// }
 }
