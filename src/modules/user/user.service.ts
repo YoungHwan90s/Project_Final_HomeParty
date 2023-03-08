@@ -75,7 +75,7 @@ export class UserService {
     
         async updateUser(user: object, data: UpdateUserDto) {
             if (data.password !== data.confirmPassword) {
-                throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
+                throw new UnauthorizedException('입력한 비밀번호가 일치하지 않습니다.');
             } else {
                 const hashedPassword = await bcrypt.hash(data.password, 10);
 
@@ -88,7 +88,7 @@ export class UserService {
                     region: data.region,
                     address: data.address,
                     profile: data.profile,
-                    introduction: data.introduction,    
+                    introduction: data.introduction,
                 });
             }
         }
@@ -98,17 +98,11 @@ export class UserService {
         }
 
         async getUsersAdmin() {
-            return await this.userRepository.find({})
-        }
-    
-        async getUserByIdAdmin(id: number) {
-            return await this.userRepository.findOne({
-                where: { id, deletedAt: null }
-            })
+            return await this.userRepository.find({withDeleted: true})
         }
     
         async deletedUserAdmin(id: number) {
-            return this.userRepository.softDelete(id)
+            return await this.userRepository.softDelete(id)
         }
 
         // private async checkPassword(id: number, password: string) {

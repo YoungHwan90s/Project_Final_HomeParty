@@ -1,83 +1,31 @@
 <h1>마이페이지 유저정보 및 수정 화면</h1>
-
-<label>이메일</label>
-<input id="email">
-<div id="email1"></div>
-</br>
-
-<label>이름</label>
-<input id="name">
-<div id="name1"></div>
-</br>
-
-<label>비밀번호</label>
-<input id="password">
-<div id="password1"></div>
-</br>
-
-<label>비밀번호 확인</label>
-<input id="confirmPassword">
-<div id="confirmPassword1"></div>
-</br>
-
-<label>성별</label>
-<input id="sex">
-<div id="sex1"></div>
-</br>
-
-<label>생일</label>
-<input id="birthday">
-<div id="birthday1"></div>
-</br>
-
-<label>핸드폰번호</label>
-<input id="phone">
-<div id="phone1"></div>
-</br>
-
-<label>지역</label>
-<input id="region">
-<div id="region1"></div>
-</br>
-
-<label>주소</label>
-<input id="address">
-<div id="address1"></div>
-</br>
-
-<label>프로필</label>
-<input id="profile">
-<div id="profile1"></div>
-</br>
-
-<label>자기소개</label>
-<input id="introduction">
-<div id="introduction1"></div>
-</br>
-
-<label>버튼</label>
-<button onclick="userEdit()">수정</button>
-<button onclick="getUser()">조회</button>
-<button onclick="deleteUser()">삭제</button>
-
+    <div id="user"></div>
 
 <script>
-
-    function getUser() {
-        $.ajax({
-            type: 'GET',
-            url: `/user`,
-            success: function (response) {
-                const userInfo = response.user
-                const newUserInfo = Object.keys(userInfo).map(key => {return { [key] : userInfo[key] }})
-                .map(obj => {
-                    const key = Object.keys(obj)[0];
-                    const value = obj[key];
-                    $(`#${key}1`).append(value);
-                })
-            }
-        });
-    }
+    $.ajax({
+        type: 'GET',
+        url: `/user`,
+        success: function (response) {
+            const userInfo = response.user
+            console.log(userInfo)
+            const html = `<div>
+                            <label>이메일</label><input type="email" value="${userInfo.email}"></br></br>
+                            <label>이름</label><input type="text" value="${userInfo.name}"></br></br>
+                            <label>비밀번호</label><input type="password" value="${userInfo.password}"></br></br>
+                            <label>비밀번호 확인</label><input type="password" value="${userInfo.password}"></br></br>
+                            <label>성별</label><input type="text"value="${userInfo.sex}"></br></br>
+                            <label>생일</label><input type="text" value="${userInfo.birthday}"></br></br>
+                            <label>핸드폰번호</label><input type="text" value="${userInfo.phone}"></br></br>
+                            <label>지역</label><input type="text" value="${userInfo.region}"></br></br>
+                            <label>주소</label><input type="text" value="${userInfo.address}"></br></br>
+                            <label>프로필</label><input type="text" value="${userInfo.profile}"></br></br>
+                            <label>자기소개</label><input type="text" value="${userInfo.introduction}"></br></br>
+                            <button onclick="userEdit()">수정</button>
+                            <button onclick="deleteUser()">삭제</button>
+                        </div>`
+            $('#user').append(html)
+        }
+    });
 
     function userEdit() {
         const userData = {
@@ -98,7 +46,7 @@
             data: userData,
             success: function (response) {
                 alert('정보 수정 완료')
-                window.location.href = "/user-edit"
+                window.location.reload()
             },
             error: function (error) {
                 customAlert(error.responseJSON.errorMessage);
@@ -114,12 +62,11 @@
                 url: `/user`,
                 success: function (response) {
                     alert('회원 탈퇴');
-                    window.location.href = "/"
+                    window.location.reload()
                 }
             })
         } else {
             alert('탈퇴 취소')
         }
     }
-
 </script>

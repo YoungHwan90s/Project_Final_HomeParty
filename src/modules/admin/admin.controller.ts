@@ -9,7 +9,7 @@ export class AdminController {
         private readonly userService: UserService,
     ) {}
 
-// 모든 회원 조회
+// 회원 정보 조회
 @Get('/users')
 @HttpCode(200)
 async getUsers(@Res() res) {
@@ -17,20 +17,12 @@ async getUsers(@Res() res) {
     return res.json({users})
 }
 
-// 회원 정보 조회
-@Get('/users/:id')
-@HttpCode(200)
-async getUserById(@Res() res, @Param('id') id: number) {
-    const user = await this.userService.getUserByIdAdmin(Number(id))
-    return res.json({user})
-}
-
 // 회원 삭제
 @Delete('/users/:id')
 @HttpCode(204)
 async deletedUser(@Res() res, @Param('id') id: number) {
-    const user = await this.userService.deletedUserAdmin(Number(id))
-    return res.json({})
+    const deleteUser = await this.userService.deletedUserAdmin(id)
+    return res.json({removedId:deleteUser})
 }
 
 // // 리뷰조회
