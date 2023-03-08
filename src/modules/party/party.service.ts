@@ -21,7 +21,7 @@ export class PartyService {
     //   }
     //   return await this.partyRepository.softDelete(partyId);
 
-      
-    }
+    // }
       
 // }
+}

@@ -26,12 +26,15 @@
             rel="stylesheet"
         />
 
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css">
+
+
          <!-- css -->
          <link rel="stylesheet" href="/css/modal.css" />
+         <link rel="stylesheet" href="/css/signup.css">         
 
-
-        <!-- 공통 js -->
-         <!-- <script src="/modal.js"></script> -->
+        <!-- 다음 우편번호찾기 API -->
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
         <title>모아바 | HOMEPARTY</title>
     </head>
@@ -65,7 +68,7 @@
         <% if (components === 'find-email') { %> <%-include('auth-find-email.ejs') %><% } %>
         <% if (components === 'find-password') { %> <%-include('auth-find-password.ejs') %><% } %>
         <% if (components === 'authentication') { %> <%-include('auth-authentication.ejs') %><% } %>
-        <% if (components === 'email-password') { %> <%-include('reset-password.ejs') %><% } %>
+        <% if (components === 'reset-password') { %> <%-include('auth-reset-password.ejs') %><% } %>
         <% if (components === 'user-menu') { %> <%-include('user-menu.ejs') %><% } %>
         <% if (components === 'user-edit') { %> <%-include('user-edit.ejs') %><% } %>
         <% if (components === 'wish-list') { %> <%-include('wish-list.ejs') %><% } %>
