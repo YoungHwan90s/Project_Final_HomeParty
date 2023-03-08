@@ -2,6 +2,7 @@ import {
     BadRequestException,
     HttpException,
     Injectable,
+    NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,7 +27,7 @@ export class AuthService {
         });
 
         if (!user) {
-            throw new UnauthorizedException('회원이 존재하지 않습니다.');
+            throw new NotFoundException('회원이 존재하지 않습니다.');
         }
         const comparePassword = await bcrypt.compare(password, user.password);
         if (!comparePassword) {
@@ -88,11 +89,15 @@ export class AuthService {
         }
     }
 
-    async findEmail(data: FindEmailDto): Promise<string> {
+    async findEmail(data): Promise<string> {
         const user = await this.userRepository.findOne({
             where: { name: data.name, phone: data.phone },
             select: ['email'],
         });
+
+        if (!user) {
+            throw new UnauthorizedException('회원이 존재하지 않습니다.');
+        }
 
         const email = user.email;
         const index = email.indexOf('@');

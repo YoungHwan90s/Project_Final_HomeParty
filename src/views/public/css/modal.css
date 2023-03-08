@@ -1,0 +1,29 @@
+
+.modal-header {
+    border-bottom-color: #ffffff;
+  }
+  
+.modal-footer {
+    border-top-color: #ffffff;
+  }
+
+.btn-outline-modal {
+    color: blue !important;
+    background-color: #ffffff !important;
+    border-color: blue !important;
+  }
+
+.alert {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+@media screen and (min-width: 576px) {
+    .alert {
+      width: fit-content;
+      max-width: 480px;
+    }
+  }
