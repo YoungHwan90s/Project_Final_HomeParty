@@ -1,23 +1,25 @@
 import {
+    BadRequestException,
     ConflictException,
     Injectable,
     NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { WishList } from './entity/wish-list.entity';
+import { Party } from '../party/entity/party.entity';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
-        @InjectRepository(User) private wishListRepository: Repository<WishList>,
+        @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
     ) {}
 
     async createUser(data: CreateUserDto): Promise<void> {
@@ -61,7 +63,7 @@ export class UserService {
         return await this.userRepository.findOne({ where });
     }
 
-    async resetPassword(data: ResetPasswordDTO): Promise<object> {
+    async resetPassword(data: ResetPasswordDTO): Promise<Object> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
         }
@@ -78,7 +80,7 @@ export class UserService {
         );
     }
 
-    async updateUser(user: object, data: UpdateUserDto): Promise<object> {
+    async updateUser(user: object, data: UpdateUserDto): Promise<Object> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
         } else {
@@ -98,7 +100,7 @@ export class UserService {
         }
     }
 
-    async deleteUser(id: number):Promise<object> {
+    async deleteUser(id: number): Promise<DeleteResult> {
         return this.userRepository.softDelete(id);
     }
 
@@ -115,24 +117,36 @@ export class UserService {
         }
     }
 
-    async updateWishList(userId: number, partyId: number):Promise<object> {
-        const user = await this.userRepository.findOne({
-            where: {id: userId}
-        })
+    async updateWishList(userId: number, partyId: number):Promise<WishList> {
+        const checkWishList = await this.wishListRepository.findOne({
+            where: { partyId },
+        });
 
-        const wishList = new WishList()
-        wishList.user = user;
-        wishList.partyId = partyId
-        
-        return await this.wishListRepository.save(wishList);
+        if (checkWishList) {
+            throw new BadRequestException('해당 파티가 이미 찜목록에 존재합니다.');
+        }
+
+        return await this.wishListRepository.save({
+            userId,
+            partyId,
+        });
     }
 
-    async wishList(userId: number) {
-        return this.wishListRepository.find({
+    async wishList(userId: number): Promise<WishList[]> {
+        const wishList = await this.wishListRepository.find({
             where: { userId },
-            relations: ['party', 'party.partyMember']
-        })
+            relations: [
+                'party',
+                'party.partyMember',
+                'party.thumbnail',
+                'party.partyTagMapping',
+                'party.partyTagMapping.tag',
+            ],
+        });
+        return wishList;
     }
 
-
+    async deleteWishList(id: number): Promise<DeleteResult> {
+        return await this.wishListRepository.delete(id);
+    }
 }

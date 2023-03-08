@@ -8,7 +8,6 @@ import {
     UseGuards,
     Req,
     HttpCode,
-    HttpException,
     Post,
     Res,
 } from '@nestjs/common';
@@ -46,23 +45,26 @@ export class UserController {
     }
 
     @Post('/wish-list/:partyId')
-    @HttpCode(200)
+    @HttpCode(204)
     async updateWishList(@Param('partyId') partyId: number, @Req() req) {
         // const { id: userId } = req.user
         const userId = 1;
         return await this.userService.updateWishList(userId, partyId);
     }
 
-
     @Get('/wish-list')
     @HttpCode(200)
     async wishList(@Res() res) {
         // const { id: userId } = req.user
         const userId = 1;
-        const wishList = await this.userService.wishList(userId)
+        const wishList = await this.userService.wishList(userId);
 
-        return res.send({ wishList })
+        return res.send({ wishList });
     }
 
-    // @Delete('/wish-list/:partyId')
+    @Delete('/wish-list/:id')
+    @HttpCode(204)
+    async deleteWishList(@Param('id') id: number) {
+        return await this.userService.deleteWishList(id);
+    }
 }

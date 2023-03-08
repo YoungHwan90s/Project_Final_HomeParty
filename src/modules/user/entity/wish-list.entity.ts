@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Party } from '../../party/entity/party.entity';
 import { User } from './user.entity';
 
@@ -22,5 +22,6 @@ export class WishList {
 
     // 장바구니 <-> 파티: 일대일 관계
     @OneToOne(() => Party, (party) => party.wishList)
+    @JoinColumn()
     party: Party;
 }
