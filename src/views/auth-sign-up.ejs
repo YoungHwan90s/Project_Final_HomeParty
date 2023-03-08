@@ -15,6 +15,7 @@
             profile: $('#input-profile').val(),
             introduction: $('#input-introduction').val(),
         };
+        
         $.ajax({
             type: 'POST',
             url: '/auth/sign-up',
