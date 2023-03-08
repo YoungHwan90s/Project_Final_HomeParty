@@ -1,0 +1,299 @@
+@charset "UTF-8";
+@keyframes headerMove{
+      0% {transform: translate(0px); }
+      50% {transform: translate(400px); }
+      100% {transform: translate(0,0);}
+}
+.normal {
+    font-weight: 400
+}
+.bold {
+    font-weight: 700
+}
+.bolder {
+    font-weight: 800
+}
+.light {
+    font-weight: 300
+}
+#header img{
+   width : 700px;
+   height: 230px;
+}
+
+.d_form {
+    margin: .2em 0;
+    font-size: 15px;
+    padding: .5em;
+    border: 1px solid #ccc;
+    border-color: #dbdbdb #d2d2d2 #d0d0d0 #d2d2d3;
+    box-shadow: inset 0.1em 0.1em 0.15em rgb(0 0 0 / 10%);
+    vertical-align: middle;
+    line-height: 1.25em;
+    outline: 0;
+    width: 20em;
+    height : 50px;
+	background-color : #E6E8E8;
+    padding: 10px 110px 10px 14px;
+    padding-top: 10px;
+    padding-right: 110px;
+    padding-bottom: 10px;
+    padding-left: 14px;
+    box-sizing: border-box;
+}
+.d_form.mini {
+    width: 7em;
+}
+#container, #footer, #header {
+    min-width: 220px;
+    margin: 0 15px;
+    margin-top: 0px;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    margin-left: 15px;
+    box-sizing: border-box;
+}
+
+#container {
+   width: auto;
+   max-width: 768px;
+}
+
+body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
+   legend, li, ol, p, select, table, td, textarea, th, ul {
+   margin: 0;
+   padding: 0;
+   webkit-text-size-adjust: none;
+}
+body, html {
+   width: 100%;
+   height: 100%;
+}
+body {
+   background-color: #f5f6f7;
+}
+div{
+   display : block;
+}
+header{
+   text-align : center;
+}
+select{
+   font-size : 3px;
+   border : 1px solid gray;
+   height : 30px;
+   padding : 5px;
+}
+.box input {
+	height: 100%;
+	padding: 4px 12px;
+	cursor: pointer;
+}
+#mail-select option{
+   text-height : 30px;
+}
+#mail_Input{
+   display : inline-block;
+   width : 50%;
+}
+#mail-select{
+   width : 50%;
+   font-size : 13px;
+   border : 1px solid lightgray;
+}
+#text{
+   margin : 5px;
+   font-size : 15px;
+}
+#idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, #addressError, #email-error, #consentError {
+   width:0px auto;
+   display : inline-block;
+   color : red;
+   text-align : right;
+   font-size : 11px;
+   font-weight: normal;
+   margin-left : 10px;
+}
+#container, #footer {
+   margin: 0 auto;
+   max-width: 768px;
+   min-width: 460px;
+}
+
+.wrapper {
+   width: 100%;
+   min-width: 760px;
+}
+
+#header {
+   position: relative;
+   overflow: hidden;
+   padding: 60px 0 54px;
+}
+
+#header .h_logo {
+   display: block;
+   margin: 0 auto;
+   width: 240px;
+   height: 44px;
+   background-repeat: no-repeat;
+   background-position: 0 0;
+   background-size: 240px auto;
+   color: transparent;
+   font-size: 2em;
+}
+.ipin_box, .row-group {
+   overflow: hidden;
+   width: 100%;
+}
+.box{
+   margin : 0px auto;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   position: relative;
+   width: 60%;
+   height: 51px;
+   border: solid 1px #dadada;
+   border-top-color: rgb(218, 218, 218);
+   border-top-style: solid;
+   border-top-width: 1px;
+   border-right-color: rgb(218, 218, 218);
+   border-right-style: solid;
+   border-right-width: 1px;
+   border-bottom-color: rgb(218, 218, 218);
+   border-bottom-style: solid;
+   border-bottom-width: 1px;
+   border-left-color: rgb(218, 218, 218);
+   border-left-style: solid;
+   border-left-width: 1px;
+   border-image-source: initial;
+   border-image-slice: initial;
+   border-image-width: initial;
+   border-image-outset: initial;
+   border-image-repeat: initial;
+   box-sizing: border-box;
+}
+.box.int-id, .box.int-id input {
+   background: #fff;
+}
+#emailBox{
+   display: flex;
+   gap: 4px;
+   border: 0;
+   background-color: transparent;
+}
+.list {
+   margin : 0px auto;
+   width: 60%;
+   font-size: 14px;
+   font-weight: 700;
+}
+.list h3 {
+   display : inline-block;
+}
+.user-input{
+   margin : 3%;
+   
+}
+.line{
+   margin-left : 20%;
+/*margin : 2px;*/
+}
+#address input text{
+   margin-left : 60%;
+
+}
+#addressButton{
+   text-align : center;
+   text-width : 0px auto; 
+   background-color : #00c3e6;
+   width :  0px auto;
+   font-weight : bold;
+   color : #353535;
+}
+#sample4_postcode{
+   width : 40%;
+   margin-right: 12px;
+}
+#sample4_roadAddress, #sample4_jibunAddress, #sample4_detailAddress, #sample4_extraAddress{
+   width : 60%;
+}
+#sample4_detailAddress{
+   background-color : white;
+}
+.input {
+   display: inline;
+}
+
+/* .box {
+   margin : 0px auto;
+   display: block;
+   width: 60%;
+   height: 51px;
+   background: #fff;
+   box-sizing: border-box;
+} */
+
+.int {
+   display: block;
+   position: relative;
+   width: 100%;
+   height: 29px;
+   border: solid 1px #dadada;
+   padding-right: 25px;
+   line-height: 29px;
+   border: none;
+   background: #fff;
+   font-size: 15px;
+   box-sizing: border-box;
+   z-index: 10;
+}
+#email-int{
+   display: flex;
+   /*position: relative;*/
+   width: 50%;
+   height: 29px;
+   border: solid 1px #dadada;
+   /*padding-right: 25px;*/
+   line-height: 29px;
+   border: none;
+   background: #fff;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+.email-input {
+	height: 51px;
+	box-sizing: border-box;
+	border: solid 1px #dadada;
+}
+
+#mail-select {
+	height: 51px;
+}
+
+
+#btn {
+   width: 100%;
+   height: 50px;
+}
+.btn_area {
+   margin: 30px 3% 60px;
+}
+
+#btnJoin {
+	display: block;
+	width: 60%;
+    height: 51px;
+	margin: 0 auto;
+}
+
+
+
+@media (max-width: 1024px) {
+   
+}
+
+@media (max-width: 1024px) {
+   
+}
