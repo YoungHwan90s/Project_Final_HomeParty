@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PartyMember } from './entity/party-member.entity';
@@ -13,5 +13,15 @@ export class PartyService {
         @InjectRepository(PartyMember) private PartyMembersRepository: Repository<PartyMember>,
       ) {}
 
+    async deleteParty(id: number, partyId: number) {
+      if(this.partyRepository.getId(partyId)) {
+        throw new UnauthorizedException(
+          
+        )
+      }
+      return await this.partyRepository.softDelete(partyId);
+
+      
+    }
       
 }
