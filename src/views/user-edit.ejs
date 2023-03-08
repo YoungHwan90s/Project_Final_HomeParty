@@ -68,7 +68,11 @@
             type: 'GET',
             url: `/user`,
             success: function (response) {
-                Object.entries(response.user).forEach(([key, value]) => {
+                const userInfo = response.user
+                const newUserInfo = Object.keys(userInfo).map(key => {return { [key] : userInfo[key] }})
+                .map(obj => {
+                    const key = Object.keys(obj)[0];
+                    const value = obj[key];
                     $(`#${key}1`).append(value);
                 })
             }

@@ -7,13 +7,11 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('/')
     @HttpCode(200)
     async getUserInfo(@Req() req, @Res() res) {
-        // const user = req.user
-        const id = 9
-        const user = await this.userService.getUserById(id)
+        const user = req.user
         return res.json({user})
     }
 

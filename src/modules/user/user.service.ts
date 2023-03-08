@@ -109,10 +109,4 @@ export class UserService {
                 throw new UnauthorizedException(`User password is not correct. id: ${id}`);
             }
         }
-
-        async getUserById(id: number) {
-            const user = await this.userRepository.findOne({
-                where: { id, deletedAt: null }
-            });
-        }
     }
