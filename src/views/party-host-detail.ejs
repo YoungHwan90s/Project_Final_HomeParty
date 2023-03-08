@@ -1,1 +1,128 @@
 <h2>파티 상세페이지 호스트 화면</h2>
+<div class="party-host-detail-review"></div>
+<div class="party-host-detail-review-title">
+    <h2> 👍리뷰</h2>
+</div>
+<div id="reviews-container">
+    <!-- 리뷰 데이터가 출력될 공간 -->
+  </div>
+<button onclick="readreview()">리뷰보기</button>
+
+<div class="party-host-detail-review-content">
+  
+    <div class="review-userId"></div>
+    <div class="input-star">
+        <span class="star">
+          
+            <span>★★★★★</span>
+            <input  type="range" oninput="drawStar(this)" value="5" step="1" min="0" max="10">
+          </span>
+    </div>
+    <textarea id="input-review" class="input-review" placeholder="파티 리뷰 해주세요"></textarea>
+    <button type="button" onclick="review()">리뷰등록</button>
+</div>
+<script>
+$(function() {
+  // 별점 표시
+  const drawStar = (target) => {
+    $('.star span').css({ width: `${target.value * 10}%` });
+  }})
+
+    // 서버로 데이터 전송
+    function review(){
+      const partyId = window.location.pathname.split('/')[2] //변경해야됨
+      const reviewInfo={
+         review : $('#input-review').val(), //  리뷰 내용
+         rating : $('.input-star input[type="range"]').val(), // 별점
+        }
+       
+      $.ajax({
+      type: 'POST',
+      url: `/review/${partyId}`,
+      data: reviewInfo,
+      success: function(response) {
+        // 서버로부터 응답 받은 후 처리할 코드 작성
+        alert("리뷰가 등록되었습니다.")
+        location.reload();
+      },
+      error: function(error) {
+        // 서버로부터 오류 응답 받은 후 처리할 코드 작성
+        alert("올바르지않은 값입니다.")
+      }
+    });
+  };
+;
+
+function readreview(){
+  $.ajax({
+    url: "/review/1", // 리뷰 데이터 요청 URL
+    type: "GET",
+    dataType: "json",
+    success: function(data){
+      $('#reviews-container').empty();
+
+      data.map((reviewInfo)=>{
+        const createdAt = new Date(reviewInfo.createdAt);
+        let html = 
+        ` <div class="party-host-detail-review-one">
+                <div class="party-host-detail-review-content">
+                  <text>리뷰</text>
+                  <span id="review-content">${reviewInfo.review}</span>
+                  <text>평점</text>
+                  <span id="review-star">${reviewInfo.rating}</span>
+                  <text>유저</text>
+                  <span id="userId">${reviewInfo.userId}</span>
+                  <span id="createdAt">${createdAt.getFullYear()}-${createdAt.getMonth() + 1}-${createdAt.getDate()}</span>
+                  <input id="updatereviewform"></input>
+                    <button type="button" onclick="updatereview(${reviewInfo.id})"id="review-update">수정하기</button>
+                    <button type="button" onclick="deletereview(${reviewInfo.id})"id="review-delete">삭제하기</button>
+                    <div class="party-host-detail-review-userid"></div>
+                </div>
+        </div>
+  </div>`
+  $('#reviews-container').append(html)
+      }
+      )
+}})
+}
+
+
+function updatereview(reviewId){
+  const updatereviewform = $('#updatereviewform').val()
+$.ajax({
+          type: 'PATCH',
+          url: `/review/${reviewId}`,
+          data:{
+            review: updatereviewform
+          },
+          success: function(response) {
+            // 서버로부터 응답 받은 후 처리할 코드 작성
+            alert("리뷰가 수정되었습니다.");
+            location.reload();
+          },
+          error: function(error) {
+            // 서버로부터 오류 응답 받은 후 처리할 코드 작성
+            alert("올바르지 않은 값입니다.");
+          }
+        });
+        console.log(id);
+      }
+      
+
+function deletereview(reviewId) {
+  
+  $.ajax({
+    type: 'DELETE',
+    url: `/review/${reviewId}`,
+    success: function(response) {
+      alert("리뷰가 삭제되었습니다.")
+      location.reload();
+    },
+    error: function(error) {
+      alert("올바르지 않은 값입니다.")
+    }
+  });
+}
+
+  
+</script>

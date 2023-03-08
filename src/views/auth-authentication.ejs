@@ -1,10 +1,18 @@
 <h2>인증번호 입력 페이지</h2>
 
+<div>
+    <label for="exampleInputMobile">인증번호 입력</label>
+    <input type="text" class="form-control mt-2" id="input-authenticate-code" placeholder="인증번호" />
+</div>
+
+<button onclick="authenticateCode()">인증번호 확인</button>
+
+
 <script>
-    function codeAthenticate() {
+    function authenticateCode() {
         const requiredInfo = {
-            storageEmail: sessionStorage.getItem('email'),
-            userAuthenticationCode: $('#input-authenticate-Number').val(),
+            email: sessionStorage.getItem('email'),
+            userAuthenticationCode: $('#input-authenticate-code').val(),
         };
 
         $.ajax({
@@ -12,10 +20,14 @@
             url: '/auth/code-authentication',
             data: requiredInfo,
             success: function (response) {
-                window.location.href = '/reset-password';
+                customAlert("인증에 성공하였습니다.", function () {
+                    window.location.href = '/reset-password';
+                });            
             },
             error: function (error) {
-                customAlert(error.responseJSON.errorMessage);
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     }

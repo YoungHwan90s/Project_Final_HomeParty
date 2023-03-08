@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 
 import { PartyService } from './party.service';
 
@@ -32,13 +32,13 @@ export class PartyController {
     }
 
     // // 파티 삭제
-    // @Delete(':partyId')
-
-    // 파티 신청
-    // @Post('apply/:partyId')
-    // async applyParty(@Param('partyId') partyId: number) {
-    //     let userId = Number(1);
-    //     return await this.partyService.applyParty(partyId, userId);
+    // @Delete('/party/:partyId')
+    // async deleteParty(@Param('partyId') partyId: number) {
+    //     // return await this.partyService.deleteParty(partyId, data.password);
+    // }
+    // @Delete('/party/:partyId')
+    // async deleteParty(@Param('partyId') partyId: number) {
+    //     return await this.partyService.deleteParty(partyId, data.password);
     // }
 
     // // 파티 신청자 목록 조회
