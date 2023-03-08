@@ -97,16 +97,30 @@ export class UserService {
             return this.userRepository.softDelete(id);
         }
 
-        private async checkPassword(id: number, password: string) {
-            const user = await this.userRepository.findOne({
-                where: { id, deletedAt: null },
-                select: [ "password" ],
-            });
-            if (!user) {
-                throw new NotFoundException(`User not found. id: ${id}`);
-            }
-            if (user.password !== password.toString()) {
-                throw new UnauthorizedException(`User password is not correct. id: ${id}`);
-            }
+        async getUsersAdmin() {
+            return await this.userRepository.find({})
         }
+    
+        async getUserByIdAdmin(id: number) {
+            return await this.userRepository.findOne({
+                where: { id, deletedAt: null }
+            })
+        }
+    
+        async deletedUserAdmin(id: number) {
+            return this.userRepository.softDelete(id)
+        }
+
+        // private async checkPassword(id: number, password: string) {
+        //     const user = await this.userRepository.findOne({
+        //         where: { id, deletedAt: null },
+        //         select: [ "password" ],
+        //     });
+        //     if (!user) {
+        //         throw new NotFoundException(`User not found. id: ${id}`);
+        //     }
+        //     if (user.password !== password.toString()) {
+        //         throw new UnauthorizedException(`User password is not correct. id: ${id}`);
+        //     }
+        // }
     }
