@@ -13,15 +13,15 @@ export class PartyService {
         @InjectRepository(PartyMember) private PartyMembersRepository: Repository<PartyMember>,
       ) {}
 
-    async deleteParty(id: number, partyId: number) {
-      if(this.partyRepository.getId(partyId)) {
-        throw new UnauthorizedException(
+    // async deleteParty(id: number, partyId: number) {
+    //   // if(this.partyRepository.getId(partyId)) {
+    //     throw new UnauthorizedException(
           
-        )
-      }
-      return await this.partyRepository.softDelete(partyId);
+    //     )
+    //   }
+    //   return await this.partyRepository.softDelete(partyId);
 
       
     }
       
-}
+// }

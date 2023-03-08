@@ -11,30 +11,19 @@ export class ReviewService {
   constructor(
   @InjectRepository(Review) private reviewRepository: ReviewRepository
   ) {}
-  async writeReview(userId: number, partyId: number, rating: number, review: string) {
-    try {
-      if (typeof userId !== "number" || typeof partyId !== "number" || typeof rating !== "number" || typeof review !== "string") {
-        throw new Error("입력한 데이터의 형식이 올바르지 않습니다.");
-      }
-  
+  async writeReview(userId: number, partyId: number, data ) {
       await this.reviewRepository.insert({
         userId,
         partyId,
-        rating,
-        review,
+        rating : data.rating,
+        review : data.review,
       });
-    
       return { statusCode: 201, message: "등록 되었습니다." };
-    } catch (error) {
-      console.error(error);
-      return { statusCode: 500, message: "서버 오류가 발생했습니다." };
-    }
   }
 
-  async readReview(partyId: number) {
+  async readReview(partyId: number) {    
     const reviews = await this.reviewRepository.find({
       where: { partyId, deletedAt: null },
-      select: ["userId", "partyId", "rating", "review", "createdAt", "updatedAt"],
       order: { createdAt: "DESC" }
     });
   
@@ -45,7 +34,7 @@ export class ReviewService {
     return reviews;
   }
 
-  async updateReview(reviewId: number, rating: number, review: string) {
+  async updateReview(reviewId: number, rating: string, review: string) {
         const updatedReview = { rating, review };
     const result = await this.reviewRepository.update(reviewId, updatedReview);
     if (result.affected === 1) {
