@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Tag } from "../../tag/entity/tag.entity";
-import { Party } from "./party.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Tag } from '../../tag/entity/tag.entity';
+import { Party } from './party.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'partyTagMappings' })
 export class PartyTagMapping {
@@ -11,7 +11,7 @@ export class PartyTagMapping {
     partyId: number;
 
     @Column('int')
-    userId: number;
+    tagId: number;
 
     @CreateDateColumn()
     createdAt: Date;
