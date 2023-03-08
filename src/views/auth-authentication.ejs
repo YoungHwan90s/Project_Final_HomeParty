@@ -1,0 +1,22 @@
+<h2>인증번호 입력 페이지</h2>
+
+<script>
+    function authenticateCode() {
+        const requiredInfo = {
+            storageEmail: sessionStorage.getItem('email'),
+            userAuthenticationCode: $('#input-authenticate-Number').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/auth/code-authentication',
+            data: requiredInfo,
+            success: function (response) {
+                window.location.href = '/reset-password';
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.errorMessage);
+            },
+        });
+    }
+</script>

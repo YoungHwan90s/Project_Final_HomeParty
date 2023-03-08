@@ -10,6 +10,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtConfigService } from 'src/config/config.jwt';
 import { JwtStrategy } from './strategies/jwt-strategy';
 import { CacheService } from '../cache/cache.service';
+import { MailModule } from '../node-mailer/node-mailer.module';
+import { UserService } from '../user/user.service';
 
 @Module({
     imports: [
@@ -22,9 +24,10 @@ import { CacheService } from '../cache/cache.service';
             useClass: JwtConfigService,
             inject: [ConfigService],
         }),
+        MailModule,
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService],
+    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService, UserService],
     exports: [AuthService]
 })
 export class AuthModule {}

@@ -1,1 +1,38 @@
 <h2>이메일 찾기</h2>
+
+<div>
+    <label for="exampleInputMobile">이름</label>
+    <input type="text" class="form-control mt-2" id="input-name" placeholder="이름" />
+</div>
+
+<div>
+    <label for="exampleInputMobile">휴대폰</label>
+    <input type="text" class="form-control mt-2" id="input-phone" placeholder="휴대폰" />
+</div>
+
+<button onclick="findEmail()">이메일 찾기</button>
+
+<script>
+    function findEmail() {
+        const userInfo = {
+            name: $('#input-name').val(),
+            phone: $('#input-phone').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/auth/find-email',
+            data: userInfo,
+            success: function (response) {
+                customAlert(`고객님의 계정은 ${response.email} 입니다.`, function () {
+                    window.location.href = '/login';
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload()
+                })
+            },
+        });
+    }
+</script>
