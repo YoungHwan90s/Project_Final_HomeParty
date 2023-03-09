@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } fro
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PartyService } from './party.service';
 
-@Controller('api/party')
+@Controller('/api/party')
 export class PartyController {
     constructor(private readonly partyService: PartyService) {}
 
@@ -20,15 +20,16 @@ export class PartyController {
 
     // 파티 등록
     @Post()
-    async createParty(@Body() party) {
-        return await this.partyService.createParty(party);
+    async createParty(@Body() partyInfo) {
+        let userId = 1;
+        return await this.partyService.createParty(userId, partyInfo);
     }
 
     // 파티 수정
     @Patch(':partyId')
-    async updateParty(@Param('partyId') partyId, @Body() party) {
+    async updateParty(@Param('partyId') partyId, @Body() partyInfo) {
         let userId = Number(1);
-        return await this.partyService.updateParty(userId, partyId, party);
+        return await this.partyService.updateParty(userId, partyId, partyInfo);
     }
 
     // 파티 삭제
@@ -41,12 +42,12 @@ export class PartyController {
     @UseGuards(JwtAuthGuard)
     @Post('/apply/:partyId')
     async applyParty(@Req() req, @Param('partyId') partyId: number) {
-        const { userId } = req.user;
-        return await this.partyService.applyParty(userId, partyId);
+        const user = req.user;
+        return await this.partyService.applyParty(user, partyId);
     }
 
     // 파티 신청자 목록 조회
-    @Get('/:partyId/members')
+    @Get('/apply/:partyId/members')
     async getPartyMembers(@Param('partyId') partyId: number) {
         return await this.partyService.getPartyMembers(partyId);
     }
@@ -54,17 +55,17 @@ export class PartyController {
     // 파티 신청 취소
     @Delete('/apply-cancel/:partyId')
     async cancelApply(@Param('partyId') partyId: number) {
-        let userId = 1;
+        let userId = 2;
         return await this.partyService.cancelParty(partyId, userId);
     }
 
     // 파티 승낙
-    @Patch(':partyId/members/:userId')
+    @Patch('/apply/:partyId/members/:userId')
     async acceptMember(@Param('partyId') partyId: number, @Param('userId') userId: number) {
         return await this.partyService.acceptMember(partyId, userId);
     }
     // 파티 거절
-    @Patch(':partyId/members/:userId')
+    @Patch('/apply/:partyId/members/:userId')
     async rejectMember(@Param('partyId') partyId: number, @Param('userId') userId: number) {
         return await this.partyService.rejectMember(partyId, userId);
     }

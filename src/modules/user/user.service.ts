@@ -20,6 +20,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
+        @InjectRepository(Party) private partyRepository: Repository<Party>,
     ) {}
 
     async createUser(data: CreateUserDto): Promise<void> {
@@ -105,11 +106,11 @@ export class UserService {
     }
 
     async getUsersAdmin() {
-        return await this.userRepository.find({withDeleted: true})
+        return await this.userRepository.find({ withDeleted: true });
     }
 
     async deletedUserAdmin(id: number) {
-        return await this.userRepository.softDelete(id)
+        return await this.userRepository.softDelete(id);
     }
 
     // private async checkPassword(id: number, password: string) {
@@ -125,19 +126,24 @@ export class UserService {
     //     }
     // }
 
-    async updateWishList(userId: number, partyId: number):Promise<WishList> {
+    async updateWishList(user: User, partyId: number): Promise<WishList | Number> {
         const checkWishList = await this.wishListRepository.findOne({
-            where: { partyId },
+            where: { partyId, userId: user.id },
         });
 
         if (checkWishList) {
-            throw new BadRequestException('해당 파티가 이미 찜목록에 존재합니다.');
-        }
+            await this.wishListRepository.delete(checkWishList.id);
 
-        return await this.wishListRepository.save({
-            userId,
-            partyId,
-        });
+            return 1;
+        } else {
+            const party = await this.partyRepository.findOne({ where: { id: partyId } });
+            const wishList = new WishList();
+            wishList.party = party
+            wishList.user = user;
+
+            await this.wishListRepository.save(wishList);
+        }
+        return 0;
     }
 
     async wishList(userId: number): Promise<WishList[]> {
@@ -145,16 +151,12 @@ export class UserService {
             where: { userId },
             relations: [
                 'party',
-                'party.partyMember',
-                'party.thumbnail',
-                'party.partyTagMapping',
-                'party.partyTagMapping.tag',
             ],
         });
         return wishList;
     }
 
-    async deleteWishList(id: number): Promise<DeleteResult> {
-        return await this.wishListRepository.delete(id);
+    async deleteWishList(wishListId: number): Promise<DeleteResult> {
+        return await this.wishListRepository.delete(wishListId);
     }
 }

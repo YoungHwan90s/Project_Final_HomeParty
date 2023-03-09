@@ -6,12 +6,11 @@ import {
     Post,
     Res,
     UseGuards,
-    HttpException,
     Req,
-    Get,
     UnauthorizedException,
+    UsePipes,
 } from '@nestjs/common';
-import { MailService } from '../node-mailer/mail.service';
+import { MailService } from '../../util/node-mailer/mail.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthenticateEmailDto } from './dto/authenticate-email.dto';
@@ -19,9 +18,11 @@ import { LocalAuthGuard } from './guards/auth.guard';
 
 import { UserService } from '../user/user.service';
 import { FindEmailDto } from './dto/find-email.dto';
-import { CacheService } from '../cache/cache.service';
+import { CacheService } from '../../util/cache/cache.service';
 import { AuthenticateCodeDto } from './dto/authenticate-code.dto';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
+import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
+import { createUserSchema } from 'src/util/joi/joi-validation';
 
 @Controller('auth')
 export class AuthController {
@@ -45,6 +46,7 @@ export class AuthController {
     }
 
     @Post('/sign-up')
+    // @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)
     async createUser(@Res() res, @Body() data: CreateUserDto) {
         await this.userService.createUser(data);

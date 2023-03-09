@@ -1,1 +1,60 @@
 <h2>마이페이지 위시리스트 화면</h2>
+
+<button id="like-button${id}" onclick="updateOrDeleteoWishList(id, partyId)">좋아요</button>
+
+<script>
+    function getBasketItems()
+          function getBasketItems() {
+            $.ajax({
+              type: 'GET',
+              url: `/user/wish-list`,
+              data: {},
+              success: function (response) {
+                let wishlists = response['wishList'];
+                sessionStorage.setItem('wishList', JSON.stringify(rows))
+
+                wishlists.forEach((wishList, index) => {
+                    let tempHtml = ``
+                })
+
+                for (let i = 0; i < rows.length; i++) {
+                  let basket_id = rows[i]['basket_id'];
+                  let item_id = rows[i]['item_id']
+                  let itemPrice = rows[i]['itemPrice'].toLocaleString();
+                  let itemName = rows[i]['itemName']
+                  let count = rows[i]['count'].toLocaleString();
+                  let image = rows[i]['image'];
+                  let eachItemTotal = itemPrice.split(',').join('') * count.split(',').join('')
+
+                  itemPriceArray.push(eachItemTotal)
+
+                  let temp_html = ``
+                  $('#itemList').append(temp_html);
+                }
+              },
+            });
+          }
+
+        function updateOrDeleteoWishList(id, partyId) {
+            $.ajax({
+                type: 'POST',
+                url: `/user/wish-list/${partyId}`,
+                data: {},
+                success: function (response) {
+                    if (response.updateOrDelete == 0) {
+                        $('#like-button${id}').css('color', 'red');
+                    } else {
+                        $('#like-button${id}').css('color', '');
+                    }
+                },
+                error: function (error) {
+                    customAlert(
+                        '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                        function () {
+                            window.location.reload();
+                        },
+                    );
+                },
+            });
+        }
+</script>
