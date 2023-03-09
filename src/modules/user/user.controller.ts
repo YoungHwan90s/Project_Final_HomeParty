@@ -1,6 +1,18 @@
-import { Body, Controller, Delete, Get, Patch, UseGuards, Req, HttpCode, Res } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Patch,
+    Param,
+    UseGuards,
+    Req,
+    HttpCode,
+    Post,
+    Res,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto} from './dto/update-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('user')
@@ -33,8 +45,19 @@ export class UserController {
         return res.json({})
     }
 
-    // @Get('/wish-list')
+    @Get('/wish-list')
+    @HttpCode(200)
+    async wishList(@Res() res) {
+        // const { id: userId } = req.user
+        const userId = 1;
+        const wishList = await this.userService.wishList(userId);
 
-    // @Delete('/wish-list/:partyId')
+        return res.send({ wishList });
+    }
 
+    @Delete('/wish-list/:id')
+    @HttpCode(204)
+    async deleteWishList(@Param('id') id: number) {
+        return await this.userService.deleteWishList(id);
+    }
 }

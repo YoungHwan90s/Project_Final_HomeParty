@@ -12,10 +12,11 @@ import { JwtStrategy } from './strategies/jwt-strategy';
 import { CacheService } from '../cache/cache.service';
 import { MailModule } from '../node-mailer/node-mailer.module';
 import { UserService } from '../user/user.service';
+import { WishList } from '../user/entity/wish-list.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([User, WishList]),
         PassportModule.register({
             session: false,
         }),

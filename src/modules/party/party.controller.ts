@@ -31,16 +31,13 @@ export class PartyController {
         return await this.partyService.updateParty(userId, partyId, party);
     }
 
-    // // 파티 삭제
-    // @Delete('/party/:partyId')
-    // async deleteParty(@Param('partyId') partyId: number) {
-    //     // return await this.partyService.deleteParty(partyId, data.password);
-    // }
-    // @Delete('/party/:partyId')
-    // async deleteParty(@Param('partyId') partyId: number) {
-    //     return await this.partyService.deleteParty(partyId, data.password);
-    // }
+    // 파티 삭제
+    @Delete('/:partyId')
+    async deleteParty(@Param('partyId') partyId: number) {
 
+        return await this.partyService.deleteParty(partyId);
+    }
+    
     // // 파티 신청자 목록 조회
     // @Get('/:partyId/members')
     // async getPartyMembers(@Param('partyId') partyId: number) {

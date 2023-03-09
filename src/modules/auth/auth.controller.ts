@@ -62,7 +62,7 @@ export class AuthController {
 
     @Post('/email-authenticate')
     @HttpCode(200)
-    async findPassword(@Res() res, @Body() data) {
+    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto) {
         const user = await this.userService.getUser(data.email);
         if (user) {
             const randomNum = Math.floor(Math.random() * 1000010);
@@ -78,8 +78,6 @@ export class AuthController {
     @Post('/code-authentication')
     @HttpCode(200)
     async authenticateCode(@Res() res, @Body() data: AuthenticateCodeDto) {
-        console.log(data)
-
         const authenticationCode = await this.cacheService.get(data.email);
 
         // 인증번호가 다를 때 에러
