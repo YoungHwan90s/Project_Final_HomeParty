@@ -1,1 +1,54 @@
 <h2>관리자 유저목록</h2>
+    <div id="allUser"></div>
+
+<script>
+    $.ajax({
+        type:'GET',
+        url: `/admin/users`,
+        success: function (response) {
+            const userList = response.users
+            for (let i = 0; i < userList.length; i++) {
+                const { id, email, kakaologinEmail, name, sex, birthday, phone, region, address, profile, introduction,
+                    createdAt, updatedAt, deletedAt
+                } = userList[i]
+                console.log(userList[i])
+
+                const html = `<div>
+                                <h3>번호: ${i+1}</h3>
+                                <span>이름: ${name}</span></br>
+                                <span>카카오: ${kakaologinEmail}</span></br>
+                                <span>이메일: ${email}</span></br>
+                                <span>성별: ${sex}</span></br>
+                                <span>생년월일: ${birthday}</span></br>
+                                <span>핸드폰번호: ${phone}</span></br>
+                                <span>지역: ${region}</span></br>
+                                <span>주소: ${address}</span></br>
+                                <span>프로필: ${profile}</span></br>
+                                <span>자기소개: ${introduction}</span></br>
+                                <span>생성일자: ${createdAt}</span></br>
+                                <span>수정일자: ${updatedAt}</span></br>
+                                <span>삭제일자: ${deletedAt}</span></br>
+                                <button onclick="deleteUserByAdmin(${id})">삭제</button>
+                            </div>`
+                $('#allUser').append(html)
+            }
+        }
+    })
+
+    function deleteUserByAdmin(id) {
+        const result = confirm('삭제하시겠습니까?');
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/admin/users/${id}`,
+                success: function (response) {
+                    alert('회원 삭제');
+                    $(`#id${id}`).remove()
+                    window.location.reload()
+                }
+            })
+        } else {
+            alert('삭제 취소')
+        }
+    }
+</script>
