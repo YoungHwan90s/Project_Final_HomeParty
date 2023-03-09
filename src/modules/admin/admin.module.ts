@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Party } from '../party/entity/party.entity';
-import { Review } from '../review/entity/reveiw.entity';
+import { Review } from '../review/entity/review.entity';
 import { User } from '../user/entity/user.entity';
 import { WishList } from '../user/entity/wish-list.entity';
 import { UserService } from '../user/user.service';

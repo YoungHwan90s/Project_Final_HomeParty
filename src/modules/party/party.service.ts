@@ -12,11 +12,10 @@ import { PartyRepository } from './party.repository';
 export class PartyService {
     constructor(
         private partyRepository: PartyRepository,
-        @InjectRepository(PartyMember) private partyMembersRepository: Repository<PartyMember>,
-        @InjectRepository(Thumbnail) private thumbnailsRepository: Repository<Thumbnail>,
-        @InjectRepository(Tag) private tagsRepository: Repository<Tag>,
+        @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
+        @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
+        @InjectRepository(Tag) private tagRepository: Repository<Tag>,
         @InjectRepository(PartyTagMapping) private partyTagMapping: Repository<PartyTagMapping>,
-        @InjectRepository(User) private userRepository: Repository<User>,
     ) {}
 
     async getParties() {
@@ -36,12 +35,12 @@ export class PartyService {
     async createParty(party) {
         const saveParty = await this.partyRepository.save(party);
 
-        await this.thumbnailsRepository.save({
+        await this.thumbnailRepository.save({
             partyId: saveParty.id,
             thumbnail: saveParty.thumbnail,
         });
 
-        const saveTag = await this.tagsRepository.save({
+        const saveTag = await this.tagRepository.save({
             partyId: saveParty.id,
             tagName: saveParty.tagName,
         });
@@ -71,7 +70,7 @@ export class PartyService {
             date: party.date,
         });
 
-        const result = await this.thumbnailsRepository.update(partyId, {
+        const result = await this.thumbnailRepository.update(partyId, {
             thumbnail: party.thumbnail,
         });
 
@@ -80,7 +79,7 @@ export class PartyService {
     }
 
     async applyParty(user: User, partyId: number) {
-        const existingPartyMember = await this.partyMembersRepository.findOne({
+        const existingPartyMember = await this.partyMemberRepository.findOne({
             where: { userId: user.id },
         });
 
@@ -100,17 +99,17 @@ export class PartyService {
         partyMember.user = user;
         partyMember.party = party;
 
-        return await this.partyMembersRepository.save(partyMember);
+        return await this.partyMemberRepository.save(partyMember);
     }
 
     async getPartyMembers(partyId: number) {
-        return await this.partyMembersRepository.find({
+        return await this.partyMemberRepository.find({
             where: { partyId },
         });
     }
 
     async cancelParty(partyId: number, userId: number) {
-        const existingParty = await this.partyMembersRepository.findOne({
+        const existingParty = await this.partyMemberRepository.findOne({
             where: { partyId, userId },
         });
 
@@ -118,7 +117,7 @@ export class PartyService {
             throw new Error(`신청하지 않은 파티입니다.`);
         }
 
-        return await this.partyMembersRepository.softDelete(userId);
+        return await this.partyMemberRepository.softDelete(userId);
     }
 
     async acceptMember(partyId: number, userId: number) {
@@ -130,14 +129,14 @@ export class PartyService {
     }
 
     private async updateStatus(partyId: number, userId: number, status: string) {
-        const partyMember = await this.partyMembersRepository.findOne({
+        const partyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId },
         });
         if (!partyMember) {
             throw new NotFoundException('해당 유저가 존재하지 않습니다.');
         }
         partyMember.status = status;
-        return await this.partyMembersRepository.save(partyMember);
+        return await this.partyMemberRepository.save(partyMember);
     }
 
     async deleteParty(partyId: number): Promise<DeleteResult> {
