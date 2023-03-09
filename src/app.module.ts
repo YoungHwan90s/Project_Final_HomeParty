@@ -19,7 +19,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/config.jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailerConfigService } from './config/config.nodemailer';
-import { PartyModule } from './modules/party/party.module';
 
 @Module({
     imports: [
