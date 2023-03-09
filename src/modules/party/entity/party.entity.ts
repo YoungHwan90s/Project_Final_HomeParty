@@ -58,22 +58,22 @@ export class Party {
     deletedAt: Date | null;
 
     // 파티 <-> 장바구니: 일대일 관계
-    @OneToMany(() => WishList, (wishList) => wishList.party)
+    @OneToMany(() => WishList, (wishList) => wishList.party, {cascade: true})
     wishList: WishList[];
 
     // 파티 <-> 피티멤버: 일대다 관계
-    @OneToMany(() => PartyMember, (partyMember) => partyMember.party)
+    @OneToMany(() => PartyMember, (partyMember) => partyMember.party, {cascade: true})
     partyMember: PartyMember[];
 
     // 파티 <-> 리뷰: 일대다 관계
-    @OneToMany(() => Review, (review) => review.party)
+    @OneToMany(() => Review, (review) => review.party, {cascade: true})
     review: Review[];
 
     // 파티 <-> 파티-태그-맵핑: 일대다 관계
-    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.party)
+    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.party, {cascade: true})
     partyTagMapping: PartyTagMapping[];
 
     // 파티 <-> 썸네일: 일대다 관계
-    @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party)
+    @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party, {cascade: true})
     thumbnail: Thumbnail[];
 }
