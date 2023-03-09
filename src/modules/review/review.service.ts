@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { async } from 'rxjs';
 import { Review } from './entity/reveiw.entity';
 import { ReviewRepository } from './review.repository';
 
@@ -11,6 +10,7 @@ export class ReviewService {
   constructor(
   @InjectRepository(Review) private reviewRepository: ReviewRepository
   ) {}
+  
   async writeReview(userId: number, partyId: number, data ) {
       await this.reviewRepository.insert({
         userId,
@@ -26,11 +26,9 @@ export class ReviewService {
       where: { partyId, deletedAt: null },
       order: { createdAt: "DESC" }
     });
-  
     if (!reviews || reviews.length === 0) {
       throw new Error('잘못된 요청입니다.');
     }
-  
     return reviews;
   }
 
@@ -55,7 +53,18 @@ export class ReviewService {
       await this.reviewRepository.softDelete(id)
       return{statusCode:200 , message : "삭제 되었습니다."}
     }
-   
   }
 
+  async getReviewAdmin(partyId: number) {
+    const reviews = await this.reviewRepository.find({
+        where: { partyId },
+        order: { createdAt: "DESC" },
+        withDeleted: true
+    });
+    return reviews;
+  }  
+
+  async deleteReviewAdmin(id: number) {
+    return await this.reviewRepository.softDelete(id)
+  }
 }
