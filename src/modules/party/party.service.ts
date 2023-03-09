@@ -17,18 +17,6 @@ export class PartyService {
         @InjectRepository(PartyTagMapping) private partyTagMapping: Repository<PartyTagMapping>,
     ) {}
 
-<<<<<<< HEAD
-    // async deleteParty(id: number, partyId: number) {
-    //   if(this.partyRepository.getId(partyId)) {
-    //     throw new UnauthorizedException(
-          
-    //     )
-    //   }
-    //   return await this.partyRepository.softDelete(partyId);
-
-    // }
-      
-=======
     async getParties() {
         return await this.partyTagMapping.find({
             relations: ['tag', 'party', 'party.partyMember', 'party.thumbnail'],
@@ -140,5 +128,4 @@ export class PartyService {
     async deleteParty(partyId: number): Promise<DeleteResult> {
         return await this.partyRepository.delete(partyId);
     }
->>>>>>> dev
 }

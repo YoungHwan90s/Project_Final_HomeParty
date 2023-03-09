@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { TypeOrmConfigService } from './config/config.typeorm';
-// import { PartyModule } from './modules/party/party.module';
+import { PartyModule } from './modules/party/party.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ReveiwModule } from './modules/review/reveiw.module';
 import { AdminModule } from './modules/admin/admin.module';
@@ -45,7 +45,7 @@ import { MailerConfigService } from './config/config.nodemailer';
           }),
         CacheModule,
         UserModule,
-        // PartyModule,
+        PartyModule,
         AuthModule,
         PassportModule,
         ReveiwModule,
