@@ -42,7 +42,7 @@ import { MailerConfigService } from './config/config.nodemailer';
             imports: [ConfigModule],
             useClass: MailerConfigService,
             inject: [ConfigService],
-          }),
+        }),
         CacheModule,
         UserModule,
         PartyModule,
