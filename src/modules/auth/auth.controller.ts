@@ -6,9 +6,7 @@ import {
     Post,
     Res,
     UseGuards,
-    HttpException,
     Req,
-    Get,
     UnauthorizedException,
     UsePipes,
 } from '@nestjs/common';
@@ -48,7 +46,7 @@ export class AuthController {
     }
 
     @Post('/sign-up')
-    @UsePipes(new JoiValidationPipe(createUserSchema))
+    // @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)
     async createUser(@Res() res, @Body() data: CreateUserDto) {
         await this.userService.createUser(data);
