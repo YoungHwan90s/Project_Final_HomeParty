@@ -10,7 +10,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Review } from '../../review/entity/reveiw.entity';
+import { Review } from '../../review/entity/review.entity';
 import { WishList } from '../../user/entity/wish-list.entity';
 import { PartyMember } from './party-member.entity';
 import { PartyTagMapping } from './party-tag-mapping.entity';

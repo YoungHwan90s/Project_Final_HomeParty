@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 
 @Controller('/api/party')
@@ -20,7 +21,7 @@ export class PartyController {
 
     // 파티 등록
     @Post()
-    async createParty(@Body() partyInfo) {
+    async createParty(@Body() partyInfo: Party) {
         let userId = 1;
         return await this.partyService.createParty(userId, partyInfo);
     }

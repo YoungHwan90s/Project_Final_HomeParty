@@ -5,7 +5,7 @@ import { PartyMember } from 'src/modules/party/entity/party-member.entity';
 import { PartyTagMapping } from 'src/modules/party/entity/party-tag-mapping.entity';
 import { Party } from 'src/modules/party/entity/party.entity';
 import { Thumbnail } from 'src/modules/party/entity/thumbnail.entity';
-import { Review } from 'src/modules/review/entity/reveiw.entity';
+import { Review } from 'src/modules/review/entity/review.entity';
 import { Tag } from 'src/modules/tag/entity/tag.entity';
 import { User } from 'src/modules/user/entity/user.entity';
 import { WishList } from 'src/modules/user/entity/wish-list.entity';
