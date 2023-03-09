@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { Tag } from '../tag/entity/tag.entity';
 import { PartyMember } from './entity/party-member.entity';
 import { PartyTagMapping } from './entity/party-tag-mapping.entity';
@@ -88,4 +88,9 @@ export class PartyService {
     //         where: { partyId },
     //     });
     // }
+    
+    async deleteParty(partyId: number): Promise<DeleteResult> {
+        return await this.partyRepository.delete(partyId);
+    }
+
 }

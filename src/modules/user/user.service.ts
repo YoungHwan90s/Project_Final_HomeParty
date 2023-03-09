@@ -1,21 +1,28 @@
 import {
+    BadRequestException,
     ConflictException,
-    Injectable, NotFoundException,
+    Injectable,
+    NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
+import { WishList } from './entity/wish-list.entity';
+import { Party } from '../party/entity/party.entity';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private userRepository: Repository<User>,
+        @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
+    ) {}
 
-    async createUser(data: CreateUserDto) {
+    async createUser(data: CreateUserDto): Promise<void> {
         const existUser = await this.getUser(data.email);
 
         if (existUser) {
@@ -56,7 +63,7 @@ export class UserService {
         return await this.userRepository.findOne({ where });
     }
 
-    async resetPassword(data: ResetPasswordDTO) {
+    async resetPassword(data: ResetPasswordDTO): Promise<Object> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
         }
@@ -71,42 +78,75 @@ export class UserService {
                 password: hashedPassword,
             },
         );
-      }
-    
-        async updateUser(user: object, data: UpdateUserDto) {
-            if (data.password !== data.confirmPassword) {
-                throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
-            } else {
-                const hashedPassword = await bcrypt.hash(data.password, 10);
+    }
 
-                return this.userRepository.update(user['id'], {
-                    password: hashedPassword,
-                    name: data.name,
-                    sex: data.sex,
-                    phone: data.phone,
-                    birthday: data.birthday,
-                    region: data.region,
-                    address: data.address,
-                    profile: data.profile,
-                    introduction: data.introduction,    
-                });
-            }
-        }
+    async updateUser(user: object, data: UpdateUserDto): Promise<Object> {
+        if (data.password !== data.confirmPassword) {
+            throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
+        } else {
+            const hashedPassword = await bcrypt.hash(data.password, 10);
 
-        async deleteUser(id: number) {
-            return this.userRepository.softDelete(id);
-        }
-
-        private async checkPassword(id: number, password: string) {
-            const user = await this.userRepository.findOne({
-                where: { id, deletedAt: null },
-                select: [ "password" ],
+            return this.userRepository.update(user['id'], {
+                password: hashedPassword,
+                name: data.name,
+                sex: data.sex,
+                phone: data.phone,
+                birthday: data.birthday,
+                region: data.region,
+                address: data.address,
+                profile: data.profile,
+                introduction: data.introduction,
             });
-            if (!user) {
-                throw new NotFoundException(`User not found. id: ${id}`);
-            }
-            if (user.password !== password.toString()) {
-                throw new UnauthorizedException(`User password is not correct. id: ${id}`);
-            }
         }
     }
+
+    async deleteUser(id: number): Promise<DeleteResult> {
+        return this.userRepository.softDelete(id);
+    }
+
+    private async checkPassword(id: number, password: string) {
+        const user = await this.userRepository.findOne({
+            where: { id, deletedAt: null },
+            select: ['password'],
+        });
+        if (!user) {
+            throw new NotFoundException(`User not found. id: ${id}`);
+        }
+        if (user.password !== password.toString()) {
+            throw new UnauthorizedException(`User password is not correct. id: ${id}`);
+        }
+    }
+
+    async updateWishList(userId: number, partyId: number):Promise<WishList> {
+        const checkWishList = await this.wishListRepository.findOne({
+            where: { partyId },
+        });
+
+        if (checkWishList) {
+            throw new BadRequestException('해당 파티가 이미 찜목록에 존재합니다.');
+        }
+
+        return await this.wishListRepository.save({
+            userId,
+            partyId,
+        });
+    }
+
+    async wishList(userId: number): Promise<WishList[]> {
+        const wishList = await this.wishListRepository.find({
+            where: { userId },
+            relations: [
+                'party',
+                'party.partyMember',
+                'party.thumbnail',
+                'party.partyTagMapping',
+                'party.partyTagMapping.tag',
+            ],
+        });
+        return wishList;
+    }
+
+    async deleteWishList(id: number): Promise<DeleteResult> {
+        return await this.wishListRepository.delete(id);
+    }
+}

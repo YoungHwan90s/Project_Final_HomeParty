@@ -30,9 +30,6 @@ export class PartyMember {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @DeleteDateColumn()
-    deletedAt: Date | null;
-
     // 파티멤버 <-> 파티: 다대일 관계
     @ManyToOne(() => Party, (party) => party.partyMember)
     party: Party;
