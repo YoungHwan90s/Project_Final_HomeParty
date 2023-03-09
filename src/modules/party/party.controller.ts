@@ -47,6 +47,7 @@ export class PartyController {
     // // 파티 신청 취소
     // @Delete('/party/apply-cancle/:partyId')
 
+
     // // 파티 승낙/ 거절
     // @Patch('/party/:partyId/members/:userId')
 }

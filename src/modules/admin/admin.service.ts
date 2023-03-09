@@ -6,7 +6,6 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class AdminService {
     constructor(
-        @InjectRepository(Review) private userRepository: Repository<Review>,
-        ) {}
-
+        @InjectRepository(Review) private reviewRepository: Repository<Review>,
+    ) {}
 }

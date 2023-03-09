@@ -104,49 +104,57 @@ export class UserService {
         return this.userRepository.softDelete(id);
     }
 
-    private async checkPassword(id: number, password: string) {
-        const user = await this.userRepository.findOne({
-            where: { id, deletedAt: null },
-            select: ['password'],
-        });
-        if (!user) {
-            throw new NotFoundException(`User not found. id: ${id}`);
+        async getUsersAdmin() {
+            return await this.userRepository.find({withDeleted: true})
         }
-        if (user.password !== password.toString()) {
-            throw new UnauthorizedException(`User password is not correct. id: ${id}`);
-        }
-    }
-
-    async updateWishList(userId: number, partyId: number):Promise<WishList> {
-        const checkWishList = await this.wishListRepository.findOne({
-            where: { partyId },
-        });
-
-        if (checkWishList) {
-            throw new BadRequestException('해당 파티가 이미 찜목록에 존재합니다.');
+    
+        async deletedUserAdmin(id: number) {
+            return await this.userRepository.softDelete(id)
         }
 
-        return await this.wishListRepository.save({
-            userId,
-            partyId,
-        });
-    }
+        // private async checkPassword(id: number, password: string) {
+        //     const user = await this.userRepository.findOne({
+        //         where: { id, deletedAt: null },
+        //         select: [ "password" ],
+        //     });
+        //     if (!user) {
+        //         throw new NotFoundException(`User not found. id: ${id}`);
+        //     }
+        //     if (user.password !== password.toString()) {
+        //         throw new UnauthorizedException(`User password is not correct. id: ${id}`);
+        //     }
+        // }
 
-    async wishList(userId: number): Promise<WishList[]> {
-        const wishList = await this.wishListRepository.find({
-            where: { userId },
-            relations: [
-                'party',
-                'party.partyMember',
-                'party.thumbnail',
-                'party.partyTagMapping',
-                'party.partyTagMapping.tag',
-            ],
-        });
-        return wishList;
+        async updateWishList(userId: number, partyId: number):Promise<WishList> {
+            const checkWishList = await this.wishListRepository.findOne({
+                where: { partyId },
+            });
+    
+            if (checkWishList) {
+                throw new BadRequestException('해당 파티가 이미 찜목록에 존재합니다.');
+            }
+    
+            return await this.wishListRepository.save({
+                userId,
+                partyId,
+            });
+        }
+    
+        async wishList(userId: number): Promise<WishList[]> {
+            const wishList = await this.wishListRepository.find({
+                where: { userId },
+                relations: [
+                    'party',
+                    'party.partyMember',
+                    'party.thumbnail',
+                    'party.partyTagMapping',
+                    'party.partyTagMapping.tag',
+                ],
+            });
+            return wishList;
+        }
+    
+        async deleteWishList(id: number): Promise<DeleteResult> {
+            return await this.wishListRepository.delete(id);
+        }
     }
-
-    async deleteWishList(id: number): Promise<DeleteResult> {
-        return await this.wishListRepository.delete(id);
-    }
-}
