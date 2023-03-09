@@ -49,31 +49,30 @@ export class AuthController {
     async createUser(@Res() res, @Body() data: CreateUserDto) {
         await this.userService.createUser(data);
 
-        return res.json({});
+        return res.send({});
     }
 
     @Post('/find-email')
     @HttpCode(200)
-    async findEmail(@Res() res, @Req() req, @Body() data: FindEmailDto) {
+    async findEmail(@Res() res, @Body() data: FindEmailDto) {
         const email = await this.authService.findEmail(data);
 
-        return res.json({ email });
+        return res.send({ email });
     }
 
     @Post('/email-authenticate')
     @HttpCode(200)
-    async FindPasswordDTO(@Res() res, @Body() data: AuthenticateEmailDto) {
+    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto) {
         const user = await this.userService.getUser(data.email);
-
         if (user) {
             const randomNum = Math.floor(Math.random() * 1000010);
             const randomNumtoString = String(randomNum);
-            await this.cacheService.set(data.email, randomNumtoString);
+            await this.cacheService.set(data.email, randomNumtoString, 120);
 
-            this.mailService.sendMail(data.email, randomNum);
+            await this.mailService.sendMail(data.email, randomNum);
         }
 
-        return res.json({});
+        return res.send({});
     }
 
     @Post('/code-authentication')
@@ -89,7 +88,7 @@ export class AuthController {
         if (authenticationCode == data.userAuthenticationCode) {
             await this.cacheService.del(data.email);
 
-            return res.json({});
+            return res.send({});
         }
     }
 
@@ -98,6 +97,6 @@ export class AuthController {
     async authenticateNumber(@Res() res, @Body() data: ResetPasswordDTO) {
         await this.userService.resetPassword(data);
 
-        return res.json({});
+        return res.send({});
     }
 }

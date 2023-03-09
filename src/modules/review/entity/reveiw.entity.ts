@@ -21,7 +21,7 @@ import { User } from "../../user/entity/user.entity";
     @Column("int")
     partyId: number;
   
-    @Column("int")
+    @Column("varchar")
     rating: string;
   
     @Column("varchar", { length: 1000 })

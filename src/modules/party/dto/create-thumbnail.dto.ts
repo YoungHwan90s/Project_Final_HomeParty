@@ -1,12 +1,9 @@
 import { IsNumber, IsString } from 'class-validator';
 
 export class CreateThumbnailDto {
+    @IsString()
+    readonly thumbnail: string[];
 
-  @IsString()
-  readonly thumbnail: string;
-
-  @IsNumber()
-  readonly partyId: number;
-
+    @IsNumber()
+    readonly partyId: number;
 }
-
