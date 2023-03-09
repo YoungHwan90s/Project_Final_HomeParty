@@ -58,8 +58,8 @@ export class Party {
     deletedAt: Date | null;
 
     // 파티 <-> 장바구니: 일대일 관계
-    @OneToOne(() => WishList, (wishList) => wishList.party)
-    wishList: WishList;
+    @OneToMany(() => WishList, (wishList) => wishList.party)
+    wishList: WishList[];
 
     // 파티 <-> 피티멤버: 일대다 관계
     @OneToMany(() => PartyMember, (partyMember) => partyMember.party)
@@ -76,5 +76,4 @@ export class Party {
     // 파티 <-> 썸네일: 일대다 관계
     @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party)
     thumbnail: Thumbnail[];
-
 }

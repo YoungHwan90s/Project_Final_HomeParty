@@ -4,7 +4,7 @@ import Joi from 'joi';
 export const createUserSchema = Joi.object({
     email: Joi.string().email().required(),
     name: Joi.string().min(3).max(30).pattern(new RegExp('^[a-z0-9가-힣]*$')).required(),
-    phone: Joi.string().length(11).pattern(new RegExp('^[0-9]*$')),
+    phone: Joi.string().length(11).pattern(new RegExp('^[0-9]{3}-[0-9]{4}-[0-9]{4}$')),
     address: Joi.string(),
     password: Joi.string().min(8).pattern(new RegExp('^[a-z0-9]*$')).required(),
     confirmPassword: Joi.ref('password'),
