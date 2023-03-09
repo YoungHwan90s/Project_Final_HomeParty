@@ -151,6 +151,8 @@ export class UserService {
             where: { userId },
             relations: [
                 'party',
+                'party.thumbnail',
+                'party.partyTagMapping.tag'
             ],
         });
         return wishList;
