@@ -49,8 +49,8 @@ export class UserController {
     @Get('/wish-list')
     @HttpCode(200)
     async wishList(@Req() req, @Res() res) {
-        const { id: userId } = req.user;
-        const wishList = await this.userService.wishList(userId);
+        const { id } = req.user;
+        const wishList = await this.userService.wishList(id);
 
         return res.json({ wishList });
     }
@@ -68,7 +68,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Delete('/wish-list/:wishListId')
     @HttpCode(204)
-    async deleteWishList(@Res() res, @Param('id') wishListId: number) {
+    async deleteWishList(@Res() res, @Param('wishListId') wishListId: number) {
         await this.userService.deleteWishList(wishListId);
 
         return res.json({});

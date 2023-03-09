@@ -1,6 +1,12 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import Connection from 'mysql2/typings/mysql/lib/Connection';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { Tag } from '../tag/entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { PartyMember } from './entity/party-member.entity';
@@ -16,6 +22,7 @@ export class PartyService {
         @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
         @InjectRepository(Tag) private tagRepository: Repository<Tag>,
         @InjectRepository(PartyTagMapping) private partyTagMapping: Repository<PartyTagMapping>,
+        private readonly dataSource: DataSource,
     ) {}
 
     async getParties() {
@@ -33,41 +40,54 @@ export class PartyService {
     }
 
     async createParty(userId, partyInfo) {
-        const party = new Party();
-        party.hostId = userId;
-        party.title = partyInfo.title;
-        party.content = partyInfo.content;
-        party.maxMember = partyInfo.maxMember;
-        party.currMember = partyInfo.currMember;
-        party.region = partyInfo.region;
-        party.address = partyInfo.address;
-        party.date = partyInfo.date;
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
 
-        const newParty = await this.partyRepository.save(party);
+        try {
+            const party = new Party();
+            party.hostId = userId;
+            party.title = partyInfo.title;
+            party.content = partyInfo.content;
+            party.maxMember = partyInfo.maxMember;
+            party.currMember = partyInfo.currMember;
+            party.region = partyInfo.region;
+            party.address = partyInfo.address;
+            party.date = partyInfo.date;
 
-        if (partyInfo.thumbnail) {
-            const thumbnail = new Thumbnail();
-            thumbnail.party = newParty;
-            thumbnail.thumbnail = partyInfo.thumbnail;
-            await this.thumbnailRepository.save(thumbnail);
+            const newParty = await this.partyRepository.save(party);
+
+            if (partyInfo.thumbnail) {
+                const thumbnail = new Thumbnail();
+                thumbnail.party = newParty;
+                thumbnail.thumbnail = partyInfo.thumbnail;
+                await this.thumbnailRepository.save(thumbnail);
+            }
+
+            if (partyInfo.tagName) {
+                const tag = new Tag();
+                tag.tagName = partyInfo.tagName;
+                await this.tagRepository.save(tag);
+
+                const tagMapping = new PartyTagMapping();
+                tagMapping.party = newParty;
+                tagMapping.tag = tag;
+                await this.partyTagMapping.save(tagMapping);
+            }
+
+            const partyMember = new PartyMember();
+            partyMember.party = newParty;
+            partyMember.user = userId;
+            partyMember.status = '호스트';
+
+            await this.partyMemberRepository.save(partyMember);
+            await queryRunner.commitTransaction();
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw new UnauthorizedException('asdf');
+        } finally {
+            await queryRunner.release();
         }
-
-        if (partyInfo.tagName) {
-            const tag = new Tag();
-            tag.tagName = partyInfo.tagName;
-            await this.tagRepository.save(tag);
-
-            const tagMapping = new PartyTagMapping();
-            tagMapping.party = newParty;
-            tagMapping.tag = tag;
-            await this.partyTagMapping.save(tagMapping);
-        }
-
-        const partyMember = new PartyMember();
-        partyMember.party = newParty;
-        partyMember.user = userId;
-        partyMember.status = '호스트';
-        await this.partyMemberRepository.save(partyMember);
     }
 
     async updateParty(userId, partyId, partyInfo) {
@@ -177,7 +197,11 @@ export class PartyService {
         return await this.partyMemberRepository.save(partyMember);
     }
 
-    async deleteParty(partyId: number): Promise<DeleteResult> {
-        return await this.partyRepository.delete(partyId);
+    async deleteParty(partyId: number) {
+        const party = await this.partyRepository.findOne({
+            where: { id: partyId },
+            relations: ['wishList', 'partyMember', 'review', 'partyTagMapping', 'thumbnail'],
+        });
+        return this.partyRepository.softRemove(party);
     }
 }
