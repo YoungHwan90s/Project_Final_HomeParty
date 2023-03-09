@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from '../tag/entity/tag.entity';
@@ -25,9 +25,9 @@ export class PartyService {
     }
 
     async getPartyById(partyId: number) {
-        return await this.partyTagMapping.findOne({
-            relations: ['tag', 'party', 'party.partyMember', 'party.thumbnail'],
-            where: { party: { id: partyId, deletedAt: null } },
+        return await this.partyRepository.findOne({
+            relations: ['thumbnail', 'partyMember', 'partyTagMapping.tag'],
+            where: { id: partyId },
         });
     }
 
@@ -56,7 +56,7 @@ export class PartyService {
         });
 
         if (selectParty.hostId !== userId) {
-            throw new ForbiddenException(`다른 사용자의 게시물은 삭제할 수 없습니다.`);
+            throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
         }
 
         await this.partyRepository.update(partyId, {
@@ -68,24 +68,60 @@ export class PartyService {
             address: party.address,
             date: party.date,
         });
-        await this.thumbnailsRepository.update(partyId, { thumbnail: party.thumbnail });
-        await this.tagsRepository.update(partyId, { tagName: party.tagName });
+
+        const result = await this.thumbnailsRepository.update(partyId, {
+            thumbnail: party.thumbnail,
+        });
+
+        console.log(result);
+        // await this.tagsRepository.update(partyId, { tagName: party.tagName });
     }
 
-    // async applyParty(partyId: number, userId: number) {
-    //     const party = await this.partyRepository.findOne({
-    //         where: { id: partyId, deletedAt: null },
-    //     });
+    async applyParty(partyId: number, userId: number) {
+        const existingPartyMember = await this.partyMembersRepository.findOne({
+            where: { userId },
+        });
 
-    //     const result = await this.partyMembersRepository.insert({
-    //         partyId,
-    //         userId,
-    //     });
-    // }
+        if (existingPartyMember) {
+            throw new Error(`이미 신청하셨습니다.`);
+        }
+        return await this.partyMembersRepository.insert({ userId, partyId });
+    }
 
-    // async getPartyMembers(partyId: number) {
-    //     return await this.partyMembersRepository.find({
-    //         where: { partyId },
-    //     });
-    // }
+    async getPartyMembers(partyId: number) {
+        return await this.partyMembersRepository.find({
+            where: { partyId },
+        });
+    }
+
+    async cancelParty(partyId: number, userId: number) {
+        const existingParty = await this.partyMembersRepository.findOne({
+            where: { partyId, userId },
+        });
+
+        if (!existingParty) {
+            throw new Error(`신청하지 않은 파티입니다.`);
+        }
+
+        return await this.partyMembersRepository.softDelete(userId);
+    }
+
+    async acceptMember(partyId: number, userId: number) {
+        return await this.updateStatus(partyId, userId, '신청완료');
+    }
+
+    async rejectMember(partyId: number, userId: number) {
+        return await this.updateStatus(partyId, userId, '거절');
+    }
+
+    private async updateStatus(partyId: number, userId: number, status: string) {
+        const partyMember = await this.partyMembersRepository.findOne({
+            where: { partyId, userId },
+        });
+        if (!partyMember) {
+            throw new NotFoundException('해당 유저가 존재하지 않습니다.');
+        }
+        partyMember.status = status;
+        return await this.partyMembersRepository.save(partyMember);
+    }
 }
