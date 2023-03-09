@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Not, Repository } from 'typeorm';
 import { Tag } from '../tag/entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { PartyMember } from './entity/party-member.entity';

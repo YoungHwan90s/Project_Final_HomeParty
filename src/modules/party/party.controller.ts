@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } fro
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PartyService } from './party.service';
 
-@Controller('api/party')
+@Controller('/api/party')
 export class PartyController {
     constructor(private readonly partyService: PartyService) {}
 
