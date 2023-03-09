@@ -38,7 +38,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo) {
+    async createParty(user: User, partyInfo): Promise<any> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -54,16 +54,13 @@ export class PartyService {
             party.date = partyInfo.date;
 
             const newParty = await this.partyRepository.save(party);
-
-            if (partyInfo.thumbnail && partyInfo.thumbnail.length > 0) {
-                const thumbnails = [];
-                for (const thumb of partyInfo.thumbnail) {
+            if (partyInfo.thumbnail) {
+                for (let i = 0; i < partyInfo.thumbnail.length; i++) {
                     const thumbnail = new Thumbnail();
                     thumbnail.party = newParty;
-                    thumbnail.thumbnail = thumb;
-                    thumbnails.push(thumbnail);
+                    thumbnail.thumbnail = partyInfo.thumbnail[i];
+                    await this.thumbnailRepository.save(thumbnail);
                 }
-                await this.thumbnailRepository.save(thumbnails);
             }
 
             if (partyInfo.tagName) {
@@ -86,7 +83,7 @@ export class PartyService {
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
-            throw new UnauthorizedException('에러났습니다.');
+            throw new UnauthorizedException('itsnotworking');
         } finally {
             await queryRunner.release();
         }

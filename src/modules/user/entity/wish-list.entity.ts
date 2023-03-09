@@ -3,13 +3,8 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    Index,
-    JoinColumn,
     ManyToOne,
-    OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn,
 } from 'typeorm';
 import { Party } from '../../party/entity/party.entity';
 import { User } from './user.entity';
