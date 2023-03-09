@@ -10,16 +10,16 @@
             console.log(userInfo)
             const html = `<div>
                             <label>이메일</label><input type="email" value="${userInfo.email}"></br></br>
-                            <label>이름</label><input type="text" value="${userInfo.name}"></br></br>
-                            <label>비밀번호</label><input type="password" value="${userInfo.password}"></br></br>
-                            <label>비밀번호 확인</label><input type="password" value="${userInfo.password}"></br></br>
-                            <label>성별</label><input type="text"value="${userInfo.sex}"></br></br>
-                            <label>생일</label><input type="text" value="${userInfo.birthday}"></br></br>
-                            <label>핸드폰번호</label><input type="text" value="${userInfo.phone}"></br></br>
-                            <label>지역</label><input type="text" value="${userInfo.region}"></br></br>
-                            <label>주소</label><input type="text" value="${userInfo.address}"></br></br>
-                            <label>프로필</label><input type="text" value="${userInfo.profile}"></br></br>
-                            <label>자기소개</label><input type="text" value="${userInfo.introduction}"></br></br>
+                            <label>이름</label><input id="name" type="text" value="${userInfo.name}"></br></br>
+                            <label>비밀번호</label><input id="password" type="password" value="${userInfo.password}"></br></br>
+                            <label>비밀번호 확인</label><input id="confirmPassword" type="password" value="${userInfo.password}"></br></br>
+                            <label>성별</label><input id="sex" type="text"value="${userInfo.sex}"></br></br>
+                            <label>생일</label><input id="birthday" type="text" value="${userInfo.birthday}"></br></br>
+                            <label>핸드폰번호</label><input id="phone" type="text" value="${userInfo.phone}"></br></br>
+                            <label>지역</label><input id="region" type="text" value="${userInfo.region}"></br></br>
+                            <label>주소</label><input id="address" type="text" value="${userInfo.address}"></br></br>
+                            <label>프로필</label><input id="profile" type="text" value="${userInfo.profile}"></br></br>
+                            <label>자기소개</label><input id="introduction" type="text" value="${userInfo.introduction}"></br></br>
                             <button onclick="userEdit()">수정</button>
                             <button onclick="deleteUser()">삭제</button>
                         </div>`
