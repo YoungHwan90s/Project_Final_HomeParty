@@ -19,8 +19,8 @@ export class PartyController {
         return await this.partyService.getPartyById(partyId);
     }
 
-    @UseGuards(JwtAuthGuard)
     // 파티 등록
+    @UseGuards(JwtAuthGuard)
     @Post()
     async createParty(@Req() req, @Body() partyInfo) {
         const user = req.user;
@@ -28,16 +28,11 @@ export class PartyController {
     }
 
     // 파티 수정
+    @UseGuards(JwtAuthGuard)
     @Patch(':partyId')
-    async updateParty(@Param('partyId') partyId, @Body() partyInfo) {
-        let userId = Number(1);
+    async updateParty(@Req() req, @Param('partyId') partyId, @Body() partyInfo) {
+        const { id: userId } = req.user;
         return await this.partyService.updateParty(userId, partyId, partyInfo);
-    }
-
-    // 파티 삭제
-    @Delete('/:partyId')
-    async deleteParty(@Param('partyId') partyId: number) {
-        return await this.partyService.deleteParty(partyId);
     }
 
     // 파티 신청
@@ -55,20 +50,28 @@ export class PartyController {
     }
 
     // 파티 신청 취소
+    @UseGuards(JwtAuthGuard)
     @Delete('/apply-cancel/:partyId')
-    async cancelApply(@Param('partyId') partyId: number) {
-        let userId = 2;
-        return await this.partyService.cancelParty(partyId, userId);
+    async cancelApply(@Req() req, @Param('partyId') partyId: number) {
+        const { id: userId } = req.user;
+        return await this.partyService.cancelParty(userId, partyId);
     }
 
-    // 파티 승낙
+    // 파티 승낙 / 거절
     @Patch('/apply/:partyId/members/:userId')
-    async acceptMember(@Param('partyId') partyId: number, @Param('userId') userId: number) {
-        return await this.partyService.acceptMember(partyId, userId);
+    async acceptMember(
+        @Param('userId') userId: number,
+        @Param('partyId') partyId: number,
+        @Body() status,
+    ) {
+        return await this.partyService.acceptMember(userId, partyId, status);
     }
-    // 파티 거절
-    @Patch('/apply/:partyId/members/:userId')
-    async rejectMember(@Param('partyId') partyId: number, @Param('userId') userId: number) {
-        return await this.partyService.rejectMember(partyId, userId);
+
+    // 파티 삭제
+    @UseGuards(JwtAuthGuard)
+    @Delete('/:partyId')
+    async deleteParty(@Req() req, @Param('partyId') partyId: number) {
+        const { id: userId } = req.user;
+        return await this.partyService.deleteParty(userId, partyId);
     }
 }
