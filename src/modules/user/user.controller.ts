@@ -55,6 +55,14 @@ export class UserController {
         return res.send({ wishList });
     }
 
+    @Post('/wish-list/:partyId')
+    @HttpCode(204)
+    async updateWishList(@Param('partyId') partyId: number, @Req() req) {
+        // const { id: userId } = req.user
+        const userId = 1;
+        return await this.userService.updateWishList(userId, partyId);
+    }
+
     @Delete('/wish-list/:id')
     @HttpCode(204)
     async deleteWishList(@Param('id') id: number) {
