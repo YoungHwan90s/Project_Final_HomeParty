@@ -1,14 +1,15 @@
 <h2>메인화면</h2>
 
 <div>찜목록담기</div>
-<button id="like-button${id}" onclick="updateOrDeleteoWishList(id, partyId)">좋아요</button>
+<button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
 
 <script>
-    function updateOrDeleteoWishList(id, partyId) {
+    function updateWishList(partyId) {
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
             data: {},
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 if (response.updateOrDelete == 0) {
                     $('#like-button${id}').css('color', 'red');

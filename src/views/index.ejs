@@ -31,12 +31,6 @@
             type="text/css"
             href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css"
         />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
-            integrity="sha512-QJ/hdR1RfN2+oBxyJewMLsz0DpMQ0WZ3qvnGkvYuL0N33UBl90dWIT3g7VLYGnH1uywVwnBx5Q5z5l5CB5uzBQ=="
-            crossorigin="anonymous"
-        />
 
         <!-- css -->
         <link rel="stylesheet" href="/css/modal.css" />
@@ -83,29 +77,30 @@
 
         <!-- body -->
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
-        <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %> <% 
-        if (components === 'sign-up') { %><%-include('auth-sign-up.ejs') %><% } %> <% 
-        if (components === 'find-email') { %><%-include('auth-find-email.ejs') %><% } %> <% 
-        if (components === 'find-password') { %><%-include('auth-find-password.ejs') %><% } %> <% 
-        if (components === 'authentication') { %><%-include('auth-authentication.ejs') %><% } %> <% 
-        if (components === 'reset-password') { %><%-include('auth-reset-password.ejs') %><% } %> <% 
-        if (components === 'user-menu') { %><%-include('user-menu.ejs') %><% } %> <% 
-        if (components === 'user-edit') { %><%-include('user-edit.ejs') %><% } %> <% 
-        if (components === 'wish-list') { %><%-include('wish-list.ejs') %><% } %> <% 
-        if (components === 'manage') { %><%-include('manage.ejs') %><% } %> <% 
-        if (components === 'manage-host') { %><%-include('manage-host.ejs') %><% } %> <% 
-        if (components === 'manage-guest') { %><%-include('manage-guest.ejs') %><% } %> <% 
-        if (components === 'manage-history') { %><%-include('manage-history.ejs') %><% } %> <% 
-        if (components === 'admin-user') { %><%-include('admin-user.ejs') %><% } %> <% 
-        if (components === 'admin-party') { %><%-include('admin-party.ejs') %><% } %> <% 
-        if (components === 'admin-review') { %><%-include('admin-review.ejs') %><% } %> <% 
-        if (components === 'admin-tag') { %><%-include('admin-tag.ejs') %><% } %> <% 
-        if (components === 'party') { %><%-include('party.ejs') %><% } %> <% 
-        if (components === 'party-make') { %><%-include('party-make.ejs') %><% } %> <% 
-        if (components === 'party-host') { %><%-include('party-host.ejs') %><% } %> <% 
-        if (components === 'party-host-detail') { %><%-include('party-host-detail.ejs') %><% } %> <% 
-        if (components === 'party-host-massage') {%> <%-include('party-host-massage.ejs') %><% } %>
+        <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %> 
+        <% if (components === 'sign-up') { %><%-include('auth-sign-up.ejs') %><% } %> 
+        <% if (components === 'find-email') { %><%-include('auth-find-email.ejs') %><% } %> 
+        <% if (components === 'find-password') { %><%-include('auth-find-password.ejs') %><% } %> 
+        <% if (components === 'authentication') { %><%-include('auth-authentication.ejs') %><% } %> 
+        <% if (components === 'reset-password') { %><%-include('auth-reset-password.ejs') %><% } %> 
+        <% if (components === 'user-menu') { %><%-include('user-menu.ejs') %><% } %> 
+        <% if (components === 'user-edit') { %><%-include('user-menu-edit.ejs') %><% } %> 
+        <% if (components === 'wish-list') { %><%-include('user-menu-wish-list.ejs') %><% } %> 
+        <% if (components === 'manage') { %><%-include('manage.ejs') %><% } %> 
+        <% if (components === 'manage-host') { %><%-include('manage-host.ejs') %><% } %> 
+        <% if (components === 'manage-guest') { %><%-include('manage-guest.ejs') %><% } %> 
+        <% if (components === 'manage-history') { %><%-include('manage-history.ejs') %><% } %> 
+        <% if (components === 'admin-user') { %><%-include('admin-user.ejs') %><% } %> 
+        <% if (components === 'admin-party') { %><%-include('admin-party.ejs') %><% } %> 
+        <% if (components === 'admin-review') { %><%-include('admin-review.ejs') %><% } %> 
+        <% if (components === 'admin-tag') { %><%-include('admin-tag.ejs') %><% } %> 
+        <% if (components === 'party') { %><%-include('party.ejs') %><% } %> 
+        <% if (components === 'party-make') { %><%-include('party-make.ejs') %><% } %> 
+        <% if (components === 'party-host') { %><%-include('party-host.ejs') %><% } %> 
+        <% if (components === 'party-host-detail') { %><%-include('party-host-detail.ejs') %><% } %> 
+        <% if (components === 'party-host-massage') {%> <%-include('party-host-massage.ejs') %><% } %>
     </body>
+
     <script>
         // modal alert function
         function customAlert(text, confirmCallback) {

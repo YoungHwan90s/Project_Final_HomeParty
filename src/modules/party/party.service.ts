@@ -5,8 +5,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import Connection from 'mysql2/typings/mysql/lib/Connection';
-import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Tag } from '../tag/entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { PartyMember } from './entity/party-member.entity';
@@ -39,29 +38,29 @@ export class PartyService {
         });
     }
 
-    async createParty(userId, partyInfo) {
+    async createParty(user: User, partyInfo): Promise<any> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
         try {
             const party = new Party();
-            party.hostId = userId;
+            party.hostId = user.id;
             party.title = partyInfo.title;
             party.content = partyInfo.content;
             party.maxMember = partyInfo.maxMember;
-            party.currMember = partyInfo.currMember;
             party.region = partyInfo.region;
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
             const newParty = await this.partyRepository.save(party);
-
             if (partyInfo.thumbnail) {
-                const thumbnail = new Thumbnail();
-                thumbnail.party = newParty;
-                thumbnail.thumbnail = partyInfo.thumbnail;
-                await this.thumbnailRepository.save(thumbnail);
+                for (let i = 0; i < partyInfo.thumbnail.length; i++) {
+                    const thumbnail = new Thumbnail();
+                    thumbnail.party = newParty;
+                    thumbnail.thumbnail = partyInfo.thumbnail[i];
+                    await this.thumbnailRepository.save(thumbnail);
+                }
             }
 
             if (partyInfo.tagName) {
@@ -77,14 +76,14 @@ export class PartyService {
 
             const partyMember = new PartyMember();
             partyMember.party = newParty;
-            partyMember.user = userId;
+            partyMember.user = user;
             partyMember.status = '호스트';
 
             await this.partyMemberRepository.save(partyMember);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
-            throw new UnauthorizedException('asdf');
+            throw new UnauthorizedException('itsnotworking');
         } finally {
             await queryRunner.release();
         }

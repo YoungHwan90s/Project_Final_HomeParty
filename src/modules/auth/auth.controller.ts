@@ -39,10 +39,7 @@ export class AuthController {
     async login(@Req() req, @Res() res) {
         const { accessToken, refreshToken } = await this.authService.login(req.user);
 
-        res.header('authorization', `Bearer ${accessToken}`);
-        res.header('refreshtoken', refreshToken);
-
-        return res.json({});
+        return res.json({accessToken, refreshToken});
     }
 
     @Post('/sign-up')
