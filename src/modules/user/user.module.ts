@@ -8,12 +8,9 @@ import { AuthModule } from '../auth/auth.module';
 import { Party } from '../party/entity/party.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, WishList, Party]),
-    AuthModule
-  ],
-  controllers: [UserController],
-  providers: [UserService],
-  exports: [UserService],
+    imports: [TypeOrmModule.forFeature([User, WishList, Party]), AuthModule],
+    controllers: [UserController],
+    providers: [UserService],
+    exports: [UserService],
 })
 export class UserModule {}

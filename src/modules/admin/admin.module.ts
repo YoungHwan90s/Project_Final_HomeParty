@@ -9,8 +9,8 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Review, User, WishList, Party])],
-  controllers: [AdminController],
-  providers: [AdminService, UserService]
+    imports: [TypeOrmModule.forFeature([Review, User, WishList, Party])],
+    controllers: [AdminController],
+    providers: [AdminService, UserService],
 })
 export class AdminModule {}
