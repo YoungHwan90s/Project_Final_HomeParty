@@ -7,12 +7,9 @@ import { WishList } from './entity/wish-list.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, WishList]),
-    AuthModule
-  ],
-  controllers: [UserController],
-  providers: [UserService],
-  exports: [UserService],
+    imports: [TypeOrmModule.forFeature([User, WishList]), AuthModule],
+    controllers: [UserController],
+    providers: [UserService],
+    exports: [UserService],
 })
 export class UserModule {}
