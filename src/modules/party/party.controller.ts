@@ -1,18 +1,5 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Req,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreatePartyDto } from './dto/create-party.dto';
-
 import { PartyService } from './party.service';
 
 @Controller('api/party')
@@ -45,14 +32,10 @@ export class PartyController {
     }
 
     // 파티 삭제
-    // @Delete('/party/:partyId')
-    // async deleteParty(@Param('partyId') partyId: number) {
-    //     // return await this.partyService.deleteParty(partyId, data.password);
-    // }
-    // @Delete('/party/:partyId')
-    // async deleteParty(@Param('partyId') partyId: number) {
-    //     return await this.partyService.deleteParty(partyId, data.password);
-    // }
+    @Delete('/:partyId')
+    async deleteParty(@Param('partyId') partyId: number) {
+        return await this.partyService.deleteParty(partyId);
+    }
 
     // 파티 신청
     @UseGuards(JwtAuthGuard)
@@ -80,7 +63,6 @@ export class PartyController {
     async acceptMember(@Param('partyId') partyId: number, @Param('userId') userId: number) {
         return await this.partyService.acceptMember(partyId, userId);
     }
-
     // 파티 거절
     @Patch(':partyId/members/:userId')
     async rejectMember(@Param('partyId') partyId: number, @Param('userId') userId: number) {

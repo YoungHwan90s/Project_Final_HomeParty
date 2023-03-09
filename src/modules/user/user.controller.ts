@@ -1,8 +1,19 @@
-import { Body, Controller, Delete, Get, Patch, Param, UseGuards, Req, HttpCode, HttpException } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Patch,
+    Param,
+    UseGuards,
+    Req,
+    HttpCode,
+    Post,
+    Res,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto} from './dto/update-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { User } from './entity/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -11,29 +22,42 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Get('/')
     @HttpCode(200)
-    async getUserInfo(@Req() req) {
+    async getUserInfo(@Req() req, @Res() res) {
         const user = req.user
-        return user
+        return res.json({user})
     }
 
     @UseGuards(JwtAuthGuard)
     @Patch('/')
     @HttpCode(201)
-    async updateUser(@Req() req, @Body() data: UpdateUserDto) {
+    async updateUser(@Req() req, @Res() res, @Body() data: UpdateUserDto) {
         const user = req.user
-        return await this.userService.updateUser(user, data);
+        await this.userService.updateUser(user, data);
+        return res.json({})
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('/')
     @HttpCode(204)
-    async deleteUser(@Req() req) {
+    async deleteUser(@Req() req, @Res() res) {
         const { id } = req.user
-        return await this.userService.deleteUser(id) 
+        await this.userService.deleteUser(id)
+        return res.json({})
     }
 
-    // @Get('/wish-list')
+    @Get('/wish-list')
+    @HttpCode(200)
+    async wishList(@Res() res) {
+        // const { id: userId } = req.user
+        const userId = 1;
+        const wishList = await this.userService.wishList(userId);
 
-    // @Delete('/wish-list/:partyId')
+        return res.send({ wishList });
+    }
 
+    @Delete('/wish-list/:id')
+    @HttpCode(204)
+    async deleteWishList(@Param('id') id: number) {
+        return await this.userService.deleteWishList(id);
+    }
 }

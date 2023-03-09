@@ -9,7 +9,7 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, WishList]),
-    AuthModule,
+    AuthModule
   ],
   controllers: [UserController],
   providers: [UserService],

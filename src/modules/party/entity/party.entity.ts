@@ -3,6 +3,8 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
+    ManyToOne,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
@@ -58,7 +60,7 @@ export class Party {
     // 파티 <-> 장바구니: 일대일 관계
     @OneToOne(() => WishList, (wishList) => wishList.party)
     wishList: WishList;
-    
+
     // 파티 <-> 피티멤버: 일대다 관계
     @OneToMany(() => PartyMember, (partyMember) => partyMember.party)
     partyMember: PartyMember[];
