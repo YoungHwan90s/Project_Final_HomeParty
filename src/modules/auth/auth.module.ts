@@ -9,8 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtConfigService } from 'src/config/config.jwt';
 import { JwtStrategy } from './strategies/jwt-strategy';
-import { CacheService } from '../cache/cache.service';
-import { MailModule } from '../node-mailer/node-mailer.module';
+import { CacheService } from '../../util/cache/cache.service';
+import { MailModule } from '../../util/node-mailer/node-mailer.module';
 import { UserService } from '../user/user.service';
 import { WishList } from '../user/entity/wish-list.entity';
 

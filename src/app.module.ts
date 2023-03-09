@@ -14,7 +14,7 @@ import { TagModule } from './modules/tag/tag.module';
 import { PassportModule } from '@nestjs/passport';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { RedisConfigService } from './config/config.redis';
-import { CacheModule } from './modules/cache/cache.module';
+import { CacheModule } from './util/cache/cache.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/config.jwt';
 import { MailerModule } from '@nestjs-modules/mailer';

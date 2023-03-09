@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { User } from '../user/entity/user.entity';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { CacheService } from '../cache/cache.service';
+import { CacheService } from '../../util/cache/cache.service';
 import { FindEmailDto } from './dto/find-email.dto';
 
 @Injectable()
