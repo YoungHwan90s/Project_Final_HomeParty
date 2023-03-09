@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } fro
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PartyService } from './party.service';
 
-@Controller('api/party')
+@Controller('/api/party')
 export class PartyController {
     constructor(private readonly partyService: PartyService) {}
 
@@ -41,8 +41,8 @@ export class PartyController {
     @UseGuards(JwtAuthGuard)
     @Post('/apply/:partyId')
     async applyParty(@Req() req, @Param('partyId') partyId: number) {
-        const { userId } = req.user;
-        return await this.partyService.applyParty(userId, partyId);
+        const user = req.user;
+        return await this.partyService.applyParty(user, partyId);
     }
 
     // 파티 신청자 목록 조회

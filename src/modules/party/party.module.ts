@@ -9,10 +9,11 @@ import { PartyTagMapping } from './entity/party-tag-mapping.entity';
 import { AuthModule } from '../auth/auth.module';
 import { PartyRepository } from './party.repository';
 import { Tag } from '../tag/entity/tag.entity';
+import { User } from '../user/entity/user.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Party, Thumbnail, PartyMember, PartyTagMapping, Tag]),
+        TypeOrmModule.forFeature([Party, Thumbnail, PartyMember, PartyTagMapping, Tag, User]),
         AuthModule,
     ],
     controllers: [PartyController],

@@ -1,7 +1,8 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Not, Repository } from 'typeorm';
 import { Tag } from '../tag/entity/tag.entity';
+import { User } from '../user/entity/user.entity';
 import { PartyMember } from './entity/party-member.entity';
 import { PartyTagMapping } from './entity/party-tag-mapping.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
@@ -15,6 +16,7 @@ export class PartyService {
         @InjectRepository(Thumbnail) private thumbnailsRepository: Repository<Thumbnail>,
         @InjectRepository(Tag) private tagsRepository: Repository<Tag>,
         @InjectRepository(PartyTagMapping) private partyTagMapping: Repository<PartyTagMapping>,
+        @InjectRepository(User) private userRepository: Repository<User>,
     ) {}
 
     async getParties() {
@@ -77,15 +79,28 @@ export class PartyService {
         // await this.tagsRepository.update(partyId, { tagName: party.tagName });
     }
 
-    async applyParty(partyId: number, userId: number) {
+    async applyParty(user: User, partyId: number) {
         const existingPartyMember = await this.partyMembersRepository.findOne({
-            where: { userId },
+            where: { userId: user.id },
         });
 
         if (existingPartyMember) {
             throw new Error(`이미 신청하셨습니다.`);
         }
-        return await this.partyMembersRepository.insert({ userId, partyId });
+
+        const party = await this.partyRepository.findOne({
+            where: { id: partyId },
+        });
+
+        if (!party) {
+            throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
+        }
+
+        const partyMember = new PartyMember();
+        partyMember.user = user;
+        partyMember.party = party;
+
+        return await this.partyMembersRepository.save(partyMember);
     }
 
     async getPartyMembers(partyId: number) {
