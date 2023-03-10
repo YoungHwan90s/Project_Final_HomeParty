@@ -40,7 +40,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo): Promise<void> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<void> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -65,25 +65,27 @@ export class PartyService {
                     await queryRunner.manager.save(Thumbnail, thumbnail);
                 }
             }
-            throw new Error('123412341234');
-            // if (partyInfo.tagName) {
-            //     const tag = new Tag();
-            //     tag.tagName = partyInfo.tagName;
-            //     await this.tagRepository.save(tag);
 
-            //     const tagMapping = new PartyTagMapping();
-            //     tagMapping.party = newParty;
-            //     tagMapping.tag = tag;
-            //     await this.partyTagMapping.save(tagMapping);
-            // }
+            if (partyInfo.tagName.length) {
+                for (let i = 0; i < partyInfo.tagName.length; i++) {
+                    const tag = new Tag();
+                    tag.tagName = partyInfo.tagName[i];
+                    await queryRunner.manager.save(tag);
 
-            // const partyMember = new PartyMember();
-            // partyMember.party = newParty;
-            // partyMember.user = user;
-            // partyMember.status = '호스트';
+                    const tagMapping = new PartyTagMapping();
+                    tagMapping.party = newParty;
+                    tagMapping.tag = tag;
+                    await queryRunner.manager.save(tagMapping);
+                }
+            }
 
-            // await this.partyMemberRepository.save(partyMember);
-            // await queryRunner.commitTransaction();
+            const partyMember = new PartyMember();
+            partyMember.party = newParty;
+            partyMember.user = user;
+            partyMember.status = '호스트';
+
+            await queryRunner.manager.save(partyMember);
+            await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
@@ -97,6 +99,20 @@ export class PartyService {
             relations: { thumbnail: true, partyTagMapping: { tag: true } },
             where: { id: partyId },
         });
+
+        party.title = partyInfo.title;
+        party.content = partyInfo.content;
+        party.title = partyInfo.title;
+        party.region = partyInfo.region;
+        party.address = partyInfo.address;
+        party.date = partyInfo.date;
+
+        for (let i = 0; i < party.thumbnail.length; i++) {
+            partyInfo.thumbnail[i]
+            
+        }
+
+        // await this.partyRepository.save(party);
 
         console.dir(party, { depth: null });
 

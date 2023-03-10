@@ -36,7 +36,7 @@ export class PartyController {
     @UseGuards(JwtAuthGuard)
     @HttpCode(201)
     @Post()
-    async createParty(@Req() req, @Body() partyInfo) {
+    async createParty(@Req() req, @Body() partyInfo: CreatePartyDto) {
         let user = req.user;
         return await this.partyService.createParty(user, partyInfo);
     }
