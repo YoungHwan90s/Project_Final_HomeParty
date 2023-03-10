@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Tag } from '../party/entity/party-tag.entity';
 import { Party } from '../party/entity/party.entity';
 import { Review } from '../review/entity/review.entity';
 import { ReviewService } from '../review/review.service';
@@ -10,7 +11,7 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Review, User, WishList, Party])],
+    imports: [TypeOrmModule.forFeature([Review, User, WishList, Party,Tag])],
     controllers: [AdminController],
     providers: [AdminService, UserService, ReviewService]
 })

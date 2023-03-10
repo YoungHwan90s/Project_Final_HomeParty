@@ -10,7 +10,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ReviewModule } from './modules/review/review.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { imageUploadModule } from './modules/image-upload/image-upload.module';
-import { TagModule } from './modules/tag/tag.module';
 import { PassportModule } from '@nestjs/passport';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { RedisConfigService } from './config/config.redis';
@@ -19,6 +18,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/config.jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailerConfigService } from './config/config.nodemailer';
+import { S3Module } from './util/s3/s3.module';
 
 @Module({
     imports: [
@@ -51,7 +51,7 @@ import { MailerConfigService } from './config/config.nodemailer';
         ReviewModule,
         AdminModule,
         imageUploadModule,
-        TagModule,
+        S3Module,
     ],
     controllers: [AppController],
     providers: [AppService],

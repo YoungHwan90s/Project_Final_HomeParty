@@ -48,9 +48,9 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Get('/wish-list')
     @HttpCode(200)
-    async wishList(@Req() req, @Res() res) {
+    async getWishList(@Req() req, @Res() res) {
         const { id } = req.user;
-        const wishList = await this.userService.wishList(id);
+        const wishList = await this.userService.getWishList(id);
 
         return res.json({ wishList });
     }
@@ -63,14 +63,5 @@ export class UserController {
         const updateOrDelete = await this.userService.updateWishList(user, partyId);
 
         return res.json({ updateOrDelete });
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Delete('/wish-list/:wishListId')
-    @HttpCode(204)
-    async deleteWishList(@Res() res, @Param('wishListId') wishListId: number) {
-        await this.userService.deleteWishList(wishListId);
-
-        return res.json({});
     }
 }
