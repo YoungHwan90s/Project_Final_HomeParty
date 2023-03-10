@@ -1,4 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Res } from '@nestjs/common';
+import { Tag } from '../party/entity/party-tag.entity';
+import { PartyService } from '../party/party.service';
 import { UserService } from '../user/user.service';
 import { AdminService } from './admin.service';
 
@@ -35,9 +37,15 @@ async deletedUser(@Res() res, @Param('id') id: number) {
 // @Post('/tag')
 
 // // 태그 조회
-// @Get('/tag')
+@Get('tags')
+@HttpCode(200)
+  async readtag() {
+    return  this.adminService.readtag();
+  }
 
-// // 태그 삭제
-// @Delete('/tag/:tagId')
-
+  // 태그 삭제
+  @Delete('/tag/:tagId')
+    async deletetag(@Param('tagId')tagId:number){
+      return await this.adminService.deletetag(tagId)
+    }
 }

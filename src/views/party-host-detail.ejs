@@ -42,6 +42,10 @@ $(function() {
       type: 'POST',
       url: `/review/${partyId}`,
       data: reviewInfo,
+      headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
       success: function(response) {
         // 서버로부터 응답 받은 후 처리할 코드 작성
         alert("리뷰가 등록되었습니다.")
@@ -60,6 +64,10 @@ function readreview(){
     url: "/review/1", // 리뷰 데이터 요청 URL
     type: "GET",
     dataType: "json",
+    headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
     success: function(data){
       $('#reviews-container').empty();
 
@@ -97,6 +105,10 @@ $.ajax({
           data:{
             review: updatereviewform
           },
+          headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
           success: function(response) {
             // 서버로부터 응답 받은 후 처리할 코드 작성
             alert("리뷰가 수정되었습니다.");
@@ -116,6 +128,10 @@ function deletereview(reviewId) {
   $.ajax({
     type: 'DELETE',
     url: `/review/${reviewId}`,
+    headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
     success: function(response) {
       alert("리뷰가 삭제되었습니다.")
       location.reload();
