@@ -13,6 +13,7 @@ export class ReviewRepository extends Repository<Review> {
     const result = await this.createQueryBuilder()
       .select("reviews")
       .from(Review, "reviews")
+      .orderBy("partyId", "DESC")
       .orderBy("reviews.createdAt", "DESC")
       .getMany();
     return result;

@@ -42,4 +42,18 @@ export class ReviewService {
             return await this.reviewRepository.softDelete(review.id);
         }
     }
-}
+
+    async getReviewAdmin() {
+      const reviews = await this.reviewRepository.find({
+          relations: [ 'party', 'user' ],
+          order: { partyId: "DESC" },
+          withDeleted: true,
+      });
+      console.log(reviews)
+      return reviews;
+    }
+
+    async deleteReviewAdmin(id: number) {
+      return await this.reviewRepository.softDelete(id)
+    }
+  }

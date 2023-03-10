@@ -79,7 +79,6 @@ export class UserService {
             },
         );
     }
-
     async updateUser(user: object, data: UpdateUserDto): Promise<Object> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
@@ -108,8 +107,8 @@ export class UserService {
         return await this.userRepository.find({ withDeleted: true });
     }
 
-    async deletedUserAdmin(id: number) {
-        return await this.userRepository.softDelete(id);
+    async deletedUserAdmin(userId: number) {
+        return await this.userRepository.softDelete(userId);
     }
 
     // private async checkPassword(id: number, password: string) {
