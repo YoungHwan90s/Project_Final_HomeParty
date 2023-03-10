@@ -1,5 +1,12 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Tag } from './party-tag.entity';
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Tag } from '../../tag/entity/tag.entity';
 import { Party } from './party.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'partyTagMappings' })

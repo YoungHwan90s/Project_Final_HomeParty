@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Tag } from './entity/party-tag.entity';
 import { User } from '../user/entity/user.entity';
+import { CreatePartyDto } from './dto/create-party.dto';
+import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { PartyTagMapping } from './entity/party-tag-mapping.entity';
 import { Party } from './entity/party.entity';
@@ -38,11 +40,10 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo): Promise<any> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<void> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
-
         try {
             const party = new Party();
             party.hostId = user.id;
@@ -53,25 +54,29 @@ export class PartyService {
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
-            const newParty = await this.partyRepository.save(party);
-            if (partyInfo.thumbnail) {
+            const newParty = await queryRunner.manager.save(Party, party);
+
+            if (partyInfo.thumbnail.length) {
                 for (let i = 0; i < partyInfo.thumbnail.length; i++) {
-                    const thumbnail = new Thumbnail();
-                    thumbnail.party = newParty;
-                    thumbnail.thumbnail = partyInfo.thumbnail[i];
-                    await this.thumbnailRepository.save(thumbnail);
+                    const thumbnail = this.thumbnailRepository.create({
+                        party: newParty,
+                        thumbnail: partyInfo.thumbnail[i],
+                    });
+                    await queryRunner.manager.save(Thumbnail, thumbnail);
                 }
             }
 
-            if (partyInfo.tagName) {
-                const tag = new Tag();
-                tag.tagName = partyInfo.tagName;
-                await this.tagRepository.save(tag);
+            if (partyInfo.tagName.length) {
+                for (let i = 0; i < partyInfo.tagName.length; i++) {
+                    const tag = new Tag();
+                    tag.tagName = partyInfo.tagName[i];
+                    await queryRunner.manager.save(tag);
 
-                const tagMapping = new PartyTagMapping();
-                tagMapping.party = newParty;
-                tagMapping.tag = tag;
-                await this.partyTagMapping.save(tagMapping);
+                    const tagMapping = new PartyTagMapping();
+                    tagMapping.party = newParty;
+                    tagMapping.tag = tag;
+                    await queryRunner.manager.save(tagMapping);
+                }
             }
 
             const partyMember = new PartyMember();
@@ -79,64 +84,54 @@ export class PartyService {
             partyMember.user = user;
             partyMember.status = '호스트';
 
-            await this.partyMemberRepository.save(partyMember);
+            await queryRunner.manager.save(partyMember);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
-            throw new UnauthorizedException('itsnotworking');
+            throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
         } finally {
             await queryRunner.release();
         }
     }
 
-    async updateParty(userId, partyId, partyInfo) {
+    async updateParty(userId: number, partyId: number, partyInfo: UpdatePartyDto) {
         const party = await this.partyRepository.findOne({
-            where: { id: partyId, deletedAt: null },
+            relations: { thumbnail: true, partyTagMapping: { tag: true } },
+            where: { id: partyId },
         });
 
-        if (party.hostId !== userId) {
-            throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
+        party.title = partyInfo.title;
+        party.content = partyInfo.content;
+        party.title = partyInfo.title;
+        party.region = partyInfo.region;
+        party.address = partyInfo.address;
+        party.date = partyInfo.date;
+
+        for (let i = 0; i < party.thumbnail.length; i++) {
+            partyInfo.thumbnail[i]
+            
         }
 
-        await this.partyRepository.update(partyId, partyInfo);
+        // await this.partyRepository.save(party);
 
-        if (party.thumbnail) {
-            party.thumbnail[0].thumbnail = partyInfo.thumbnail;
-        }
+        console.dir(party, { depth: null });
 
-        if (!party.thumbnail) {
-            const thumbnail = new Thumbnail();
-            thumbnail.party = party;
-            thumbnail.thumbnail = partyInfo.thumbnail;
-            await this.thumbnailRepository.save(thumbnail);
-        }
+        // if (party.hostId !== userId) {
+        //     throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
+        // }
+
+        // party.title = partyInfo.title;
+        // party.content = partyInfo.content;
+        // party.maxMember = partyInfo.maxMember;
+        // party.region = partyInfo.region;
+        // party.address = partyInfo.address;
+        // party.date = partyInfo.date;
+
+        // this.partyRepository.save(party);
     }
-    // async updateParty(userId, partyId, party) {
-    //     const selectParty = await this.partyRepository.findOne({
-    //         where: { id: partyId, deletedAt: null },
-    //     });
-
-    //     if (selectParty.hostId !== userId) {
-    //         throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
-    //     }
-
-    //     await this.partyRepository.update(partyId, {
-    //         title: party.title,
-    //         content: party.content,
-    //         maxMember: party.maxMember,
-    //         currMember: party.currMember,
-    //         region: party.region,
-    //         address: party.address,
-    //         date: party.date,
-    //     });
-
-    //     await this.thumbnailsRepository.update(partyId, {
-    //         thumbnail: party.thumbnail,
-    //     });
-    // }
 
     async applyParty(user: User, partyId: number) {
-        const existingPartyMember = await this.partyMemberRepository.findOne({
+        const existingPartyMember = await this.partyMemberRepository.findOneOrFail({
             where: { userId: user.id },
         });
 
@@ -165,42 +160,53 @@ export class PartyService {
         });
     }
 
-    async cancelParty(partyId: number, userId: number) {
-        const existingParty = await this.partyMemberRepository.findOne({
-            where: { partyId, userId },
-        });
-
-        if (!existingParty) {
-            throw new Error(`신청하지 않은 파티입니다.`);
-        }
-        console.log(existingParty.userId);
-        return await this.partyMemberRepository.delete(existingParty.userId);
-    }
-
-    async acceptMember(partyId: number, userId: number) {
-        return await this.updateStatus(partyId, userId, '신청완료');
-    }
-
-    async rejectMember(partyId: number, userId: number) {
-        return await this.updateStatus(partyId, userId, '거절');
-    }
-
-    private async updateStatus(partyId: number, userId: number, status: string) {
+    async cancelParty(userId: number, partyId: number) {
         const partyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId },
         });
+
+        if (!partyMember) {
+            throw new Error(`신청하지 않은 파티입니다.`);
+        }
+
+        return await this.partyMemberRepository.softRemove(partyMember);
+    }
+
+    async acceptMember(partyId: number, userId: number, status) {
+        const partyMember = await this.partyMemberRepository.findOne({
+            where: { partyId, userId },
+        });
+        const party = await this.partyRepository.findOne({
+            where: { id: partyId },
+        });
+
         if (!partyMember) {
             throw new NotFoundException('해당 유저가 존재하지 않습니다.');
         }
-        partyMember.status = status;
-        return await this.partyMemberRepository.save(partyMember);
+
+        if (status === '신청승낙') {
+            partyMember.status = '신청승낙';
+            party.currMember += 1;
+            return await this.partyMemberRepository.save(partyMember);
+        }
+
+        if (status === '거절') {
+            partyMember.status = '거절';
+            party.currMember -= 1;
+            return await this.partyMemberRepository.save(partyMember);
+        }
     }
 
-    async deleteParty(partyId: number) {
+    async deleteParty(userId: number, partyId: number) {
         const party = await this.partyRepository.findOne({
             where: { id: partyId },
             relations: ['wishList', 'partyMember', 'review', 'partyTagMapping', 'thumbnail'],
         });
+
+        if (party.hostId !== userId) {
+            throw new ForbiddenException(`해당 호스트만 삭제가 가능합니다.`);
+        }
+
         return this.partyRepository.softRemove(party);
     }
 }
