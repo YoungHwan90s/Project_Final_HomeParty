@@ -1,9 +1,6 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartyDto {
-    @IsNumber()
-    readonly hostId: number;
-
     @IsString()
     readonly title: string;
 
@@ -13,10 +10,6 @@ export class CreatePartyDto {
     @IsNumber()
     readonly maxMember: number;
 
-    @IsOptional()
-    @IsNumber()
-    readonly currMember: number;
-
     @IsString()
     readonly region: string;
 
@@ -25,8 +18,4 @@ export class CreatePartyDto {
 
     @IsString()
     readonly date: string;
-
-    @IsOptional()
-    @IsString()
-    readonly status: string;
 }

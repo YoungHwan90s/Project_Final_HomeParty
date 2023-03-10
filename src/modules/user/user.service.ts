@@ -1,10 +1,4 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Injectable,
-    NotFoundException,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
@@ -138,7 +132,7 @@ export class UserService {
         } else {
             const party = await this.partyRepository.findOne({ where: { id: partyId } });
             const wishList = new WishList();
-            wishList.party = party
+            wishList.party = party;
             wishList.user = user;
 
             await this.wishListRepository.save(wishList);
@@ -149,11 +143,7 @@ export class UserService {
     async wishList(userId: number): Promise<WishList[]> {
         const wishList = await this.wishListRepository.find({
             where: { userId },
-            relations: [
-                'party',
-                'party.thumbnail',
-                'party.partyTagMapping.tag'
-            ],
+            relations: ['party', 'party.thumbnail'],
         });
         return wishList;
     }

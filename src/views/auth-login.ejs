@@ -23,7 +23,9 @@
             url: '/auth/login',
             data: loginInfo,
             success: function (response) {
-                window.location.href = '/';
+                sessionStorage.setItem("accessToken", response.accessToken);
+                sessionStorage.setItem("refreshToken", response.refreshToken);
+                window.location.href = '/wish-list';
             },
             error: function (error) {
                 customAlert(error.responseJSON.message, function() {

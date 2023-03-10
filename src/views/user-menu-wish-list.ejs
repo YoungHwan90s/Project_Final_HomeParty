@@ -1,1 +1,83 @@
-<h3>마이페이지 유저정보 및 수정 화면</h3>
+<h2>마이페이지 위시리스트 화면</h2>
+
+<button id="like-button${id}" onclick="updateWishList(id, partyId)">좋아요</button>
+
+<button id="like-button${id}" onclick="myWishLists()">파티불러오기</button>
+
+<script>
+    function myWishLists() {
+        $.ajax({
+            type: 'GET',
+            url: `/user/wish-list`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                let wishList = response['wishList'];
+                sessionStorage.setItem('wishList', JSON.stringify(wishList));
+
+                // 한 셋트
+                // let parties = wishList[0]['party']                
+                // let thumbnails = wishList[0]['party']['thumbnail']
+                // console.log(wishList[0]['party'])
+                for (let i = 0; i < wishList.length; i ++) {
+                    let title = wishList[i]['party']['title']
+                    let maxMember = wishList[i]['party']['maxMember']
+                    let currMember = wishList[i]['party']['currMember']               
+                    let thumbnails = wishList[i]['party']['thumbnail']
+                }
+                // 1. 파티 썸네일
+                // 2. 파티 제목
+                // 3. 파티 최대 인원
+                // 4. 파티 현재 인원
+                // 5. 파티 지역
+                // 6. 파티 날짜
+                // 7. 파티 상태
+      
+                // wishlists.forEach((wishList, index) => {
+                //     let tempHtml = ``;
+                // });
+
+                // for (let i = 0; i < rows.length; i++) {
+                //     let basket_id = rows[i]['basket_id'];
+                //     let item_id = rows[i]['item_id'];
+                //     let itemPrice = rows[i]['itemPrice'].toLocaleString();
+                //     let itemName = rows[i]['itemName'];
+                //     let count = rows[i]['count'].toLocaleString();
+                //     let image = rows[i]['image'];
+                //     let eachItemTotal = itemPrice.split(',').join('') * count.split(',').join('');
+
+                //     itemPriceArray.push(eachItemTotal);
+
+                //     let temp_html = ``;
+                //     $('#itemList').append(temp_html);
+                // }
+            },
+        });
+    }
+
+    function updateWishList(id, partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    $('#like-button${id}').css('color', 'red');
+                } else {
+                    $('#like-button${id}').css('color', '');
+                }
+            },
+            error: function (error) {
+                customAlert(
+                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    function () {
+                        window.location.reload();
+                    },
+                );
+            },
+        });
+    }
+</script>
