@@ -25,6 +25,9 @@ export class Tag {
 
     @UpdateDateColumn()
     updatedAt: Date;
+    
+    @DeleteDateColumn()
+    deletedAt: Date | null;
 
     @DeleteDateColumn()
     deletedAt: Date | null;
