@@ -7,7 +7,7 @@ import { PartyService } from './party.service';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { PartyTagMapping } from './entity/party-tag-mapping.entity';
 import { AuthModule } from '../auth/auth.module';
-import { Tag } from '../tag/entity/tag.entity';
+import { Tag } from './entity/party-tag.entity';
 import { User } from '../user/entity/user.entity';
 
 @Module({

@@ -9,7 +9,6 @@ import { User } from '../user/entity/user.entity';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../../util/cache/cache.service';
-import { FindEmailDto } from './dto/find-email.dto';
 
 @Injectable()
 export class AuthService {
