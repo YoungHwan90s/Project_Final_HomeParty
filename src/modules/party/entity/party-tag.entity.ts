@@ -7,7 +7,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { PartyTagMapping } from '../../party/entity/party-tag-mapping.entity';
+import { PartyTagMapping } from './party-tag-mapping.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'tags' })
 export class Tag {
@@ -26,7 +26,10 @@ export class Tag {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @DeleteDateColumn()
+    deletedAt: Date | null;
+
     // 파티 <-> 파티-태그-맵핑: 일대다 관계
-    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.tag)
+    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.tag, {cascade: true})
     partyTagMapping: PartyTagMapping[];
 }

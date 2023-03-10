@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    ConflictException,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
@@ -131,6 +136,9 @@ export class UserService {
             return 1;
         } else {
             const party = await this.partyRepository.findOne({ where: { id: partyId } });
+            if (!party) {
+                throw new NotFoundException('파티가 존재하지 않습니다.');
+            }
             const wishList = new WishList();
             wishList.party = party;
             wishList.user = user;
@@ -140,15 +148,11 @@ export class UserService {
         return 0;
     }
 
-    async wishList(userId: number): Promise<WishList[]> {
+    async getWishList(userId: number): Promise<WishList[]> {
         const wishList = await this.wishListRepository.find({
             where: { userId },
-            relations: ['party', 'party.thumbnail'],
+            relations: ['party', 'party.thumbnail', 'party.partyTagMapping.tag'],
         });
         return wishList;
-    }
-
-    async deleteWishList(wishListId: number): Promise<DeleteResult> {
-        return await this.wishListRepository.delete(wishListId);
     }
 }
