@@ -23,7 +23,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             password: this.configService.get<string>('DATABASE_PASSWORD'),
             database: this.configService.get<string>('DATABASE_NAME'),
             entities: [Party, PartyMember, PartyTagMapping, Tag, Thumbnail, User, WishList, Review],
-            synchronize: false,
+            synchronize: true,
         };
     }
 }

@@ -11,6 +11,8 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CreatePartyDto } from './dto/create-party.dto';
+import { UpdatePartyDto } from './dto/update-party.dto';
 import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 
@@ -34,7 +36,7 @@ export class PartyController {
     @UseGuards(JwtAuthGuard)
     @HttpCode(201)
     @Post()
-    async createParty(@Req() req, @Body() partyInfo: Party) {
+    async createParty(@Req() req, @Body() partyInfo) {
         let user = req.user;
         return await this.partyService.createParty(user, partyInfo);
     }
@@ -42,7 +44,11 @@ export class PartyController {
     // 파티 수정
     @UseGuards(JwtAuthGuard)
     @Patch(':partyId')
-    async updateParty(@Req() req, @Param('partyId') partyId, @Body() partyInfo) {
+    async updateParty(
+        @Req() req,
+        @Param('partyId') partyId: number,
+        @Body() partyInfo: UpdatePartyDto,
+    ) {
         const { id: userId } = req.user;
         return await this.partyService.updateParty(userId, partyId, partyInfo);
     }
@@ -74,7 +80,7 @@ export class PartyController {
     async acceptMember(
         @Param('userId') userId: number,
         @Param('partyId') partyId: number,
-        @Body() status,
+        @Body() status: string,
     ) {
         return await this.partyService.acceptMember(userId, partyId, status);
     }
