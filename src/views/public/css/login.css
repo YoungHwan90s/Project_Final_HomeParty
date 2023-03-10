@@ -32,11 +32,10 @@
    src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acEB.woff2) format('woff2');
    font-display: swap;
 }
-#header img{
+#header-login img{
    width : 700px;
    height: 230px;
 }
-
 .d_form {
     margin: .2em 0;
     font-size: 15px;
@@ -59,7 +58,7 @@
 .d_form.mini {
     width: 7em;
 }
-#container, #footer, #header {
+#container-login, #footer, #header-login {
     min-width: 220px;
     margin: 0 15px;
     margin-top: 0px;
@@ -68,12 +67,10 @@
     margin-left: 15px;
     box-sizing: border-box;
 }
-
-#container {
+#container-login {
    width: auto;
    max-width: 768px;
 }
-
 body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
    legend, li, ol, p, select, table, td, textarea, th, ul {
    margin: 0;
@@ -91,8 +88,7 @@ body {
 div{
    display : block;
 }
-
-header{
+.login-header{
    text-align : center;
 }
 select{
@@ -125,24 +121,24 @@ select{
    font-weight: normal;
    margin-left : 10px;
 }
-#container, #footer {
+#container-login, #footer {
    margin: 0 auto;
    max-width: 768px;
    min-width: 460px;
 }
 
-.wrapper {
+.wrapper-login {
    width: 100%;
    min-width: 760px;
 }
 
-#header {
+#header-login {
    position: relative;
    overflow: hidden;
    padding: 60px 0 54px;
 }
 
-#header .h_logo {
+#header-login .h_logo {
    display: block;
    margin: 0 auto;
    width: 240px;
@@ -207,7 +203,6 @@ select{
 }
 .user-input{
    margin : 3%;
-   
 }
 .line{
    margin-left : 20%;
@@ -246,11 +241,9 @@ select{
 	box-sizing: border-box;
 	border: solid 1px #dadada;
 }
-
 #mail-select {
 	height: 51px;
 }
-
 #btn {
    width: 100%;
    height: 50px;
@@ -258,7 +251,6 @@ select{
 .btn_area {
    margin: 30px 3% 60px;
 }
-
 #btnJoin {
 	display: block;
 	width: 60%;
@@ -270,11 +262,9 @@ select{
     height: 51px;
 	margin: 0 auto;
 }
-
 input::placeholder {
    font-size: 13px;
 }
-
 /*찾기 및 회원가입*/
 .find-signup-wrap{
     padding-top: 20px;
