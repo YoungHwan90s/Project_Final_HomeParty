@@ -3,4 +3,35 @@
 
 
 
+<div class="update-item-value">
+    <input type="file" id="update-item-image" accept="image/*" />
+    <input type="hidden" id="update-item-image-url" />
+</div>
 
+<script>
+
+document.getElementById('update-item-image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/image',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                document.getElementById('update-item-image-url').value = response.filePath;
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    })
+
+</script>
