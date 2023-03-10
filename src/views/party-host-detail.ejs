@@ -21,6 +21,8 @@
     <textarea id="input-review" class="input-review" placeholder="파티 리뷰 해주세요"></textarea>
     <button type="button" onclick="review()">리뷰등록</button>
 </div>
+<div id="map" style=" margin: auto; width:50%;height:450px;"></div>
+<!-- 리뷰 CRUD -->
 <script>
 $(function() {
   // 별점 표시
@@ -126,3 +128,73 @@ function deletereview(reviewId) {
 
   
 </script>
+
+
+<!-- 카카오맵 -->
+<script>
+  var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+      mapOption = {
+          center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+          level: 6 // 지도의 확대 레벨
+      };  
+  
+  // 지도를 생성합니다    
+  var map = new kakao.maps.Map(mapContainer, mapOption); 
+  // 마우스 휠과 모바일 터치를 이용한 지도 확대, 축소를 막는다
+    // map.setZoomable(false);   
+  // 주소-좌표 변환 객체를 생성합니다
+  var geocoder = new kakao.maps.services.Geocoder();
+    // 지도 타입 변경 컨트롤을 생성한다
+    var mapTypeControl = new kakao.maps.MapTypeControl();
+    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);	
+    // 지도에 확대 축소 컨트롤을 생성한다
+    var zoomControl = new kakao.maps.ZoomControl();
+    // 지도의 우측에 확대 축소 컨트롤을 추가한다
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+      // 마커 이미지의 주소
+    var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png', 
+        markerImageSize = new kakao.maps.Size(51, 52), // 마커 이미지의 크기
+        markerImageOptions = { 
+            offset : new kakao.maps.Point(25, 25)// 마커 좌표에 일치시킬 이미지 안의 좌표
+        };
+      // 마커 이미지를 생성한다
+    var markerImage = new kakao.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+  // 주소로 좌표를 검색합니다
+  geocoder.addressSearch('건원대로34번길 32-29', function(result, status) {
+  // 무조건 도로명 주소를 작성해줘야된다
+  
+      // 정상적으로 검색이 완료됐으면 
+       if (status === kakao.maps.services.Status.OK) {
+  
+          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          console.log(coords);
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          var marker = new kakao.maps.Marker({
+              map: map,
+              image : markerImage, // 마커의 이미지
+              position: coords
+          });
+  
+          // 인포윈도우로 장소에 대한 설명을 표시합니다
+          var infowindow = new kakao.maps.InfoWindow({
+              content: '<div style="background-color: white; color: black; padding: 8px; border-radius: 10px; width: auto; white-space: nowrap;">정확한 위치는 신청완료 후에 표시 됩니다.</div>'
+          });
+          infowindow.open(map, marker);
+  
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+      } 
+      // 지도에 원을 표시한다
+    var circle = new kakao.maps.Circle({
+      map: map, // 원을 표시할 지도 객체
+      center : new kakao.maps.LatLng(result[0].y, result[0].x), // 지도의 중심 좌표
+       radius: 500,  //미터 단위의 원의 반지름
+        strokeWeight: 5,  // 선의 두께
+        strokeColor: '#75B8FA',   //선의 색깔
+        strokeOpacity: 0,//선의 불투명도 0에 가까울수록 투명해짐
+        fillColor: '#F7BCCC', //채우기 색깔
+        fillOpacity: 0.5 // 채우기 불투명도 
+    });	
+  });   
+  </script>
