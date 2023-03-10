@@ -8,12 +8,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         super();
     }
 
-    async canActivate(context: ExecutionContext):Promise<any> {
+    async canActivate(context: ExecutionContext): Promise<any> {
         const req = context.switchToHttp().getRequest();
         const res = context.switchToHttp().getResponse();
 
         const authorization = req.headers['authorization'];
         const refreshToken = req.headers['refreshtoken'];
+
         // header 토큰 확인
         if (!authorization || !authorization.startsWith('Bearer ')) {
             return false;

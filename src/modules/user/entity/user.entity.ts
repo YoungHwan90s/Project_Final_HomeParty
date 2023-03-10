@@ -9,7 +9,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { PartyMember } from '../../party/entity/party-member.entity';
-import { Review } from '../../review/entity/reveiw.entity';
+import { Review } from '../../review/entity/review.entity';
 import { WishList } from './wish-list.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'users' })

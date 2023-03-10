@@ -1,0 +1,60 @@
+<h2>마이페이지 위시리스트 화면</h2>
+
+<button id="like-button${id}" onclick="updateWishList(id, partyId)">좋아요 취소</button>
+
+<button id="like-button${id}" onclick="myWishLists()">파티불러오기</button>
+
+<script>
+    function myWishLists() {
+        $.ajax({
+            type: 'GET',
+            url: `/user/wish-list`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                let wishList = response['wishList'];
+                sessionStorage.setItem('wishList', JSON.stringify(wishList));
+
+                for (let i = 0; i < wishList.length; i++) {
+                    let partyId = wishList[i]['party']['id'];
+                    let title = wishList[i]['party']['title'];
+                    let maxMember = wishList[i]['party']['maxMember'];
+                    let currMember = wishList[i]['party']['currMember'];
+                    let thumbnails = wishList[i]['party']['thumbnail'];
+                    let region = wishList[i]['party']['region'];
+                    let date = wishList[i]['party']['date'];
+                    let status = wishList[i]['party']['status'];
+                    let thumbnail = wishList[i]['party']['thumbnail'];
+
+                    console.log(partyId,title,maxMember,currMember,thumbnails,region,date,status, thumbnail);
+                }
+            },
+        });
+    }
+
+    function updateWishList(id, partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    $('#like-button${id}').css('color', 'red');
+                } else {
+                    $('#like-button${id}').css('color', '');
+                }
+            },
+            error: function (error) {
+                customAlert(
+                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    function () {
+                        window.location.reload();
+                    },
+                );
+            },
+        });
+    }
+</script>
