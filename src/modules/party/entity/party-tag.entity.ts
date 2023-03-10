@@ -1,13 +1,12 @@
 import {
     Column,
     CreateDateColumn,
-    DeleteDateColumn,
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { PartyTagMapping } from '../../party/entity/party-tag-mapping.entity';
+import { PartyTagMapping } from './party-tag-mapping.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'tags' })
 export class Tag {

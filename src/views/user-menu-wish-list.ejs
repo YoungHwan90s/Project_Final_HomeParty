@@ -1,6 +1,6 @@
 <h2>마이페이지 위시리스트 화면</h2>
 
-<button id="like-button${id}" onclick="updateWishList(id, partyId)">좋아요</button>
+<button id="like-button${id}" onclick="updateWishList(id, partyId)">좋아요 취소</button>
 
 <button id="like-button${id}" onclick="myWishLists()">파티불러오기</button>
 
@@ -18,42 +18,19 @@
                 let wishList = response['wishList'];
                 sessionStorage.setItem('wishList', JSON.stringify(wishList));
 
-                // 한 셋트
-                // let parties = wishList[0]['party']                
-                // let thumbnails = wishList[0]['party']['thumbnail']
-                // console.log(wishList[0]['party'])
-                for (let i = 0; i < wishList.length; i ++) {
-                    let title = wishList[i]['party']['title']
-                    let maxMember = wishList[i]['party']['maxMember']
-                    let currMember = wishList[i]['party']['currMember']               
-                    let thumbnails = wishList[i]['party']['thumbnail']
+                for (let i = 0; i < wishList.length; i++) {
+                    let partyId = wishList[i]['party']['id'];
+                    let title = wishList[i]['party']['title'];
+                    let maxMember = wishList[i]['party']['maxMember'];
+                    let currMember = wishList[i]['party']['currMember'];
+                    let thumbnails = wishList[i]['party']['thumbnail'];
+                    let region = wishList[i]['party']['region'];
+                    let date = wishList[i]['party']['date'];
+                    let status = wishList[i]['party']['status'];
+                    let thumbnail = wishList[i]['party']['thumbnail'];
+
+                    console.log(partyId,title,maxMember,currMember,thumbnails,region,date,status, thumbnail);
                 }
-                // 1. 파티 썸네일
-                // 2. 파티 제목
-                // 3. 파티 최대 인원
-                // 4. 파티 현재 인원
-                // 5. 파티 지역
-                // 6. 파티 날짜
-                // 7. 파티 상태
-      
-                // wishlists.forEach((wishList, index) => {
-                //     let tempHtml = ``;
-                // });
-
-                // for (let i = 0; i < rows.length; i++) {
-                //     let basket_id = rows[i]['basket_id'];
-                //     let item_id = rows[i]['item_id'];
-                //     let itemPrice = rows[i]['itemPrice'].toLocaleString();
-                //     let itemName = rows[i]['itemName'];
-                //     let count = rows[i]['count'].toLocaleString();
-                //     let image = rows[i]['image'];
-                //     let eachItemTotal = itemPrice.split(',').join('') * count.split(',').join('');
-
-                //     itemPriceArray.push(eachItemTotal);
-
-                //     let temp_html = ``;
-                //     $('#itemList').append(temp_html);
-                // }
             },
         });
     }
