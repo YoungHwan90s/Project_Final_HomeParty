@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Tag } from '../party/entity/party-tag.entity';
 import { PartyService } from '../party/party.service';
+import { ReviewService } from '../review/review.service';
 import { UserService } from '../user/user.service';
 import { AdminService } from './admin.service';
 
