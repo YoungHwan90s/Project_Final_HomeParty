@@ -18,6 +18,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigService } from './config/config.jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailerConfigService } from './config/config.nodemailer';
+import { S3Module } from './util/s3/s3.module';
 
 @Module({
     imports: [
@@ -50,6 +51,7 @@ import { MailerConfigService } from './config/config.nodemailer';
         ReviewModule,
         AdminModule,
         imageUploadModule,
+        S3Module,
     ],
     controllers: [AppController],
     providers: [AppService],
