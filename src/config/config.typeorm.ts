@@ -5,25 +5,25 @@ import { PartyMember } from 'src/modules/party/entity/party-member.entity';
 import { PartyTagMapping } from 'src/modules/party/entity/party-tag-mapping.entity';
 import { Party } from 'src/modules/party/entity/party.entity';
 import { Thumbnail } from 'src/modules/party/entity/thumbnail.entity';
-import { Review } from 'src/modules/review/entity/reveiw.entity';
-import { Tag } from 'src/modules/tag/entity/tag.entity';
+import { Review } from 'src/modules/review/entity/review.entity';
+import { Tag } from 'src/modules/party/entity/party-tag.entity';
 import { User } from 'src/modules/user/entity/user.entity';
 import { WishList } from 'src/modules/user/entity/wish-list.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-  constructor(private readonly configService: ConfigService) {}
+    constructor(private readonly configService: ConfigService) {}
 
-  createTypeOrmOptions(): TypeOrmModuleOptions {
-    return {
-      type: 'mysql',
-      host: this.configService.get<string>("DATABASE_HOST"),
-      port: this.configService.get<number>("DATABASE_PORT"),
-      username: this.configService.get<string>("DATABASE_USERNAME"),
-      password: this.configService.get<string>("DATABASE_PASSWORD"),
-      database: this.configService.get<string>("DATABASE_NAME"),
-      entities: [Party, PartyMember, PartyTagMapping, Tag, Thumbnail, User, WishList, Review],
-      synchronize: true,
-    };
-  }
+    createTypeOrmOptions(): TypeOrmModuleOptions {
+        return {
+            type: 'mysql',
+            host: this.configService.get<string>('DATABASE_HOST'),
+            port: this.configService.get<number>('DATABASE_PORT'),
+            username: this.configService.get<string>('DATABASE_USERNAME'),
+            password: this.configService.get<string>('DATABASE_PASSWORD'),
+            database: this.configService.get<string>('DATABASE_NAME'),
+            entities: [Party, PartyMember, PartyTagMapping, Tag, Thumbnail, User, WishList, Review],
+            synchronize: true,
+        };
+    }
 }

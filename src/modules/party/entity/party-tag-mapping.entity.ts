@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Tag } from '../../tag/entity/tag.entity';
 import { Party } from './party.entity';
 
@@ -15,6 +22,9 @@ export class PartyTagMapping {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date | null;
 
     // 파티-태그-맵핑 <-> 파티: 다대일 관계
     @ManyToOne(() => Party, (party) => party.partyTagMapping)

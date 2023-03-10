@@ -1,5 +1,4 @@
 import {
-    BadRequestException,
     ConflictException,
     Injectable,
     NotFoundException,
@@ -20,6 +19,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
+        @InjectRepository(Party) private partyRepository: Repository<Party>,
     ) {}
 
     async createUser(data: CreateUserDto): Promise<void> {
@@ -79,7 +79,6 @@ export class UserService {
             },
         );
     }
-
     async updateUser(user: object, data: UpdateUserDto): Promise<Object> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
@@ -104,57 +103,55 @@ export class UserService {
         return this.userRepository.softDelete(id);
     }
 
-        async getUsersAdmin() {
-            return await this.userRepository.find({withDeleted: true})
-        }
-    
-        async deletedUserAdmin(id: number) {
-            return await this.userRepository.softDelete(id)
-        }
-
-        // private async checkPassword(id: number, password: string) {
-        //     const user = await this.userRepository.findOne({
-        //         where: { id, deletedAt: null },
-        //         select: [ "password" ],
-        //     });
-        //     if (!user) {
-        //         throw new NotFoundException(`User not found. id: ${id}`);
-        //     }
-        //     if (user.password !== password.toString()) {
-        //         throw new UnauthorizedException(`User password is not correct. id: ${id}`);
-        //     }
-        // }
-
-        async updateWishList(userId: number, partyId: number):Promise<WishList> {
-            const checkWishList = await this.wishListRepository.findOne({
-                where: { partyId },
-            });
-    
-            if (checkWishList) {
-                throw new BadRequestException('해당 파티가 이미 찜목록에 존재합니다.');
-            }
-    
-            return await this.wishListRepository.save({
-                userId,
-                partyId,
-            });
-        }
-    
-        async wishList(userId: number): Promise<WishList[]> {
-            const wishList = await this.wishListRepository.find({
-                where: { userId },
-                relations: [
-                    'party',
-                    'party.partyMember',
-                    'party.thumbnail',
-                    'party.partyTagMapping',
-                    'party.partyTagMapping.tag',
-                ],
-            });
-            return wishList;
-        }
-    
-        async deleteWishList(id: number): Promise<DeleteResult> {
-            return await this.wishListRepository.delete(id);
-        }
+    async getUsersAdmin() {
+        return await this.userRepository.find({ withDeleted: true });
     }
+
+    async deletedUserAdmin(userId: number) {
+        return await this.userRepository.softDelete(userId);
+    }
+
+    // private async checkPassword(id: number, password: string) {
+    //     const user = await this.userRepository.findOne({
+    //         where: { id, deletedAt: null },
+    //         select: [ "password" ],
+    //     });
+    //     if (!user) {
+    //         throw new NotFoundException(`User not found. id: ${id}`);
+    //     }
+    //     if (user.password !== password.toString()) {
+    //         throw new UnauthorizedException(`User password is not correct. id: ${id}`);
+    //     }
+    // }
+
+    async updateWishList(user: User, partyId: number): Promise<WishList | Number> {
+        const checkWishList = await this.wishListRepository.findOne({
+            where: { partyId, userId: user.id },
+        });
+
+        if (checkWishList) {
+            await this.wishListRepository.delete(checkWishList.id);
+
+            return 1;
+        } else {
+            const party = await this.partyRepository.findOne({ where: { id: partyId } });
+            if (!party) {
+                throw new NotFoundException('파티가 존재하지 않습니다.');
+            }
+            const wishList = new WishList();
+            wishList.party = party;
+            wishList.user = user;
+
+            await this.wishListRepository.save(wishList);
+        }
+        return 0;
+    }
+
+    async getWishList(userId: number): Promise<WishList[]> {
+        const wishList = await this.wishListRepository.find({
+            where: { userId },
+            relations: ['party', 'party.thumbnail', 'party.partyTagMapping.tag'],
+        });
+        return wishList;
+    }
+}

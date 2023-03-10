@@ -1,12 +1,10 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartyDto {
-    @IsNumber()
-    readonly hostId: number;
-
     @IsString()
     readonly title: string;
 
+    @IsOptional()
     @IsString()
     readonly content: string;
 
@@ -14,19 +12,21 @@ export class CreatePartyDto {
     readonly maxMember: number;
 
     @IsOptional()
-    @IsNumber()
-    readonly currMember: number;
-
     @IsString()
     readonly region: string;
 
+    @IsOptional()
     @IsString()
     readonly address: string;
 
     @IsString()
-    readonly date: string;
+    readonly date: Date;
 
-    @IsOptional()
-    @IsString()
-    readonly status: string;
+    @IsArray()
+    @IsString({ each: true })
+    thumbnail: string[];
+
+    @IsArray()
+    @IsString({ each: true })
+    tagName: string[];
 }

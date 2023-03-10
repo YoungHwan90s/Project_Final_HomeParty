@@ -23,41 +23,45 @@ export class UserController {
     @Get('/')
     @HttpCode(200)
     async getUserInfo(@Req() req, @Res() res) {
-        const user = req.user
-        return res.json({user})
+        const user = req.user;
+        return res.json({ user });
     }
 
     @UseGuards(JwtAuthGuard)
     @Patch('/')
     @HttpCode(201)
     async updateUser(@Req() req, @Res() res, @Body() data: UpdateUserDto) {
-        const user = req.user
+        const user = req.user;
         await this.userService.updateUser(user, data);
-        return res.json({})
+        return res.json({});
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('/')
     @HttpCode(204)
     async deleteUser(@Req() req, @Res() res) {
-        const { id } = req.user
-        await this.userService.deleteUser(id)
-        return res.json({})
+        const { id } = req.user;
+        await this.userService.deleteUser(id);
+        return res.json({});
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('/wish-list')
     @HttpCode(200)
-    async wishList(@Res() res) {
-        // const { id: userId } = req.user
-        const userId = 1;
-        const wishList = await this.userService.wishList(userId);
+    async getWishList(@Req() req, @Res() res) {
+        const { id } = req.user;
+        const wishList = await this.userService.getWishList(id);
 
-        return res.send({ wishList });
+        return res.json({ wishList });
     }
 
-    @Delete('/wish-list/:id')
+    @UseGuards(JwtAuthGuard)
+    @Post('/wish-list/:partyId')
     @HttpCode(204)
-    async deleteWishList(@Param('id') id: number) {
-        return await this.userService.deleteWishList(id);
+    async updateWishList(@Req() req, @Res() res, @Param('partyId') partyId: number) {
+        const user = req.user;
+        const updateOrDelete = await this.userService.updateWishList(user, partyId);
+
+        return res.json({ updateOrDelete });
     }
 }

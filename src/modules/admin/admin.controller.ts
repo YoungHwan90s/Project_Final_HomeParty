@@ -1,4 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Tag } from '../party/entity/party-tag.entity';
+import { PartyService } from '../party/party.service';
+import { ReviewService } from '../review/review.service';
 import { UserService } from '../user/user.service';
 import { AdminService } from './admin.service';
 
@@ -7,37 +11,53 @@ export class AdminController {
     constructor(
         private readonly adminService: AdminService,
         private readonly userService: UserService,
+        private readonly reviewService: ReviewService
     ) {}
 
-// 회원 정보 조회
+@UseGuards(JwtAuthGuard)
 @Get('/users')
 @HttpCode(200)
-async getUsers(@Res() res) {
+async getUserAdmin(@Res() res) {
     const users = await this.userService.getUsersAdmin()
     return res.json({users})
 }
 
-// 회원 삭제
-@Delete('/users/:id')
+@UseGuards(JwtAuthGuard)
+@Delete('/users/:userId')
 @HttpCode(204)
-async deletedUser(@Res() res, @Param('id') id: number) {
-    const deleteUser = await this.userService.deletedUserAdmin(id)
+async deletedUserAdmin(@Res() res, @Param('userId') userId: number) {
+    const deleteUser = await this.userService.deletedUserAdmin(userId)
     return res.json({removedId:deleteUser})
 }
 
-// // 리뷰조회
-// @Get('/review')
+// 리뷰 조회
+// @UseGuards(JwtAuthGuard)
+@Get('/review')
+@HttpCode(200)
+async getReviewAdmin() {
+    return await this.reviewService.getReviewAdmin()
+}
 
-// // 리뷰 삭제
-// @Delete('/review/:reviewId')
+// 리뷰 삭제
+@Delete('/review/:reviewId')
+@HttpCode(204)
+async deleteReviewAdmin(@Param('reviewId') reviewId: number) {
+    return await this.reviewService.deleteReviewAdmin(reviewId)
+}
 
 // // 태그 추가
 // @Post('/tag')
 
 // // 태그 조회
-// @Get('/tag')
+@Get('tags')
+@HttpCode(200)
+  async readtag() {
+    return  this.adminService.readtag();
+  }
 
-// // 태그 삭제
-// @Delete('/tag/:tagId')
-
+  // 태그 삭제
+  @Delete('/tag/:tagId')
+    async deletetag(@Param('tagId')tagId:number){
+      return await this.adminService.deletetag(tagId)
+    }
 }

@@ -3,14 +3,11 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    JoinColumn,
-    ManyToOne,
     OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Review } from '../../review/entity/reveiw.entity';
+import { Review } from '../../review/entity/review.entity';
 import { WishList } from '../../user/entity/wish-list.entity';
 import { PartyMember } from './party-member.entity';
 import { PartyTagMapping } from './party-tag-mapping.entity';
@@ -58,23 +55,22 @@ export class Party {
     deletedAt: Date | null;
 
     // 파티 <-> 장바구니: 일대일 관계
-    @OneToOne(() => WishList, (wishList) => wishList.party)
-    wishList: WishList;
+    @OneToMany(() => WishList, (wishList) => wishList.party, { cascade: true })
+    wishList: WishList[];
 
     // 파티 <-> 피티멤버: 일대다 관계
-    @OneToMany(() => PartyMember, (partyMember) => partyMember.party)
+    @OneToMany(() => PartyMember, (partyMember) => partyMember.party, { cascade: true })
     partyMember: PartyMember[];
 
     // 파티 <-> 리뷰: 일대다 관계
-    @OneToMany(() => Review, (review) => review.party)
+    @OneToMany(() => Review, (review) => review.party, { cascade: true })
     review: Review[];
 
     // 파티 <-> 파티-태그-맵핑: 일대다 관계
-    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.party)
+    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.party, { cascade: true })
     partyTagMapping: PartyTagMapping[];
 
     // 파티 <-> 썸네일: 일대다 관계
-    @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party)
+    @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party, { cascade: true })
     thumbnail: Thumbnail[];
-
 }

@@ -1,1 +1,30 @@
 <h2>메인화면</h2>
+
+<div>찜목록담기</div>
+<button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
+
+<script>
+    function updateWishList(partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    $('#like-button${id}').css('color', 'red');
+                } else {
+                    $('#like-button${id}').css('color', '');
+                }
+            },
+            error: function (error) {
+                customAlert(
+                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    function () {
+                        window.location.reload();
+                    },
+                );
+            },
+        });
+    }
+</script>
