@@ -6,7 +6,10 @@
         type: 'GET',
         url: `/user`,
         data: {},
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
         success: function (response) {
             const userInfo = response.user
             console.log(userInfo)
@@ -46,7 +49,10 @@
             type: 'PATCH',
             url: `/user`,
             data: userData,
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
             success: function (response) {
                 alert('정보 수정 완료')
                 window.location.reload()
@@ -64,8 +70,12 @@
                 type: 'DELETE',
                 url: `/user`,
                 data: {},
-                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
                 success: function (response) {
+                    console.log(response)
                     alert('회원 탈퇴');
                     window.location.reload()
                 }

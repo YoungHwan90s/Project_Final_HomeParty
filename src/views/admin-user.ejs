@@ -6,14 +6,16 @@
         type:'GET',
         url: `/admin/users`,
         data: {},
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
         success: function (response) {
             const userList = response.users
             for (let i = 0; i < userList.length; i++) {
-                const { id, email, kakaologinEmail, name, sex, birthday, phone, region, address, profile, introduction,
+                const { id: userId, email, kakaologinEmail, name, sex, birthday, phone, region, address, profile, introduction,
                     createdAt, updatedAt, deletedAt
                 } = userList[i]
-                console.log(userList[i])
 
                 const html = `<div>
                                 <h3>번호: ${i+1}</h3>
@@ -30,24 +32,27 @@
                                 <span>생성일자: ${createdAt}</span></br>
                                 <span>수정일자: ${updatedAt}</span></br>
                                 <span>삭제일자: ${deletedAt}</span></br>
-                                <button onclick="deleteUserByAdmin(${id})">삭제</button>
+                                <button onclick="deleteUserByAdmin(${userId})">삭제</button>
                             </div>`
                 $('#allUser').append(html)
             }
         }
     })
 
-    function deleteUserByAdmin(id) {
+    function deleteUserByAdmin(userId) {
         const result = confirm('삭제하시겠습니까?');
         if (result) {
             $.ajax({
                 type: 'DELETE',
                 url: `/admin/users/${userId}`,
                 data: {},
-                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
                 success: function (response) {
                     alert('회원 삭제');
-                    $(`#id${id}`).remove()
+                    $(`#id${userId}`).remove()
                     window.location.reload()
                 }
             })

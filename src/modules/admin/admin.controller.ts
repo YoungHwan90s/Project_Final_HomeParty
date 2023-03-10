@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ReviewService } from '../review/review.service';
+import { User } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
 import { AdminService } from './admin.service';
 
@@ -11,6 +13,7 @@ export class AdminController {
         private readonly reviewService: ReviewService
     ) {}
 
+@UseGuards(JwtAuthGuard)
 @Get('/users')
 @HttpCode(200)
 async getUserAdmin(@Res() res) {
@@ -18,6 +21,7 @@ async getUserAdmin(@Res() res) {
     return res.json({users})
 }
 
+@UseGuards(JwtAuthGuard)
 @Delete('/users/:userId')
 @HttpCode(204)
 async deletedUserAdmin(@Res() res, @Param('userId') userId: number) {
@@ -26,11 +30,12 @@ async deletedUserAdmin(@Res() res, @Param('userId') userId: number) {
 }
 
 // 리뷰 조회
-@Get('/review/:partyId')
+// @UseGuards(JwtAuthGuard)
+@Get('/review')
 @HttpCode(200)
-async getReviewAdmin(@Param('partyId') partyId: number) {
-    return await this.reviewService.getReviewAdmin(partyId)
-}   
+async getReviewAdmin() {
+    return await this.reviewService.getReviewAdmin()
+}
 
 // 리뷰 삭제
 @Delete('/review/:reviewId')

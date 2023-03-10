@@ -51,18 +51,18 @@ export class ReviewService {
             return { statusCode: 200, message: '삭제 되었습니다.' };
         }
     }
-  }
 
-  async getReviewAdmin(partyId: number) {
-    const reviews = await this.reviewRepository.find({
-        where: { partyId },
-        order: { createdAt: "DESC" },
-        withDeleted: true
-    });
-    return reviews;
-  }
+    async getReviewAdmin() {
+      const reviews = await this.reviewRepository.find({
+          relations: [ 'party', 'user' ],
+          order: { partyId: "DESC" },
+          withDeleted: true,
+      });
+      console.log(reviews)
+      return reviews;
+    }
 
-  async deleteReviewAdmin(id: number) {
-    return await this.reviewRepository.softDelete(id)
+    async deleteReviewAdmin(id: number) {
+      return await this.reviewRepository.softDelete(id)
+    }
   }
-}
