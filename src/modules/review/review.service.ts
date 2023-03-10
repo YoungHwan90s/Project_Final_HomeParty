@@ -62,7 +62,7 @@ export class ReviewService {
         withDeleted: true
     });
     return reviews;
-  }  
+  }
 
   async deleteReviewAdmin(id: number) {
     return await this.reviewRepository.softDelete(id)

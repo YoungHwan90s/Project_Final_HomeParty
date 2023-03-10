@@ -109,8 +109,8 @@ export class UserService {
         return await this.userRepository.find({ withDeleted: true });
     }
 
-    async deletedUserAdmin(id: number) {
-        return await this.userRepository.softDelete(id);
+    async deletedUserAdmin(userId: number) {
+        return await this.userRepository.softDelete(userId);
     }
 
     // private async checkPassword(id: number, password: string) {

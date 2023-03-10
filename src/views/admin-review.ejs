@@ -1,1 +1,13 @@
 <h2>관리자 리뷰목록</h2>
+
+<script>
+    $.ajax({
+        type: 'GET',
+        url: `/admin/review/${reviewId}`,
+        data: {},
+        // authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        success: function (response) {
+            console.log(response)
+        }
+    })
+</script>

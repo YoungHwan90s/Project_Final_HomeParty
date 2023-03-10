@@ -5,6 +5,8 @@
     $.ajax({
         type:'GET',
         url: `/admin/users`,
+        data: {},
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         success: function (response) {
             const userList = response.users
             for (let i = 0; i < userList.length; i++) {
@@ -40,7 +42,9 @@
         if (result) {
             $.ajax({
                 type: 'DELETE',
-                url: `/admin/users/${id}`,
+                url: `/admin/users/${userId}`,
+                data: {},
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 success: function (response) {
                     alert('회원 삭제');
                     $(`#id${id}`).remove()

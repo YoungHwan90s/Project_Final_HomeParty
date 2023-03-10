@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -12,9 +12,11 @@ export class ReviewController {
 // @UseGuards(JwtAuthGuard)
 @Post('/:partyId')
 async write(
+    // @Req () req,
     @Param('partyId') partyId: number,
-    @Body() data:CreateReviewDto){
-    return await this.reviewService.writeReview(1, partyId, data)//1 => userid 변경해야됨 
+    @Body() data:CreateReviewDto) {
+        // const userId = req.review 
+        return await this.reviewService.writeReview(1, partyId, data)//1 => userid 변경해야됨 
 }
 // // 리뷰 조회
 // @UseGuards(JwtAuthGuard)
@@ -43,5 +45,4 @@ async deleteReview(
     @Param('reviewId') reviewId: number){
         return await this.reviewService.deleteReview(reviewId)
     }
-
 }

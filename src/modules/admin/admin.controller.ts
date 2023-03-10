@@ -18,14 +18,14 @@ async getUserAdmin(@Res() res) {
     return res.json({users})
 }
 
-@Delete('/users/:id')
+@Delete('/users/:userId')
 @HttpCode(204)
-async deletedUserAdmin(@Res() res, @Param('id') id: number) {
-    const deleteUser = await this.userService.deletedUserAdmin(id)
+async deletedUserAdmin(@Res() res, @Param('userId') userId: number) {
+    const deleteUser = await this.userService.deletedUserAdmin(userId)
     return res.json({removedId:deleteUser})
 }
 
-// 리뷰조회
+// 리뷰 조회
 @Get('/review/:partyId')
 @HttpCode(200)
 async getReviewAdmin(@Param('partyId') partyId: number) {
@@ -33,9 +33,9 @@ async getReviewAdmin(@Param('partyId') partyId: number) {
 }   
 
 // 리뷰 삭제
-@Delete('/review/:id')
+@Delete('/review/:reviewId')
 @HttpCode(204)
-async deleteReviewAdmin(@Param('id') reviewId: number) {
+async deleteReviewAdmin(@Param('reviewId') reviewId: number) {
     return await this.reviewService.deleteReviewAdmin(reviewId)
 }
 

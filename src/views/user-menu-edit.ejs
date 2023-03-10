@@ -5,6 +5,8 @@
     $.ajax({
         type: 'GET',
         url: `/user`,
+        data: {},
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         success: function (response) {
             const userInfo = response.user
             console.log(userInfo)
@@ -44,6 +46,7 @@
             type: 'PATCH',
             url: `/user`,
             data: userData,
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 alert('정보 수정 완료')
                 window.location.reload()
@@ -60,6 +63,8 @@
             $.ajax({
                 type: 'DELETE',
                 url: `/user`,
+                data: {},
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 success: function (response) {
                     alert('회원 탈퇴');
                     window.location.reload()

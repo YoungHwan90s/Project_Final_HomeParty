@@ -20,9 +20,17 @@ export class PartyController {
     }
 
     // 파티 등록
+    // @Post()
+    // async createParty(@Body() partyInfo: Party) {
+    //     let userId = 1;
+    //     return await this.partyService.createParty(userId, partyInfo);
+    // }
+
+    @UseGuards(JwtAuthGuard)
     @Post()
-    async createParty(@Body() partyInfo: Party) {
-        let userId = 1;
+    async createParty(@Req() req, @Body() partyInfo: Party) {
+        // let userId = 1;
+        const { id: userId } = req.user;
         return await this.partyService.createParty(userId, partyInfo);
     }
 
