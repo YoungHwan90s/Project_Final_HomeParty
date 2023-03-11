@@ -1,9 +1,17 @@
+<%- include('header.ejs') %>
+
 <h2>메인화면</h2>
 
 <div>찜목록담기</div>
 <button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
+<button id="like-button${id}" onclick="check()">check</button>
 
 <script>
+
+    function check() {
+        console.log($('#user').val())
+
+    }
     function updateWishList(partyId) {
         $.ajax({
             type: 'POST',

@@ -26,9 +26,17 @@
             href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css"
         />
 
+        <link href="https://webfontworld.github.io/naver/NanumSquare.css" rel="stylesheet" />
+        <!-- 아이콘 링크 -->
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+        
+
         <!-- css -->
         <link rel="stylesheet" href="/css/modal.css" />
         <link rel="stylesheet" href="/css/signup.css" />
+        <link rel="stylesheet" href="/css/login.css" />
+        <link rel="stylesheet" href="/css/profile-upload.css" />
+
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script
@@ -37,15 +45,12 @@
         crossorigin="anonymous">
         </script>
 
-        <!-- 다음 우편번호찾기 API -->
+        <!-- 다음 주소찾기 -->
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script  type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services,clusterer"></script>
-
+        
         <title>모아바 | HOMEPARTY</title>
     </head>
     <body>
-        <%- include('header.ejs') %>
-
         <!-- Modalalert-->
         <div
             class="modal text-left"

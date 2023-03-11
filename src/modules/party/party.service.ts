@@ -54,15 +54,15 @@ export class PartyService {
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
-            const newParty = await queryRunner.manager.save(Party, party);
+            const newParty = await queryRunner.manager.save(party);
 
             if (partyInfo.thumbnail.length) {
                 for (let i = 0; i < partyInfo.thumbnail.length; i++) {
-                    const thumbnail = this.thumbnailRepository.create({
-                        party: newParty,
-                        thumbnail: partyInfo.thumbnail[i],
-                    });
-                    await queryRunner.manager.save(Thumbnail, thumbnail);
+                    const thumbnail = new Thumbnail();
+                    thumbnail.party = newParty;
+                    thumbnail.thumbnail = partyInfo.thumbnail[i];
+
+                    await queryRunner.manager.save(thumbnail);
                 }
             }
 
@@ -70,6 +70,7 @@ export class PartyService {
                 for (let i = 0; i < partyInfo.tagName.length; i++) {
                     const tag = new Tag();
                     tag.tagName = partyInfo.tagName[i];
+
                     await queryRunner.manager.save(tag);
 
                     const tagMapping = new PartyTagMapping();
@@ -108,8 +109,7 @@ export class PartyService {
         party.date = partyInfo.date;
 
         for (let i = 0; i < party.thumbnail.length; i++) {
-            partyInfo.thumbnail[i]
-            
+            partyInfo.thumbnail[i];
         }
 
         // await this.partyRepository.save(party);

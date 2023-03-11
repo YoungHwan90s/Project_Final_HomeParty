@@ -212,16 +212,15 @@ select{
    font-weight : bold;
    color : #353535;
 }
-#sample4_postcode{
+#input-address-1{
    width : 40%;
    margin-right: 12px;
 }
-#sample4_roadAddress, #sample4_jibunAddress, #sample4_detailAddress, #sample4_extraAddress{
+#input-address-2{
    width : 60%;
-}
-#sample4_detailAddress{
    background-color : white;
 }
+
 .input {
    display: inline;
 }
