@@ -5,18 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
         />
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"
-        ></script>
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
@@ -35,6 +29,13 @@
         <!-- css -->
         <link rel="stylesheet" href="/css/modal.css" />
         <link rel="stylesheet" href="/css/signup.css" />
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous">
+        </script>
 
         <!-- 다음 우편번호찾기 API -->
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -80,6 +81,7 @@
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %> 
         <% if (components === 'sign-up') { %><%-include('auth-sign-up.ejs') %><% } %> 
+        <% if (components === 'profile-upload') { %><%-include('auth-profile-upload') %><% } %> 
         <% if (components === 'find-email') { %><%-include('auth-find-email.ejs') %><% } %> 
         <% if (components === 'find-password') { %><%-include('auth-find-password.ejs') %><% } %> 
         <% if (components === 'authentication') { %><%-include('auth-authentication.ejs') %><% } %> 
