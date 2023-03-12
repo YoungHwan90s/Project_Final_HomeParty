@@ -296,3 +296,8 @@ select{
 @media (max-width: 1024px) {
    
 }
+
+hr {
+   width: 40%;
+   margin: 0 auto;
+ }
