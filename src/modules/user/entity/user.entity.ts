@@ -38,9 +38,6 @@ export class User {
     @Column('varchar', { nullable: true, length: 50 })
     birthday: string | null;
 
-    @Column('varchar', { nullable: true, length: 5 })
-    region: string | null;
-
     @Column('varchar', { nullable: true, length: 100 })
     address: string | null;
 
