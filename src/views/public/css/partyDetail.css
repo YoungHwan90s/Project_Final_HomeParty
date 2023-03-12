@@ -1,0 +1,227 @@
+.partyDetail .mainHeader .title {
+    font-size: 32px;
+  }
+  
+  .partyDetail .tagList {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  
+  .partyDetail .column2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+  
+  .partyDetail .headcountList {
+    display: flex;
+  }
+  
+  .partyDetail .headcountItem {
+    flex-shrink: 0;
+    display: flex;
+    gap: 4px;
+  }
+  
+  .partyDetail .headcountItem:nth-child(n + 2)::before {
+    content: "/";
+    margin-left: 4px;
+  }
+  
+  .partyDetail .headcountItem dt,
+  .partyDetail .headcountItem dd {
+    flex-shrink: 0;
+    gap: 4px;
+  }
+  
+  .partyDetail .headcountItem dd {
+    font-weight: 700;
+  }
+  
+  .partyDetail .partyLikeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    border: 0;
+    background-color: transparent;
+  }
+  
+  .partyDetail .mainSection {
+    margin-top: 32px;
+  }
+  
+  .partyDetail .partyImageSection {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .partyDetail .partyImageList {
+    display: flex;
+    height: 300px;
+  }
+  
+  .partyDetail .partyImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .partyDetail .tns-nav {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    z-index: var(--carouselIndex);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateX(-50%);
+  }
+  
+  .partyDetail .tns-nav button {
+    display: block;
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    background-color: var(--whiteColor);
+    border: 1px solid var(--blackColor);
+    border-radius: 50%;
+  }
+  
+  .partyDetail .tns-nav button.tns-nav-active {
+    width: 12px;
+    height: 12px;
+    background-color: var(--blackColor);
+  }
+  
+  .partyDetail .partyImageButton {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    background-color: var(--whiteColor);
+    border: 0;
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .partyDetail .partyImageButton.prev {
+    left: 24px;
+  }
+  
+  .partyDetail .partyImageButton.next {
+    right: 24px;
+  }
+  
+  .partyDetail .partyInfoWrapper {
+    display: grid;
+    grid-template-areas:
+      "introduce calendar"
+      "region calendar"
+      "host calendar";
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+    margin-top: 32px;
+  }
+  
+  .partyDetail .IntroduceSection {
+    grid-area: introduce;
+  }
+  
+  .partyDetail .calendarSection {
+    grid-area: calendar;
+  }
+  
+  .partyDetail .calendar time {
+    pointer-events: none;
+  }
+  
+  .partyDetail .calendarButtonWrapper {
+    margin-top: 16px;
+  }
+  
+  .partyDetail .calendarButtonWrapper button:nth-child(n + 2) {
+    margin-top: 8px;
+  }
+  
+  .partyDetail .regionSection {
+    grid-area: region;
+    padding-top: 24px;
+    border-top: 1px solid var(--borderColor);
+  }
+  
+  .partyDetail .regionSection p {
+    margin-top: 8px;
+  }
+  
+  .partyDetail .hostSection {
+    grid-area: host;
+    padding-top: 24px;
+    border-top: 1px solid var(--borderColor);
+  }
+  
+  .partyDetail .hostSection .hostInfoWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .partyDetail .hostFigure {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .partyDetail .hostImageWrapper {
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  
+  .partyDetail .hostImageWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .partyDetail .hostTitle {
+    font-weight: 700;
+  }
+  
+  .partyDetail .hostName {
+    margin-top: 6px;
+  }
+  
+  .partyDetail .hostContactLink {
+    padding: 12px 24px;
+    font-size: 14px;
+    border: 1px solid var(--borderColor);
+    border-radius: 4px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .partyDetail .partyInfoWrapper {
+      grid-template-areas:
+        "introduce"
+        "calendar"
+        "region"
+        "host";
+      grid-template-columns: 1fr;
+    }
+  
+    .partyDetail .calendarSection {
+      width: 100%;
+      padding-top: 32px;
+      border-top: 1px solid var(--borderColor);
+    }
+  }

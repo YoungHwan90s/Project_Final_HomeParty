@@ -10,8 +10,7 @@
     new Carousel($carousel);
 });
 
-/* ------------------------------- ImageUpload
-------------------------------- */
+/* ------------------------------- Image-upload ------------------------------- */
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -23,13 +22,8 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-$('#imageUpload').change(function () {
-    readURL(this);
-});
 
-/* -------------------------------- PartyDetail
-------------------------------- */
-
+/* -------------------------------- PartyDetail------------------------------- */
 new Calendar(document.querySelector('.partyDetail .calendar'));
 
 const partyDetailSlide = tns({
