@@ -39,7 +39,6 @@ export class UserService {
                 sex: data.sex,
                 phone: data.phone,
                 birthday: data.birthday,
-                region: data.region,
                 address: data.address,
                 profile: data.profile,
                 introduction: data.introduction,
@@ -50,7 +49,6 @@ export class UserService {
 
     async getUser(data: any): Promise<User> {
         let where = {};
-
         // 인자 값 id 일 때
         if (typeof data === 'number') {
             where = { id: data, deletedAt: null };
@@ -91,7 +89,6 @@ export class UserService {
                 sex: data.sex,
                 phone: data.phone,
                 birthday: data.birthday,
-                region: data.region,
                 address: data.address,
                 profile: data.profile,
                 introduction: data.introduction,

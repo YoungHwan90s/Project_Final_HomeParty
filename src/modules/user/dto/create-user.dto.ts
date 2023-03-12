@@ -19,18 +19,13 @@ export class CreateUserDto {
     @IsString()
     readonly phone: string;
 
-    @IsOptional()
-    @IsString()
-    readonly birthday: string;
-
-    @IsOptional()
-    @IsString()
-    readonly region: string;
-
-    @IsOptional()
     @IsString()
     readonly address: string;
 
+    @IsOptional()
+    @IsString()
+    readonly birthday: string;
+    
     @IsOptional()
     @IsString()
     readonly profile: string;

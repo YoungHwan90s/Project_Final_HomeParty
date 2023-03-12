@@ -1,0 +1,55 @@
+<div class="create-item-value">
+    <input type="file" id="item-image" accept="image/*" />
+    <input type="hidden" id="item-image-url" />
+</div>
+
+
+<div class="item-create-btn-wrap">
+    <button type="button" onclick="createItem()">등록</button>
+</div>
+
+<div class="item-create-btn-wrap">
+    <button type="button" onclick="location.href='/'">건너뛰기</button>
+</div>
+
+
+
+
+<script>
+    const uploadButton = document.querySelector('.upload-button');
+    const fileInput = document.querySelector('.file-upload');
+    
+    uploadButton.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    document.getElementById('item-image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file, encodeURIComponent(file.name));
+        $.ajax({
+            type: 'POST',
+            url: '/file/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                console.log(response.filePath.location)
+                document.getElementById('item-image-url').value = response.filePath.location;
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    });
+
+    function createItem() {
+        const itemInfo = {
+            image: document.getElementById('item-image-url').value,
+        };
+        console.log(itemInfo)
+    }
+</script>

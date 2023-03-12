@@ -1,16 +1,44 @@
-<h2>이메일 찾기</h2>
+<div class="wrapper-login">
+    <header class="login-header">
+        <div id="header">
+            <h3 class="signup-logo">
+                <span><img alt="모아바 메인로고" src="image/main.png" /></span>
+                <p>회원님의 계정을 찾아드립니다</p>
+            </h3>
+        </div>
+    </header>
+    <div id="container-login">
+        <div class="row-group">
 
-<div>
-    <label for="exampleInputMobile">이름</label>
-    <input type="text" class="form-control mt-2" id="input-name" placeholder="이름" />
+            <!-- 이름 입력 -->
+            <div class="user-input">
+                <h3 class="list">이름<span id="name-error"></span></h3>
+                <span class="box int-id"
+                    ><input type="text" id="input-name" class="int check" maxlength="20"
+                /></span>
+            </div>
+
+            <!-- 휴대폰 입력 -->
+            <div class="user-input">
+                <h3 class="list">휴대폰<span id="phone-num-error"></span></h3>
+                <span class="box int-id">
+                    <input
+                        type="number"
+                        pattern="[0-9]*"
+                        id="input-phone"
+                        class="int check"
+                        maxlength="20"
+                    />
+                </span>
+            </div>
+            <div class="btn_area">
+                <button onclick="findEmail()" type="button" id="btnJoin" class="btn_type btn_primary">
+                    이메일 찾기
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div>
-    <label for="exampleInputMobile">휴대폰</label>
-    <input type="text" class="form-control mt-2" id="input-phone" placeholder="휴대폰" />
-</div>
-
-<button onclick="findEmail()">이메일 찾기</button>
 
 <script>
     function findEmail() {
@@ -24,14 +52,14 @@
             url: '/auth/find-email',
             data: userInfo,
             success: function (response) {
-                customAlert(`고객님의 계정은 ${response.email} 입니다.`, function () {
-                    window.location.href = '/login';
+                customAlert(`회원가입 계정: ${response.email}`, function () {
+                    window.location.replace('/login')
                 });
             },
             error: function (error) {
                 customAlert(error.responseJSON.message, function () {
-                    window.location.reload()
-                })
+                    window.location.reload();
+                });
             },
         });
     }

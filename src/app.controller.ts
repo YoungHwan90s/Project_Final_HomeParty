@@ -17,6 +17,12 @@ export class AppController {
         return { components: 'sign-up' };
     }
 
+    @Get('/profile-upload')
+    @Render('index')
+    profileImage(@Req() req): { components: string } {
+        return { components: 'profile-upload' };
+    }
+
     @Get('/login')
     @Render('index')
     login(@Req() req): { components: string } {
