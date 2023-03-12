@@ -107,25 +107,6 @@ export class PartyService {
         party.region = partyInfo.region;
         party.address = partyInfo.address;
         party.date = partyInfo.date;
-
-        for (let i = 0; i < party.thumbnail.length; i++) {
-            partyInfo.thumbnail[i];
-        }
-
-        // await this.partyRepository.save(party);
-
-        // if (party.hostId !== userId) {
-        //     throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
-        // }
-
-        // party.title = partyInfo.title;
-        // party.content = partyInfo.content;
-        // party.maxMember = partyInfo.maxMember;
-        // party.region = partyInfo.region;
-        // party.address = partyInfo.address;
-        // party.date = partyInfo.date;
-
-        // this.partyRepository.save(party);
     }
 
     async applyParty(user: User, partyId: number) {

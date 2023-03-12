@@ -22,3 +22,14 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+/* -------------------------------- PartyDetail------------------------------- */
+new Calendar(document.querySelector('.partyDetail .calendar'));
+
+const partyDetailSlide = tns({
+    container: '.partyImageList',
+    slideBy: 'page',
+    controlsContainer: '.partyImageButtonWrapper',
+    autoplay: true,
+    autoplayButtonOutput: false,
+});

@@ -50,11 +50,11 @@
     function saveImage() {
         const image = $('#imageUpload').get(0);
         const file = image.files[0];
-        
+
         if (!file) {
             customAlert('업로드된 이미지가 없습니다.', function () {
-                    window.location.reload();
-                });
+                window.location.reload();
+            });
         }
         const formData = new FormData();
         formData.append('file', file, encodeURIComponent(file.name));
@@ -68,7 +68,7 @@
             data: formData,
             success: function (response) {
                 $('#imageUrl').val(response.filePath.location);
-                $('#imageUrl').trigger('change')
+                $('#imageUrl').trigger('change');
             },
             error: function (response) {
                 customAlert(response.responseJSON.message, function () {
