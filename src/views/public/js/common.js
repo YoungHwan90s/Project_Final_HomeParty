@@ -10,8 +10,7 @@
     new Carousel($carousel);
 });
 
-/* ------------------------------- 
-Image-upload
+/* ------------------------------- ImageUpload
 ------------------------------- */
 function readURL(input) {
     if (input.files && input.files[0]) {
@@ -26,4 +25,17 @@ function readURL(input) {
 }
 $('#imageUpload').change(function () {
     readURL(this);
+});
+
+/* -------------------------------- PartyDetail
+------------------------------- */
+
+new Calendar(document.querySelector('.partyDetail .calendar'));
+
+const partyDetailSlide = tns({
+    container: '.partyImageList',
+    slideBy: 'page',
+    controlsContainer: '.partyImageButtonWrapper',
+    autoplay: true,
+    autoplayButtonOutput: false,
 });
