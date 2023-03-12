@@ -3,17 +3,16 @@
         <!-- 회원가입 타이틀부분 -->
         <header>
             <div id="header">
-                <h1 class="signup-logo">
+                <h3 class="signup-logo">
                     <span><img alt="모아바 메인로고" src="image/main.png" /></span>
-                    <p>글씨</p>
-                </h1>
+                    <p>지금 바로 가입하여 파티에 참여해보세요!</p>
+                </h3>
             </div>
         </header>
         <div id="container-signup">
             <div class="row-group">
                 <div class="user-input">
                     <!-- 이메일 입력 -->
-
                     <h3 class="list">이메일<span id="email-error"></span></h3>
                     <span class="input-wrapper email-int box" id="emailBox">
                         <input type="text" id="input-email" maxlength="20" class="check email-input" />
@@ -137,16 +136,14 @@ function signUp() {
             phone: $('#input-phone').val(),
             address: $('#input-address-1').val() + ' ' + $('#input-address-2').val(),
         };
-        
-        console.log(userInfo)
-
+    
         $.ajax({
             type: 'POST',
             url: '/auth/sign-up',
             data: userInfo,
             success: function (response) {
                 customAlert('회원가입을 축하드립니다!', function () {
-                    window.location.href='/profile-upload';
+                    window.location.replace('/profile-upload');
                 });
             },
             error: function (error) {
