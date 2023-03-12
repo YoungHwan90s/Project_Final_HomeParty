@@ -1,0 +1,123 @@
+/* partySearch */
+.partyList {
+  --partyListColumn: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--partyListColumn, 1), minmax(0, 1fr));
+  gap: 20px;
+}
+
+.partyItem {
+  position: relative;
+}
+
+/* thumbnail */
+.thumbnailWrapper {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.thumbnailList {
+  display: flex;
+  transition: transform calc(var(--duration) * 1ms) ease-out;
+  transform: translate3D(calc(var(--currentSlide) * -100%), 0, 0);
+}
+
+.thumbnailItem {
+  flex-shrink: 0;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+}
+
+.thumbnailImage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnailButton {
+  position: absolute;
+  top: 50%;
+  z-index: var(--partySearchThumbnailButon);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border: 0;
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.thumbnailButton.prev {
+  left: 8px;
+}
+
+.thumbnailButton.next {
+  right: 8px;
+}
+
+.thumbnailWrapper:hover .thumbnailButton {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+/* partyInfo */
+.partySearch .partyInfoList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 15px;
+}
+
+.partySearch .partyTitle dd {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.partySearch .partyHeadcount {
+  display: flex;
+}
+
+.partySearch .partyInfoItem {
+  display: flex;
+  gap: 2px;
+}
+
+.partySearch .partyInfoItem dt,
+.partySearch .partyInfoItem:not(.partyTitle) dd {
+  flex-shrink: 0;
+  color: var(--primaryColor);
+}
+
+.partySearch .partyInfoItem dt:nth-of-type(n + 2)::before {
+  content: "/";
+}
+
+.partySearch .partyLikeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: var(--partySearchLikeButton);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 20px;
+  color: var(--blackColor);
+  border: 0;
+  border-radius: 50%;
+  background-color: transparent;
+}

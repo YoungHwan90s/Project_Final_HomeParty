@@ -76,7 +76,7 @@ export class PartyService {
                     const tagMapping = new PartyTagMapping();
                     tagMapping.party = newParty;
                     tagMapping.tag = tag;
-                    await queryRunner.manager.save(tagMapping);
+                    await queryRunner.manager.save(PartyTagMapping, tagMapping);
                 }
             }
 
@@ -113,8 +113,6 @@ export class PartyService {
         }
 
         // await this.partyRepository.save(party);
-
-        console.dir(party, { depth: null });
 
         // if (party.hostId !== userId) {
         //     throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
