@@ -13,7 +13,6 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
-import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 
 @Controller('/api/party')

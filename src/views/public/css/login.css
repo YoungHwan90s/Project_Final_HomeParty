@@ -71,23 +71,8 @@
    width: auto;
    max-width: 768px;
 }
-body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
-   legend, li, ol, p, select, table, td, textarea, th, ul {
-   margin: 0;
-   padding: 0;
-   webkit-text-size-adjust: none;
-}
-body, html {
-   font-family: 'NanumSquare',sans-serif;
-   width: 100%;
-   height: 100%;
-}
-body {
-   background-color: #f5f6f7;
-}
-div{
-   display : block;
-}
+
+
 .login-header{
    text-align : center;
 }
@@ -103,11 +88,7 @@ select{
    display : inline-block;
    width : 50%;
 }
-#mail-select{
-   width : 50%;
-   font-size : 13px;
-   border : 1px solid lightgray;
-}
+
 #text{
    margin : 5px;
    font-size : 15px;
@@ -125,11 +106,6 @@ select{
    margin: 0 auto;
    max-width: 768px;
    min-width: 460px;
-}
-
-.wrapper-login {
-   width: 100%;
-   min-width: 760px;
 }
 
 #header-login {
@@ -241,9 +217,7 @@ select{
 	box-sizing: border-box;
 	border: solid 1px #dadada;
 }
-#mail-select {
-	height: 51px;
-}
+
 #btn {
    width: 100%;
    height: 50px;
@@ -251,17 +225,7 @@ select{
 .btn_area {
    margin: 30px 3% 60px;
 }
-#btnJoin {
-	display: block;
-	width: 60%;
-    height: 51px;
-	margin: 0 auto;
 
-	display: block;
-	width: 60%;
-    height: 51px;
-	margin: 0 auto;
-}
 input::placeholder {
    font-size: 13px;
 }
