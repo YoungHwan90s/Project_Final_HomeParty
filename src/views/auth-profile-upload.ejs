@@ -3,7 +3,6 @@
     <input type="hidden" id="item-image-url" />
 </div>
 
-
 <div class="item-create-btn-wrap">
     <button type="button" onclick="createItem()">등록</button>
 </div>
@@ -12,13 +11,33 @@
     <button type="button" onclick="location.href='/'">건너뛰기</button>
 </div>
 
-
-
+<div class="container">
+    <h1>
+        jQuery Image Upload
+        <small>with preview</small>
+    </h1>
+    <div class="avatar-upload">
+        <div class="avatar-edit">
+            <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" />
+            <label for="imageUpload"></label>
+        </div>
+        <div class="avatar-preview">
+            <div
+                id="imagePreview"
+                style="background-image: url(http://i.pravatar.cc/500?img=7)"
+            ></div>
+        </div>
+    </div>
+    <div class="avatar-buttons">
+        <button>확인</button>
+        <button>건너뛰기</button>
+    </div>
+</div>
 
 <script>
     const uploadButton = document.querySelector('.upload-button');
     const fileInput = document.querySelector('.file-upload');
-    
+
     uploadButton.addEventListener('click', () => {
         fileInput.click();
     });
@@ -35,7 +54,7 @@
             processData: false,
             data: formData,
             success: function (response) {
-                console.log(response.filePath.location)
+                console.log(response.filePath.location);
                 document.getElementById('item-image-url').value = response.filePath.location;
             },
             error: function (response) {
@@ -50,6 +69,6 @@
         const itemInfo = {
             image: document.getElementById('item-image-url').value,
         };
-        console.log(itemInfo)
+        console.log(itemInfo);
     }
 </script>

@@ -1,0 +1,20 @@
+.datePickerWrapper {
+  position: relative;
+}
+
+.datePicker {
+  width: 200px;
+  height: 32px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.datePickerWrapper .calendar {
+  position: absolute;
+  top: calc(100% + 16px);
+  display: none;
+}
+
+.datePickerWrapper .datePicker.active ~ .calendar {
+  display: block;
+}
