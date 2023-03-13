@@ -92,7 +92,12 @@ button {
 .title {
   font-weight: 700;
 }
-​
+
 .tns-liveregion {
   display: none;
+}
+
+.note-info{
+  margin: 3px;
+  font-size: 14px;
 }

@@ -1,3 +1,4 @@
+import { Party } from 'src/modules/party/entity/party.entity';
 import {
     Column,
     CreateDateColumn,
@@ -56,15 +57,19 @@ export class User {
     @DeleteDateColumn()
     deletedAt: Date | null;
 
+    // 유저 <-> 파티: 일대다 관계
+    @OneToMany(() => Party, (party) => party.user, { cascade: true })
+    party: Party[];
+
     // 유저 <-> 장바구니: 일대다 관계
-    @OneToMany(() => WishList, (wishList) => wishList.user)
+    @OneToMany(() => WishList, (wishList) => wishList.user, { cascade: true })
     wishList: WishList[];
 
     // 유저 <-> 파티멤버: 일대다 관계
-    @OneToMany(() => PartyMember, (partyMember) => partyMember.user)
+    @OneToMany(() => PartyMember, (partyMember) => partyMember.user, { cascade: true })
     partyMember: PartyMember[];
 
     // 유저 <-> 리뷰: 일대다 관계
-    @OneToMany(() => Review, (review) => review.user)
+    @OneToMany(() => Review, (review) => review.user, { cascade: true })
     review: Review[];
 }

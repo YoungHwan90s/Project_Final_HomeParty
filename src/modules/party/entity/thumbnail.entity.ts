@@ -15,7 +15,7 @@ export class Thumbnail {
     id: number;
 
     @Column('varchar', { length: 1000, nullable: true })
-    thumbnail: string;
+    thumbnail: string | null
 
     @Column('int')
     partyId: number;
@@ -30,6 +30,8 @@ export class Thumbnail {
     deletedAt: Date | null;
 
     // 썸네일 <-> 파티: 다대일 관계
-    @ManyToOne(() => Party, (party) => party.thumbnail)
+    @ManyToOne(() => Party, (party) => party.thumbnail, {
+        orphanedRowAction: 'soft-delete'
+    })
     party: Party;
 }
