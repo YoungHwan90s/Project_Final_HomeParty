@@ -8,6 +8,12 @@ export class AppController {
     @Get('/')
     @Render('index')
     index(@Req() req): { components: string } {
+        return { components: 'index' };
+    }
+
+    @Get('/party')
+    @Render('index')
+    party(@Req() req): { components: string } {
         return { components: 'main' };
     }
 
@@ -121,7 +127,7 @@ export class AppController {
 
     @Get('/party/:partyId')
     @Render('index')
-    party(@Req() req): { components: string } {
+    partyById(@Req() req): { components: string } {
         return { components: 'party' };
     }
 
@@ -129,12 +135,6 @@ export class AppController {
     @Render('index')
     partymake(@Req() req): { components: string } {
         return { components: 'party-make' };
-    }
-
-    @Get('/party-host')
-    @Render('index')
-    partyhost(@Req() req): { components: string } {
-        return { components: 'party-host' };
     }
 
     @Get('/party-host-detail/:hostId')
