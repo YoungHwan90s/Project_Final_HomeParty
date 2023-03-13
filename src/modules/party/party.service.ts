@@ -1,17 +1,17 @@
 import {
+    ConsoleLogger,
     ForbiddenException,
     Injectable,
+    NotAcceptableException,
     NotFoundException,
-    UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { Tag } from './entity/party-tag.entity';
+import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyMember } from './entity/party-member.entity';
-import { PartyTagMapping } from './entity/party-tag-mapping.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 
@@ -22,7 +22,6 @@ export class PartyService {
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
         @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
         @InjectRepository(Tag) private tagRepository: Repository<Tag>,
-        @InjectRepository(PartyTagMapping) private partyTagMapping: Repository<PartyTagMapping>,
         private readonly dataSource: DataSource,
     ) {}
 
@@ -35,7 +34,7 @@ export class PartyService {
 
     async getPartyById(partyId: number) {
         return await this.partyRepository.findOne({
-            relations: ['thumbnail', 'partyMember', 'partyTagMapping.tag', 'wishList'],
+            relations: ['thumbnail', 'partyMember', 'tag', 'wishList'],
             where: { id: partyId },
         });
     }
@@ -44,74 +43,158 @@ export class PartyService {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
+
         try {
+            // Party 객체 인스턴스 맵핑
             const party = new Party();
             party.hostId = user.id;
             party.title = partyInfo.title;
             party.content = partyInfo.content;
             party.maxMember = partyInfo.maxMember;
-            party.region = partyInfo.region;
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
-            const newParty = await queryRunner.manager.save(party);
+            if (partyInfo.tagName.length) {
+                let newTags = [];
+                for (let i = 0; i < partyInfo.tagName.length; i++) {
+                    let tag = await queryRunner.manager.findOne(Tag, {
+                        where: {
+                            tagName: partyInfo.tagName[i],
+                        },
+                    });
+                    if (tag) {
+                        tag.freq += 1;
+                    }
+                    if (!tag) {
+                        tag = new Tag();
+                        tag.tagName = partyInfo.tagName[i];
+                    }
+                    newTags.push(tag);
+                }
+
+                // Tag 객체 인스턴스 맵핑
+                party.tag = newTags;
+            }
 
             if (partyInfo.thumbnail.length) {
+                let newThumbnails = [];
                 for (let i = 0; i < partyInfo.thumbnail.length; i++) {
-                    const thumbnail = new Thumbnail();
-                    thumbnail.party = newParty;
+                    let thumbnail = new Thumbnail();
                     thumbnail.thumbnail = partyInfo.thumbnail[i];
-
-                    await queryRunner.manager.save(thumbnail);
+                    newThumbnails.push(thumbnail);
                 }
+                // Thumbnail 객체 인스턴스 맵핑
+                party.thumbnail = newThumbnails;
             }
 
-            if (partyInfo.tagName.length) {
-                for (let i = 0; i < partyInfo.tagName.length; i++) {
-                    const tag = new Tag();
-                    tag.tagName = partyInfo.tagName[i];
-
-                    await queryRunner.manager.save(tag);
-
-                    const tagMapping = new PartyTagMapping();
-                    tagMapping.party = newParty;
-                    tagMapping.tag = tag;
-                    await queryRunner.manager.save(PartyTagMapping, tagMapping);
-                }
-            }
-
+            // PartyMember 객체 인스턴스 맵핑
             const partyMember = new PartyMember();
-            partyMember.party = newParty;
             partyMember.user = user;
             partyMember.status = '호스트';
+            party.partyMember = [partyMember];
 
-            await queryRunner.manager.save(partyMember);
+            await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
-            throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
+            throw new NotAcceptableException(
+                '파티신청에 실패하였습니다. 파티정보를 다시 확인하시고 시도하여 주시기 바랍니다.',
+            );
         } finally {
             await queryRunner.release();
         }
     }
 
-    async updateParty(userId: number, partyId: number, partyInfo: UpdatePartyDto) {
-        const party = await this.partyRepository.findOne({
-            relations: { thumbnail: true, partyTagMapping: { tag: true } },
-            where: { id: partyId },
-        });
+    async updateParty(partyId: number, data) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
 
-        party.title = partyInfo.title;
-        party.content = partyInfo.content;
-        party.title = partyInfo.title;
-        party.region = partyInfo.region;
-        party.address = partyInfo.address;
-        party.date = partyInfo.date;
+        try {
+            const { addThumbnail, removeThumbnail, addTagName, removeTagName } = data;
+            let party = await queryRunner.manager.findOne(Party, {
+                where: { id: partyId },
+            });
+
+            party.title = data.title;
+            party.content = data.content;
+            party.maxMember = data.maxMember;
+            party.address = data.address;
+            party.date = data.date;
+
+            if (addThumbnail?.length) {
+                let newThumbnails = [];
+                for (let i = 0; i < addThumbnail.length; i++) {
+                    let thumbnail = new Thumbnail();
+                    thumbnail.thumbnail = addThumbnail[i];
+                    thumbnail.party = party
+                    
+                    newThumbnails.push(thumbnail);
+                }
+                party.thumbnail = newThumbnails;
+
+            }
+
+            if (addTagName?.length) {
+                let newTags = [];
+                for (let i = 0; i < addTagName.length; i++) {
+                    let tag = await queryRunner.manager.findOne(Tag, {
+                        where: {
+                            tagName: addTagName[i],
+                        },
+                    });
+                    if (tag) {
+                        tag.freq += 1;
+                    }
+                    if (!tag) {
+                        tag = new Tag();
+                        tag.tagName = addTagName[i];
+                    }
+                    newTags.push(tag);
+                }
+
+                party.tag = newTags;
+            }
+
+            if (removeThumbnail) {
+                for (let i = 0; i < removeThumbnail.length; i++) {
+                    party.thumbnail = party.thumbnail.filter(
+                        (thumbnail) => thumbnail.id !== removeThumbnail[i],
+                    );
+                }
+            }
+
+            if (removeTagName) {
+                for (let i = 0; i < removeTagName.length; i++) {
+                    const tag = await queryRunner.manager.findOne(Tag, {
+                        where: { id: removeTagName[i] },
+                    });
+                    tag.freq -= 1;
+                    if (tag.freq <= 0) {
+                        await queryRunner.manager.softDelete(Tag, tag.id);
+                    }
+                    queryRunner.manager.save(tag)
+
+                    party.tag = party.tag.filter((tag) => tag.tagName !== removeTagName[i]);
+                }
+            }
+
+            await queryRunner.manager.save(Party, party);
+            await queryRunner.commitTransaction();
+
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw new NotAcceptableException(
+                '파티수정에 실패하였습니다. 파티정보를 다시 확인하시고 시도하여 주시기 바랍니다.',
+            );
+        } finally {
+            await queryRunner.release();
+        }
     }
 
     async applyParty(user: User, partyId: number) {
-        const existingPartyMember = await this.partyMemberRepository.findOneOrFail({
-            where: { userId: user.id },
+        const existingPartyMember = await this.partyMemberRepository.findOne({
+            where: { partyId, userId: user.id },
         });
 
         if (existingPartyMember) {
@@ -179,7 +262,7 @@ export class PartyService {
     async deleteParty(userId: number, partyId: number) {
         const party = await this.partyRepository.findOne({
             where: { id: partyId },
-            relations: ['wishList', 'partyMember', 'review', 'partyTagMapping', 'thumbnail'],
+            relations: ['wishList', 'partyMember', 'review', 'tag', 'thumbnail'],
         });
 
         if (party.hostId !== userId) {

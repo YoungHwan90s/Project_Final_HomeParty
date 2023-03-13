@@ -131,12 +131,6 @@ export class AppController {
         return { components: 'party-make' };
     }
 
-    @Get('/party-host')
-    @Render('index')
-    partyhost(@Req() req): { components: string } {
-        return { components: 'party-host' };
-    }
-
     @Get('/party-host-detail/:hostId')
     @Render('index')
     partyhostdetail(@Req() req): { components: string } {
