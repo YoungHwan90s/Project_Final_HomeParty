@@ -43,13 +43,8 @@ export class PartyController {
     // 파티 수정
     @UseGuards(JwtAuthGuard)
     @Patch(':partyId')
-    async updateParty(
-        @Req() req,
-        @Param('partyId') partyId: number,
-        @Body() partyInfo: UpdatePartyDto,
-    ) {
-        const { id: userId } = req.user;
-        return await this.partyService.updateParty(userId, partyId, partyInfo);
+    async updateParty(@Param('partyId') partyId: number, @Body() data: UpdatePartyDto) {
+        return await this.partyService.updateParty(partyId, data);
     }
 
     // 파티 신청
