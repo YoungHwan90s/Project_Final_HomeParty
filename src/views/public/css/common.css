@@ -1,0 +1,98 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+/* root */
+:root {
+  /* container */
+  --max-container: 1320px;
+  --carouselIndex: 9;
+
+  /* z-index */
+  --partySearchLikeButtonIndex: 9;
+  --carouselIndex: 9;
+
+  /* color */
+  --whiteColor: #fff;
+  --blackColor: #222;
+  --primaryColor: #666;
+  --borderColor: #ddd;
+  --pointColor: red;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f6f7;
+  font-family: 'Open Sans', "NanumSquare", sans-serif;
+}
+
+div{
+ display : block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.a11yHidden {
+    overflow: hidden;
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    clip-path: circle(0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.container {
+    max-width: var(--max-container);
+    width: 90%;
+    margin: 0 auto;
+}
+
+.mainSection {
+    margin-top: 60px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn_primary {
+	display: block;
+	width: 60%;
+  height: 51px;
+	margin: 0 auto;
+}
+
+.btn_point {
+  background-color: var(--pointColor);
+  color:white;
+  border:0;
+}
+
+#mail-select{
+  width : 50%;
+  font-size : 13px;
+  border : 1px solid lightgray;
+  height: 51px;
+}
+
+.wrapper {
+  width: 100%;
+  min-width: 760px;
+}
+
+.title {
+  font-weight: 700;
+}
+​
+.tns-liveregion {
+  display: none;
+}

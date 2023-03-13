@@ -54,15 +54,15 @@ export class PartyService {
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
-            const newParty = await queryRunner.manager.save(Party, party);
+            const newParty = await queryRunner.manager.save(party);
 
             if (partyInfo.thumbnail.length) {
                 for (let i = 0; i < partyInfo.thumbnail.length; i++) {
-                    const thumbnail = this.thumbnailRepository.create({
-                        party: newParty,
-                        thumbnail: partyInfo.thumbnail[i],
-                    });
-                    await queryRunner.manager.save(Thumbnail, thumbnail);
+                    const thumbnail = new Thumbnail();
+                    thumbnail.party = newParty;
+                    thumbnail.thumbnail = partyInfo.thumbnail[i];
+
+                    await queryRunner.manager.save(thumbnail);
                 }
             }
 
@@ -70,12 +70,13 @@ export class PartyService {
                 for (let i = 0; i < partyInfo.tagName.length; i++) {
                     const tag = new Tag();
                     tag.tagName = partyInfo.tagName[i];
+
                     await queryRunner.manager.save(tag);
 
                     const tagMapping = new PartyTagMapping();
                     tagMapping.party = newParty;
                     tagMapping.tag = tag;
-                    await queryRunner.manager.save(tagMapping);
+                    await queryRunner.manager.save(PartyTagMapping, tagMapping);
                 }
             }
 
@@ -106,28 +107,6 @@ export class PartyService {
         party.region = partyInfo.region;
         party.address = partyInfo.address;
         party.date = partyInfo.date;
-
-        for (let i = 0; i < party.thumbnail.length; i++) {
-            partyInfo.thumbnail[i]
-            
-        }
-
-        // await this.partyRepository.save(party);
-
-        console.dir(party, { depth: null });
-
-        // if (party.hostId !== userId) {
-        //     throw new ForbiddenException(`다른 사용자의 게시물은 수정할 수 없습니다.`);
-        // }
-
-        // party.title = partyInfo.title;
-        // party.content = partyInfo.content;
-        // party.maxMember = partyInfo.maxMember;
-        // party.region = partyInfo.region;
-        // party.address = partyInfo.address;
-        // party.date = partyInfo.date;
-
-        // this.partyRepository.save(party);
     }
 
     async applyParty(user: User, partyId: number) {

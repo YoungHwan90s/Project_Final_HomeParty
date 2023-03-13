@@ -25,11 +25,8 @@ export class Tag {
 
     @UpdateDateColumn()
     updatedAt: Date;
-    
-    @DeleteDateColumn()
-    deletedAt: Date | null;
 
     // 파티 <-> 파티-태그-맵핑: 일대다 관계
-    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.tag, {cascade: true})
+    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.tag, { cascade: true })
     partyTagMapping: PartyTagMapping[];
 }

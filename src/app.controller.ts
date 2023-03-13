@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService) {}
-    
+
     @Get('/')
     @Render('index')
     index(@Req() req): { components: string } {
@@ -15,6 +15,12 @@ export class AppController {
     @Render('index')
     signup(@Req() req): { components: string } {
         return { components: 'sign-up' };
+    }
+
+    @Get('/profile-upload')
+    @Render('index')
+    profileImage(@Req() req): { components: string } {
+        return { components: 'profile-upload' };
     }
 
     @Get('/login')
@@ -113,7 +119,7 @@ export class AppController {
         return { components: 'admin-tag' };
     }
 
-    @Get('/party')
+    @Get('/party/:partyId')
     @Render('index')
     party(@Req() req): { components: string } {
         return { components: 'party' };
@@ -131,7 +137,7 @@ export class AppController {
         return { components: 'party-host' };
     }
 
-    @Get('/party-host-detail')
+    @Get('/party-host-detail/:hostId')
     @Render('index')
     partyhostdetail(@Req() req): { components: string } {
         return { components: 'party-host-detail' };

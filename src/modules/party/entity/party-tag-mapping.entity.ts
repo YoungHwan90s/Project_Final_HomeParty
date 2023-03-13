@@ -7,7 +7,6 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Tag } from './party-tag.entity';
-
 import { Party } from './party.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'partyTagMappings' })

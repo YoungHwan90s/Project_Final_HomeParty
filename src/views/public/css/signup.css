@@ -44,7 +44,7 @@
 .d_form.mini {
     width: 7em;
 }
-#container, #footer, #header {
+#container-signup, #footer, #header {
     min-width: 220px;
     margin: 0 15px;
     margin-top: 0px;
@@ -54,27 +54,12 @@
     box-sizing: border-box;
 }
 
-#container {
+#container-signup {
    width: auto;
    max-width: 768px;
 }
 
-body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
-   legend, li, ol, p, select, table, td, textarea, th, ul {
-   margin: 0;
-   padding: 0;
-   webkit-text-size-adjust: none;
-}
-body, html {
-   width: 100%;
-   height: 100%;
-}
-body {
-   background-color: #f5f6f7;
-}
-div{
-   display : block;
-}
+
 header{
    text-align : center;
 }
@@ -96,11 +81,6 @@ select{
    display : inline-block;
    width : 50%;
 }
-#mail-select{
-   width : 50%;
-   font-size : 13px;
-   border : 1px solid lightgray;
-}
 #text{
    margin : 5px;
    font-size : 15px;
@@ -114,15 +94,10 @@ select{
    font-weight: normal;
    margin-left : 10px;
 }
-#container, #footer {
+#container-signup, #footer {
    margin: 0 auto;
    max-width: 768px;
    min-width: 460px;
-}
-
-.wrapper {
-   width: 100%;
-   min-width: 760px;
 }
 
 #header {
@@ -212,16 +187,15 @@ select{
    font-weight : bold;
    color : #353535;
 }
-#sample4_postcode{
+#input-address-1{
    width : 40%;
    margin-right: 12px;
 }
-#sample4_roadAddress, #sample4_jibunAddress, #sample4_detailAddress, #sample4_extraAddress{
+#input-address-2{
    width : 60%;
-}
-#sample4_detailAddress{
    background-color : white;
 }
+
 .input {
    display: inline;
 }
@@ -268,11 +242,6 @@ select{
 	border: solid 1px #dadada;
 }
 
-#mail-select {
-	height: 51px;
-}
-
-
 #btn {
    width: 100%;
    height: 50px;
@@ -281,15 +250,6 @@ select{
    margin: 30px 3% 60px;
 }
 
-#btnJoin {
-	display: block;
-	width: 60%;
-    height: 51px;
-	margin: 0 auto;
-}
-
-
-
 @media (max-width: 1024px) {
    
 }
@@ -297,3 +257,8 @@ select{
 @media (max-width: 1024px) {
    
 }
+
+hr {
+   width: 40%;
+   margin: 0 auto;
+ }

@@ -23,6 +23,7 @@ import { AuthenticateCodeDto } from './dto/authenticate-code.dto';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
 import { createUserSchema } from 'src/util/joi/joi-validation';
+import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -39,16 +40,23 @@ export class AuthController {
     async login(@Req() req, @Res() res) {
         const { accessToken, refreshToken } = await this.authService.login(req.user);
 
-        return res.json({accessToken, refreshToken});
+        return res.json({ accessToken, refreshToken });
     }
 
     @Post('/sign-up')
     // @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)
     async createUser(@Res() res, @Body() data: CreateUserDto) {
-        await this.userService.createUser(data);
+        const { id } = await this.userService.createUser(data);
 
-        return res.send({});
+        return res.send({ id });
+    }
+
+    @Patch('/profile-update')
+    @HttpCode(201)
+    async updateUserProfile(@Req() req, @Res() res, @Body() data: CreateUserProfileDto) {
+        await this.userService.updateUserProfile(data);
+        return res.json({});
     }
 
     @Post('/find-email')
