@@ -1,170 +1,182 @@
-<main class="partyDetail main container"></main>
+<%- include('header.ejs') %>
+<main class="partySearch main container">
+    <header class="partySearchBar mainHeader">
+        <h2 class="a11yHidden">파티 검색</h2>
+
+        <form class="partySearchForm">
+            <fieldset>
+                <legend class="a11yHidden">파티 검색 폼</legend>
+
+                <input
+                    type="text"
+                    name="partyWhere"
+                    placeholder="어디에서"
+                    class="partyWhere"
+                    id="partyWhere"
+                />
+
+                <div class="partyWhen">
+                    <div class="datePickerWrapper"></div>
+                </div>
+
+                <input
+                    type="text"
+                    name="partyName"
+                    placeholder="파티 명"
+                    class="partyName"
+                    id="partyName"
+                />
+
+                <button type="submit" class="partySubmitButton" aria-label="파티 검색하기 버튼">
+                    <i class="bx bx-search" aria-hidden="true"></i>
+                </button>
+            </fieldset>
+        </form>
+    </header>
+
+    <div class="mainSection">
+        <ul class="partyList"></ul>
+    </div>
+</main>
+
+<div>찜목록담기</div>
+<button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
 
 <script>
-    const partyId = window.location.pathname.split('/')[2];
-
     $.ajax({
         type: 'GET',
-        url: `/api/party/${partyId}`,
+        url: `/api/party/list`,
         data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
         success: function (response) {
-            const {
-                hostId,
-                title,
-                content,
-                maxMember,
-                currMember,
-                thumbnails,
-                region,
-                date,
-                status,
-                thumbnail,
-                partyTagMapping,
-                // user,
-            } = response;
+            let partyList = response;
+            console.log(partyList)
 
-            //prettier-ignore
-            const partyTagHtml =
-                partyTagMapping.length > 0
-                ? partyTagMapping.map((partyTagMapping) =>
-                      `<li class="tagItem">
-                          #${partyTagMapping.tag.tagName}
-                      </li>`
-                  ).join('')
-                : ``;
+            for (let i = 0; i < partyList.length; i++) {
+                const partyId = partyList[i]['id'];
+                const title = partyList[i]['title'];
+                const maxMember = partyList[i]['maxMember'];
+                const currMember = partyList[i]['currMember'];
+                const thumbnails = partyList[i]['thumbnail'];
+                const date = partyList[i]['date'];
+                const status = partyList[i]['status'];
+                const thumbnailList = partyList[i]['thumbnail'];
 
-            //prettier-ignore
-            const partyImageHtml =
-                thumbnail.length > 0
-                ? thumbnail.map((thumbnail) => `
-                    <li class="partyImageItem">
-                        <img src="${thumbnail}" alt="" class="partyImage" />
-                    </li>
-                `).join('')
-                : `
-                    <li class="partyImageItem">
-                        <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
-                    </li>`;
+                //prettier-ignore
+                const thumbnailHtml = `
+                    ${thumbnailList.length === 0 
+                        ?  `
+                            <li class="thumbnailItem">
+                                <div class="thumbnailRatio">
+                                    <img
+                                        src="https://velog.velcdn.com/images/joosing/post/459e7cff-f9fc-470a-8856-824560ea9c45/image.png"
+                                        alt=""
+                                        class="thumbnailImage"
+                                    />
+                                </div>
+                            </li>
+                            ` 
+                        : thumbnailList.map(({ thumbnail }) => `
+                            <li class="thumbnailItem">
+                                <div class="thumbnailRatio">
+                                    <img
+                                        src="${thumbnail}"
+                                        alt=""
+                                        class="thumbnailImage"
+                                    />
+                                </div>
+                            </li>
+                        `).join('')
+                    }`;
 
-            // const hostProfileSrc =
-            //     user.profile ??
-            //     `https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage`;
+                const partyItem = `
+                    <li class="partyItem">
+                        <div class="thumbnailWrapper carousel">
+                            <a href="party/${partyId}" class="partyLink thumbnailLink">
+                                <ul class="thumbnailList carouselList">
+                                    ${thumbnailHtml}
+                                </ul>
+                            </a>
 
-            const html = `
-                <header class="mainHeader">
-                    <h2 class="title">
-                        ${title}
-                    </h2>
-
-                    <ul class="tagList">
-                        ${partyTagHtml}
-                    </ul>
-
-                    <div class="column2">
-                        <dl class="headcountList">
-                            <div class="headcountItem">
-                                <dt>현재 신청 인원</dt>
-                                <dd>
-                                  ${currMember}
-                                </dd>
+                            <div class="thumbnailButtonWrapper carouselButtonWrapper">
+                                <button
+                                    type="button"
+                                    class="thumbnailButton carouselButton prev"
+                                    aria-label="이전 썸네일 보기"
+                                >
+                                    <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="thumbnailButton carouselButton next"
+                                    aria-label="다음 썸네일 보기"
+                                >
+                                    <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                                </button>
                             </div>
-                            <div class="headcountItem">
-                                <dt>총 인원</dt>
-                                <dd>
-                                    ${maxMember}
-                                </dd>
-                            </div>
-                        </dl>
+                        </div>
+
+                        <a href="" class="partyLink">
+                            <dl class="partyInfoList">
+                                <div class="partyInfoItem partyTitle">
+                                    <dt class="a11yHidden">제목</dt>
+                                    <dd>
+                                        ${title}
+                                    </dd>
+                                </div>
+                                <div class="partyInfoItem partyHeadcount">
+                                    <dt>현재</dt>
+                                    <dd class="currentCount">
+                                        ${currMember}명
+                                    </dd>
+                                    <dt>총</dt>
+                                    <dd class="totalCount">
+                                        ${maxMember}명
+                                    </dd>
+                                </div>
+                                <div class="partyInfoItem partyEtc">
+                                    <dt class="a11yHidden">지역</dt>
+                                    <dd class="partyPlace">
+                                    </dd>
+                                    <dt class="a11yHidden">날짜</dt>
+                                    <dd class="partyDate">
+                                        ${date}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </a>
 
                         <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i class="bx bxs-heart" aria-hidden="true"></i>
                         </button>
-                    </div>
-                </header>
+                    </li>
+                `;
 
-                <div class="mainSection">
-                    <section class="partyImageSection">
-                        <h3 class="a11yHidden">파티 이미지</h3>
-
-                        <ul class="partyImageList">
-                            ${partyImageHtml}
-                        </ul>
-
-                        <div class="partyImageButtonWrapper">
-                            <button
-                                type="button"
-                                class="partyImageButton prev"
-                                aria-label="이전 파티 이미지 보기"
-                            >
-                                <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                            </button>
-                            <button
-                                type="button"
-                                class="partyImageButton next"
-                                aria-label="다음 파티 이미지 보기"
-                            >
-                                <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </section>
-
-                    <div class="partyInfoWrapper">
-                        <section class="IntroduceSection">
-                            <h3 class="a11yHidden">파티 소개</h3>
-                            <p>
-                                ${content}
-                            </p>
-                        </section>
-
-                        <section class="calendarSection">
-                            <h3 class="a11yHidden">달력</h3>
-
-                            <div class="calendar"></div>
-
-                            <div class="calendarButtonWrapper">
-                                <button type="button" class="btn_primary btn_point">예약하기</button
-                                ><button type="button" class="btn_primary">취소하기</button>
-                            </div>
-                        </section>
-
-                        <section class="regionSection">
-                            <h3 class="title">지역</h3>
-                            <p>
-                                ${region}
-                            </p>
-
-                            <!-- 지도 삽입 -->
-                        </section>
-
-                        <section class="hostSection">
-                            <h3 class="a11yHidden">호스트 정보</h3>
-                            <div class="hostInfoWrapper">
-                                <a href="/party-host-detail/${hostId}" class="hostInfoLink">
-                                    <figure class="hostFigure">
-                                        <div class="hostImageWrapper">
-                                            <img src="" alt="" />
-                                        </div>
-
-                                        <figcaption>
-                                            <h3 class="hostTitle">호스트</h3>
-                                            <p class="hostName">
-                                                
-                                            </p>
-                                            <p class="a11yHidden">호스트 정보 더보기</p>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-
-                                <a href="/party-host-massage" class="hostContactLink">호스트에게 연락하기</a>
-                            </div>
-                        </section>
-                    </div>
-                </div>`;
-            $('#partyDetail').append(html);
+                $('.partyList').append(partyItem);
+            }
         },
     });
+
+    function updateWishList(partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    $('#like-button${id}').css('color', 'red');
+                } else {
+                    $('#like-button${id}').css('color', '');
+                }
+            },
+            error: function (error) {
+                customAlert(
+                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    function () {
+                        window.location.reload();
+                    },
+                );
+            },
+        });
+    }
 </script>

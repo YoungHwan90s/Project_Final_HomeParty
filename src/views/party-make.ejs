@@ -250,7 +250,36 @@
         $(_this).parent('li').remove()
     }
 
-</script>
-</body>
+  function createParty() {
+        const partyInfo = {
+            title : $('input-title').val(),
+            content : $('input-content').val(),
+            maxMember : $('input-maxMember').val(),
+            currMember : $('input-currMember').val(),
+            thumbnails : $('input-thumbnails').val(),
+            date : $('input-date').val(),
+            status : $('input-status').val(),
+            thumbnail : $('input-thumbnail').val(),
+            tagName : $('input-tagName').val(),
+        }
 
-</html>
+        $.ajax({
+            type: 'POST',
+            url: `/api/party`,
+            data: partyInfo,
+            success: function (response) {
+                customAlert("파티가 생성되었습니다!", function () {
+                      window.location.reload();
+                    },
+                );
+                window.location.replace('/party')
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                      window.location.reload();
+                    },
+                );
+            },
+        });
+    }
+</script>

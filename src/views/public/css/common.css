@@ -28,10 +28,6 @@ body, html {
   font-family: 'Open Sans', "NanumSquare", sans-serif;
 }
 
-div{
- display : block;
-}
-
 a {
     color: inherit;
     text-decoration: none;
@@ -100,4 +96,5 @@ button {
 .note-info{
   margin: 3px;
   font-size: 14px;
+
 }

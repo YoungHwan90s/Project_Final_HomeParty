@@ -5,16 +5,17 @@ import { AppService } from './app.service';
 export class AppController {
     constructor(private readonly appService: AppService) {}
 
+
     @Get('/')
     @Render('index')
-    index(@Req() req): { components: string } {
-        return { components: 'index' };
+    main(@Req() req): { components: string } {
+        return { components: 'main' };
     }
 
     @Get('/party')
     @Render('index')
     party(@Req() req): { components: string } {
-        return { components: 'main' };
+        return { components: 'party' };
     }
 
     @Get('/sign-up')
@@ -128,7 +129,7 @@ export class AppController {
     @Get('/party/:partyId')
     @Render('index')
     partyById(@Req() req): { components: string } {
-        return { components: 'party' };
+        return { components: 'party-id' };
     }
 
     @Get('/party-make')
