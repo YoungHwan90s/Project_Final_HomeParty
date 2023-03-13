@@ -42,6 +42,8 @@
         <link rel="stylesheet" href="/css/signup.css" />
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
+        <link rel="stylesheet" href="/css/user-menu-mypage.css" />
+        <link rel="stylesheet" href="/css/user-menu-edit.css" />
 
         <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/css/partySearch.css" />
@@ -114,6 +116,7 @@
         <% if (components === 'reset-password') {%><%-include('auth-reset-password.ejs') %><% } %> 
         <% if (components === 'user-menu') {%><%-include('user-menu.ejs') %><% } %>
         <% if (components === 'user-edit') {%><%-include('user-menu-edit.ejs') %><% } %>
+        <% if (components === 'user-mypage') {%><%-include('user-menu-mypage.ejs') %><% } %>
         <% if (components === 'wish-list') {%><%-include('user-menu-wish-list.ejs') %><% } %>
         <% if (components === 'manage') {%><%-include('manage.ejs') %><% } %>
         <% if (components === 'manage-host') {%><%-include('manage-host.ejs') %><% } %>
