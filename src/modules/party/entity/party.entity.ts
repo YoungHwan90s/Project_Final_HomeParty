@@ -33,9 +33,6 @@ export class Party {
     @Column('int', { default: 1 })
     currMember: number;
 
-    @Column('varchar', { length: 10 })
-    region: string;
-
     @Column('varchar', { length: 100 })
     address: string;
 

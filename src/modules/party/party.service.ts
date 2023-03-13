@@ -50,7 +50,6 @@ export class PartyService {
             party.title = partyInfo.title;
             party.content = partyInfo.content;
             party.maxMember = partyInfo.maxMember;
-            party.region = partyInfo.region;
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
@@ -104,18 +103,17 @@ export class PartyService {
         party.title = partyInfo.title;
         party.content = partyInfo.content;
         party.title = partyInfo.title;
-        party.region = partyInfo.region;
         party.address = partyInfo.address;
         party.date = partyInfo.date;
     }
 
     async applyParty(user: User, partyId: number) {
-        const existingPartyMember = await this.partyMemberRepository.findOneOrFail({
-            where: { userId: user.id },
+        const existingPartyMember = await this.partyMemberRepository.findOne({
+            where: { partyId, userId: user.id },
         });
 
         if (existingPartyMember) {
-            throw new Error(`이미 신청하셨습니다.`);
+            throw new NotFoundException(`이미 신청하셨습니다.`);
         }
 
         const party = await this.partyRepository.findOne({
@@ -125,7 +123,7 @@ export class PartyService {
         if (!party) {
             throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
         }
-
+        
         const partyMember = new PartyMember();
         partyMember.user = user;
         partyMember.party = party;
@@ -141,14 +139,17 @@ export class PartyService {
 
     async cancelParty(userId: number, partyId: number) {
         const partyMember = await this.partyMemberRepository.findOne({
-            where: { partyId, userId },
+            where: { userId, partyId },
         });
+        console.log(partyMember)
 
         if (!partyMember) {
-            throw new Error(`신청하지 않은 파티입니다.`);
+            throw new NotFoundException(`신청하지 않은 파티입니다.`);
         }
 
-        return await this.partyMemberRepository.softRemove(partyMember);
+        return await this.partyMemberRepository.softDelete({
+            userId, partyId
+        })
     }
 
     async acceptMember(partyId: number, userId: number, status) {

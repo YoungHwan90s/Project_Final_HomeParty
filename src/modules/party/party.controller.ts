@@ -8,6 +8,7 @@ import {
     Patch,
     Post,
     Req,
+    Res,
     UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -55,9 +56,10 @@ export class PartyController {
     // 파티 신청
     @UseGuards(JwtAuthGuard)
     @Post('/apply/:partyId')
-    async applyParty(@Req() req, @Param('partyId') partyId: number) {
+    async applyParty(@Req() req, @Res() res, @Param('partyId') partyId: number) {
         const user = req.user;
-        return await this.partyService.applyParty(user, partyId);
+        await this.partyService.applyParty(user, partyId);
+        return res.send({})
     }
 
     // 파티 신청자 목록 조회
