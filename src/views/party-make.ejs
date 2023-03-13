@@ -1,120 +1,99 @@
-<!DOCTYPE html>
-<html lang="ko"> 
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://webfontworld.github.io/naver/NanumSquare.css" rel="stylesheet">
-<link rel="stylesheet" href="party-make.css">
-<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-   
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-</head>
-
-<body>
-    <div class="wrap-board">
-        <div class="board-title">
-            <strong>파티 만들기</strong>
-            <p>파티 작성</p>
-        </div>
-        <div class="wrap-board-cont">
-            <div class="board-content">
-                <div class="write-title">
-                    <dl>
-                        <dt>제목</dt>
-                        <dd><input class="title-input" type="text" placeholder=""></dd>
-                    </dl>
-                </div>
-                <div class="board-info">
-                    <dl>
-                        <dt>인원</dt>
-                        <dd><input class="title-input" type="text" placeholder=""></dd>
-                    </dl>
-                    <dl>
-                        <dt>날짜</dt>
-                        <dd><input class="title-input" type="date" placeholder=""></dd>
-                    </dl>
-                </div>
-                <div class="cont">
-                    <textarea placeholder="파티 소개"></textarea>
-                    <!-- 태그 -->
-                    <div class="wrap-tag">
-                        <div class="tag-cont">
-                            <div class="tag-box">
-                                <ul>
-                                    <li></li>
-                                    <input class="tag-text" type="text">
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="tag-details">
-                            <p><span></span>태그를 삭제하려면 눌러주세요</p>
-                            <button>처음으로</button>
+<div class="wrap-board">
+    <div class="board-title">
+        <strong>파티 만들기</strong>
+        <p>파티 작성</p>
+    </div>
+    <div class="wrap-board-cont">
+        <div class="board-content">
+            <div class="write-title">
+                <dl>
+                    <dt>제목</dt>
+                    <dd><input class="title-input" type="text" placeholder=""></dd>
+                </dl>
+            </div>
+            <div class="board-info">
+                <dl>
+                    <dt>인원</dt>
+                    <dd><input class="title-input" type="text" placeholder=""></dd>
+                </dl>
+                <dl>
+                    <dt>날짜</dt>
+                    <dd><input class="title-input" type="date" placeholder=""></dd>
+                </dl>
+            </div>
+            <div class="cont">
+                <textarea placeholder="파티 소개"></textarea>
+                <!-- 태그 -->
+                <div class="wrap-tag">
+                    <div class="tag-cont">
+                        <div class="tag-box">
+                            <ul>
+                                <li></li>
+                                <input class="tag-text" type="text">
+                            </ul>
                         </div>
                     </div>
-                </div>
-                <!-- 주소 입력 -->
-                <div class="write-title">
-                    <dl>
-                        <dt>주소</dt>
-                        <dd><input class="add-input" type="text"
-                            id="input-address-1"
-                            class="d_form mini line addressCheck"
-                            placeholder="도로명 주소"
-                            readonly/>
-                            <input class="add-input"
-                                type="button"
-                                id="addressButton"
-                                class="d_form mini"
-                                onclick="findAddr()"
-                                value="주소 검색"
-                                readonly
-                            />
-                        </dd>
-                    <dl>
-                        <dt>상세주소</dt>
-                        <dd><input class="add-input" type="text"
-                            id="input-address-2"
-                            class="d_form mini line addressCheck"
-                            placeholder="상세주소"
-                        />
-                        </dd>
-                    </dl>
-                    </dl>
-                </div>
-                
-                <!-- 이미지 업로드 -->
-                <div class="board-info2">    
-                    <dl>
-                        <dt>썸네일 추가</dt>
-                        <dd>
-                            <div class="filebox clearfix">
-                                <div class="inputFile">
-                                    <label for="AddImgs" class="addImgBtn">+</label>
-                                    <input type="file" id="AddImgs" class="upload-hidden" accept=".jpg, .png, .gif" multiple>
-                                </div>
-                                <ul id="Preview" class="sortable"></ul>
-                                </div>
-                            </div>
-                        </dd>
-                    </dl>
-                </div>
-   
-                
-                
-                <div class="wrap-bt">
-                    <a href="" class="on">등록</a>
-                    <a href="">취소</a>
+                    <div class="tag-details">
+                        <p><span></span>태그를 삭제하려면 눌러주세요</p>
+                        <button>처음으로</button>
+                    </div>
                 </div>
             </div>
+            <!-- 주소 입력 -->
+            <div class="write-title">
+                <dl>
+                    <dt>주소</dt>
+                    <dd><input class="add-input" type="text"
+                        id="input-address-1"
+                        class="d_form mini line addressCheck"
+                        placeholder="도로명 주소"
+                        readonly/>
+                        <input class="add-input"
+                            type="button"
+                            id="addressButton"
+                            class="d_form mini"
+                            onclick="findAddr()"
+                            value="주소 검색"
+                            readonly
+                        />
+                    </dd>
+                <dl>
+                    <dt>상세주소</dt>
+                    <dd><input class="add-input" type="text"
+                        id="input-address-2"
+                        class="d_form mini line addressCheck"
+                        placeholder="상세주소"
+                    />
+                    </dd>
+                </dl>
+                </dl>
+            </div>
+            
+            <!-- 이미지 업로드 -->
+            <div class="board-info2">    
+                <dl>
+                    <dt>썸네일 추가</dt>
+                    <dd>
+                        <div class="filebox clearfix">
+                            <div class="inputFile">
+                                <label for="AddImgs" class="addImgBtn">+</label>
+                                <input type="file" id="AddImgs" class="upload-hidden" accept=".jpg, .png, .gif" multiple>
+                            </div>
+                            <ul id="Preview" class="sortable"></ul>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="wrap-bt">
+                <button>등록</button>
+                <button>취소</button>
+            </div>
+
         </div>
     </div>
+</div>
 
 <script>
     const ul = document.querySelector("ul"),
