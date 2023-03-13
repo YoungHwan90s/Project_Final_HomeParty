@@ -22,17 +22,17 @@
                 date,
                 status,
                 thumbnail,
-                partyTagMapping,
+                tag,
                 // user,
             } = response;
-            console.log(currMember)
+            console.log(response)
 
             //prettier-ignore
-            const partyTagHtml =
-                partyTagMapping.length > 0
-                ? partyTagMapping.map((partyTagMapping) =>
+            const tagHtml =
+                tag.length > 0
+                ? tag.map((tag) =>
                       `<li class="tagItem">
-                          #${partyTagMapping.tag.tagName}
+                          #${tag.tagName}
                       </li>`
                   ).join('')
                 : ``;
@@ -61,7 +61,7 @@
                     </h2>
 
                     <ul class="tagList">
-                        ${partyTagHtml}
+                        ${tagHtml}
                     </ul>
 
                     <div class="column2">
