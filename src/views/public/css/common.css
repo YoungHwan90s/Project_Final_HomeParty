@@ -90,5 +90,11 @@ button {
 }
 
 .tns-liveregion {
-  display:none;
+  display: none;
+}
+
+.note-info{
+  margin: 3px;
+  font-size: 14px;
+
 }

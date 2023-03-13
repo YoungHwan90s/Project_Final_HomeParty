@@ -151,7 +151,7 @@ export class UserService {
     async getWishList(userId: number): Promise<WishList[]> {
         const wishList = await this.wishListRepository.find({
             where: { userId },
-            relations: ['party', 'party.thumbnail', 'party.partyTagMapping.tag'],
+            relations: ['party', 'party.thumbnail', 'party.tag'],
         });
         return wishList;
     }

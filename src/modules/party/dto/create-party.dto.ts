@@ -18,10 +18,12 @@ export class CreatePartyDto {
     @IsString()
     readonly date: Date;
 
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
     thumbnail: string[];
 
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
     tagName: string[];

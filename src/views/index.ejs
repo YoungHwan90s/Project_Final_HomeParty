@@ -45,6 +45,7 @@
         <link rel="stylesheet" href="/css/modal.css" />
         <link rel="stylesheet" href="/css/signup.css" />
         <link rel="stylesheet" href="/css/login.css" />
+        <!-- <link rel="stylesheet" href="/css/header.css" /> -->
         <link rel="stylesheet" href="/css/profile-upload.css" />
 
         <link rel="stylesheet" href="/css/partySearch.css" />
@@ -72,11 +73,9 @@
         <title>모아바 | HOMEPARTY</title>
     </head>
     <body>
-        
-
         <!-- body --> 
         <%-include('alertModal.ejs') %>
-        <%- include('header.ejs') %>
+        
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
         <% if (components==='login') { %> <%-include('auth-login.ejs') %><% } %>
