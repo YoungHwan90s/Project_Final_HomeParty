@@ -38,19 +38,21 @@
 
         <!-- css -->
         <link rel="stylesheet" href="/css/reset.css" />
+        <link rel="stylesheet" href="/library/datePicker/base.css" />
+        <link rel="stylesheet" href="/library/datePicker/calendar.css" />
+        <link rel="stylesheet" href="/library/datePicker/datePicker.css" />
+        <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/css/modal.css" />
         <link rel="stylesheet" href="/css/signup.css" />
         <link rel="stylesheet" href="/css/login.css" />
+        <!-- <link rel="stylesheet" href="/css/header.css" /> -->
         <link rel="stylesheet" href="/css/profile-upload.css" />
         <link rel="stylesheet" href="/css/user-menu-mypage.css" />
         <link rel="stylesheet" href="/css/user-menu-edit.css" />
 
-        <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/css/partySearch.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
-        <link rel="stylesheet" href="/library/datePicker/base.css" />
-        <link rel="stylesheet" href="/library/datePicker/calendar.css" />
-        <link rel="stylesheet" href="/library/datePicker/datePicker.css" />
+        <link rel="stylesheet" href="/css/partyDetail.css">
 
         <!-- js -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -61,11 +63,10 @@
         ></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"
-            defer
         ></script>
-        <script src="/library/datePicker/calendar.js" defer></script>
-        <script src="/library/datePicker/datePicker.js" defer></script>
-        <script src="/library/carousel/carousel.js" defer></script>
+        <script src="/library/datePicker/calendar.js"></script>
+        <script src="/library/datePicker/datePicker.js"></script>
+        <script src="/library/carousel/carousel.js"></script>
         <script src="/js/common.js" defer></script>
 
         <!-- 다음 주소찾기 -->
@@ -74,39 +75,11 @@
         <title>모아바 | HOMEPARTY</title>
     </head>
     <body>
-        <!-- Modalalert-->
-        <div
-            class="modal text-left"
-            id="alertModal"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="alertModalLabel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="alertModalLabel">알림</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="alertText"></div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-outline-modal btn-confirm"
-                            data-dismiss="modal"
-                        >
-                            확인
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- body -->
+        <!-- body --> 
+        <%-include('alertModal.ejs') %>
+        
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
+        <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
         <% if (components==='login') { %> <%-include('auth-login.ejs') %><% } %>
         <% if (components === 'sign-up'){%><%-include('auth-sign-up.ejs') %><% } %>
         <% if (components === 'profile-upload'){%><%-include('auth-profile-upload') %><% } %> 
@@ -126,9 +99,8 @@
         <% if (components === 'admin-party') {%><%-include('admin-party.ejs') %><% } %>
         <% if (components === 'admin-review') {%><%-include('admin-review.ejs') %><% } %>
         <% if (components === 'admin-tag') {%><%-include('admin-tag.ejs') %><% } %>
-        <% if (components === 'party') {%><%-include('party.ejs') %><% } %>
-        <% if (components === 'party-make') {%><%-include('party-make.ejs') %><% } %>
-        <% if (components === 'party-host-detail'){%><%-include('party-host-detail.ejs') %><% } %> 
+        <% if (components === 'party-id') {%><%-include('party-detail.ejs') %><% } %>
+        <% if (components === 'party-make') {%><%-include('party-make.ejs') %><% } %> 
         <% if (components === 'party-host-massage'){%> <%-include('party-host-massage.ejs') %><% } %>
     </body>
 

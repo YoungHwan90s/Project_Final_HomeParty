@@ -1,15 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Review } from 'src/modules/review/entity/review.entity';
-import { Admin, DeleteResult, Repository } from 'typeorm';
-import { PartyTagMapping } from '../party/entity/party-tag-mapping.entity';
-import { Tag } from '../party/entity/party-tag.entity';
+import { Repository } from 'typeorm';
+import { Tag } from '../party/entity/tag.entity';
 
 
 @Injectable()
 export class AdminService {
     constructor(
-        // @InjectRepository(Review) private reviewRepository: Repository<Review>,
         @InjectRepository(Tag) private tagRepository:Repository<Tag>
     ) {}
 
