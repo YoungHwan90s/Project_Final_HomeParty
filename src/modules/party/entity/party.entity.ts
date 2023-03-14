@@ -57,7 +57,7 @@ export class Party {
     deletedAt: Date | null;
 
     // 파티 <-> 유저: 더대일 관계
-    @ManyToOne(() => User, (user) => user.party)
+    @ManyToOne(() => User, (user) => user.party, { cascade: true })
     user: User;
     
     // 파티 <-> 장바구니: 일대일 관계

@@ -47,6 +47,7 @@ export class PartyService {
         try {
             // Party 객체 인스턴스 맵핑
             const party = new Party();
+            party.user = user;
             party.hostId = user.id;
             party.title = partyInfo.title;
             party.content = partyInfo.content;
