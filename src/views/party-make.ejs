@@ -14,39 +14,6 @@
 
         <div class="tagListWrapper">
           <ul class="tagList">
-            <li class="tagItem">
-              #
-              <p class="tag">오영환</p>
-              <button
-                type="button"
-                class="tagResetButton"
-                aria-label="해당 태그 삭제"
-              >
-                <i class="bx bx-x" aria-hidden="true"></i>
-              </button>
-            </li>
-            <li class="tagItem">
-              #
-              <p class="tag">이정기</p>
-              <button
-                type="button"
-                class="tagResetButton"
-                aria-label="해당 태그 삭제"
-              >
-                <i class="bx bx-x" aria-hidden="true"></i>
-              </button>
-            </li>
-            <li class="tagItem">
-              #
-              <p class="tag">이설인</p>
-              <button
-                type="button"
-                class="tagResetButton"
-                aria-label="해당 태그 삭제"
-              >
-                <i class="bx bx-x" aria-hidden="true"></i>
-              </button>
-            </li>
             <li class="tagInputWrapper">
               <label for="partyTag" class="a11yHidden">태그 입력</label>
               <input
@@ -60,21 +27,6 @@
         </div>
 
         <dl class="headcountList">
-          <div class="headcountItem">
-            <dt>
-              <label for="partyCurrMemeber">현재 신청 인원 : </label>
-            </dt>
-            <dd>
-              <input
-                type="number"
-                id="partyCurrMemeber"
-                class="partyCurrMemeber"
-                pattern="[0-9]*"
-                placeholder="0"
-              />
-              명
-            </dd>
-          </div>
           <div class="headcountItem">
             <dt>
               <label for="partyTotalMemeber">총 인원 : </label>
@@ -330,14 +282,14 @@
     // 파티 만들기 ajax
         const partyInfo = {
             title : $('#partyTitle').val(),
-            content : $('.input-content').val(),
-            maxMember : $('.input-maxMember').val(),
-            address: $('#input-address-1').val() + ' ' + $('#input-address-2').val(),
-            date : $(''),
-            thumbnail : imageFiles,
+            content : $('#partyIntroduce').val(),
+            maxMember : Number($('#partyTotalMemeber').val()),
+            address: $('#partyAddressSearch').val() + ' ' + $('#partyAddressDetail').val(),
+            date : String($('.datePicker').val()),
+            thumbnail : [],
             tagName : tagList,
         }
-        console.log(partyInfo)
+        console.log(partyInfo.date)
         $.ajax({
             type: 'POST',
             url: `api/party`,
