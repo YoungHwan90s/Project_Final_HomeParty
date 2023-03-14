@@ -1,1 +1,37 @@
-<h2>마이페이지 첫 메뉴 화면</h2>
+<div class="container-menu">
+    <h1>마이페이지</h1>
+    <div class="row">
+        <div onclick="location.href='/user-mypage'" class="service">
+            <i class="fa-solid fa-lock"></i>
+            <h2>개인정보 및 보안</h2>
+            <p>비밀번호를 변경하고 계정을 안전하게 보호하세요</p>
+        </div>
+        <div onclick="location.href='/user-wish-list'" class="service">
+            <i class="fa-solid fa-heart-circle-plus"></i>
+            <h2>찜! 목록</h2>
+            <p>파티에 참여할 준비 되셨나요?</p>
+        </div>
+        <div onclick="location.href=''" class="service">
+            <i class="fa-solid fa-list-check"></i>
+            <h2>내 파티 관리</h2>
+            <p>내 파티를 관리하고 신청자를 확인하세요</p>
+        </div>
+    </div>
+    <div onclick="location.href='/party-make'" class="row">
+        <div class="service">
+            <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+            <h2>파티 등록하기</h2>
+            <p>나만의 색다른 파티 만들기</p>
+        </div>
+        <div onclick="location.href='/'" class="service">
+            <i class="fa-solid fa-champagne-glasses"></i>
+            <h2>진행중 파티</h2>
+            <p>내가 신청한 파티 상태를 확인하세요</p>
+        </div>
+        <div onclick="location.href='/'"class="service">
+            <i class="fa-regular fa-clock"></i>
+            <h2>과거이력</h2>
+            <p>참여했던 파티 목록 확인</p>
+        </div>
+    </div>
+</div>
