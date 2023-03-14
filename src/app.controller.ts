@@ -72,7 +72,7 @@ export class AppController {
         return { components: 'user-edit' };
     }
 
-    @Get('/wish-list')
+    @Get('/user-wish-list')
     @Render('index')
     wishlist(@Req() req): { components: string } {
         return { components: 'wish-list' };
