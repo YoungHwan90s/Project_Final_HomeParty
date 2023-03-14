@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Tag } from '../party/entity/party-tag.entity';
+import { Tag } from '../party/entity/tag.entity';
 import { Party } from '../party/entity/party.entity';
 import { Review } from '../review/entity/review.entity';
 import { ReviewService } from '../review/review.service';

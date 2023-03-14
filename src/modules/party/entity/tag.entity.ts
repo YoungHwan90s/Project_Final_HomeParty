@@ -3,11 +3,12 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    ManyToMany,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { PartyTagMapping } from './party-tag-mapping.entity';
+import { Party } from './party.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'tags' })
 export class Tag {
@@ -23,10 +24,13 @@ export class Tag {
     @CreateDateColumn()
     createdAt: Date;
 
+    @DeleteDateColumn()
+    deletedAt: Date | null;
+
     @UpdateDateColumn()
     updatedAt: Date;
 
-    // 파티 <-> 파티-태그-맵핑: 일대다 관계
-    @OneToMany(() => PartyTagMapping, (partyTagMapping) => partyTagMapping.tag, { cascade: true })
-    partyTagMapping: PartyTagMapping[];
+    // // 파티 <-> 태그: 다대다 관계
+    @ManyToMany(() => Party)
+    party: Party[];
 }

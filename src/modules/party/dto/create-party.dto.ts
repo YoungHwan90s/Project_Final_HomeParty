@@ -13,19 +13,17 @@ export class CreatePartyDto {
 
     @IsOptional()
     @IsString()
-    readonly region: string;
-
-    @IsOptional()
-    @IsString()
     readonly address: string;
 
     @IsString()
     readonly date: Date;
 
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
     thumbnail: string[];
 
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
     tagName: string[];

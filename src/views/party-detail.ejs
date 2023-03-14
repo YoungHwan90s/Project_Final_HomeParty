@@ -1,0 +1,243 @@
+<main class="partyDetail main container"></main>
+
+<script>
+    const partyId = window.location.pathname.split('/')[2];
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/party/${partyId}`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            const {
+                hostId,
+                title,
+                content,
+                maxMember,
+                currMember,
+                thumbnails,
+                date,
+                status,
+                thumbnail,
+                tag,
+                // user,
+            } = response;
+            console.log(response)
+
+            //prettier-ignore
+            const tagHtml =
+                tag.length > 0
+                ? tag.map((tag) =>
+                      `<li class="tagItem">
+                          #${tag.tagName}
+                      </li>`
+                  ).join('')
+                : ``;
+
+            //prettier-ignore
+            const partyImageHtml =
+                thumbnail.length > 0
+                ? thumbnail.map((thumbnail) => `
+                    <li class="partyImageItem">
+                        <img src="${thumbnail}" alt="" class="partyImage" />
+                    </li>
+                `).join('')
+                : `
+                    <li class="partyImageItem">
+                        <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
+                    </li>`;
+
+            // const hostProfileSrc =
+            //     user.profile ??
+            //     `https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage`;
+
+            const html = `
+                <header class="mainHeader">
+                    <h2 class="title">
+                        ${title}
+                    </h2>
+
+                    <ul class="tagList">
+                        ${tagHtml}
+                    </ul>
+
+                    <div class="column2">
+                        <dl class="headcountList">
+                            <div class="headcountItem">
+                                <dt>현재 참여 인원</dt>
+                                <dd>
+                                  ${currMember}
+                                </dd>
+                            </div>
+                            <div class="headcountItem">
+                                <dt>총 인원</dt>
+                                <dd>
+                                    ${maxMember}
+                                </dd>
+                            </div>
+                        </dl>
+
+                        <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                            <i class="bx bxs-heart" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="mainSection">
+                    <section class="partyImageSection">
+                        <h3 class="a11yHidden">파티 이미지</h3>
+
+                        <ul class="partyImageList">
+                            ${partyImageHtml}
+                        </ul>
+
+                        <div class="partyImageButtonWrapper">
+                            <button
+                                type="button"
+                                class="partyImageButton prev"
+                                aria-label="이전 파티 이미지 보기"
+                            >
+                                <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="partyImageButton next"
+                                aria-label="다음 파티 이미지 보기"
+                            >
+                                <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </section>
+
+                    <div class="partyInfoWrapper">
+                        <section class="IntroduceSection">
+                            <h3 class="a11yHidden">파티 소개</h3>
+                            <p>
+                                ${content}
+                            </p>
+                        </section>
+
+                        <section class="calendarSection">
+                            <h3 class="a11yHidden">달력</h3>
+
+                            <div class="calendar"></div>
+
+                            <div class="calendarButtonWrapper">
+                                <button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
+                                ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>
+                            </div>
+                        </section>
+
+                        <section class="regionSection">
+                            <h3 class="title">지역</h3>
+                            <p>
+                        
+                            </p>
+
+                            <!-- 지도 삽입 -->
+                        </section>
+
+                        <section class="hostSection">
+                            <h3 class="a11yHidden">호스트 정보</h3>
+                            <div class="hostInfoWrapper">
+                                <a href="/party-host-detail/${hostId}" class="hostInfoLink">
+                                    <figure class="hostFigure">
+                                        <div class="hostImageWrapper">
+                                            <img src="" alt="" />
+                                        </div>
+
+                                        <figcaption>
+                                            <h3 class="hostTitle">호스트</h3>
+                                            <p class="hostName">
+                                                
+                                            </p>
+                                            <p class="a11yHidden">호스트 정보 더보기</p>
+                                        </figcaption>
+                                    </figure>
+                                </a>
+
+                                <a href="/party-host-message" class="hostContactLink">호스트에게 연락하기</a>
+                            </div>
+                        </section>
+                    </div>
+                </div>`;
+            $('.partyDetail').append(html);
+                if(document.querySelector('.partyDetail')){
+                    new Calendar(document.querySelector('.partyDetail .calendar'));
+
+                    document.querySelector('time[datetime="2023-03-03"]').classList.add("selected")
+
+                    document.querySelector('.today').classList.remove('today')
+
+                    const partyDetailSlide = tns({
+                        container: '.partyImageList',
+                        slideBy: 'page',
+                        controlsContainer: '.partyImageButtonWrapper',
+                        autoplay: true,
+                        autoplayButtonOutput: false,
+                    });
+                }
+        },
+    });
+
+    function applyParty(partyId) {
+        $.ajax({
+        type: 'POST',
+        url: `/api/party/apply/${partyId}`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            customAlert(
+                '신청되었습니다.',
+                    function () {
+                        window.location.reload();
+                    },
+            )
+        },
+        error: function (error) {
+            customAlert(
+                error.responseJSON.message,
+                function () {
+                    window.location.reload();
+                    },
+                );
+            },
+        })
+    }
+
+    function cancelParty(partyId) {
+
+        $.ajax({
+        type: 'DELETE',
+        url: `/api/party/apply-cancel/${partyId}`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            console.log(123412341234,response)
+            customAlert(
+                "취소되었습니다.",
+                    function () {
+                        window.location.reload();
+                    },
+            )
+        },
+        error: function (error) {
+            customAlert(
+                error.responseJSON.message,
+                function () {
+                    window.location.reload();
+                    },
+                );
+            },
+        })
+    }
+</script>

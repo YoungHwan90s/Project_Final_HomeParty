@@ -8,6 +8,7 @@ import {
     Patch,
     Post,
     Req,
+    Res,
     UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -43,21 +44,17 @@ export class PartyController {
     // 파티 수정
     @UseGuards(JwtAuthGuard)
     @Patch(':partyId')
-    async updateParty(
-        @Req() req,
-        @Param('partyId') partyId: number,
-        @Body() partyInfo: UpdatePartyDto,
-    ) {
-        const { id: userId } = req.user;
-        return await this.partyService.updateParty(userId, partyId, partyInfo);
+    async updateParty(@Param('partyId') partyId: number, @Body() data: UpdatePartyDto) {
+        return await this.partyService.updateParty(partyId, data);
     }
 
     // 파티 신청
     @UseGuards(JwtAuthGuard)
     @Post('/apply/:partyId')
-    async applyParty(@Req() req, @Param('partyId') partyId: number) {
+    async applyParty(@Req() req, @Res() res, @Param('partyId') partyId: number) {
         const user = req.user;
-        return await this.partyService.applyParty(user, partyId);
+        await this.partyService.applyParty(user, partyId);
+        return res.send({})
     }
 
     // 파티 신청자 목록 조회
