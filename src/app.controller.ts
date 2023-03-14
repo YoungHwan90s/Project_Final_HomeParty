@@ -132,6 +132,12 @@ export class AppController {
         return { components: 'party-id' };
     }
 
+    @Get('/party/edit/:partyId/')
+    @Render('index')
+    partyEdit(@Req() req): { components: string } {
+        return { components: 'party-edit' };
+    }
+
     @Get('/party-make')
     @Render('index')
     partymake(@Req() req): { components: string } {
