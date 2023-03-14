@@ -10,9 +10,11 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { Review } from './entity/review.entity';
 import { ReviewService } from './review.service';
 
 @Controller('review')
@@ -23,7 +25,7 @@ export class ReviewController {
     @UseGuards(JwtAuthGuard)
     @Post('/:partyId')
     @HttpCode(201)
-    async write(@Req() req, @Param('partyId') partyId: number, @Body() data: CreateReviewDto) {
+    async write(@Req() req, @Param('partyId') partyId: number, @Body() data: CreateReviewDto): Promise<Review> {
         const { id } = req.user;
         return await this.reviewService.writeReview(id, partyId, data);
     }
@@ -31,7 +33,7 @@ export class ReviewController {
     // @UseGuards(JwtAuthGuard)
     @Get('/:partyId')
     @HttpCode(200)
-    async readReview(@Param('partyId') partyId: number) {
+    async readReview(@Param('partyId') partyId: number):Promise<Review[]> {
         return await this.reviewService.readReview(partyId);
     }
 
@@ -39,15 +41,16 @@ export class ReviewController {
     // @UseGuards(JwtAuthGuard)
     @Patch('/:reviewId')
     @HttpCode(201)
-    async updateReview(@Param('reviewId') reviewId: number, @Body() data: UpdateReviewDto) {
+    async updateReview(@Param('reviewId') reviewId: number, @Body() data: UpdateReviewDto):Promise<UpdateResult> {
         return await this.reviewService.updateReview(reviewId, data.rating, data.review);
     }
 
     // // 리뷰 삭제
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Delete('/:reviewId')
     @HttpCode(204)
-    async deleteReview(@Param('reviewId') reviewId: number) {
-        return await this.reviewService.deleteReview(reviewId);
+    async deleteReview(@Param('reviewId') reviewId: number, @Req() req): Promise<DeleteResult> {
+        const { id } = req.user;
+        return await this.reviewService.deleteReview(id, reviewId);
     }
 }

@@ -58,7 +58,7 @@ export class User {
     deletedAt: Date | null;
 
     // 유저 <-> 파티: 일대다 관계
-    @OneToMany(() => Party, (party) => party.user, { cascade: true })
+    @OneToMany(() => Party, (party) => party.user)
     party: Party[];
 
     // 유저 <-> 장바구니: 일대다 관계

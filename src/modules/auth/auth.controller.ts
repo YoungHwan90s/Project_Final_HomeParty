@@ -24,6 +24,7 @@ import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
 import { createUserSchema } from 'src/util/joi/joi-validation';
 import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
+import { SaveOptions, UpdateResult } from 'typeorm';
 
 @Controller('auth')
 export class AuthController {
@@ -37,7 +38,7 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     @HttpCode(200)
-    async login(@Req() req, @Res() res) {
+    async login(@Req() req, @Res() res): Promise<any> {
         const { accessToken, refreshToken } = await this.authService.login(req.user);
 
         return res.json({ accessToken, refreshToken });
@@ -46,7 +47,7 @@ export class AuthController {
     @Post('/sign-up')
     // @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)
-    async createUser(@Res() res, @Body() data: CreateUserDto) {
+    async createUser(@Res() res, @Body() data: CreateUserDto): Promise<SaveOptions> {
         const { id } = await this.userService.createUser(data);
 
         return res.send({ id });
@@ -54,14 +55,14 @@ export class AuthController {
 
     @Patch('/profile-update')
     @HttpCode(201)
-    async updateUserProfile(@Req() req, @Res() res, @Body() data: CreateUserProfileDto) {
+    async updateUserProfile(@Res() res, @Body() data: CreateUserProfileDto): Promise<UpdateResult> {
         await this.userService.updateUserProfile(data);
         return res.json({});
     }
 
     @Post('/find-email')
     @HttpCode(200)
-    async findEmail(@Res() res, @Body() data: FindEmailDto) {
+    async findEmail(@Res() res, @Body() data: FindEmailDto): Promise<string> {
         const email = await this.authService.findEmail(data);
 
         return res.send({ email });
@@ -69,14 +70,14 @@ export class AuthController {
 
     @Post('/email-authenticate')
     @HttpCode(200)
-    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto) {
+    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto): Promise<any> {
         const user = await this.userService.getUser(data.email);
         if (user) {
             const randomNum = Math.floor(Math.random() * 1000010);
             const randomNumtoString = String(randomNum);
             await this.cacheService.set(data.email, randomNumtoString, 120);
 
-            await this.mailService.sendMail(data.email, randomNum);
+            this.mailService.sendMail(data.email, randomNum);
         }
 
         return res.send({});
