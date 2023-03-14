@@ -1,47 +1,47 @@
-.partyDetail .mainHeader .title {
+.partyPage .mainHeader .title {
     font-size: 32px;
   }
   
-  .partyDetail .tagList {
+  .partyPage .tagList {
     display: flex;
     gap: 4px;
     margin-top: 8px;
     font-size: 14px;
   }
   
-  .partyDetail .column2 {
+  .partyPage .column2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 16px;
   }
   
-  .partyDetail .headcountList {
+  .partyPage .headcountList {
     display: flex;
   }
   
-  .partyDetail .headcountItem {
+  .partyPage .headcountItem {
     flex-shrink: 0;
     display: flex;
     gap: 4px;
   }
   
-  .partyDetail .headcountItem:nth-child(n + 2)::before {
+  .partyPage .headcountItem:nth-child(n + 2)::before {
     content: "/";
     margin-left: 4px;
   }
   
-  .partyDetail .headcountItem dt,
-  .partyDetail .headcountItem dd {
+  .partyPage .headcountItem dt,
+  .partyPage .headcountItem dd {
     flex-shrink: 0;
     gap: 4px;
   }
   
-  .partyDetail .headcountItem dd {
+  .partyPage .headcountItem dd {
     font-weight: 700;
   }
   
-  .partyDetail .partyLikeButton {
+  .partyPage .partyLikeButton {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,27 +52,27 @@
     background-color: transparent;
   }
   
-  .partyDetail .mainSection {
+  .partyPage .mainSection {
     margin-top: 32px;
   }
   
-  .partyDetail .partyImageSection {
+  .partyPage .partyImageSection {
     position: relative;
     overflow: hidden;
   }
   
-  .partyDetail .partyImageList {
+  .partyPage .partyImageList {
     display: flex;
     height: 300px;
   }
   
-  .partyDetail .partyImage {
+  .partyPage .partyImage {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
   
-  .partyDetail .tns-nav {
+  .partyPage .tns-nav {
     position: absolute;
     left: 50%;
     bottom: 10px;
@@ -83,7 +83,7 @@
     transform: translateX(-50%);
   }
   
-  .partyDetail .tns-nav button {
+  .partyPage .tns-nav button {
     display: block;
     width: 10px;
     height: 10px;
@@ -93,13 +93,13 @@
     border-radius: 50%;
   }
   
-  .partyDetail .tns-nav button.tns-nav-active {
+  .partyPage .tns-nav button.tns-nav-active {
     width: 12px;
     height: 12px;
     background-color: var(--blackColor);
   }
   
-  .partyDetail .partyImageButton {
+  .partyPage .partyImageButton {
     position: absolute;
     top: 50%;
     display: flex;
@@ -114,15 +114,15 @@
     transform: translateY(-50%);
   }
   
-  .partyDetail .partyImageButton.prev {
+  .partyPage .partyImageButton.prev {
     left: 24px;
   }
   
-  .partyDetail .partyImageButton.next {
+  .partyPage .partyImageButton.next {
     right: 24px;
   }
   
-  .partyDetail .partyInfoWrapper {
+  .partyPage .partyInfoWrapper {
     display: grid;
     grid-template-areas:
       "introduce calendar"
@@ -133,76 +133,76 @@
     margin-top: 32px;
   }
   
-  .partyDetail .IntroduceSection {
+  .partyPage .IntroduceSection {
     grid-area: introduce;
   }
   
-  .partyDetail .calendarSection {
+  .partyPage .calendarSection {
     grid-area: calendar;
   }
   
-  .partyDetail .calendar time {
+  .partyPage .calendar time {
     pointer-events: none;
   }
   
-  .partyDetail .calendarButtonWrapper {
+  .partyPage .calendarButtonWrapper {
     margin-top: 16px;
   }
   
-  .partyDetail .calendarButtonWrapper button:nth-child(n + 2) {
+  .partyPage .calendarButtonWrapper button:nth-child(n + 2) {
     margin-top: 8px;
   }
   
-  .partyDetail .regionSection {
+  .partyPage .regionSection {
     grid-area: region;
     padding-top: 24px;
     border-top: 1px solid var(--borderColor);
   }
   
-  .partyDetail .regionSection p {
+  .partyPage .regionSection p {
     margin-top: 8px;
   }
   
-  .partyDetail .hostSection {
+  .partyPage .hostSection {
     grid-area: host;
     padding-top: 24px;
     border-top: 1px solid var(--borderColor);
   }
   
-  .partyDetail .hostSection .hostInfoWrapper {
+  .partyPage .hostSection .hostInfoWrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   
-  .partyDetail .hostFigure {
+  .partyPage .hostFigure {
     display: flex;
     align-items: center;
     gap: 12px;
   }
   
-  .partyDetail .hostImageWrapper {
+  .partyPage .hostImageWrapper {
     width: 56px;
     height: 56px;
     overflow: hidden;
     border-radius: 50%;
   }
   
-  .partyDetail .hostImageWrapper img {
+  .partyPage .hostImageWrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
   
-  .partyDetail .hostTitle {
+  .partyPage .hostTitle {
     font-weight: 700;
   }
   
-  .partyDetail .hostName {
+  .partyPage .hostName {
     margin-top: 6px;
   }
   
-  .partyDetail .hostContactLink {
+  .partyPage .hostContactLink {
     padding: 12px 24px;
     font-size: 14px;
     border: 1px solid var(--borderColor);
@@ -210,7 +210,7 @@
   }
   
   @media screen and (max-width: 768px) {
-    .partyDetail .partyInfoWrapper {
+    .partyPage .partyInfoWrapper {
       grid-template-areas:
         "introduce"
         "calendar"
@@ -219,7 +219,7 @@
       grid-template-columns: 1fr;
     }
   
-    .partyDetail .calendarSection {
+    .partyPage .calendarSection {
       width: 100%;
       padding-top: 32px;
       border-top: 1px solid var(--borderColor);

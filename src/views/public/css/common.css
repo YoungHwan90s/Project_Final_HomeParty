@@ -98,3 +98,27 @@ button {
   font-size: 14px;
 
 }
+
+.d_form.mini {
+  width: 7em;
+}
+
+.d_form {
+  margin: .2em 0;
+  font-size: 15px;
+  padding: .5em;
+  border: 1px solid #ccc;
+  border-color: #dbdbdb #d2d2d2 #d0d0d0 #d2d2d3;
+  vertical-align: middle;
+  line-height: 1.25em;
+  outline: 0;
+  width: 20em;
+  height : 50px;
+  background-color : #E6E8E8;
+  padding: 10px 110px 10px 14px;
+  padding-top: 10px;
+  padding-right: 110px;
+  padding-bottom: 10px;
+  padding-left: 14px;
+  box-sizing: border-box;
+}

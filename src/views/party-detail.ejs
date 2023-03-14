@@ -1,4 +1,6 @@
-<main class="partyDetail main container"></main>
+<%-include('header.ejs') %>
+
+<main class="partyPage main container"></main>
 
 <script>
     const partyId = window.location.pathname.split('/')[2];
@@ -164,16 +166,16 @@
                         </section>
                     </div>
                 </div>`;
-            $('.partyDetail').append(html);
-                if(document.querySelector('.partyDetail')){
-                    new Calendar(document.querySelector('.partyDetail .calendar'));
+            $('.partyPage').append(html);
+                if(document.querySelector('.partyPage')){
+                    new Calendar(document.querySelector('.partyPage .calendar'));
 
                     document.querySelector('time[datetime="2023-03-03"]').classList.add("selected")
 
                     document.querySelector('.today').classList.remove('today')
 
                     const partyDetailSlide = tns({
-                        container: '.partyImageList',
+                        container: '.partyDetail .partyImageList',
                         slideBy: 'page',
                         controlsContainer: '.partyImageButtonWrapper',
                         autoplay: true,
