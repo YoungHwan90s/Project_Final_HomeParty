@@ -1,20 +1,21 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
+import { CreateReviewDto } from './dto/create-review.dto';
 import { Review } from './entity/review.entity';
 
 @Injectable()
 export class ReviewService {
     constructor(@InjectRepository(Review) private reviewRepository: Repository<Review>) {}
 
-    async writeReview(userId: number, partyId: number, data) {
-        await this.reviewRepository.insert({
-            userId,
-            partyId,
-            rating: data.rating,
-            review: data.review,
-        });
-        return { statusCode: 201, message: '등록 되었습니다.' };
+    async writeReview(userId: number, partyId: number, data: CreateReviewDto):Promise<Review> {
+        const review = new Review()
+        review.userId = userId
+        review.partyId = partyId
+        review.rating = data.rating
+        review.review = data.review
+
+       return await this.reviewRepository.save(review)
     }
 
     async readReview(partyId: number): Promise<any> {
