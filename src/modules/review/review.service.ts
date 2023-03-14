@@ -1,15 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+import { Party } from '../party/entity/party.entity';
 import { Review } from './entity/review.entity';
-import { ReviewRepository } from './review.repository';
+
 
 @Injectable()
 export class ReviewService {
-    constructor(@InjectRepository(Review) private reviewRepository: ReviewRepository) {}
-    async writeReview(userId: number, partyId: number, data) {
+    constructor(
+        @InjectRepository(Review) private reviewRepository: Repository<Review>,
+        @InjectRepository(Party) private partyRepository: Repository<Party>) {}
+    
+    async writeReview( id,partyId: number, data) {
         await this.reviewRepository.insert({
-            userId,
+            id ,
             partyId,
             rating: data.rating,
             review: data.review,
@@ -17,16 +21,17 @@ export class ReviewService {
         return { statusCode: 201, message: '등록 되었습니다.' };
     }
 
-    async readReview(partyId: number) :Promise<any>{
-        const reviews = await this.reviewRepository.find({
-            where: { partyId, deletedAt: null },
+    async readReview(hostId: number) :Promise<any>{        
+        const reviewInfo = await this.partyRepository.find({
+            where: { hostId , deletedAt: null },
             order: { createdAt: 'DESC' },
+            relations:['review','review.user']
         });
-
-        if (!reviews || reviews.length === 0) {
-            throw new BadRequestException("잘못된 요청입니다.");
-        }
-        return reviews;
+        
+        if (!reviewInfo) {
+            throw new NotFoundException("리뷰가 없습니다.");
+        }        
+        return reviewInfo;
     }
 
     async updateReview(reviewId: number, rating: string, review: string) {

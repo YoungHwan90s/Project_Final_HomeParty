@@ -1,32 +1,114 @@
 <h2>파티 상세페이지 호스트 화면</h2>
-<div class="party-host-detail-review"></div>
-<div class="party-host-detail-review-title">
-    <h2>👍리뷰</h2>
-</div>
-<div id="reviews-container">
-    <!-- 리뷰 데이터가 출력될 공간 -->
-</div>
-<button onclick="readreview()">리뷰보기</button>
-
-<div class="party-host-detail-review-content">
-    <div class="review-userId"></div>
-    <div class="input-star">
-        <span class="star">
-            <span>★★★★★</span>
-            <input type="range" oninput="drawStar(this)" value="5" step="1" min="0" max="10" />
-        </span>
-    </div>
-    <textarea id="input-review" class="input-review" placeholder="파티 리뷰 해주세요"></textarea>
-    <button type="button" onclick="review()">리뷰등록</button>
-</div>
-<div id="map" style="margin: auto; width: 50%; height: 450px"></div>
+<body>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fs-3 " href="#!">MoAvA </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">메세지</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Header - set the background image for the header in the line below-->
+    <header class="py-5 bg-image-full" style="background-color: white ">
+        <div class="text-center my-3" id="userinfo">
+            <!-- <img class="img-fluid rounded-circle mb-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 15%; height: 15%;" />
+            <h1 class="text-black fs-3 fw-bolder">안녕하세요. 호스트이름 입니다.</h1>
+            <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:1926</p>
+            <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
+            <h1 class="text-black fs-3 fw-bolder" >소개</h1>
+            <p class="text-black-50 mb-0" id="host-email">이메일 : test@yahoo</p>
+        </div> -->
+    </header>
+    <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 10%;margin-right: 10%"></div>
+    <h1 class="text-black fs-3 fw-bolder">주요 활동지역</h1>
+    <div id="map" style="margin: auto; width: 30%; height: 250px"></div> 
+    <!-- Content section-->
+    <section class="py-5">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <h1 class="text-black fs-3 fw-bolder">⭐리뷰</h1>
+                    <div style="margin-top: 8%;" id="reviews-container">
+                       <!-- 리뷰 데이터가 출력될 공간 -->
+                    </div>
+    </section> 
+</body>
 
 <!-- 카카오맵  -->
+<div id="map" style="margin: auto; width: 30%; height: 250px"></div>
 <script
     type="text/javascript"
     src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services,clusterer"
 ></script>
 <script>
+    $(document).ready(() => {
+        const param = window.location.pathname.split('/')[2]; 
+        const hostId = Number(param)
+        $.ajax({
+            url: `/review/${hostId}`, // 리뷰 데이터 요청 URL
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (data) {
+                console.log(data);
+                for(i=0; i < data.length; i++){
+                    let id = data[i].id
+                    console.log(id);
+                }
+    //             $('#reviews-container').empty();
+    //             data.map((reviewInfo) => {
+    //                 const createdAt = new Date(reviewInfo.createdAt);
+    //                 let html = `
+    //                 <div style="margin-top: 8%;">
+    //                         <img class="img-fluid rounded-circle me-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 22%;  float: left;"/>
+    //                         <div>
+    //                             <h1 class="text-black fs-5 fw-bolder">${reviewInfo.userId}</h1>
+    //                             <p class="text-black-50 mb-0">작성일:${createdAt.getFullYear()}-${createdAt.getMonth() + 1}</p>
+    //                             <p class="text-black-50 mb-0">평점: ${reviewInfo.rating}점</p>
+    //                             <p class="lead">${Review.review}</p>
+    //                         </div>
+    //                     </div>`
+    //                     $('#reviews-container').append(html);
+    //                 });
+                }
+            });
+    })
+    $(document).ready(() => {
+        const param = window.location.pathname.split('/')[2]; 
+        const userId = Number(param)
+            $.ajax({
+                url:`/user/${userId}`,
+                type: 'GET',
+                dataType:'json',
+                headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (data) {
+                data.map(() => {
+                    let info = `
+                    <img class="img-fluid rounded-circle mb-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 15%; height: 15%;" />
+                        <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${userId.name} 입니다.</h1>
+                        <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${userId.createdAt.getFullYear()}년</p>
+                        <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
+                        <h1 class="text-black fs-3 fw-bolder" >소개</h1>
+                        <p class="text-black-50 mb-0" id="host-email">이메일 : ${userId.email}</p>
+                    `
+                    $('#userinfo').append(info)
+                })
+            }
+            })
+        }
+    )
     $(function () {
         // 별점 표시
         const drawStar = (target) => {
@@ -35,7 +117,7 @@
     });
 
     // 서버로 데이터 전송
-    function review() {
+    function reviews() {
         const partyId = window.location.pathname.split('/')[2]; //변경해야됨
         const reviewInfo = {
             review: $('#input-review').val(), //  리뷰 내용
@@ -61,47 +143,8 @@
             },
         });
     }
-    function readreview() {
-        $.ajax({
-            url: '/review/1', // 리뷰 데이터 요청 URL
-            type: 'GET',
-            dataType: 'json',
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (data) {
-                $('#reviews-container').empty();
+   
 
-                data.map((reviewInfo) => {
-                    const createdAt = new Date(reviewInfo.createdAt);
-                    let html = ` <div class="party-host-detail-review-one">
-                <div class="party-host-detail-review-content">
-                  <text>리뷰</text>
-                  <span id="review-content">${reviewInfo.review}</span>
-                  <text>평점</text>
-                  <span id="review-star">${reviewInfo.rating}</span>
-                  <text>유저</text>
-                  <span id="userId">${reviewInfo.userId}</span>
-                  <span id="createdAt">${createdAt.getFullYear()}-${
-                        createdAt.getMonth() + 1
-                    }-${createdAt.getDate()}</span>
-                  <input id="updatereviewform"></input>
-                    <button type="button" onclick="updatereview(${
-                        reviewInfo.id
-                    })"id="review-update">수정하기</button>
-                    <button type="button" onclick="deletereview(${
-                        reviewInfo.id
-                    })"id="review-delete">삭제하기</button>
-                    <div class="party-host-detail-review-userid"></div>
-                </div>
-        </div>
-  </div>`;
-                    $('#reviews-container').append(html);
-                });
-            },
-        });
-    }
 
     function updatereview(reviewId) {
         const updatereviewform = $('#updatereviewform').val();
