@@ -8,257 +8,66 @@
             <div class="write-title">
                 <dl>
                     <dt>제목</dt>
-                    <dd><input class="title-input" type="text" placeholder=""></dd>
+                    <dd><input class="input-title" type="text" placeholder=""></dd>
                 </dl>
             </div>
             <div class="board-info">
                 <dl>
                     <dt>인원</dt>
-                    <dd><input class="title-input" type="text" placeholder=""></dd>
-                </dl>
-                <dl>
-                    <dt>날짜</dt>
-                    <dd><input class="title-input" type="date" placeholder=""></dd>
+                    <dd><input class="input-maxMember" type="number" placeholder=""></dd>
                 </dl>
             </div>
             <div class="cont">
-                <textarea placeholder="파티 소개"></textarea>
-                <!-- 태그 -->
-                <div class="wrap-tag">
-                    <div class="tag-cont">
-                        <div class="tag-box">
-                            <ul>
-                                <li></li>
-                                <input class="tag-text" type="text">
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tag-details">
-                        <p><span></span>태그를 삭제하려면 눌러주세요</p>
-                        <button>처음으로</button>
-                    </div>
-                </div>
-            </div>
-            <!-- 주소 입력 -->
-            <div class="write-title">
                 <dl>
-                    <dt>주소</dt>
-                    <dd><input class="add-input" type="text"
-                        id="input-address-1"
-                        class="d_form mini line addressCheck"
-                        placeholder="도로명 주소"
-                        readonly/>
-                        <input class="add-input"
-                            type="button"
-                            id="addressButton"
-                            class="d_form mini"
-                            onclick="findAddr()"
-                            value="주소 검색"
-                            readonly
-                        />
-                    </dd>
-                <dl>
-                    <dt>상세주소</dt>
-                    <dd><input class="add-input" type="text"
-                        id="input-address-2"
-                        class="d_form mini line addressCheck"
-                        placeholder="상세주소"
-                    />
-                    </dd>
+                    <dt>파티소개</dt>
+                    <dd><input class="input-content" type="text" placeholder=""></dd>
                 </dl>
-                </dl>
-            </div>
             
-            <!-- 이미지 업로드 -->
-            <div class="board-info2">    
-                <dl>
-                    <dt>썸네일 추가</dt>
-                    <dd>
-                        <div class="filebox clearfix">
-                            <div class="inputFile">
-                                <label for="AddImgs" class="addImgBtn">+</label>
-                                <input type="file" id="AddImgs" class="upload-hidden" accept=".jpg, .png, .gif" multiple>
-                            </div>
-                            <ul id="Preview" class="sortable"></ul>
-                            </div>
-                        </div>
-                    </dd>
-                </dl>
-            </div>
-
-            <div class="wrap-bt">
-                <button>등록</button>
-                <button>취소</button>
-            </div>
+                <div class="wrap-bt">
+                    <button onclick="createParty()">등록</button>
+                    <a href="/party"><button>취소</button></a>
+                </div>
 
         </div>
     </div>
 </div>
 
 <script>
-    const ul = document.querySelector("ul"),
-        input = document.querySelector(".tag-text"),
-        tagNumb = document.querySelector(".tag-details span");
-
-        let maxTags = 10,
-        tags = ["태그"];
-
-        countTags();
-        createTag();
-
-        function countTags(){
-            input.focus();
-            tagNumb.innerText = maxTags - tags.length;
-        }
-
-        function createTag(){
-            ul.querySelectorAll("li").forEach(li => li.remove());
-            tags.slice().reverse().forEach(tag =>{
-                let liTag = `<li>${tag} <i class="uit uit-multiply" onclick="remove(this, '${tag}')"></i></li>`;
-                ul.insertAdjacentHTML("afterbegin", liTag);// ul tag 안에 li 넣는거
-            });
-            countTags();
-        }
-
-        function remove(element, tag){
-            let index  = tags.indexOf(tag);
-            tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
-            element.parentElement.remove();
-            countTags();
-        }
-
-        function addTag(e){
-            //Enter 치면 태그 입력
-            if(e.key == "Enter"){
-                //태그에서 원치않는 여백을 없애줌
-                let tag = e.target.value.replace(/\s+/g, ' ');
-                if(tag.length > 1 && !tags.includes(tag)){
-                    if(tags.length < 10){
-                        tag.split(',').forEach(tag => {
-                            tags.push(tag);
-                            createTag();
-                        });
-                    }
-                }
-                e.target.value = "";
-            }
-        }
-
-        input.addEventListener("keyup", addTag);
-
-        const removeBtn = document.querySelector(".tag-details button");
-        removeBtn.addEventListener("click", () =>{
-            tags.length = 0;
-            ul.querySelectorAll("li").forEach(li => li.remove());
-            countTags();
-        });
-
-    //이미지 등록
-    //서버 이미지 담기
-    let files = [];
-    $("#AddImgs").change(function(e){
-        //div 내용 비워주기
-        $('#Preview').empty();
-        files = [...files, ...e.target.files]
-        var arr = Array.prototype.slice.call(files);
-        console.log(files)
-        //업로드 가능 파일인지 체크
-        for(var i=0; i<files.length; i++){
-            if(!checkExtension(files[i].name,files[i].size)){
-                return false;
-            }
-        }
-        
-        preview(arr);
-        
-        function checkExtension(fileName,fileSize){
-            var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-            var maxSize = 20971520;  //20MB
-
-            if(fileSize >= maxSize){
-                alert('이미지 크기가 초과되었습니다.');
-                $("#AddImgs").val("");  //파일 초기화
-                return false;
-            }
-
-            if(regex.test(fileName)){
-                alert('확장자명을 확인해주세요.');
-                $("#AddImgs").val("");  //파일 초기화
-                return false;
-            }
-            return true;
-        }
-
-        function preview(arr){
-            arr.forEach(function(f, i){
-                var fileName = f.name;
-                if(fileName.length > 10){
-                    fileName = fileName.substring(0,7)+"...";
-                }
-
-                //div에 이미지 추가
-                var str = `<li class="ui-state-default" data-id=${i}>`;
-                //str += '<span>'+fileName+'</span><br>';
-
-                //이미지 파일 미리보기
-                if(f.type.match('image.*')){
-                    //파일을 읽기 위한 FileReader객체 생성
-                    var reader = new FileReader(); 
-                    reader.onload = function (e) { 
-                        //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-                        str += '<img src="'+e.target.result+'" title="'+f.name+'" width=80 height=80>';
-                        str += '<span class="delBtn" onclick="delImg(this)">x</span>';
-                        str += '</li>';
-                        $(str).appendTo('#Preview');
-                    } 
-                    reader.readAsDataURL(f);
-                }else{
-                    //이미지 파일 아닐 경우 대체 이미지
-                    str += '<img src="/resources/img/fileImg.png" title="'+f.name+'" width=60 height=60 />';
-                    $(str).appendTo('#Preview');
-                }
-              })
-          }
-      })
-
-    //이미지 삭제
-    function delImg(_this){
-        let imgIndex = $(_this).parent('li')[0].dataset.id;
-        files.splice(imgIndex,1)
-        console.log(files)
-        $(_this).parent('li').remove()
-    }
-
+    
   function createParty() {
         const partyInfo = {
-            title : $('input-title').val(),
-            content : $('input-content').val(),
-            maxMember : $('input-maxMember').val(),
-            currMember : $('input-currMember').val(),
-            thumbnails : $('input-thumbnails').val(),
-            date : $('input-date').val(),
-            status : $('input-status').val(),
-            thumbnail : $('input-thumbnail').val(),
-            tagName : $('input-tagName').val(),
+            title : $('.input-title').val(),
+            content : $('.input-content').val(),
+            maxMember : $('.input-maxMember').val(),
+            address: "서울",
+            date : "2022-03-03",
+            thumbnail : [],
+            tagName : [],
         }
-
+        console.log(partyInfo)
         $.ajax({
             type: 'POST',
-            url: `/api/party`,
-            data: partyInfo,
+            url: `api/party`,
+            data: JSON.stringify(partyInfo),
+            contentType: "application/json",
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
             success: function (response) {
                 customAlert("파티가 생성되었습니다!", function () {
-                      window.location.reload();
+                      window.location.reload('/party');
                     },
                 );
                 window.location.replace('/party')
             },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                      window.location.reload();
-                    },
-                );
-            },
+                error: function (error) {
+                    console.log(error.responseJSON.message)
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                        },
+                    );
+                },
         });
     }
 </script>

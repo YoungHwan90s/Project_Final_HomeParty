@@ -38,6 +38,7 @@ export class PartyController {
     @Post()
     async createParty(@Req() req, @Body() partyInfo: CreatePartyDto) {
         let user = req.user;
+        console.log(partyInfo)
         return await this.partyService.createParty(user, partyInfo);
     }
 

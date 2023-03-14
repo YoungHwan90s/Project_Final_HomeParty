@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartyDto {
@@ -8,6 +9,7 @@ export class CreatePartyDto {
     @IsString()
     readonly content: string;
 
+    @Type(() => Number)
     @IsNumber()
     readonly maxMember: number;
 
@@ -16,7 +18,7 @@ export class CreatePartyDto {
     readonly address: string;
 
     @IsString()
-    readonly date: Date;
+    readonly date: string;
 
     @IsOptional()
     @IsArray()

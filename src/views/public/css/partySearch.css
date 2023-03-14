@@ -121,3 +121,15 @@
     border-radius: 50%;
     background-color: transparent;
 }
+
+@media screen and (max-width: 768px) {
+    .partyList {
+      --partyListColumn: 3;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .partyList {
+      --partyListColumn: 1;
+    }
+  }

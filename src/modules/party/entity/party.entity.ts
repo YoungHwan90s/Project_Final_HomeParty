@@ -1,3 +1,4 @@
+import { Max, Min } from 'class-validator';
 import { User } from 'src/modules/user/entity/user.entity';
 import {
     Column,
@@ -41,7 +42,7 @@ export class Party {
     address: string;
 
     @Column()
-    date: Date;
+    date: string;
 
     @Column('varchar', { default: '모집중' })
     status: string;
