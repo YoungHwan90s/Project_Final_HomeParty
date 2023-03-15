@@ -1,3 +1,9 @@
+/* common.css에 옮겨주세요 */
+button > i,
+button > i::before {
+  pointer-events: none;
+}
+
 /* partyPage */
 .partyPage .mainHeader .title {
   font-size: 32px;
@@ -209,8 +215,127 @@
 }
 
 /* partyDetail */
+.partyDetail .goToPartyEdit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 40px;
+  margin: 0 0 40px auto;
+  color: var(--whiteColor);
+  background: var(--pointColor);
+  border: 0;
+  border-radius: 4px;
+}
+
 .partyDetail .calendar time {
   pointer-events: none;
+}
+
+.partyDetail .column2 {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.partyDetail .partyMemberDropDown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  color: var(--whiteColor);
+  background-color: var(--blackColor);
+  border: 0;
+  border-radius: 50%;
+}
+
+.partyDetail .partyMemberDropDown.opened .bx-chevron-down {
+  transform: rotate(180deg);
+}
+
+.partyDetail .column2 {
+  position: relative;
+}
+
+.partyDetail .memberList {
+  position: absolute;
+  top: 100%;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 60px;
+  width: 100%;
+  padding: 40px 60px;
+  margin-top: 16px;
+  background-color: var(--whiteColor);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.partyDetail .partyMemberDropDown.opened ~ .memberList {
+  transform: translateY(0px);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.partyDetail .memberItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.partyDetail .memberLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.partyDetail .profileWrapper {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.partyDetail .profile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.partyDetail .memberButtonWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.partyDetail .memberButton {
+  display: block;
+  padding: 4px 8px;
+  background-color: transparent;
+  border: 1px solid var(--borderColor);
+  border-radius: 100px;
+}
+
+.partyDetail .memberAcceptButton.selected {
+  color: var(--whiteColor);
+  background-color: var(--pointColor);
+  border-color: var(--pointColor);
+}
+
+.partyDetail .memberDeclineButton.selected {
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+  border-color: var(--primaryColor);
 }
 
 /* partyEdit */
@@ -414,6 +539,15 @@
   margin-top: 32px;
 }
 
+/* ------------------------------ wide tab size ----------------------------- */
+@media screen and (max-width: 1024px) {
+  /* partyDetail */
+  .partyDetail .memberList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 40px;
+  }
+}
+
 /* -------------------------------- tab size -------------------------------- */
 @media screen and (max-width: 768px) {
   /* partyPage */
@@ -430,6 +564,11 @@
     width: 100%;
     padding-top: 32px;
     border-top: 1px solid var(--borderColor);
+  }
+
+  /* partyDetail */
+  .partyDetail .memberList {
+    grid-template-columns: 1fr;
   }
 
   /* partyEdit */
