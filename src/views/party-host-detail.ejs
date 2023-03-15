@@ -1,50 +1,158 @@
-<h2>파티 상세페이지 호스트 화면</h2>
-<div class="party-host-detail-review"></div>
-<div class="party-host-detail-review-title">
-    <h2>👍리뷰</h2>
+<body>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fs-3 " href="#!">MoAvA </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">메세지</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Header - set the background image for the header in the line below-->
+    <header class="py-5 bg-image-full" style="background-color: white ">
+        <div class="text-center my-3" id="userinfo">
+    </header>
+    
+    <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 10%;margin-right: 10%"></div>
+    
+  
+   
+    <!-- Content section-->
+     <section class="py-5">
+        <div class="container my-5">
+          <div class="row justify-content-start">
+            <div class="col-lg-6">
+              <h1 class="text-black fs-3 fw-bolder">⭐리뷰</h1>
+              <div id="reviews-container">
+                
+              </div>
+              <div style="margin-top: 8%;" id="reviews-container">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <h1 class="text-black fs-3 fw-bolder">파티 리스트</h1>
+              <div class="card"  id="thumbnail" style="width: 18rem; margin-top:10%;" >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <script>
+      </script>
+  
+</body>
+<div class="mainSection">
+    <ul class="partyList"></ul>
 </div>
-<div id="reviews-container">
-    <!-- 리뷰 데이터가 출력될 공간 -->
-</div>
-<button onclick="readreview()">리뷰보기</button>
-
-<div class="party-host-detail-review-content">
-    <div class="review-userId"></div>
-    <div class="input-star">
-        <span class="star">
-            <span>★★★★★</span>
-            <input type="range" oninput="drawStar(this)" value="5" step="1" min="0" max="10" />
-        </span>
-    </div>
-    <textarea id="input-review" class="input-review" placeholder="파티 리뷰 해주세요"></textarea>
-    <button type="button" onclick="review()">리뷰등록</button>
-</div>
-<div id="map" style="margin: auto; width: 50%; height: 450px"></div>
-
+   <!-- Bootstrap core JS-->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+   <!-- Core theme JS-->
+   <script src="js/scripts.js"></script>
 <!-- 카카오맵  -->
-<script
-    type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services,clusterer"
-></script>
-<script>
-    $(function () {
-        // 별점 표시
-        const drawStar = (target) => {
-            $('.star span').css({ width: `${target.value * 10}%` });
-        };
-    });
+ <script>
+    $(document).ready(() => {
+        const param = window.location.pathname.split('/')[2]; 
+        const hostId = Number(param)
+        
+        $.ajax({ 
+            url: `/review/${hostId}`, // 리뷰 데이터 요청 URL
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (data) {
+                
+                const date = new Date(data.createdAt)
+                const Info = `
+                    <img class="img-fluid rounded-circle mb-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 15%; height: 15%;" />
+                        <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${data.name} 입니다.</h1>
+                        <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
+                        <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
+                        <h1 class="text-black fs-3 fw-bolder" >소개</h1>
+                        <p class="text-black-50 mb-0" id="host-email">이메일 : ${data.email}</p>
+                        <p class="text-black-50 mb-0" id="host-email">성별 : ${data.sex}</p>
+                    `;
+                    $(`#userinfo`).append(Info)
+                
+                
+                let parties = data.party             
+                for(let i=0; i < parties.length; i++){ 
+                    let party = parties[i]
+                    thumbnails=party.thumbnail
+                    for(let j = 0;j < thumbnails.length;j++ ){
+                   
+                    const thumbnail =`
+                    <a href="http://localhost:4000/party/${party.id}">
+                        <img class="card-img" src="${thumbnails[j].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
+                        <div class="card-body">
+                            <h5 class="card-title" style="font-weight: bold; font-family: Arial, sans-serif;">파티 제목: ${party.title}</h5>
+                        <p class="card-text" style="color: #009900;">${party.status}</p>
+                        <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 10%;margin-right: 10%; margin-top: 10%" ></div>
+                        </div>
+                    </div>
+                    `;
+                    $(`#thumbnail`).append(thumbnail)
+                    }
+                    let reviewArr = parties[i].review
+                    
+                    for(let j = 0; j<reviewArr.length;j++){
+                        let reviewInfo = reviewArr[j]
+                        
+                    const createdAt = new Date(reviewInfo.createdAt);
+                    const signUpYear = createdAt.getFullYear();
+                    const signUpMonth =`${signUpYear}년${createdAt.getMonth() + 1}월`;
+                    const html = `
+                        <div style="margin-top: 20%; width: 120%" >
+                            <a href="http://localhost:4000/party-host-detail/${reviewInfo.user.id}">
+                        <img class="img-fluid rounded-circle me-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 35%;  float: left;"/>
+                        </a>
+                        <div>
+                                <h1 class="text-black fs-5 fw-bolder text-start" style="margin-bottom: 15px;">${reviewInfo.user.name}</h1>
+                            <p class="text-black-50 mb-0" style="margin-bottom: 5px; ">작성일:${signUpMonth}</p>
+                    <p class="text-black-50 mb-0" style="margin-bottom: 0px;">평점: ${reviewInfo.rating}점</p>
+                            <p class="lead" style="margin-top: 15px;">리뷰: ${reviewInfo.review}</p>
+                            <div class="edit-review-form" id="editform${reviewInfo.id}" style="display: none ;">
+                                <input type="text" id="editreview${reviewInfo.id}" value="${reviewInfo.review}" style = "margin-top : 5%" align="left">
+                                <div align="left" style = "margin-top : 5%">
+                                <button type="button" class="btn btn-success" id="updatereview${reviewInfo.id}" onclick="updatereview(${reviewInfo.id})" >수정 완료</button>
+                                <button type="button" class="btn btn-secondary"id="cancel${reviewInfo.id}" onclick="cancel(${reviewInfo.id})" >취소</button>
+                            </div>
+                            </div>
+                            <button type="button" class="btn btn-success" onclick="editreviewbtn(${reviewInfo.id})" id="oneditform${reviewInfo.id}" style="margin-top : 5%">수정</button>
+                            <button type="button" class="btn btn-danger" id="delreviewbtn${reviewInfo.id}" onclick="delreviewbtn(${reviewInfo.id})" style="margin-top : 5%">삭제</button>
+                        </div>
+                        </div>
+                    `;
+                    $('#reviews-container').append(html);
+                    
+                    
+                }
+                }
+            }
+        }
+            );
+        })
 
     // 서버로 데이터 전송
-    function review() {
-        const partyId = window.location.pathname.split('/')[2]; //변경해야됨
+    function reviewcreate(hostid) {
         const reviewInfo = {
-            review: $('#input-review').val(), //  리뷰 내용
+            review: $('#reviewtextarea').val(), //  리뷰 내용
+   
             rating: $('.input-star input[type="range"]').val(), // 별점
         };
 
         $.ajax({
             type: 'POST',
-            url: `/review/${partyId}`,
+            url: `/review/${hostid}`,
             data: reviewInfo,
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -61,55 +169,26 @@
             },
         });
     }
-    function readreview() {
-        $.ajax({
-            url: '/review/1', // 리뷰 데이터 요청 URL
-            type: 'GET',
-            dataType: 'json',
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (data) {
-                $('#reviews-container').empty();
+   
+    
 
-                data.map((reviewInfo) => {
-                    const createdAt = new Date(reviewInfo.createdAt);
-                    let html = ` <div class="party-host-detail-review-one">
-                <div class="party-host-detail-review-content">
-                  <text>리뷰</text>
-                  <span id="review-content">${reviewInfo.review}</span>
-                  <text>평점</text>
-                  <span id="review-star">${reviewInfo.rating}</span>
-                  <text>유저</text>
-                  <span id="userId">${reviewInfo.userId}</span>
-                  <span id="createdAt">${createdAt.getFullYear()}-${
-                        createdAt.getMonth() + 1
-                    }-${createdAt.getDate()}</span>
-                  <input id="updatereviewform"></input>
-                    <button type="button" onclick="updatereview(${
-                        reviewInfo.id
-                    })"id="review-update">수정하기</button>
-                    <button type="button" onclick="deletereview(${
-                        reviewInfo.id
-                    })"id="review-delete">삭제하기</button>
-                    <div class="party-host-detail-review-userid"></div>
-                </div>
-        </div>
-  </div>`;
-                    $('#reviews-container').append(html);
-                });
-            },
-        });
+    function editreviewbtn(reviewid) {
+        console.log(reviewid);
+            $(`#editform${reviewid}`).show();
+            $(`#oneditform${reviewid}`).hide();
+    }
+    function cancel(reviewid) {
+            $(`#editform${reviewid}`).hide();
+            $(`#oneditform${reviewid}`).show();
     }
 
-    function updatereview(reviewId) {
-        const updatereviewform = $('#updatereviewform').val();
+function updatereview(reviewid) {
+    const updatedReview = $('#editreview').val();
         $.ajax({
             type: 'PATCH',
-            url: `/review/${reviewId}`,
+            url: `/review/${reviewid}`,
             data: {
-                review: updatereviewform,
+                review: updatedReview,
             },
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -125,12 +204,12 @@
                 alert('올바르지 않은 값입니다.');
             },
         });
-    }
+    };
 
-    function deletereview(reviewId) {
+    function delreviewbtn(reviewid) {
         $.ajax({
             type: 'DELETE',
-            url: `/review/${reviewId}`,
+            url: `/review/${reviewid}`,
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
@@ -146,75 +225,3 @@
     }
 </script>
 
-<!-- 카카오맵 -->
-<script>
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 6, // 지도의 확대 레벨
-        };
-
-    // 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-    // 마우스 휠과 모바일 터치를 이용한 지도 확대, 축소를 막는다
-    // map.setZoomable(false);
-    // 주소-좌표 변환 객체를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
-    // 지도 타입 변경 컨트롤을 생성한다
-    var mapTypeControl = new kakao.maps.MapTypeControl();
-    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-    // 지도에 확대 축소 컨트롤을 생성한다
-    var zoomControl = new kakao.maps.ZoomControl();
-    // 지도의 우측에 확대 축소 컨트롤을 추가한다
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-    // 마커 이미지의 주소
-    var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
-        markerImageSize = new kakao.maps.Size(51, 52), // 마커 이미지의 크기
-        markerImageOptions = {
-            offset: new kakao.maps.Point(25, 25), // 마커 좌표에 일치시킬 이미지 안의 좌표
-        };
-    // 마커 이미지를 생성한다
-    var markerImage = new kakao.maps.MarkerImage(
-        markerImageUrl,
-        markerImageSize,
-        markerImageOptions,
-    );
-    // 주소로 좌표를 검색합니다
-    geocoder.addressSearch('건원대로34번길 32-29', function (result, status) {
-        // 무조건 도로명 주소를 작성해줘야된다
-
-        // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            console.log(coords);
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-                map: map,
-                image: markerImage, // 마커의 이미지
-                position: coords,
-            });
-
-            // 인포윈도우로 장소에 대한 설명을 표시합니다
-            var infowindow = new kakao.maps.InfoWindow({
-                content:
-                    '<div style="background-color: white; color: black; padding: 8px; border-radius: 10px; width: auto; white-space: nowrap;">정확한 위치는 신청완료 후에 표시 됩니다.</div>',
-            });
-            infowindow.open(map, marker);
-
-            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
-        }
-        // 지도에 원을 표시한다
-        var circle = new kakao.maps.Circle({
-            map: map, // 원을 표시할 지도 객체
-            center: new kakao.maps.LatLng(result[0].y, result[0].x), // 지도의 중심 좌표
-            radius: 500, //미터 단위의 원의 반지름
-            strokeWeight: 5, // 선의 두께
-            strokeColor: '#75B8FA', //선의 색깔
-            strokeOpacity: 0, //선의 불투명도 0에 가까울수록 투명해짐
-            fillColor: '#F7BCCC', //채우기 색깔
-            fillOpacity: 0.5, // 채우기 불투명도
-        });
-    });
-</script>
