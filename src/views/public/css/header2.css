@@ -1,0 +1,109 @@
+.main-header {
+    width: 100%;
+    background: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-fixed);
+}
+.nav {
+    height: var(--main-header-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav__logo,
+.nav__toggle {
+    color: #fff;
+}
+.nav__logo {
+    display: flex;
+    align-items: center;
+    column-gap: .5rem;
+    font-weight: var(--font-bold);
+}
+.nav__logo-img {
+    width: .75rem;
+}
+.nav__toggle { 
+    display: inline-flex;
+    font-size: 1.15rem;
+    cursor: pointer;
+}
+  
+@media screen and (max-width: 767px) {
+.nav__menu {
+    position: fixed;
+    background-color: var(--black-color);
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100%;
+    transition: .3s;
+    }
+}
+
+.nav__list {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    row-gap: 3rem;
+    padding-top: 9rem;
+}
+.nav__link {
+    color:hsl(0, 0%, 90%);
+    font-size: var(--h2-font-size);
+    transition: .3s;
+}
+.nav__link:hover {
+    color: #fff;
+}
+.nav__close {
+    font-size: 2rem;
+    color: #fff;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 767px) {
+    .nav {
+    height: calc(var(--header-height) + 1.5rem);
+    }
+    .nav__toggle,
+    .nav__close {
+    display: none;
+    }
+    .nav__list {
+    padding-top: 0;
+    flex-direction: row;
+    column-gap: 4rem;
+    } 
+    .nav__link {
+    position: relative;
+    font-size: var(--normal-font-size);
+    text-transform: initial;
+    }
+    .nav__link::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 12px;
+    background-color: var(--text-color-light);
+    transform: translateX(1.25rem);
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    }
+
+    .scroll-header .nav__link {
+    color: var(--text-color);
+    }
+    .scroll-header .active-link {
+    color: var(--title-color);
+    }
+    .scroll-header .active-link::after {
+    background-color: var(--title-color);
+    }
+}
