@@ -1,9 +1,11 @@
-<div class="mypage-container container">
-    <div class="row">
+<div class="mypage-container">
+    <div class="mypage-wrap">
         <!-- 프로필 사진 -->
-        <div class="image-wrap col-sm-12 col-md-6">
+        <div class="image-wrap">
             <div class="profile">
-                <img id="image" src="" alt="..."/>
+                <div class="image">
+                    <img id="image" src="" alt="..."/>
+                </div>
                 <div class="email">
                     <p id="email"></p>
                 </div>
@@ -15,7 +17,7 @@
         <!-- 프로필 사진 -->
 
         <!-- 유저 정보 -->
-        <div class="info-wrap col-sm-12  col-md-6">
+        <div class="info-wrap">
             <div class="container-info">
                 <div class="user-info">
                     <div class="user">
@@ -37,16 +39,8 @@
                         </span>
                     </div>
                     <div class="user">
-                        <h2 class="title">생년월일<span id="birthday-error"></span></h2>
-                        <span>
-                            <input type="text" id="birthday" value="" name="birthday" maxlength="20"/>
-                        </span>
-                    </div>
-                    <div class="user">
                         <h2 class="title">성별<span id="sex-error"></span></h2>
                         <select name="gender" id="sex">
-                            <option value="" name="sex"></option>
-                            <option value="선택">선택</option>
                             <option value="남성">남성</option>
                             <option value="여성">여성</option>
                             <option value="기타">기타</option>
@@ -59,23 +53,18 @@
                         </span>
                     </div>
                     <div class="user">
-                        <h2 class="title">주소<span id="addressError"></span></h2>
+                        <h2 class="title">변경 전 주소</h2>
+                        <div id="past-addr"></div>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">변경할 주소<span id="addressError"></span></h2>
                         <div id="address" class="int-id">
                             <span>
-                                <input type="text" id="address-1" 
-                                    class="d_form mini line addressCheck"
-                                    placeholder="도로명 주소"
-                                    readonly/>
-                                <input
-                                    type="button" id="addressButton" class="d_form mini"
-                                    onclick="findAddr()" value="주소 검색"
-                                    readonly/>
+                                <input type="text" id="address-1" placeholder="도로명 주소" disabled/>
+                                <input type="button" id="addressButton" onclick="findAddr()" value="주소 검색"/>
                             </span>
                             <span id="guide" style="color: #999; display: none"></span>
-                            <input
-                                type="text" id="address-2"
-                                class="d_form mini line addressCheck"
-                                placeholder="상세주소"/>
+                        </br><input type="text" id="address-2" placeholder="상세주소"/>
                         </div>
                     </div>
                     <div class="user">
@@ -92,6 +81,28 @@
 </div>
 
 <script>
+
+    function findAddr() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 사용자 주소를 받아올 변수를 정의한다.
+                var addr = '';
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') {
+                    // 사용자가 도로명 주소를 선택했을 경우(R)
+                    addr = data.roadAddress;
+                } else {
+                    // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 부모창의 주소칸에 받아온 주소를 넣는다.
+                $('#address-1').val(addr);
+            },
+        }).open();
+    }
+
     $.ajax({
         type: 'GET',
         url: `/user`,
@@ -105,17 +116,16 @@
 
             $('#email').append(userInfo.email)
             $('input[name=name]').attr('value', userInfo.name)
-            $('input[name=birthday]').attr('value', userInfo.birthday)
             $('option[name=sex]').attr('value', userInfo.sex)
             $('input[name=phone]').attr('value', userInfo.phone)
-
             $('#sex').append(userInfo.sex)
-            $('select[name=gender]').change(function(){
-                $(this).val();
-            })
-            $('#birth').append(userInfo.birth)
+            $("sex option:selected").text()
+            function selectSexOption() {
+                $('#sex').val(userInfo.sex)
+            }
+            selectSexOption();
             $('#phone').append(userInfo.phone)
-            $('#address').append(userInfo.address)
+            $('#past-addr').append(userInfo.address)
             $('#introduction').append(userInfo.introduction)
             $('img[id=image]').attr('src', userInfo.profile)
 
@@ -129,7 +139,6 @@
             password: $('#password').val(),
             confirmPassword: $('#confirmPassword').val(),
             sex: $('#sex').val(),
-            birthday: $('#birthday').val(),
             phone: $('#phone').val(),
             region: region = $('#region').val(),
             address: $('#address-1').val() + ', ' + $('#address-2').val(),
@@ -154,26 +163,7 @@
         });
     }
 
-    function findAddr() {
-        new daum.Postcode({
-            oncomplete: function (data) {
-                // 사용자 주소를 받아올 변수를 정의한다.
-                var addr = '';
-
-                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                if (data.userSelectedType === 'R') {
-                    // 사용자가 도로명 주소를 선택했을 경우(R)
-                    addr = data.roadAddress;
-                } else {
-                    // 사용자가 지번 주소를 선택했을 경우(J)
-                    addr = data.jibunAddress;
-                }
-
-                // 부모창의 주소칸에 받아온 주소를 넣는다.
-                $('#input-address-1').val(addr);
-            },
-        }).open();
-    }
+    
 
     // //회원가입 유효성검사
     // // 자원을 화면에 로드하게 되면 수행할 동작(==function)
@@ -232,16 +222,6 @@
     //         if (!pnumLimit.test(input[4].value)) { //입력값과 정규식 범위와 같지 않다면
     //             // pw의 오류 문구삽입
     //             document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
-    //         }
-    //     }
-
-    //     // [ 이메일 입력 유효성검사 ]
-    //     join.email.onkeydown = function () { //입력값과 정규식 범위와 같지 않다면
-    //         innerReset(error); // 초기화 메서드 호출
-    //         var emailLimit = /[0-9a-zA-Z-_.]/; // 정규식 0~9, a~z, A~Z, -, _, .내에서만 입력가능
-    //         if (!emailLimit.test(input[5].value)) {  //입력값과 정규식 범위와 같지 않다면
-    //             // 이메일의 오류 문구삽입
-    //             document.getElementById(errorId[5]).innerHTML = " 올바른 형식이 아닙니다. 영문,숫자, (-)(_)(.) 입력만 가능합니다.";
     //         }
     //     }
     // }
@@ -306,20 +286,6 @@
     //         join.phone - num.focus(); // 포커스 이동
     //         return false;
     //     }
-
-    //     // [ email 아이디 유효성검사 ]
-    //     if (!emailLimit.test(input[5].value)) {
-    //         document.getElementById(errorId[5]).innerHTML = " 올바른 형식이 아닙니다. 영문,숫자, (-)(_)(.) 외 입력은 불가합니다.";
-    //         join.email.focus(); // 포커스 이동
-    //         return false;
-    //     }
-
-    //     // [ email 주소선택 유효성검사 ]
-    //     if (document.getElementById("mail-select").value == "이메일 선택") {
-    //         document.getElementById(errorId[5]).innerHTML = " 이메일을 선택해주세요.";
-    //         return false;
-    //     }
-    //     //console.log(document.getElementById("mail-select").value);
 
     //     // 개인정보 동의박스 체크
     //     var consentCheck = document.getElementById("check");

@@ -5,20 +5,53 @@
       100% {transform: translate(0,0);}
 }
 
+* p {
+   width: 250px;
+   height: 60px;
+}
+
 .mypage-container {
-   margin-top: 10%;
+   width: 100%;
+   height: 100%;
+
    display: flex;
-   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.mypage-wrap {
+   width: 80%;
+   height: 80%;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
 }
 
 .image-wrap {
+   width: 40%;
+   height: 100%;
+
    display: flex;
    justify-content: center;
+   align-items: center;
 }
 
-.email {
+.profile {
+   width: 60%;
+   height: 70%;
+
    display: flex;
+   flex-direction: column;
    justify-content: center;
+   align-items: center;
+}
+
+.image {
+   width: 100%;
+   height: 30%;
+   border-radius: 100%;
 }
 
 img {
@@ -29,7 +62,12 @@ img {
 }
 
 .email {
-   margin-top: 3%;
+   width: 100%;
+   height: 10%;
+
+   display: flex;
+   justify-content: center;
+   margin-top: 3%
 }
 
 #email {
@@ -46,6 +84,14 @@ button {
    margin: 2.5%
 }
 
+.info-wrap {
+   width: 60%;
+   height: 100%;
+   padding: 5%;
+
+   display: flex;
+   align-items: center;
+}
 
 .user-info {
    margin-top: 5%;
@@ -56,7 +102,7 @@ button {
 }
 
 /*태블릿*/
-@media all and (min-width:576px){
+/* @media all and (min-width:576px){
    .mypage-container {
       margin-top: 30%;
       display: flex;
@@ -68,10 +114,10 @@ button {
       border-radius: 100%;
       object-fit: fill;
    }
-}
+} */
 
 /*데스크톱*/
-@media all and (min-width:1200px){
+/* @media all and (min-width:1200px){
    .mypage-container {
       margin-top: 50%;
       display: flex;
@@ -83,4 +129,4 @@ button {
       border-radius: 100%;
       object-fit: fill;
    }
-} 
+}  */

@@ -1,9 +1,11 @@
-<div class="mypage-container container">
-    <div class="row">
+<div class="mypage-container">
+    <div class="mypage-wrap">
         <!-- 프로필 사진 -->
-        <div class="image-wrap col-sm-12 col-md-6">
+        <div class="image-wrap">
             <div class="profile">
-                <img id="image" src="" alt="..."/>
+                <div class="image">
+                    <img id="image" src="" alt="..."/>
+                </div>
                 <div class="email">
                     <p id="email"></p>
                 </div>
@@ -16,7 +18,7 @@
         <!-- 프로필 사진 -->
 
         <!-- 유저 정보 -->
-        <div class="info-wrap col-sm-12  col-md-6">
+        <div class="info-wrap">
             <div class="container-info">
                 <div class="user-info">
                     <div class="user">
@@ -84,7 +86,7 @@
                 success: function (response) {
                     console.log(response)
                     alert('회원 탈퇴');
-                    window.location.reload()
+                    window.location.href="/"
                 }
             })
         } else {
