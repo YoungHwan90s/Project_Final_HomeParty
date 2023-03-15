@@ -107,7 +107,6 @@
                 const userId = response.userId
                 sessionStorage.setItem('accessToken', response.accessToken);
                 sessionStorage.setItem('refreshToken', response.refreshToken);
-                sessionStorage.setItem('userId', response.userId);
                 window.location.replace('/')
             },
             error: function (error) {

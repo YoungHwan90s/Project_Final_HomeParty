@@ -11,7 +11,7 @@
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
         />
-        
+
         <script src="https://kit.fontawesome.com/8b38a77eac.js" crossorigin="anonymous"></script>
 
         <!-- 아이콘 링크 -->
@@ -53,7 +53,7 @@
     </head>
     <body>
         <%-include('alert-modal.ejs') %>
-        
+
         <header class="main-header" id="main-header"></header>
 
         <!-- body -->
@@ -85,76 +85,64 @@
 </html>
 
 <script>
-     $(document).ready(function () {
+    $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let html = `
-                                <nav class="nav container">
-                                    <a href="#" class="nav__logo">
+                let html = `<nav class="nav container">
+                                    <a href="/" class="nav__logo">
                                         <img src="assets/img/logo.png" alt="" class="nav__logo-img">
                                         모아바
                                     </a>
-                                    
                                     <div class="nav__menu" id="nav-menu">
                                         <ul class="nav__list">
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link active-link">파티 탐색하기</a>
+                                                <a href="/party" class="nav__link active-link">파티 탐색하기</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link">파티 호스트</a>
+                                                <a href="/party-make" class="nav__link">파티 호스트</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link">내 계정</a>
+                                                <a href="/user-menu" class="nav__link">내 계정</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link">로그아웃</a>
+                                                <a onclick="logout()"" class="nav__link logout">로그아웃</a>
                                             </li>
                                         </ul>
-
                                         <div class="nav__close" id="nav-close">
                                             <i class='bx bx-x'></i>
                                         </div>
                                     </div>
-
                                     <div class="nav__toggle" id="nav-toggle">
                                         <i class='bx bx-grid-alt'></i>
                                     </div>
-                                </nav>
-                                
-                            `;
+                                </nav>`;
                 $('#main-header').append(html);
             } else {
-                let html = `
-                                <nav class="nav container">
+                let html = `<nav class="nav container">
                                     <a href="#" class="nav__logo">
                                         <img src="assets/img/logo.png" alt="" class="nav__logo-img">
                                         모아바
                                     </a>
-                                    
                                     <div class="nav__menu" id="nav-menu">
                                         <ul class="nav__list">
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link active-link">파티 탐색하기</a>
+                                                <a href="/party" class="nav__link active-link">파티 탐색하기</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link">파티 호스트</a>
+                                                <a href="/party-make" class="nav__link">파티 호스트</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="#" class="nav__link">로그인</a>
+                                                <a href="/login" class="nav__link">로그인</a>
                                             </li>
                                         </ul>
-
                                         <div class="nav__close" id="nav-close">
                                             <i class='bx bx-x'></i>
                                         </div>
                                     </div>
-
                                     <div class="nav__toggle" id="nav-toggle">
                                         <i class='bx bx-grid-alt'></i>
                                     </div>
-                                </nav>
-                                
-                           `;
+                                </nav>`;
                 $('#main-header').append(html);
             }
         });

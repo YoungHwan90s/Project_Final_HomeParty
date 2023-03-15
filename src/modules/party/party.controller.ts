@@ -7,7 +7,6 @@ import {
     Param,
     Patch,
     Post,
-    Query,
     Req,
     Res,
     UseGuards,
@@ -15,6 +14,7 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
+import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 
 @Controller('/api/party')
@@ -23,20 +23,16 @@ export class PartyController {
 
     // 파티 목록 조회
     @Get('/list')
-    async getParties(@Query('userId') userId: number) {
-        console.log(userId)
-            if (userId == 0) {
-                return await this.partyService.getParties();
-            } else {
-                return await this.partyService.getPartiesWithWishList(userId);
-            }
+    async getParties(): Promise<Party[]> {
+        return await this.partyService.getParties();
     }
 
     //파티 상세 조회
     @Get(':partyId')
     async getPartyById(@Param('partyId') partyId: number) {
         return await this.partyService.getPartyById(partyId);
-    }q
+    }
+    q;
 
     // 파티 등록
     @UseGuards(JwtAuthGuard)
@@ -60,7 +56,7 @@ export class PartyController {
     async applyParty(@Req() req, @Res() res, @Param('partyId') partyId: number) {
         const user = req.user;
         await this.partyService.applyParty(user, partyId);
-        return res.send({})
+        return res.send({});
     }
 
     // 파티 신청자 목록 조회

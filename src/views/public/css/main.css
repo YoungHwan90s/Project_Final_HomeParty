@@ -847,3 +847,6 @@ button {
 on the image of the gif */
 
 
+.logout{
+  cursor: pointer;
+}

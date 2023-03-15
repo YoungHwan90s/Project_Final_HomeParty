@@ -12,6 +12,7 @@ import { CreatePartyDto } from './dto/create-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
+import { WishList } from '../user/entity/wish-list.entity';
 
 @Injectable()
 export class PartyService {
@@ -21,18 +22,10 @@ export class PartyService {
         private readonly dataSource: DataSource,
     ) {}
 
-    async getParties() {
+    async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
             relations: ['thumbnail'],
         });
-    }
-
-    async getPartiesWithWishList(userId: number) {
-        const test =  await this.partyRepository.find({
-            relations: ['thumbnail', 'wishList']
-        });
-
-        console.log(test)
     }
 
     async getPartyById(partyId: number) {
