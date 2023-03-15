@@ -9,9 +9,8 @@ export class CreatePartyDto {
     @IsString()
     readonly content: string;
 
-    @Type(() => Number)
     @IsNumber()
-    readonly maxMember: number;
+    readonly maxMember: string;
 
     @IsOptional()
     @IsString()
