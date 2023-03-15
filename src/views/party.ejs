@@ -1,4 +1,3 @@
-<%- include('header.ejs') %>
 <main class="partySearch main container">
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
@@ -16,7 +15,10 @@
                 />
 
                 <div class="partyWhen">
-                    <div class="datePickerWrapper"></div>
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
                 </div>
 
                 <input
@@ -35,7 +37,7 @@
     </header>
 
     <div class="mainSection">
-        <ul class="partyList"></ul>
+        <ul class="partyList partyGrid"></ul>
     </div>
 </main>
 
@@ -43,123 +45,124 @@
 <button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
 
 <script>
-    $.ajax({
-        type: 'GET',
-        url: `/api/party/list`,
-        data: {},
-        success: function (response) {
-            let partyList = response;
-
-            for (let i = 0; i < partyList.length; i++) {
-                const partyId = partyList[i]['id'];
-                const title = partyList[i]['title'];
-                const maxMember = partyList[i]['maxMember'];
-                const currMember = partyList[i]['currMember'];
-                const thumbnails = partyList[i]['thumbnail'];
-                const date = partyList[i]['date'];
-                const status = partyList[i]['status'];
-                const thumbnailList = partyList[i]['thumbnail'];
-                
-                //prettier-ignore
-                const thumbnailHtml = `
-                    ${thumbnailList.length === 0 
-                        ?  `
-                            <li class="thumbnailItem">
-                                <div class="thumbnailRatio">
-                                    <img
-                                        src="https://velog.velcdn.com/images/joosing/post/459e7cff-f9fc-470a-8856-824560ea9c45/image.png"
-                                        alt=""
-                                        class="thumbnailImage"
-                                    />
+        $.ajax({
+            type: 'GET',
+            url: `/api/party/list`,
+            data: {},
+            success: function (response) {
+                console.log(response[0])
+                let partyList = response;
+    
+                for (let i = 0; i < partyList.length; i++) {
+                    const partyId = partyList[i]['id'];
+                    const title = partyList[i]['title'];
+                    const maxMember = partyList[i]['maxMember'];
+                    const currMember = partyList[i]['currMember'];
+                    const thumbnails = partyList[i]['thumbnail'];
+                    const date = partyList[i]['date'];
+                    const status = partyList[i]['status'];
+                    const thumbnailList = partyList[i]['thumbnail'];
+    
+                    //prettier-ignore
+                    const thumbnailHtml = `
+                        ${thumbnailList.length === 0 
+                            ?  `
+                                <li class="thumbnailItem">
+                                    <div class="thumbnailRatio">
+                                        <img
+                                            src="https://velog.velcdn.com/images/joosing/post/459e7cff-f9fc-470a-8856-824560ea9c45/image.png"
+                                            alt=""
+                                            class="thumbnailImage"
+                                        />
+                                    </div>
+                                </li>
+                                ` 
+                            : thumbnailList.map(({ thumbnail }) => `
+                                <li class="thumbnailItem">
+                                    <div class="thumbnailRatio">
+                                        <img
+                                            src="${thumbnail}"
+                                            alt=""
+                                            class="thumbnailImage"
+                                        />
+                                    </div>
+                                </li>
+                            `).join('')
+                        }`;
+    
+                    const partyItem = `
+                        <li class="partyItem">
+                            <div class="thumbnailWrapper carousel">
+                                <a href="party/${partyId}" class="partyLink thumbnailLink">
+                                    <ul class="thumbnailList carouselList">
+                                        ${thumbnailHtml}
+                                    </ul>
+                                </a>
+    
+                                <div class="thumbnailButtonWrapper carouselButtonWrapper">
+                                    <button
+                                        type="button"
+                                        class="thumbnailButton carouselButton prev"
+                                        aria-label="이전 썸네일 보기"
+                                    >
+                                        <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="thumbnailButton carouselButton next"
+                                        aria-label="다음 썸네일 보기"
+                                    >
+                                        <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                                    </button>
                                 </div>
-                            </li>
-                            ` 
-                        : thumbnailList.map(({ thumbnail }) => `
-                            <li class="thumbnailItem">
-                                <div class="thumbnailRatio">
-                                    <img
-                                        src="${thumbnail}"
-                                        alt=""
-                                        class="thumbnailImage"
-                                    />
-                                </div>
-                            </li>
-                        `).join('')
-                    }`;
-
-                const partyItem = `
-                    <li class="partyItem">
-                        <div class="thumbnailWrapper carousel">
-                            <a href="party/${partyId}" class="partyLink thumbnailLink">
-                                <ul class="thumbnailList carouselList">
-                                    ${thumbnailHtml}
-                                </ul>
-                            </a>
-
-                            <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                                <button
-                                    type="button"
-                                    class="thumbnailButton carouselButton prev"
-                                    aria-label="이전 썸네일 보기"
-                                >
-                                    <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="thumbnailButton carouselButton next"
-                                    aria-label="다음 썸네일 보기"
-                                >
-                                    <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                                </button>
                             </div>
-                        </div>
+    
+                            <a href="" class="partyLink">
+                                <dl class="partyInfoList">
+                                    <div class="partyInfoItem partyTitle">
+                                        <dt class="a11yHidden">제목</dt>
+                                        <dd>
+                                            ${title}
+                                        </dd>
+                                    </div>
+                                    <div class="partyInfoItem partyHeadcount">
+                                        <dt>현재</dt>
+                                        <dd class="currentCount">
+                                            ${currMember}명
+                                        </dd>
+                                        <dt>총</dt>
+                                        <dd class="totalCount">
+                                            ${maxMember}명
+                                        </dd>
+                                    </div>
+                                    <div class="partyInfoItem partyEtc">
+                                        <dt class="a11yHidden">지역</dt>
+                                        <dd class="partyPlace">
+                                        </dd>
+                                        <dt class="a11yHidden">날짜</dt>
+                                        <dd class="partyDate">
+                                            ${date}
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </a>
+    
+                            <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                                <i class="bx bxs-heart" aria-hidden="true"></i>
+                            </button>
+                        </li>
+                    `;
+    
+                    $('.partyList').append(partyItem);
+                }
+            },
+        });
 
-                        <a href="" class="partyLink">
-                            <dl class="partyInfoList">
-                                <div class="partyInfoItem partyTitle">
-                                    <dt class="a11yHidden">제목</dt>
-                                    <dd>
-                                        ${title}
-                                    </dd>
-                                </div>
-                                <div class="partyInfoItem partyHeadcount">
-                                    <dt>현재</dt>
-                                    <dd class="currentCount">
-                                        ${currMember}명
-                                    </dd>
-                                    <dt>총</dt>
-                                    <dd class="totalCount">
-                                        ${maxMember}명
-                                    </dd>
-                                </div>
-                                <div class="partyInfoItem partyEtc">
-                                    <dt class="a11yHidden">지역</dt>
-                                    <dd class="partyPlace">
-                                    </dd>
-                                    <dt class="a11yHidden">날짜</dt>
-                                    <dd class="partyDate">
-                                        ${date}
-                                    </dd>
-                                </div>
-                            </dl>
-                        </a>
-
-                        <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
-                            <i class="bx bxs-heart" aria-hidden="true"></i>
-                        </button>
-                    </li>
-                `;
-
-                $('.partyList').append(partyItem);
-            }
-        },
-    });
-
-    function updateWishList(partyId) {
+    function updateWishList(userId, partyId) {
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
-            data: {},
+            data: { userId },
             authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 if (response.updateOrDelete == 0) {

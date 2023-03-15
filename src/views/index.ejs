@@ -17,10 +17,6 @@
         <!-- 아이콘 링크 -->
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-        <link
-        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet"
-        />
         <!-- css -->
         <link rel="stylesheet" href="/css/reset.css" />
         <link rel="stylesheet" href="/library/datePicker/base.css" />
@@ -32,15 +28,13 @@
         <link rel="stylesheet" href="/css/signup.css" />
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/user-menu.css" />
-        <!-- <link rel="stylesheet" href="/css/header.css" /> -->
         <link rel="stylesheet" href="/css/profile-upload.css" />
         <link rel="stylesheet" href="/css/user-menu-mypage.css" />
         <link rel="stylesheet" href="/css/user-menu-edit.css" />
-
-        <link rel="stylesheet" href="/css/partySearch.css" />
+        <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-make.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
-        <link rel="stylesheet" href="/css/partyPage.css">
+        <link rel="stylesheet" href="/css/partyPage.css" />
 
         <!-- js -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -49,23 +43,22 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"
         ></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"
-        ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
         <script src="/library/datePicker/calendar.js"></script>
         <script src="/library/datePicker/datePicker.js"></script>
         <script src="/library/carousel/carousel.js"></script>
-        <script src="/js/common.js" defer></script>
-
-        <!-- 다음 주소찾기 -->
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+        <script src="/js/common.js" defer></script>
 
         <title>모아바 | HOMEPARTY</title>
     </head>
     <body>
-        <!-- body --> 
-        <%-include('alertModal.ejs') %>
-        
+        <%-include('alert-modal.ejs') %>
+
+        <header class="main-header" id="main-header"></header>
+
+        <!-- body -->
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
         <% if (components==='login') { %> <%-include('auth-login.ejs') %><% } %>
@@ -92,15 +85,69 @@
         <% if (components === 'party-make') {%><%-include('party-make.ejs') %><% } %> 
         <% if (components === 'party-host-massage'){%> <%-include('party-host-massage.ejs') %><% } %>
     </body>
-
-    <script>
-        // modal alert function
-        function customAlert(text, confirmCallback) {
-            $('#alertText').text(text);
-            $('#alertModal').modal('show');
-            if (confirmCallback) {
-                $('#alertModal .btn-confirm').click(confirmCallback);
-            }
-        }
-    </script>
 </html>
+
+<script>
+    $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let html = `<nav class="nav container">
+                                    <a href="/" class="nav__logo">
+                                        <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                                        모아바
+                                    </a>
+                                    <div class="nav__menu" id="nav-menu">
+                                        <ul class="nav__list">
+                                            <li class="nav__item">
+                                                <a href="/party" class="nav__link active-link">파티 탐색하기</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="/party-make" class="nav__link">파티 호스트</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="/user-menu" class="nav__link">내 계정</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a onclick="logout()"" class="nav__link logout">로그아웃</a>
+                                            </li>
+                                        </ul>
+                                        <div class="nav__close" id="nav-close">
+                                            <i class='bx bx-x'></i>
+                                        </div>
+                                    </div>
+                                    <div class="nav__toggle" id="nav-toggle">
+                                        <i class='bx bx-grid-alt'></i>
+                                    </div>
+                                </nav>`;
+                $('#main-header').append(html);
+            } else {
+                let html = `<nav class="nav container">
+                                    <a href="#" class="nav__logo">
+                                        <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                                        모아바
+                                    </a>
+                                    <div class="nav__menu" id="nav-menu">
+                                        <ul class="nav__list">
+                                            <li class="nav__item">
+                                                <a href="/party" class="nav__link active-link">파티 탐색하기</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="/party-make" class="nav__link">파티 호스트</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="/login" class="nav__link">로그인</a>
+                                            </li>
+                                        </ul>
+                                        <div class="nav__close" id="nav-close">
+                                            <i class='bx bx-x'></i>
+                                        </div>
+                                    </div>
+                                    <div class="nav__toggle" id="nav-toggle">
+                                        <i class='bx bx-grid-alt'></i>
+                                    </div>
+                                </nav>`;
+                $('#main-header').append(html);
+            }
+        });
+    });
+</script>

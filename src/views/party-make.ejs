@@ -5,12 +5,7 @@
             <h2 class="title">
                 <!-- Backend -->
                 <label for="partyTitle" class="a11yHidden">제목 입력</label>
-                <input
-                    type="text"
-                    placeholder="파티 제목"
-                    id="partyTitle"
-                    class="partyTitle"
-                />
+                <input type="text" placeholder="파티 제목" id="partyTitle" class="partyTitle" />
             </h2>
 
             <div class="tagListWrapper">
@@ -134,8 +129,10 @@
 
                 <section class="calendarSection">
                     <h3 class="title">날짜 선택</h3>
-
-                    <div class="datePickerWrapper"></div>
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
                 </section>
 
                 <section class="regionSection">
@@ -251,14 +248,13 @@
         function saveParty(image) {
             // tag 배열로 뽑아오기
             const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
-
             // 파티 만들기 ajax
             const partyInfo = {
                 title: $('#partyTitle').val(),
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: $('#date-pick').val(),
+                date: $('.datePicker').val(),
                 thumbnail: image,
                 tagName: tagList,
             };
@@ -273,9 +269,8 @@
                 },
                 success: function (response) {
                     customAlert('파티가 생성되었습니다!', function () {
-                        window.location.reload('/party');
+                        window.location.replace('/party');
                     });
-                    window.location.replace('/party');
                 },
                 error: function (error) {
                     customAlert(error.responseJSON.message, function () {

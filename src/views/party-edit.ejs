@@ -1,246 +1,270 @@
-<%-include('header.ejs') %>
+<main class="partyPage partyMake partyEdit main container">
+    <form action="" class="partyMakeForm">
+        <header class="mainHeader">
+            <h2 class="title">
+                <!-- Backend -->
+                <label for="partyTitle" class="a11yHidden">제목 입력</label>
+                <input
+                    type="text"
+                    placeholder="제목을 입력하세요"
+                    id="partyTitle"
+                    class="partyTitle"
+                />
+            </h2>
 
-<main class="partyPage partyDetail main container"></main>
+            <div class="tagListWrapper">
+                <ul class="tagList">
+                    <li class="tagInputWrapper">
+                        <label for="partyTag" class="a11yHidden">태그 입력</label>
+                        <input
+                            type="text"
+                            id="partyTag"
+                            class="partyTag"
+                            placeholder="Enter키를 이용하여 태그를 입력하세요."
+                        />
+                    </li>
+                </ul>
+            </div>
+
+            <dl class="headcountList">
+                <div class="headcountItem">
+                    <dt>
+                        <label for="partyTotalMemeber">총 인원 : </label>
+                    </dt>
+                    <dd>
+                        <input
+                            type="number"
+                            id="partyTotalMemeber"
+                            class="partyTotalMemeber"
+                            pattern="[0-9]*"
+                            placeholder="0"
+                        />
+                        명
+                    </dd>
+                </div>
+            </dl>
+        </header>
+
+        <div class="mainSection">
+            <section class="partyImageSection">
+                <h3 class="title">파티 이미지 등록</h3>
+
+                <ul class="partyImageList">
+                    <li class="partyImageItem">
+                        <label for="partyImage1">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage1"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                    <li class="partyImageItem">
+                        <label for="partyImage2">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage2"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                    <li class="partyImageItem">
+                        <label for="partyImage3">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage3"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                    <li class="partyImageItem">
+                        <label for="partyImage4">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage4"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <div class="partyInfoWrapper">
+                <section class="IntroduceSection">
+                    <h3 class="title">
+                        <label for="partyIntroduce">파티 소개</label>
+                    </h3>
+                    <p>
+                        <textarea
+                            id="partyIntroduce"
+                            class="partyIntroduce"
+                            placeholder="파티 소개글 입력"
+                        ></textarea>
+                    </p>
+                </section>
+
+                <section class="calendarSection">
+                    <h3 class="title">날짜 선택</h3>
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
+                </section>
+
+                <section class="regionSection">
+                    <h3 class="title">지역</h3>
+                    <div class="addressSearchWrapper">
+                        <label for="partyAddressSearch" class="a11yHidden">주소 검색</label>
+                        <input
+                        type="button"
+                        id="partyAddressSearch-1"
+                        class="partyAddressSearch"
+                        onclick="findAddr()"
+                        value="주소 검색"
+                        readonly
+                        />
+                        <input
+                            type="text"
+                            id="partyAddressSearch-2"
+                            class="partyAddressSearch"
+                            placeholder="도로명 주소"
+                            readonly
+                        />
+
+                    </div>
+                    <div class="addressDetailWrapper">
+                        <label for="partyAddressDetail" class="a11yHidden">상세 주소 입력</label>
+                        <input
+                            type="text"
+                            id="partyAddressDetail"
+                            class="partyAddressDetail"
+                            placeholder="상세 주소 입력"
+                        />
+                    </div>
+
+                    <!-- 지도 삽입 -->
+                </section>
+
+                <section class="hostSection">
+                    <h3 class="a11yHidden">호스트 정보</h3>
+                    <div class="hostInfoWrapper">
+                        <a href="" class="hostInfoLink">
+                            <figure class="hostFigure">
+                                <div class="hostImageWrapper">
+                                    <img src="http://placehold.it/320x100?text=sample" alt="" />
+                                </div>
+
+                                <figcaption>
+                                    <h3 class="hostTitle">호스트</h3>
+                                    <p class="hostName">
+                                        <!-- Backend -->
+                                        이정기
+                                    </p>
+                                    <p class="a11yHidden">호스트 정보 더보기</p>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <button type="button" class="partyFormSubmit btn_primary btn_point" onclick="editParty()">등록하기</button>
+    </form>
+</main>
 
 <script>
+    const partyJSON = JSON.parse(sessionStorage.getItem('party'));
     const partyId = window.location.pathname.split('/')[2];
 
+    const { title, content, maxMember, date, thumbnail, tag, address } = partyJSON
+    console.log(address)
+    console.log(partyJSON)
+    // $('#partyTitle').val(title)
+    $('#partyIntroduce').val(content)
+    $('#partyTotalMemeber').val(maxMember)
+    
+    // data, address, addThumbnail , removeThumnail, addTagName, removeTagName 더미값 주고 수정해보기
+
+    const partyInfo = {
+        title : "오모리",
+        content : $('#partyIntroduce').val(),
+        maxMember : Number($('#partyTotalMemeber').val()),
+        // address: $('#partyAddressSearch-2').val() + ' ' + $('#partyAddressDetail').val(),
+        address : address,
+        date : date,
+        addThumbnail : [],
+        removeThumnail : [],
+        addTagName : [],
+        removeTagName : [],
+    }
+    console.log(partyInfo)
+    function editParty(){
     $.ajax({
-        type: 'GET',
+        type: 'PATCH',
         url: `/api/party/${partyId}`,
-        data: {},
+        data: partyInfo,
         headers: {
             authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
-        success: function (response) {
-            sessionStorage.setItem('party', response);
-            
-            const {
-                hostId,
-                title,
-                content,
-                maxMember,
-                currMember,
-                thumbnails,
-                date,
-                status,
-                thumbnail,
-                tag,
-                // user,
-            } = response;
-
-            //prettier-ignore
-            const tagHtml =
-                tag.length > 0
-                ? tag.map((tag) =>
-                      `<li class="tagItem">
-                          #${tag.tagName}
-                      </li>`
-                  ).join('')
-                : ``;
-
-            //prettier-ignore
-            const partyImageHtml =
-                thumbnail.length > 0
-                ? thumbnail.map((thumbnail) => `
-                    <li class="partyImageItem">
-                        <img src="${thumbnail}" alt="" class="partyImage" />
-                    </li>
-                `).join('')
-                : `
-                    <li class="partyImageItem">
-                        <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
-                    </li>`;
-
-            // const hostProfileSrc =
-            //     user.profile ??
-            //     `https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage`;
-
-            const html = `
-                <header class="mainHeader">
-                    <h2 class="title">
-                        ${title}
-                    </h2>
-
-                    <ul class="tagList">
-                        ${tagHtml}
-                    </ul>
-
-                    <div class="column2">
-                        <dl class="headcountList">
-                            <div class="headcountItem">
-                                <dt>현재 참여 인원</dt>
-                                <dd>
-                                  ${currMember}
-                                </dd>
-                            </div>
-                            <div class="headcountItem">
-                                <dt>총 인원</dt>
-                                <dd>
-                                    ${maxMember}
-                                </dd>
-                            </div>
-                        </dl>
-
-                        <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
-                            <i class="bx bxs-heart" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </header>
-
-                <div class="mainSection">
-                    <section class="partyImageSection">
-                        <h3 class="a11yHidden">파티 이미지</h3>
-
-                        <ul class="partyImageList">
-                            ${partyImageHtml}
-                        </ul>
-
-                        <div class="partyImageButtonWrapper">
-                            <button
-                                type="button"
-                                class="partyImageButton prev"
-                                aria-label="이전 파티 이미지 보기"
-                            >
-                                <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                            </button>
-                            <button
-                                type="button"
-                                class="partyImageButton next"
-                                aria-label="다음 파티 이미지 보기"
-                            >
-                                <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </section>
-
-                    <div class="partyInfoWrapper">
-                        <section class="IntroduceSection">
-                            <h3 class="a11yHidden">파티 소개</h3>
-                            <p>
-                                ${content}
-                            </p>
-                        </section>
-
-                        <section class="calendarSection">
-                            <h3 class="a11yHidden">달력</h3>
-
-                            <div class="calendar"></div>
-
-                            <div class="calendarButtonWrapper">
-                                <button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
-                                ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>
-                            </div>
-                        </section>
-
-                        <section class="regionSection">
-                            <h3 class="title">지역</h3>
-                            <p>
-                        
-                            </p>
-
-                            <!-- 지도 삽입 -->
-                        </section>
-
-                        <section class="hostSection">
-                            <h3 class="a11yHidden">호스트 정보</h3>
-                            <div class="hostInfoWrapper">
-                                <a href="/party-host-detail/${hostId}" class="hostInfoLink">
-                                    <figure class="hostFigure">
-                                        <div class="hostImageWrapper">
-                                            <img src="" alt="" />
-                                        </div>
-
-                                        <figcaption>
-                                            <h3 class="hostTitle">호스트</h3>
-                                            <p class="hostName">
-                                                
-                                            </p>
-                                            <p class="a11yHidden">호스트 정보 더보기</p>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-
-                                <a href="/party-host-message" class="hostContactLink">호스트에게 연락하기</a>
-                            </div>
-                        </section>
-                    </div>
-                </div>`;
-            $('.partyPage').append(html);
-                if(document.querySelector('.partyPage')){
-                    new Calendar(document.querySelector('.partyPage .calendar'));
-
-                    document.querySelector('time[datetime="2023-03-03"]').classList.add("selected")
-
-                    document.querySelector('.today').classList.remove('today')
-
-                    const partyDetailSlide = tns({
-                        container: '.partyDetail .partyImageList',
-                        slideBy: 'page',
-                        controlsContainer: '.partyImageButtonWrapper',
-                        autoplay: true,
-                        autoplayButtonOutput: false,
-                    });
-                }
-        },
+        success: function (response) {},
     });
+}
+    //전의 데이터를 다 붙여넣어 주거나, 클라이언트에게 보여준다.
 
-    function applyParty(partyId) {
-        $.ajax({
-        type: 'POST',
-        url: `/api/party/apply/${partyId}`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            customAlert(
-                '신청되었습니다.',
-                    function () {
-                        window.location.reload();
-                    },
-            )
-        },
-        error: function (error) {
-            customAlert(
-                error.responseJSON.message,
-                function () {
-                    window.location.reload();
-                    },
-                );
+    //추가한 데이터 선우코드 가져와 하나씩 넣는다. (태그, 썹네일)
+
+    //클라이언트가 입력한 데이터를 서버에 보내준다.
+
+    function findAddr() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 사용자 주소를 받아올 변수를 정의한다.
+                var addr = '';
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') {
+                    // 사용자가 도로명 주소를 선택했을 경우(R)
+                    addr = data.roadAddress;
+                } else {
+                    // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 부모창의 주소칸에 받아온 주소를 넣는다.
+                $('#partyAddressSearch-2').val(addr);
             },
-        })
+        }).open();
     }
 
-    function cancelParty(partyId) {
 
-        $.ajax({
-        type: 'DELETE',
-        url: `/api/party/apply-cancel/${partyId}`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            console.log(123412341234,response)
-            customAlert(
-                "취소되었습니다.",
-                    function () {
-                        window.location.reload();
-                    },
-            )
-        },
-        error: function (error) {
-            customAlert(
-                error.responseJSON.message,
-                function () {
-                    window.location.reload();
-                    },
-                );
-            },
-        })
-    }
 </script>
