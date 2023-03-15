@@ -19,16 +19,7 @@ export class ReviewService {
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Party) private partyRepository: Repository<Party>) {}
     
-        //트러블슈팅
-    // async writeReview( id,partyId: number, data) {
-    //     await this.reviewRepository.insert({
-    //         id ,
-    //         partyId,
-    //         rating: data.rating,
-    //         review: data.review,
-    //     });
-    //     return { statusCode: 201, message: '등록 되었습니다.' };
-    // }
+
 
     async writeReview( userId:number,partyId: number, data: CreateReviewDto):Promise<Review> {
         const review = new Review()
@@ -53,31 +44,6 @@ export class ReviewService {
     }
 
 
-    // async readReview(partyId: number) :Promise<any>{        
-    //     const reviewInfo = await this.reviewRepository.find({
-    //         where: { partyId , deletedAt: null },
-    //         order: { createdAt: 'DESC' },
-    //         relations:['party.user','user','party.thumbnail']
-    //     });
-        
-        
-    //     if (!reviewInfo) {
-    //         throw new NotFoundException("리뷰가 없습니다.");
-    //     }        
-    //     return reviewInfo;
-    // }
-    // async readReview(hostId: number) :Promise<any>{        
-    //     const reviewInfo = await this.partyRepository.find({
-    //         where: { hostId , deletedAt: null },
-    //         order: { createdAt: 'DESC' },
-    //         relations:['review','review.user']
-    //     });
-
-    //     if (!reviewInfo) {
-    //         throw new NotFoundException("리뷰가 없습니다.");
-    //     }        
-    //     return reviewInfo;
-    // }
 
     async updateReview(reviewId: number, rating: string, review: string) {
         return await this.reviewRepository.update(reviewId, { rating, review });

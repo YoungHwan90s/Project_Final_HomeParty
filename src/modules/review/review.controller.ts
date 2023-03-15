@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -10,19 +11,21 @@ export class ReviewController {
     constructor(private readonly reviewService: ReviewService) {}
 
     // // 리뷰 등록
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Post('/:partyId')
     @HttpCode(201)
     async write(@Req() req, @Param('partyId') partyId: number, @Body() data: CreateReviewDto): Promise<Review> {
-        const { id } = req.user;
-        return await this.reviewService.writeReview(id, partyId, data);
+        // const { id } = req.user;
+        return await this.reviewService.writeReview(2, partyId, data);
     }
+
     // // 리뷰 조회
     // @UseGuards(JwtAuthGuard)
-    @Get('/:partyId')
+    @Get('/:hostId')
     @HttpCode(200)
-    async readReview(@Param('partyId') partyId: number):Promise<Review[]> {
-        return await this.reviewService.readReview(partyId);
+    async readReview(@Res() res ,@Req() req, @Param('hostId') hostId: number):Promise<Review[]> {
+       return await this.reviewService.readReview(hostId);
+
     }
 
     // // 리뷰 수정
