@@ -23,7 +23,29 @@ function readURL(input) {
     }
 }
 
-/* -------------------------------- partyPage------------------------------- */
+/* -------------------------------- getMyInfo ------------------------------- */
+function getMyInfo(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/auth/my-info',
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            callback(response.user);
+        },
+        error: function (error) {
+            callback()
+        },
+    });
+}
 
-
-
+/* -------------------------------- modal alert ------------------------------- */
+function customAlert(text, confirmCallback) {
+    $('#alertText').text(text);
+    $('#alertModal').modal('show');
+    if (confirmCallback) {
+        $('#alertModal .btn-confirm').click(confirmCallback);
+    }
+}

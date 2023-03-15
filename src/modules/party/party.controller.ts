@@ -58,6 +58,7 @@ export class PartyController {
     }
 
     // 파티 신청자 목록 조회
+    @UseGuards(JwtAuthGuard)
     @Get('/apply/:partyId/members')
     async getPartyMembers(@Param('partyId') partyId: number) {
         return await this.partyService.getPartyMembers(partyId);
@@ -72,6 +73,7 @@ export class PartyController {
     }
 
     // 파티 승낙 / 거절
+    @UseGuards(JwtAuthGuard)
     @Patch('/apply/:partyId/members/:userId')
     async acceptMember(
         @Param('userId') userId: number,

@@ -8,7 +8,7 @@ export class CreatePartyDto {
     @IsString()
     readonly content: string;
 
-    @IsNumber()
+    @IsString()
     readonly maxMember: string;
 
     @IsOptional()
