@@ -7,6 +7,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     Res,
     UseGuards,
@@ -22,8 +23,8 @@ export class PartyController {
 
     // 파티 목록 조회
     @Get('/list')
-    async getParties() {
-        return await this.partyService.getParties();
+    async getParties(@Query('userId') userId: number) {
+        return await this.partyService.getParties(userId);
     }
 
     //파티 상세 조회

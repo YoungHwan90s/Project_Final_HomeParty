@@ -45,12 +45,8 @@
 <button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
 
 <script>
-    let userId
     $(document).ready(function () {
-        getMyInfo(function (userInfo) {
-            userId = userInfo.id
-            getPartyList(userId)
-        });
+        const userId= sessionStorage.getItem('userId') ? getPartyList(userId) : getPartyList(0)
     });
 
     function getPartyList(userId) {

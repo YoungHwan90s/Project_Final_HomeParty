@@ -30,7 +30,7 @@
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/user-menu.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
-
+        <link rel="stylesheet" href="/css/header.css" />
         <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-make.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
@@ -83,65 +83,69 @@
 </html>
 
 <script>
-    $(document).ready(function () {
+     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let html = `<div class="container">
-                            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-                                </a>
+                let html = `<main-header class="main-header" id="main-header">
+                                <nav class="nav container">
+                                    <a href="#" class="nav__logo">
+                                        <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                                        모아바
+                                    </a>  
+                                    <div class="nav__menu" id="nav-menu">
+                                        <ul class="nav__list">
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link active-link">파티 탐색하기</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link">파티 호스트</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link">로그아웃</a>
+                                            </li>
+                                        </ul>
 
-                                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                                <li><a href="#" class="nav-link px-2 link-secondary">모아바</a></li>
-                                </ul>
+                                        <div class="nav__close" id="nav-close">
+                                            <i class='bx bx-x'></i>
+                                        </div>
+                                    </div>
 
-                                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-                                </form>
-
-                                <div class="dropdown text-end">
-                                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                                </a>
-                                <ul class="dropdown-menu text-small">
-                                    <li><a class="dropdown-item" href="/user-menu">마이페이지</a></li>
-                                    <li><a class="dropdown-item" href="/party-make">파티 만들기</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
-                                </ul>
-                                </div>
-                            </div>
-                            </div>
-                        `;
+                                    <div class="nav__toggle" id="nav-toggle">
+                                        <i class='bx bx-grid-alt'></i>
+                                    </div>
+                                </nav>
+                            </header>`;
                 $('#global-header').append(html);
             } else {
-                let html = `<div class="container">
-                            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-                            </a>
+                let html = `<main-header class="main-header" id="main-header">
+                                <nav class="nav container">
+                                    <a href="#" class="nav__logo">
+                                        <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                                        모아바
+                                    </a>
+                                    <div class="nav__menu" id="nav-menu">
+                                        <ul class="nav__list">
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link active-link">파티 탐색하기</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link">파티 호스트</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link">로그인</a>
+                                            </li>
+                                        </ul>
 
-                            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                            <li><a href="#" class="nav-link px-2 link-secondary">모아바</a></li>
-                            </ul>
+                                        <div class="nav__close" id="nav-close">
+                                            <i class='bx bx-x'></i>
+                                        </div>
+                                    </div>
 
-                            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                            <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-                            </form>
-
-                            <div class="dropdown text-end">
-                            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                            </a>
-                            <ul class="dropdown-menu text-small">
-                                <li><a class="dropdown-item" href="/login">로그인</a></li>
-                                <li><a class="dropdown-item" href="/sign-up">회원가입</a></li>
-                                <li><a class="dropdown-item" href="/party">파티 보러가기</a></li>
-                            </ul>
-                            </div>
-                        </div>
-                        </div>`;
+                                    <div class="nav__toggle" id="nav-toggle">
+                                        <i class='bx bx-grid-alt'></i>
+                                    </div>
+                                </nav>
+                            </header>`;
                 $('#global-header').append(html);
             }
         });
