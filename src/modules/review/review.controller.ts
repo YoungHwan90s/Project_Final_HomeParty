@@ -9,15 +9,15 @@ export class ReviewController {
     constructor(private readonly reviewService: ReviewService) {}
 
 // // 리뷰 등록
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Post('/:partyId')
 @HttpCode(201)
 async write(
     @Req () req,
     @Param('partyId') partyId: number,
     @Body() data:CreateReviewDto) {
-        const {id} = req.user
-        return await this.reviewService.writeReview(id , partyId, data)//1 => userid 변경해야됨 
+        // const {id} = req.user
+        return await this.reviewService.writeReview( 6 , partyId, data) 
 }
 // // 리뷰 조회
 // @UseGuards(JwtAuthGuard)
