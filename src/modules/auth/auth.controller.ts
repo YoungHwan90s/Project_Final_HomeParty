@@ -45,9 +45,11 @@ export class AuthController {
     @Post('/login')
     @HttpCode(200)
     async login(@Req() req, @Res() res): Promise<Token> {
-        const { accessToken, refreshToken } = await this.authService.login(req.user);
+        const user = req.user
+        const userId = user.id
+        const { accessToken, refreshToken } = await this.authService.login(user);
         
-        return res.json({ accessToken, refreshToken });
+        return res.json({ accessToken, refreshToken, userId });
     }
 
     @UseGuards(JwtAuthGuard)

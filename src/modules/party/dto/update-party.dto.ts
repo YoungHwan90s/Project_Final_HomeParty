@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdatePartyDto {
     @IsString()
@@ -8,8 +8,8 @@ export class UpdatePartyDto {
     @IsString()
     readonly content: string;
 
-    @IsNumber()
-    readonly maxMember: number;
+    @IsString()
+    readonly maxMember: string;
 
     @IsOptional()
     @IsString()
@@ -20,19 +20,17 @@ export class UpdatePartyDto {
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    addThumbnail: string[];
+    addThumbnail: [];
 
     @IsOptional()
     @IsArray()
-    removeThumnail: number[];
+    removeThumnail: [];
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    addTagName: string[];
+    addTagName: [];
 
     @IsOptional()
     @IsArray()
-    removeTagName: number[];
+    removeTagName: [];
 }

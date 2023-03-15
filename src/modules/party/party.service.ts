@@ -1,5 +1,4 @@
 import {
-    ConsoleLogger,
     ForbiddenException,
     Injectable,
     NotAcceptableException,
@@ -10,7 +9,6 @@ import { DataSource, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
-import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
