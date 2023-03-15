@@ -49,7 +49,6 @@
         data: {},
         success: function (response) {
             let partyList = response;
-            console.log(partyList)
 
             for (let i = 0; i < partyList.length; i++) {
                 const partyId = partyList[i]['id'];
@@ -60,7 +59,7 @@
                 const date = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
-
+                
                 //prettier-ignore
                 const thumbnailHtml = `
                     ${thumbnailList.length === 0 
@@ -164,9 +163,9 @@
             authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    $('#like-button${id}').css('color', 'red');
+                    $(`#like-button${partyId}`).css('color', 'red');
                 } else {
-                    $('#like-button${id}').css('color', '');
+                    $(`#like-button${partyId}`).css('color', '');
                 }
             },
             error: function (error) {

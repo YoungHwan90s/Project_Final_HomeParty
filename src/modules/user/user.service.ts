@@ -104,14 +104,6 @@ export class UserService {
         return this.userRepository.softDelete(id);
     }
 
-    async getUsersAdmin() {
-        return await this.userRepository.find({ withDeleted: true });
-    }
-
-    async deletedUserAdmin(userId: number) {
-        return await this.userRepository.softDelete(userId);
-    }
-
     // private async checkPassword(id: number, password: string) {
     //     const user = await this.userRepository.findOne({
     //         where: { id, deletedAt: null },

@@ -39,7 +39,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo: CreatePartyDto): Promise<void> {
+    async createParty(user: User, partyInfo): Promise<void> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -47,6 +47,7 @@ export class PartyService {
         try {
             // Party 객체 인스턴스 맵핑
             const party = new Party();
+            party.user = user;
             party.hostId = user.id;
             party.title = partyInfo.title;
             party.content = partyInfo.content;
@@ -54,7 +55,7 @@ export class PartyService {
             party.address = partyInfo.address;
             party.date = partyInfo.date;
 
-            if (partyInfo.tagName.length) {
+            if (partyInfo.tagName?.length) {
                 let newTags = [];
                 for (let i = 0; i < partyInfo.tagName.length; i++) {
                     let tag = await queryRunner.manager.findOne(Tag, {
@@ -76,7 +77,7 @@ export class PartyService {
                 party.tag = newTags;
             }
 
-            if (partyInfo.thumbnail.length) {
+            if (partyInfo.thumbnail?.length) {
                 let newThumbnails = [];
                 for (let i = 0; i < partyInfo.thumbnail.length; i++) {
                     let thumbnail = new Thumbnail();
@@ -226,7 +227,6 @@ export class PartyService {
         const partyMember = await this.partyMemberRepository.findOne({
             where: { userId, partyId },
         });
-        console.log(partyMember)
 
         if (!partyMember) {
             throw new NotFoundException(`신청하지 않은 파티입니다.`);

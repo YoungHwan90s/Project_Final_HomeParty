@@ -42,6 +42,6 @@ import { User } from "../../user/entity/user.entity";
 
     // 리뷰 <-> 유저 다대일 관계
     @ManyToOne(() => User, (user) => user.review)
-    user: Party;
+    user: User;
     
   }

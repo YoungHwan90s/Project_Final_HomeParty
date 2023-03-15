@@ -15,7 +15,7 @@
     </h1>
     <div class="avatar-upload">
         <div class="avatar-edit">
-            <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" />
+            <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
             <input type="hidden" id="imageUrl" />
             <label for="imageUpload"></label>
         </div>
@@ -57,7 +57,7 @@
             });
         }
         const formData = new FormData();
-        formData.append('file', file, encodeURIComponent(file.name));
+        formData.append('files[]', file, encodeURIComponent(file.name));
 
         $.ajax({
             type: 'POST',
@@ -67,7 +67,7 @@
             processData: false,
             data: formData,
             success: function (response) {
-                $('#imageUrl').val(response.filePath.location);
+                $('#imageUrl').val(response[0].filePath.location);
                 $('#imageUrl').trigger('change');
             },
             error: function (response) {
@@ -91,7 +91,7 @@
             success: function (response) {
                 sessionStorage.removeItem('userId');
                 customAlert('이미지가 성공적으로 저장되었습니다.', function () {
-                    window.location.replace('/');
+                    window.location.replace('/party');
                 });
             },
             error: function (response) {

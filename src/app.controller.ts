@@ -7,7 +7,7 @@ export class AppController {
 
     @Get('/')
     @Render('index')
-    index(@Req() req): { components: string } {
+    main(@Req() req): { components: string } {
         return { components: 'main' };
     }
 
@@ -77,7 +77,7 @@ export class AppController {
         return { components: 'user-mypage' };
     }
 
-    @Get('/wish-list')
+    @Get('/user-wish-list')
     @Render('index')
     wishlist(@Req() req): { components: string } {
         return { components: 'wish-list' };
@@ -135,6 +135,12 @@ export class AppController {
     @Render('index')
     partyById(@Req() req): { components: string } {
         return { components: 'party-id' };
+    }
+
+    @Get('/party/edit/:partyId/')
+    @Render('index')
+    partyEdit(@Req() req): { components: string } {
+        return { components: 'party-edit' };
     }
 
     @Get('/party-make')

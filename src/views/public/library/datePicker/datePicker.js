@@ -30,7 +30,7 @@ class DatePicker {
 
   render() {
     this.$container.innerHTML = `
-      <input type="text" class="datePicker" placeholder="Select date" readonly />
+      <input type="text" id="date-pick" class="datePicker" placeholder="Select date" readonly />
       <div class="calendar"></div>
     `;
   }
