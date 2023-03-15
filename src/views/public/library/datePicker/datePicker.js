@@ -28,15 +28,8 @@ class DatePicker {
     });
   }
 
-  render() {
-    this.$container.innerHTML = `
-      <input type="text" class="datePicker" placeholder="Select date" readonly />
-      <div class="calendar"></div>
-    `;
-  }
-
   async init() {
-    this.render();
+    // this.render();
 
     this.$datePicker = this.$container.querySelector(".datePicker");
     this.$calendar = this.$container.querySelector(".calendar");

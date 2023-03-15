@@ -5,6 +5,8 @@ import { User } from '../user/entity/user.entity';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../../util/cache/cache.service';
+import { AccessToken } from 'aws-sdk/clients/amplify';
+import { RefreshToken } from 'aws-sdk/clients/ssooidc';
 
 @Injectable()
 export class AuthService {
@@ -43,11 +45,11 @@ export class AuthService {
         return this.jwtService.sign(payload);
     }
 
-    async generateRefreshToken() {
+    async generateRefreshToken(): Promise<string> {
         return this.jwtService.sign({}, { expiresIn: '1d' });
     }
 
-    async verifyAccessToken(token: string) {
+    async verifyAccessToken(token: string): Promise<any> {
         try {
             const decoded = await this.jwtService.verify(token);
             return {

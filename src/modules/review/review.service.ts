@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { Party } from '../party/entity/party.entity';
@@ -78,26 +83,15 @@ export class ReviewService {
         return await this.reviewRepository.update(reviewId, { rating, review });
     }
 
-    async deleteReview(id: number):Promise<DeleteResult> {
-        const review = await this.reviewRepository.findOne({where: { id }});
+    async deleteReview(id, reveiwId: number): Promise<DeleteResult> {
+        const review = await this.reviewRepository.findOne({ where: { id: reveiwId } });
         if (!review) {
-            throw new NotFoundException("리뷰가 없습니다.")
-        } else {
-            return await this.reviewRepository.softDelete(review.id);
+            throw new NotFoundException('리뷰가 없습니다.');
         }
-    }
+        if (review.userId !== id) {
+            throw new UnauthorizedException('회원 본인만 삭제할 수 있습니다.');
+        }
 
-    async getReviewAdmin() {
-      const reviews = await this.reviewRepository.find({
-          relations: [ 'party', 'user' ],
-          order: { partyId: "DESC" },
-          withDeleted: true,
-      });
-      console.log(reviews)
-      return reviews;
+        return await this.reviewRepository.softDelete(review.id);
     }
-
-    async deleteReviewAdmin(id: number) {
-      return await this.reviewRepository.softDelete(id)
-    }
-  }
+}

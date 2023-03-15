@@ -1,20 +1,71 @@
+<header class="p-3 mb-3 border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        </a>
 
-<nav>
-    <a href="#" class="logo-header">logo</a>
-    <div class="navigation">
-        <ul class="menu">
-            <div class="close-btn"></div>
-            <li class="menu-item"><a href="#">파티 탐색하기</a></li>
-            <li class="menu-item">
-                <a class="sub-btn" href="#">메뉴<i class="uil uil-angle-down"></i></a>
-                <ul class="sub-menu">
-                    <li class="sub-item"><a href="/login">로그인</a></li>
-                    <li class="sub-item"><a href="/sign-up">회원가입</a></li>
-                    <li class="sub-item"><a href="/party-make">파티를 열어보세요</a></li>
-                </ul>
-            </li>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="#" class="nav-link px-2 link-secondary">모아바</a></li>
         </ul>
-    </div>
-    <div class="menu-btn"></div>
-</nav>
 
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        </form>
+
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small">
+            <li><a class="dropdown-item" href="/login">로그인</a></li>
+            <li><a class="dropdown-item" href="/sign-up">회원가입</a></li>
+            <li><a class="dropdown-item" href="/party">파티 보러가기</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</header>
+
+<header class="p-3 mb-3 border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="#" class="nav-link px-2 link-secondary">모아바</a></li>
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        </form>
+
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small">
+            <li><a class="dropdown-item" href="/user-menu">마이페이지</a></li>
+            <li><a class="dropdown-item" href="/party-make">파티 만들기</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"  onclick="logout()">로그아웃</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</header>
+
+<script>
+    function logout(){
+        customAlert(
+                    '로그아웃 되었습니다.',
+                    function () {
+                        window.location.replace('/login');
+                    },
+                );
+        sessionStorage.clear()
+    }
+
+</script>
