@@ -1,0 +1,96 @@
+<div class="mypage-container">
+    <div class="mypage-wrap">
+        <!-- 프로필 사진 -->
+        <div class="image-wrap">
+            <div class="profile">
+                <div class="image">
+                    <img id="image" src="" alt="..."/>
+                </div>
+                <div class="email">
+                    <p id="email"></p>
+                </div>
+                <div class="button">
+                    <button type="button" onclick="location.href='user-edit'">수정하기</button>
+                    <button type="button" onclick="deleteUser()">탈퇴하기</button>
+                </div>
+            </div>
+        </div>
+        <!-- 프로필 사진 -->
+
+        <!-- 유저 정보 -->
+        <div class="info-wrap">
+            <div class="container-info">
+                <div class="user-info">
+                    <div class="user">
+                        <h2 class="title">이름</h2>
+                        <p id="name"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">성별</h2>
+                        <p id="sex"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">핸드폰 번호</h2>
+                        <p id="phone"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">주소</h2>
+                        <p id="address"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">자기소개</h2>
+                        <p id="introduction"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 유저 정보 -->
+    </div>
+</div>
+
+<script>
+    $.ajax({
+        type: 'GET',
+        url: `/user`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            const userInfo = response.user
+
+            $('#email').append(userInfo.email)
+            $('#name').append(userInfo.name)
+            $('#sex').append(userInfo.sex)
+            $('#birthday').append(userInfo.birthday)
+            $('#phone').append(userInfo.phone)
+            $('#address').append(userInfo.address)
+            $('#introduction').append(userInfo.introduction)
+            $('img[id=image]').attr('src', userInfo.profile)
+
+        }
+    });
+
+    function deleteUser() {
+        let result = confirm('탈퇴하시겠습니까?');
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/user`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    console.log(response)
+                    alert('회원 탈퇴');
+                    window.location.href="/"
+                }
+            })
+        } else {
+            alert('탈퇴 취소')
+        }
+    }
+</script>
