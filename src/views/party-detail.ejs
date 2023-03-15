@@ -14,8 +14,8 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
-            sessionStorage.setItem('party', response);
-            
+            sessionStorage.setItem('party', JSON.stringify(response));
+            console.log(response)
             const {
                 hostId,
                 title,
