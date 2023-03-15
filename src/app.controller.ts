@@ -5,7 +5,6 @@ import { AppService } from './app.service';
 export class AppController {
     constructor(private readonly appService: AppService) {}
 
-
     @Get('/')
     @Render('index')
     main(@Req() req): { components: string } {
@@ -72,7 +71,7 @@ export class AppController {
         return { components: 'user-edit' };
     }
 
-    @Get('/wish-list')
+    @Get('/user-wish-list')
     @Render('index')
     wishlist(@Req() req): { components: string } {
         return { components: 'wish-list' };
@@ -130,6 +129,12 @@ export class AppController {
     @Render('index')
     partyById(@Req() req): { components: string } {
         return { components: 'party-id' };
+    }
+
+    @Get('/party/edit/:partyId/')
+    @Render('index')
+    partyEdit(@Req() req): { components: string } {
+        return { components: 'party-edit' };
     }
 
     @Get('/party-make')

@@ -5,6 +5,7 @@
     font-weight: normal;
     font-style: normal;
     }
+
 /*=============== VARIABLES CSS ===============*/
 :root {
   --header-height: 3.5rem;
@@ -844,4 +845,5 @@ button {
 
 /* The size may vary depending 
 on the image of the gif */
+
 

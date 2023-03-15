@@ -7,7 +7,6 @@
 :root {
   /* container */
   --max-container: 1320px;
-  --carouselIndex: 9;
 
   /* z-index */
   --partySearchLikeButtonIndex: 9;
@@ -15,68 +14,78 @@
 
   /* color */
   --whiteColor: #fff;
-  --blackColor: #222;
-  --primaryColor: #666;
   --borderColor: #ddd;
-  --pointColor: red;
+  --primaryColor: #666;
+  --blackColor: #222;
+
+  --pointColor: #d8273a;
+  --lightBeigeColor: #fbe8cc;
+  --darkBeigeColor: #9c8b70;
+  --lightNavyColor: #697390;
+  --darkNavyColor: #1b2030;
 }
 
-body, html {
+body,
+html {
   width: 100%;
   height: 100%;
-  background-color: #f5f6f7;
-  font-family: 'Open Sans', "NanumSquare", sans-serif;
+  font-family: "Open Sans", "NanumSquare", sans-serif;
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 .a11yHidden {
-    overflow: hidden;
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-    clip-path: circle(0);
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    border: 0;
-    padding: 0;
-    white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  clip-path: circle(0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
 }
 
 .container {
-    max-width: var(--max-container);
-    width: 90%;
-    margin: 0 auto;
+  max-width: var(--max-container);
+  width: 90%;
+  margin: 0 auto;
 }
 
 .mainSection {
-    margin-top: 60px;
+  margin-top: 60px;
 }
 
 button {
   cursor: pointer;
 }
 
+button > i,
+button > i::before {
+  pointer-events: none;
+}
+
 .btn_primary {
-	display: block;
-	width: 60%;
+  display: block;
+  width: 60%;
   height: 51px;
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 .btn_point {
   background-color: var(--pointColor);
-  color:white;
-  border:0;
+  color: white;
+  border: 0;
 }
 
-#mail-select{
-  width : 50%;
-  font-size : 13px;
-  border : 1px solid lightgray;
+#mail-select {
+  width: 50%;
+  font-size: 13px;
+  border: 1px solid lightgray;
   height: 51px;
 }
 
@@ -93,8 +102,31 @@ button {
   display: none;
 }
 
-.note-info{
+.note-info {
   margin: 3px;
   font-size: 14px;
+}
 
+.d_form.mini {
+  width: 7em;
+}
+
+.d_form {
+  margin: 0.2em 0;
+  font-size: 15px;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-color: #dbdbdb #d2d2d2 #d0d0d0 #d2d2d3;
+  vertical-align: middle;
+  line-height: 1.25em;
+  outline: 0;
+  width: 20em;
+  height: 50px;
+  background-color: #e6e8e8;
+  padding: 10px 110px 10px 14px;
+  padding-top: 10px;
+  padding-right: 110px;
+  padding-bottom: 10px;
+  padding-left: 14px;
+  box-sizing: border-box;
 }

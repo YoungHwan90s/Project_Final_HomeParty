@@ -11,7 +11,7 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Review, User, WishList, Party,Tag])],
+    imports: [TypeOrmModule.forFeature([User, Review, WishList, Party,Tag])],
     controllers: [AdminController],
     providers: [AdminService, UserService, ReviewService]
 })

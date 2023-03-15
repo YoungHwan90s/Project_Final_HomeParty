@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartyDto {
@@ -9,22 +10,22 @@ export class CreatePartyDto {
     readonly content: string;
 
     @IsNumber()
-    readonly maxMember: number;
+    readonly maxMember: string;
 
     @IsOptional()
     @IsString()
     readonly address: string;
 
     @IsString()
-    readonly date: Date;
+    readonly date: string;
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    thumbnail: string[];
+    // @IsString({ each: true })
+    thumbnail: [];
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    tagName: string[];
+    // @IsString({ each: true })
+    tagName: [];
 }

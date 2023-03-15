@@ -16,7 +16,10 @@
                 />
 
                 <div class="partyWhen">
-                    <div class="datePickerWrapper"></div>
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
                 </div>
 
                 <input
@@ -35,7 +38,7 @@
     </header>
 
     <div class="mainSection">
-        <ul class="partyList"></ul>
+        <ul class="partyList partyGrid"></ul>
     </div>
 </main>
 
@@ -163,9 +166,9 @@
             authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    $('#like-button${id}').css('color', 'red');
+                    $(`#like-button${partyId}`).css('color', 'red');
                 } else {
-                    $('#like-button${id}').css('color', '');
+                    $(`#like-button${partyId}`).css('color', '');
                 }
             },
             error: function (error) {

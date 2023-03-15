@@ -1,13 +1,14 @@
+<%-include('header.ejs') %>
+
 <main class="partyPage partyMake partyEdit main container">
-    <h1 class="party-make-head">파티 만들기</h1>
-    <form class="partyMakeForm">
+    <form action="" class="partyMakeForm">
         <header class="mainHeader">
             <h2 class="title">
                 <!-- Backend -->
                 <label for="partyTitle" class="a11yHidden">제목 입력</label>
                 <input
                     type="text"
-                    placeholder="파티 제목"
+                    placeholder="제목을 입력하세요"
                     id="partyTitle"
                     class="partyTitle"
                 />
@@ -30,7 +31,7 @@
             <dl class="headcountList">
                 <div class="headcountItem">
                     <dt>
-                        <label for="partyTotalMemeber">모집 총 인원 : </label>
+                        <label for="partyTotalMemeber">총 인원 : </label>
                     </dt>
                     <dd>
                         <input
@@ -132,182 +133,119 @@
                     </p>
                 </section>
 
-          <section class="calendarSection">
-            <h3 class="title">날짜 선택</h3>
-            <div class="datePickerWrapper">
-              <input type="text" id="date-pick" class="datePicker" placeholder="Select date" readonly />
-              <div class="calendar"></div>
-            </div>
-          </section>
+                <section class="calendarSection">
+                    <h3 class="title">날짜 선택</h3>
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
+                </section>
 
                 <section class="regionSection">
                     <h3 class="title">지역</h3>
                     <div class="addressSearchWrapper">
+                        <label for="partyAddressSearch" class="a11yHidden">주소 검색</label>
                         <input
-                            type="button"
-                            id="partyAddressSearch"
+                        type="button"
+                        id="partyAddressSearch-1"
+                        class="partyAddressSearch"
+                        onclick="findAddr()"
+                        value="주소 검색"
+                        readonly
+                        />
+                        <input
+                            type="text"
+                            id="partyAddressSearch-2"
                             class="partyAddressSearch"
-                            onclick="findAddr()"
-                            value="주소 검색"
+                            placeholder="도로명 주소"
                             readonly
                         />
+
                     </div>
                     <div class="addressDetailWrapper">
+                        <label for="partyAddressDetail" class="a11yHidden">상세 주소 입력</label>
                         <input
                             type="text"
                             id="partyAddressDetail"
                             class="partyAddressDetail"
-                            placeholder="도로명 주소"
-                            readonly
-                        />
-                    </div>
-                    <div class="addressDetailWrapper">
-                        <input
-                            type="text"
-                            id="partyAddressDetails"
-                            class="partyAddressDetails"
                             placeholder="상세 주소 입력"
                         />
                     </div>
 
                     <!-- 지도 삽입 -->
                 </section>
+
+                <section class="hostSection">
+                    <h3 class="a11yHidden">호스트 정보</h3>
+                    <div class="hostInfoWrapper">
+                        <a href="" class="hostInfoLink">
+                            <figure class="hostFigure">
+                                <div class="hostImageWrapper">
+                                    <img src="http://placehold.it/320x100?text=sample" alt="" />
+                                </div>
+
+                                <figcaption>
+                                    <h3 class="hostTitle">호스트</h3>
+                                    <p class="hostName">
+                                        <!-- Backend -->
+                                        이정기
+                                    </p>
+                                    <p class="a11yHidden">호스트 정보 더보기</p>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                </section>
             </div>
         </div>
 
-        <!-- <button onclick="saveImage()" class="partyFormSubmit btn_primary btn_point">등록하기</button> -->
-        <button type="submit" class="partyFormSubmit btn_primary btn_point">등록하기</button>
+        <button type="button" class="partyFormSubmit btn_primary btn_point" onclick="editParty()">등록하기</button>
     </form>
 </main>
 
 <script>
-    const partyMakeForm = document.querySelector('.partyMakeForm');
-    const formData = new FormData();
+    const partyJSON = JSON.parse(sessionStorage.getItem('party'));
+    const partyId = window.location.pathname.split('/')[2];
 
-    document.querySelectorAll('.partyImageItem').forEach(($imageItem) => {
-        // image 업로드 시
-        $imageItem.addEventListener('change', (e) => {
-            if (!e.target.matches('.partyImage') || e.target.closest('.uploaded')) return;
+    const { title, content, maxMember, date, thumbnail, tag, address } = partyJSON
+    console.log(address)
+    console.log(partyJSON)
+    // $('#partyTitle').val(title)
+    $('#partyIntroduce').val(content)
+    $('#partyTotalMemeber').val(maxMember)
+    
+    // data, address, addThumbnail , removeThumnail, addTagName, removeTagName 더미값 주고 수정해보기
 
-            const file = e.target.files[0];
-            formData.append('files[]', file, encodeURIComponent(file.name));
-
-            $imageItem.classList.add('uploaded');
-            $imageItem.querySelector(
-                '.uploadImageWrapper',
-            ).innerHTML = `<img src="${URL.createObjectURL(file)}" class="uploadedImage" alt="">`;
-        });
-
-        // 이미지 삭제 버튼 클릭시
-        $imageItem.addEventListener('click', (e) => {
-            if (!e.target.matches('.partyImageReset')) return;
-
-            $imageItem.classList.remove('uploaded');
-            $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
-        });
-    });
-
-    document.querySelector('.tagList').addEventListener('click', (e) => {
-        // 태그 삭제 버튼 클릭시
-        if (e.target.closest('.tagResetButton')) e.target.closest('.tagItem').remove();
-    });
-
-    partyMakeForm.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter') return;
-        if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
-
-        e.preventDefault(); // enter키 눌렸을 때 submit 이벤트 방지
-
-        // tag input에서 enter 입력했을 경우 태그 추가
-        if (e.target.matches('.partyTag')) {
-            addTag(e.target.value);
-            e.target.value = '';
-        }
-    });
-
-    // 등록하기 버튼 눌렸을 때
-    partyMakeForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        $.ajax({
-            type: 'POST',
-            url: '/file/upload',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: formData,
-            success: function (response) {
-                let image = [];
-                for (let i = 0; i < response.length; i++) {
-                    image.push(response[i].filePath.location);
-                }
-                saveParty(image);
-            },
-            error: function (response) {
-                customAlert(response.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
-
-        function saveParty(image) {
-            // tag 배열로 뽑아오기
-            const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
-
-            // 파티 만들기 ajax
-            const partyInfo = {
-                title: $('#partyTitle').val(),
-                content: $('#partyIntroduce').val(),
-                maxMember: $('#partyTotalMemeber').val(),
-                address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: $('#date-pick').val(),
-                thumbnail: image,
-                tagName: tagList,
-            };
-
-            $.ajax({
-                type: 'POST',
-                url: `api/party`,
-                data: partyInfo,
-                headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
-                success: function (response) {
-                    customAlert('파티가 생성되었습니다!', function () {
-                        window.location.reload('/party');
-                    });
-                    window.location.replace('/party');
-                },
-                error: function (error) {
-                    customAlert(error.responseJSON.message, function () {
-                        window.location.reload();
-                    });
-                },
-            });
-        }
-    });
-
-    function addTag(value) {
-        if (value.trim() === '') return;
-
-        const newTagItem = document.createElement('li');
-        newTagItem.classList.add('tagItem');
-
-        newTagItem.innerHTML = `
-        #
-        <p class="tag">${value}</p>
-        <button
-            type="button"
-            class="tagResetButton"
-            aria-label="해당 태그 삭제"
-        >
-            <i class="bx bx-x" aria-hidden="true"></i>
-        </button>
-        `;
-
-        document.querySelector('.tagInputWrapper').insertAdjacentElement('beforebegin', newTagItem);
+    const partyInfo = {
+        title : "오모리",
+        content : $('#partyIntroduce').val(),
+        maxMember : Number($('#partyTotalMemeber').val()),
+        // address: $('#partyAddressSearch-2').val() + ' ' + $('#partyAddressDetail').val(),
+        address : address,
+        date : date,
+        addThumbnail : [],
+        removeThumnail : [],
+        addTagName : [],
+        removeTagName : [],
     }
+    console.log(partyInfo)
+    function editParty(){
+    $.ajax({
+        type: 'PATCH',
+        url: `/api/party/${partyId}`,
+        data: partyInfo,
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {},
+    });
+}
+    //전의 데이터를 다 붙여넣어 주거나, 클라이언트에게 보여준다.
+
+    //추가한 데이터 선우코드 가져와 하나씩 넣는다. (태그, 썹네일)
+
+    //클라이언트가 입력한 데이터를 서버에 보내준다.
 
     function findAddr() {
         new daum.Postcode({
@@ -325,8 +263,10 @@
                 }
 
                 // 부모창의 주소칸에 받아온 주소를 넣는다.
-                $('#partyAddressDetail').val(addr);
+                $('#partyAddressSearch-2').val(addr);
             },
         }).open();
     }
+
+
 </script>
