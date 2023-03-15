@@ -243,6 +243,12 @@
   list-style-type: none;
 }
 
+.party-make-head{
+    font-size: 30px;
+    margin-top: auto;
+    text-align: left;
+}
+
 /* 이미지 업로드 끝 */
 
 @media (max-width: 1000px) {
@@ -329,4 +335,3 @@
         width: 100%;
     }
 }
-

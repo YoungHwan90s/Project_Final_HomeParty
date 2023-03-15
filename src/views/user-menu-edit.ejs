@@ -12,7 +12,6 @@
         },
         success: function (response) {
             const userInfo = response.user
-            console.log(userInfo)
             const html = `<div>
                             <label>이메일</label><input type="email" value="${userInfo.email}"></br></br>
                             <label>이름</label><input id="name" type="text" value="${userInfo.name}"></br></br>
