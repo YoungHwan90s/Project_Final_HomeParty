@@ -7,6 +7,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     Res,
     UseGuards,
@@ -22,8 +23,8 @@ export class PartyController {
 
     // 파티 목록 조회
     @Get('/list')
-    async getParties() {
-        return await this.partyService.getParties();
+    async getParties(@Query('userId') userId: number) {
+        return await this.partyService.getParties(userId);
     }
 
     //파티 상세 조회
@@ -58,6 +59,7 @@ export class PartyController {
     }
 
     // 파티 신청자 목록 조회
+    @UseGuards(JwtAuthGuard)
     @Get('/apply/:partyId/members')
     async getPartyMembers(@Param('partyId') partyId: number) {
         return await this.partyService.getPartyMembers(partyId);
@@ -72,6 +74,7 @@ export class PartyController {
     }
 
     // 파티 승낙 / 거절
+    @UseGuards(JwtAuthGuard)
     @Patch('/apply/:partyId/members/:userId')
     async acceptMember(
         @Param('userId') userId: number,

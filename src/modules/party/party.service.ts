@@ -1,5 +1,4 @@
 import {
-    ConsoleLogger,
     ForbiddenException,
     Injectable,
     NotAcceptableException,
@@ -10,7 +9,6 @@ import { DataSource, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
-import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
@@ -20,15 +18,18 @@ export class PartyService {
     constructor(
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
-        @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
-        @InjectRepository(Tag) private tagRepository: Repository<Tag>,
         private readonly dataSource: DataSource,
     ) {}
 
-    async getParties() {
+    async getParties(userId: number) {
+        if (userId > 0) {
+            return await this.partyRepository.find({
+                relations: ['thumbnail', 'wishList'],
+                where: { wishList: { userId } },
+            });
+        }
         return await this.partyRepository.find({
-            relations: ['thumbnail', 'wishList'],
-            where: { wishList: {} },
+            relations: ['thumbnail'],
         });
     }
 
@@ -39,7 +40,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo): Promise<void> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<void> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -128,12 +129,11 @@ export class PartyService {
                 for (let i = 0; i < addThumbnail.length; i++) {
                     let thumbnail = new Thumbnail();
                     thumbnail.thumbnail = addThumbnail[i];
-                    thumbnail.party = party
-                    
+                    thumbnail.party = party;
+
                     newThumbnails.push(thumbnail);
                 }
                 party.thumbnail = newThumbnails;
-
             }
 
             if (addTagName?.length) {
@@ -174,7 +174,7 @@ export class PartyService {
                     if (tag.freq <= 0) {
                         await queryRunner.manager.softDelete(Tag, tag.id);
                     }
-                    queryRunner.manager.save(tag)
+                    queryRunner.manager.save(tag);
 
                     party.tag = party.tag.filter((tag) => tag.tagName !== removeTagName[i]);
                 }
@@ -182,7 +182,6 @@ export class PartyService {
 
             await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
-
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
@@ -209,7 +208,7 @@ export class PartyService {
         if (!party) {
             throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
         }
-        
+
         const partyMember = new PartyMember();
         partyMember.user = user;
         partyMember.party = party;
@@ -233,8 +232,9 @@ export class PartyService {
         }
 
         return await this.partyMemberRepository.softDelete({
-            userId, partyId
-        })
+            userId,
+            partyId,
+        });
     }
 
     async acceptMember(partyId: number, userId: number, status) {
