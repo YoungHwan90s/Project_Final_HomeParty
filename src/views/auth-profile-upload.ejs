@@ -57,7 +57,7 @@
             });
         }
         const formData = new FormData();
-        formData.append('file', file, encodeURIComponent(file.name));
+        formData.append('files[]', file, encodeURIComponent(file.name));
 
         $.ajax({
             type: 'POST',
@@ -67,7 +67,7 @@
             processData: false,
             data: formData,
             success: function (response) {
-                $('#imageUrl').val(response.filePath.location);
+                $('#imageUrl').val(response[0].filePath.location);
                 $('#imageUrl').trigger('change');
             },
             error: function (response) {

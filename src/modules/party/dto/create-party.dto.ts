@@ -21,11 +21,11 @@ export class CreatePartyDto {
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    thumbnail: string[];
+    // @IsString({ each: true })
+    thumbnail: [];
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    tagName: string[];
+    // @IsString({ each: true })
+    tagName: [];
 }

@@ -28,13 +28,6 @@ class DatePicker {
     });
   }
 
-  // render() {
-  //   this.$container.innerHTML = `
-  //     <input type="text" class="datePicker" placeholder="Select date" readonly />
-  //     <div class="calendar"></div>
-  //   `;
-  // }
-
   async init() {
     // this.render();
 
