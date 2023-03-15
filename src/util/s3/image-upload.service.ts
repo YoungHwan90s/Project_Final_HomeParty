@@ -2,12 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ImageUploadService {
-  uploadFile(file: Express.Multer.File) {
-    if (!file) {
-      throw new BadRequestException('파일이 존재하지 않습니다.');
+    async uploadFile(files: Express.MulterS3.File) {
+        if (!files) {
+            throw new BadRequestException('파일 업로드에 실패하였습니다.');
+        }
+        return { filePath: files };
     }
-    console.log(file)
-    
-    return { filePath: file };
-  }
 }

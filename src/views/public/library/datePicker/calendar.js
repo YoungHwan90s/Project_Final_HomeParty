@@ -41,8 +41,6 @@ class Calendar {
 
       this.selectedDate = e.target.dateTime;
 
-      console.log(this.selectedDate);
-
       const dateSelectEvent = new CustomEvent("dateSelect", {
         detail: this.selectedDate,
         bubbles: true,

@@ -23,6 +23,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             database: this.configService.get<string>('DATABASE_NAME'),
             entities: [Party, PartyMember, Tag, Thumbnail, User, WishList, Review],
             synchronize: true,
+            timezone: '+09:00',
         };
     }
 }
