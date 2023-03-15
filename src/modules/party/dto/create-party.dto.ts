@@ -9,8 +9,9 @@ export class CreatePartyDto {
     @IsString()
     readonly content: string;
 
-    @IsString()
-    readonly maxMember: string;
+    @Type(() => Number)
+    @IsNumber()
+    readonly maxMember: number;
 
     @IsOptional()
     @IsString()
@@ -21,11 +22,9 @@ export class CreatePartyDto {
 
     @IsOptional()
     @IsArray()
-    // @IsString({ each: true })
     thumbnail: [];
 
     @IsOptional()
     @IsArray()
-    // @IsString({ each: true })
     tagName: [];
 }
