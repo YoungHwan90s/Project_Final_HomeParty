@@ -29,8 +29,8 @@
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/user-menu.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
-        <!-- <link rel="stylesheet" href="/css/user-menu-mypage.css" />
-        <link rel="stylesheet" href="/css/user-menu-edit.css" /> -->
+        <!-- <link rel="stylesheet" href="/css/user-mypage.css" />
+        <link rel="stylesheet" href="/css/user-edit.css" /> -->
         <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-make.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
@@ -69,9 +69,9 @@
         <% if (components === 'authentication') {%><%-include('auth-authentication.ejs') %><% } %> 
         <% if (components === 'reset-password') {%><%-include('auth-reset-password.ejs') %><% } %> 
         <% if (components === 'user-menu') {%><%-include('user-menu.ejs') %><% } %>
-        <% if (components === 'user-edit') {%><%-include('user-menu-edit.ejs') %><% } %>
-        <% if (components === 'user-mypage') {%><%-include('user-menu-mypage.ejs') %><% } %>
-        <% if (components === 'wish-list') {%><%-include('user-menu-wish-list.ejs') %><% } %>
+        <% if (components === 'user-edit') {%><%-include('user-edit.ejs') %><% } %>
+        <% if (components === 'user-mypage') {%><%-include('user-mypage.ejs') %><% } %>
+        <% if (components === 'wish-list') {%><%-include('user-wish-list.ejs') %><% } %>
         <% if (components === 'manage') {%><%-include('manage.ejs') %><% } %>
         <% if (components === 'manage-host') {%><%-include('manage-host.ejs') %><% } %>
         <% if (components === 'manage-guest') {%><%-include('manage-guest.ejs') %><% } %>
@@ -124,7 +124,7 @@
                 $('#main-header').append(html);
             } else {
                 let html = `<nav class="nav container">
-                                    <a href="#" class="nav__logo">
+                                    <a href="/" class="nav__logo">
                                         <img src="assets/img/logo.png" alt="" class="nav__logo-img">
                                         모아바
                                     </a>

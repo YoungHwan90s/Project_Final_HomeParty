@@ -50,6 +50,28 @@ function customAlert(text, confirmCallback) {
     }
 }
 
+/* ----------------------------- Daum Address Search --------------------------- */
+function findAddr() {
+    new daum.Postcode({
+        oncomplete: function (data) {
+            // 사용자 주소를 받아올 변수를 정의한다.
+            var addr = '';
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') {
+                // 사용자가 도로명 주소를 선택했을 경우(R)
+                addr = data.roadAddress;
+            } else {
+                // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 부모창의 주소칸에 받아온 주소를 넣는다.
+            $('#input-address-1').val(addr);
+        },
+    }).open();
+}
+
 /*=============== log out ===============*/
 function logout() {
     sessionStorage.clear();

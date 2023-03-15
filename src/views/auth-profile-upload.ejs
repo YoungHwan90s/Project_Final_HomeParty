@@ -90,9 +90,12 @@
             data: userInfo,
             success: function (response) {
                 sessionStorage.removeItem('userId');
-                customAlert('이미지가 성공적으로 저장되었습니다.', function () {
-                    window.location.replace('/login');
-                });
+                customAlert(
+                    '이미지가 성공적으로 저장되었습니다. 로그인 페이지로 이동합니다.',
+                    function () {
+                        window.location.replace('/login');
+                    },
+                );
             },
             error: function (response) {
                 customAlert(response.responseJSON.message, function () {
