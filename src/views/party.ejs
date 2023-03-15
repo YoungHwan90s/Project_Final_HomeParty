@@ -45,26 +45,12 @@
 <button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
 
 <script>
-    $(document).ready(function () {
-        console.log(sessionStorage.getItem('userId'))
-        // const userId = sessionStorage.getItem('userId') ? getPartyList(userId) : getPartyList(0)
-
-        const userId = sessionStorage.getItem('userId')
-        if (userId) {
-            getPartyList(userId)
-        } else {
-            getPartyList(0)
-        }
-
-    });
-
-    function getPartyList(userId) {
-        console.log(userId, 123123123)
         $.ajax({
             type: 'GET',
-            url: `/api/party/list?userId=${userId}`,
+            url: `/api/party/list`,
             data: {},
             success: function (response) {
+                console.log(response[0])
                 let partyList = response;
     
                 for (let i = 0; i < partyList.length; i++) {
@@ -171,7 +157,6 @@
                 }
             },
         });
-    }
 
     function updateWishList(userId, partyId) {
         $.ajax({

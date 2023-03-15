@@ -5,11 +5,10 @@ import { PartyController } from './party.controller';
 import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 import { AuthModule } from '../auth/auth.module';
-import { User } from '../user/entity/user.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Party, PartyMember, User]),
+        TypeOrmModule.forFeature([Party, PartyMember]),
         AuthModule,
     ],
     controllers: [PartyController],
