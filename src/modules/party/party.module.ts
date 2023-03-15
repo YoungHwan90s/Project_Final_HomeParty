@@ -11,7 +11,7 @@ import { User } from '../user/entity/user.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Party, Thumbnail, PartyMember, Tag, User]),
+        TypeOrmModule.forFeature([Party, User]),
         AuthModule,
     ],
     controllers: [PartyController],

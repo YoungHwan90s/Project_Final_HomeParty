@@ -20,8 +20,6 @@ export class PartyService {
     constructor(
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
-        @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
-        @InjectRepository(Tag) private tagRepository: Repository<Tag>,
         private readonly dataSource: DataSource,
     ) {}
 
@@ -39,7 +37,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo): Promise<void> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<void> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();

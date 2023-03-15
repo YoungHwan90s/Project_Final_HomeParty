@@ -99,20 +99,22 @@
             email: $('#input-email').val() + '@' + $('#mail-select').val(),
             password: $('#input-password').val(),
         };
-        $.ajax({
-            type: 'POST',
-            url: '/auth/login',
-            data: signInfo,
-            success: function (response) {
-                sessionStorage.setItem('accessToken', response.accessToken);
-                sessionStorage.setItem('refreshToken', response.refreshToken);
-                window.location.replace('/party')
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+
+        console.log(signInfo)
+        // $.ajax({
+        //     type: 'POST',
+        //     url: '/auth/login',
+        //     data: signInfo,
+        //     success: function (response) {
+        //         sessionStorage.setItem('accessToken', response.accessToken);
+        //         sessionStorage.setItem('refreshToken', response.refreshToken);
+        //         window.location.replace('/party')
+        //     },
+        //     error: function (error) {
+        //         customAlert(error.responseJSON.message, function () {
+        //             window.location.reload();
+        //         });
+        //     },
+        // });
     }
 </script>
