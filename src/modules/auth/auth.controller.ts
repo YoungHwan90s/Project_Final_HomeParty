@@ -9,7 +9,6 @@ import {
     Req,
     UnauthorizedException,
     UsePipes,
-    Get,
 } from '@nestjs/common';
 import { MailService } from '../../util/node-mailer/mail.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -26,11 +25,6 @@ import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
 import { createUserSchema } from 'src/util/joi/joi-validation';
 import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
 import { SaveOptions, UpdateResult } from 'typeorm';
-import { User } from 'aws-sdk/clients/budgets';
-import { tokenType } from 'aws-sdk/clients/sts';
-import { Token } from 'aws-sdk/clients/cloudwatchlogs';
-import { Email } from 'aws-sdk/clients/organizations';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -44,19 +38,10 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     @HttpCode(200)
-    async login(@Req() req, @Res() res): Promise<Token> {
-        const user = req.user
-        const { accessToken, refreshToken } = await this.authService.login(user);
-        
-        return res.json({ accessToken, refreshToken });
-    }
+    async login(@Req() req, @Res() res): Promise<any> {
+        const { accessToken, refreshToken } = await this.authService.login(req.user);
 
-    @UseGuards(JwtAuthGuard)
-    @Get('/my-info')
-    @HttpCode(200)
-    async getMyInfo(@Req() req, @Res() res): Promise<User> {
-        const user = req.user
-        return res.json({ user });
+        return res.json({ accessToken, refreshToken });
     }
 
     @Post('/sign-up')
@@ -77,7 +62,7 @@ export class AuthController {
 
     @Post('/find-email')
     @HttpCode(200)
-    async findEmail(@Res() res, @Body() data: FindEmailDto): Promise<Email> {
+    async findEmail(@Res() res, @Body() data: FindEmailDto): Promise<string> {
         const email = await this.authService.findEmail(data);
 
         return res.send({ email });
@@ -85,7 +70,7 @@ export class AuthController {
 
     @Post('/email-authenticate')
     @HttpCode(200)
-    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto): Promise<void> {
+    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto): Promise<any> {
         const user = await this.userService.getUser(data.email);
         if (user) {
             const randomNum = Math.floor(Math.random() * 1000010);
@@ -100,7 +85,7 @@ export class AuthController {
 
     @Post('/code-authentication')
     @HttpCode(200)
-    async authenticateCode(@Res() res, @Body() data: AuthenticateCodeDto): Promise<void> {
+    async authenticateCode(@Res() res, @Body() data: AuthenticateCodeDto) {
         const authenticationCode = await this.cacheService.get(data.email);
 
         // 인증번호가 다를 때 에러
@@ -117,7 +102,7 @@ export class AuthController {
 
     @Patch('/reset-password')
     @HttpCode(200)
-    async authenticateNumber(@Res() res, @Body() data: ResetPasswordDTO): Promise<UpdateResult> {
+    async authenticateNumber(@Res() res, @Body() data: ResetPasswordDTO) {
         await this.userService.resetPassword(data);
 
         return res.send({});

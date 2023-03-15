@@ -1,108 +1,7 @@
-<div class="mypage-container">
-    <div class="mypage-wrap">
-        <!-- 프로필 사진 -->
-        <div class="image-wrap">
-            <div class="profile">
-                <div class="image">
-                    <img id="image" src="" alt="..."/>
-                </div>
-                <div class="email">
-                    <p id="email"></p>
-                </div>
-                <div class="button">
-                    <button type="button" onclick="userEdit()">수정완료</button>
-                </div>
-            </div>
-        </div>
-        <!-- 프로필 사진 -->
-
-        <!-- 유저 정보 -->
-        <div class="info-wrap">
-            <div class="container-info">
-                <div class="user-info">
-                    <div class="user">
-                        <h2 class="title">비밀번호<span id="pw-error"></span></h2>
-                        <span>
-                            <input type="password" id="password" value="" name="password" maxlength="20" />
-                        </span>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">비밀번호 재입력<span id="pw-check-error"></span></h2>
-                        <span>
-                            <input type="password" id="confirmPassword" value="" name="confirmPassword" maxlength="20"/>
-                        </span>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">이름<span id="name-error"></span></h2>
-                        <span>
-                            <input type="text" id="name" value="" name="name" maxlength="20"/>
-                        </span>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">성별<span id="sex-error"></span></h2>
-                        <select name="gender" id="sex">
-                            <option value="남성">남성</option>
-                            <option value="여성">여성</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">핸드폰 번호( - 제외)<span id="phone-num-error"></span></h2>
-                        <span>
-                            <input type="number" pattern="[0-9]*" id="phone" value="" name="phone" maxlength="11"/>
-                        </span>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">변경 전 주소</h2>
-                        <div id="past-addr"></div>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">변경할 주소<span id="addressError"></span></h2>
-                        <div id="address" class="int-id">
-                            <span>
-                                <input type="text" id="address-1" placeholder="도로명 주소" disabled/>
-                                <input type="button" id="addressButton" onclick="findAddr()" value="주소 검색"/>
-                            </span>
-                            <span id="guide" style="color: #999; display: none"></span>
-                        </br><input type="text" id="address-2" placeholder="상세주소"/>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <h2 class="title">자기소개</h2>
-                        <span>
-                            <textarea  cols="50" rows="10" id="introduction"></textarea>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 유저 정보 -->
-    </div>
-</div>
+<h1>마이페이지 유저정보 및 수정 화면</h1>
+    <div id="user"></div>
 
 <script>
-
-    function findAddr() {
-        new daum.Postcode({
-            oncomplete: function (data) {
-                // 사용자 주소를 받아올 변수를 정의한다.
-                var addr = '';
-
-                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                if (data.userSelectedType === 'R') {
-                    // 사용자가 도로명 주소를 선택했을 경우(R)
-                    addr = data.roadAddress;
-                } else {
-                    // 사용자가 지번 주소를 선택했을 경우(J)
-                    addr = data.jibunAddress;
-                }
-
-                // 부모창의 주소칸에 받아온 주소를 넣는다.
-                $('#address-1').val(addr);
-            },
-        }).open();
-    }
-
     $.ajax({
         type: 'GET',
         url: `/user`,
@@ -113,25 +12,23 @@
         },
         success: function (response) {
             const userInfo = response.user
-
-            $('#email').append(userInfo.email)
-            $('input[name=name]').attr('value', userInfo.name)
-            $('option[name=sex]').attr('value', userInfo.sex)
-            $('input[name=phone]').attr('value', userInfo.phone)
-            $('#sex').append(userInfo.sex)
-            $("sex option:selected").text()
-            function selectSexOption() {
-                $('#sex').val(userInfo.sex)
-            }
-            selectSexOption();
-            $('#phone').append(userInfo.phone)
-            $('#past-addr').append(userInfo.address)
-            $('#introduction').append(userInfo.introduction)
-            $('img[id=image]').attr('src', userInfo.profile)
-
+            const html = `<div>
+                            <label>이메일</label><input type="email" value="${userInfo.email}"></br></br>
+                            <label>이름</label><input id="name" type="text" value="${userInfo.name}"></br></br>
+                            <label>비밀번호</label><input id="password" type="password" value="${userInfo.password}"></br></br>
+                            <label>비밀번호 확인</label><input id="confirmPassword" type="password" value="${userInfo.password}"></br></br>
+                            <label>성별</label><input id="sex" type="text"value="${userInfo.sex}"></br></br>
+                            <label>생일</label><input id="birthday" type="text" value="${userInfo.birthday}"></br></br>
+                            <label>핸드폰번호</label><input id="phone" type="text" value="${userInfo.phone}"></br></br>
+                            <label>주소</label><input id="address" type="text" value="${userInfo.address}"></br></br>
+                            <label>프로필</label><input id="profile" type="text" value="${userInfo.profile}"></br></br>
+                            <label>자기소개</label><input id="introduction" type="text" value="${userInfo.introduction}"></br></br>
+                            <button onclick="userEdit()">수정</button>
+                            <button onclick="deleteUser()">삭제</button>
+                        </div>`
+            $('#user').append(html)
         }
     });
-    
 
     function userEdit() {
         const userData = {
@@ -139,9 +36,9 @@
             password: $('#password').val(),
             confirmPassword: $('#confirmPassword').val(),
             sex: $('#sex').val(),
+            birthday: $('#birthday').val(),
             phone: $('#phone').val(),
-            region: region = $('#region').val(),
-            address: $('#address-1').val() + ', ' + $('#address-2').val(),
+            address: $('#address').val(),
             profile: $('#profile').val(),
             introduction: $('#introduction').val()
         };
@@ -155,7 +52,7 @@
             },
             success: function (response) {
                 alert('정보 수정 완료')
-                window.location.href="user-mypage"
+                window.location.reload()
             },
             error: function (error) {
                 customAlert(error.responseJSON.errorMessage);
@@ -163,141 +60,25 @@
         });
     }
 
-    
-
-    // //회원가입 유효성검사
-    // // 자원을 화면에 로드하게 되면 수행할 동작(==function)
-    // window.onload = function () {
-    //     var join = document.join; //form데이터를 모두 join변수에 저장
-
-    //     // 유효성검사할 부분을 class로 부여했기에 check class 태그를 모두 input에 저장 가져옴
-    //     // 이때 input 한 태그당 배열 인덱스로 받는다.
-    //     var input = document.querySelectorAll('.check');
-
-    //     // 오류 문구 //errorId : span의 id들(각 요소마다 나타낼 오류를 표시하기 위함)
-    //     // error : class list의 하위 span을 모두 불러냄(일괄 처리를 위함 - 반복문)
-    //     var errorId = ["idError", "pw-error", "pw-check-error", "name-error", "phone-num-error", "email-error"];
-    //     var error = document.querySelectorAll('.list > span');
-
-    //     // 오류문구 초기화 메서드
-    //     // 오류 표시 후, 사용자가 올바르게 수정을 하면 텍스트가 사라지는 모습을 구현
-    //     function innerReset(error) {
-    //         for (var i = 0; i < error.length; i++) {
-    //             error[i].innerHTML = "";
-    //         }
-    //     }
-
-    //     // 초기화 메서드 호출
-    //     innerReset(error);
-
-    //     // [ ID 입력문자 유효성검사 ]
-    //     join.id.onkeydown = function () {
-    //         innerReset(error); // 초기화 메서드 호출
-    //         var idLimit = /^[a-zA-Z0-9-_]{5,20}$/; //정규식 5~20자 (a~z, A~Z, 0~9, -, _만 입력가능)
-    //         if (!idLimit.test(input[0].value)) { //입력값과 정규식 범위와 같지 않다면
-    //             // id의 오류 문구삽입
-    //             document.getElementById(errorId[0]).innerHTML = "5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
-
-    //         }
-    //     }
-    //     // [ PW 입력문자 유효성검사 ]
-    //     join.pw.onkeydown = function () {
-    //         innerReset(error); // 초기화 메서드 호출
-    //         var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/; //정규식(a~z, A~Z, 0~9, ~!@#$%^&*()_- 만 입력가능)
-    //         if (!pwLimit.test(input[1].value)) { //입력값과 정규식 범위와 같지 않다면
-    //             // pw의 오류 문구삽입
-    //             document.getElementById(errorId[1]).innerHTML = " 10~20자의 영문 소대문자, 숫자와 특수기호 '~!@#$%^&*()_-'만 사용 가능합니다.";
-    //         }
-    //     }
-    //     // [ PW 재확인 입력문자 초기화 ]
-    //     //비밀번호 동일여부는 submit 버튼 클릭시 검사해줄 예정
-    //     join.pw - check.onkeydown = function() {
-    //         // pw의 오류 문구삽입
-    //         innerReset(error);// 오류문구 초기화
-    //     }
-    //     // [ 휴대폰번호 입력문자 유효성검사 ]
-    //     join.phone - num.onkeydown = function() { //입력값과 정규식 범위와 같지 않다면
-    //         innerReset(error); // 초기화 메서드 호출
-    //         var pnumLimit = /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 정규식(^$--> 문자의미, 01, (6자리중 "1자리"), 0~9--> "8자리")
-    //         if (!pnumLimit.test(input[4].value)) { //입력값과 정규식 범위와 같지 않다면
-    //             // pw의 오류 문구삽입
-    //             document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
-    //         }
-    //     }
-    // }
-    // //submit 실행시 수행할 동작
-    // join.onsubmit = function () { //join에서 submit이 실행된다면 수행할 함수
-    //     var errorStr = [" 아이디를", " 비밀번호를", " 비밀번호 확인을", " 성함을", " 휴대폰번호를", " 이메일을"];
-
-    //     innerReset(error); // 오류문구 초기화
-
-    //     // [ input 공백확인 ]
-    //     for (var i = 0; i < input.length - 1; i++) { // -1 == submit제외
-    //         if (!input[i].value) {
-    //             document.getElementById(errorId[i]).innerHTML = errorStr[i] + " 입력해 주세요.";
-    //             input[i].focus(); // 포커스 이동
-    //             return false; // 종료 (포커스 이동유지를 위해 false 종료)
-    //         }
-    //     }
-
-    //     // [주소 input 공백확인]
-    //     {//지역변수 스코프 조정(address) -일회성사용
-    //         var inputAddress = document.querySelectorAll('.addressCheck');
-    //         for (var i = 0; i < inputAddress.length; i++) {
-    //             //console.log(inputAddress[i]);
-    //             if (!inputAddress[i].value) {
-    //                 document.getElementById("addressError").innerHTML = " 주소 혹은 상세주소를 입력해주세요.";
-    //                 return false;
-    //             }
-    //         }
-    //     }
-    //     //유효성검사) 비밀번호 재확인
-    //     if (join.pw.value != join.pw - check.value) {
-    //         document.getElementById("pw-check-error").innerHTML = " 비밀번호가 일치하지 않습니다.";
-    //         join.pw - check.focus(); // 포커스 이동
-    //         return false;
-    //     }
-
-    //     // 정규식 변수 모음
-    //     var idLimit = /^[a-zA-Z0-9-_]{5,20}$/; //정규식(a~z, A~Z, 0~9, -, _만 입력가능)
-    //     var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/;///[a-zA-Z0-9]{10, 20}/; //정규식(a~z, A~Z, 0~9,~!@#$%^&*()_-특수문자 만 입력가능)
-    //     var pnumLimit = /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 01로 시작, 0,1,6,7,8,9 중 한자리, 0~9에서 8자리 입력
-    //     var emailLimit = /[0-9a-zA-Z-_.]/; // 정규식 0~9, a~z, A~Z, -, _, .내에서만 입력가능
-
-    //     // [ ID 유효성검사 ]
-    //     if (!idLimit.test(input[0].value)) {
-    //         document.getElementById(errorId[0]).innerHTML = " 5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
-    //         join.id.focus(); // 포커스 이동
-    //         return false;
-    //     }
-
-    //     // [ PW 유효성검사 ]
-    //     if (!pwLimit.test(input[1].value)) {
-    //         document.getElementById(errorId[1]).innerHTML = " 10~20자의 영문 소대문자, 숫자와 특수기호 '~!@#$%^&*()_-'만 사용 가능합니다.";
-    //         //console.log(input[1].value);
-    //         //console.log(pwLimit.test(input[1].value));
-    //         join.pw.focus(); // 포커스 이동
-    //         return false;
-    //     }
-
-    //     // [ 휴대폰번호 유효성검사 ]
-    //     if (!pnumLimit.test(input[4].value)) {
-    //         document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
-    //         join.phone - num.focus(); // 포커스 이동
-    //         return false;
-    //     }
-
-    //     // 개인정보 동의박스 체크
-    //     var consentCheck = document.getElementById("check");
-    //     //console.log(consentCheck);
-    //     if (!consentCheck.checked) {
-    //         document.getElementById("consentError").innerHTML = "개인정보 수집이용 동의를 해주세요.";
-    //         return false;
-    //     }
-
-    //     alert("회원가입이 완료되었습니다. 참치라이더의 멤버가 되신 것을 환영합니다!! :D");
-
-    // }//join.onsublit
-
-    // //window
+    function deleteUser() {
+        let result = confirm('탈퇴하시겠습니까?');
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/user`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    console.log(response)
+                    alert('회원 탈퇴');
+                    window.location.reload()
+                }
+            })
+        } else {
+            alert('탈퇴 취소')
+        }
+    }
 </script>

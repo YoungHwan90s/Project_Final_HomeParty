@@ -1,3 +1,4 @@
+<%- include('header.ejs') %>
 <main class="partySearch main container">
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
@@ -167,11 +168,11 @@
         },
     });
 
-    function updateWishList(userId, partyId) {
+    function updateWishList(partyId) {
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
-            data: { userId },
+            data: {},
             authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 if (response.updateOrDelete == 0) {
