@@ -24,6 +24,7 @@ export class PartyService {
 
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
+            where: {deletedAt: null},
             relations: ['thumbnail'],
         });
     }
@@ -31,7 +32,7 @@ export class PartyService {
     async getPartyById(partyId: number) {
         return await this.partyRepository.findOne({
             relations: ['thumbnail', 'partyMember', 'tag', 'wishList'],
-            where: { id: partyId },
+            where: { id: partyId, deletedAt: null },
         });
     }
 
