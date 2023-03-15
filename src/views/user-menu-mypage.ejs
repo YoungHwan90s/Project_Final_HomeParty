@@ -1,83 +1,48 @@
-    <!-- Header - set the background image for the header in the line below-->
-    <header class="py-3 bg-image-full"\>
-        <div class="text-center my-5">
-            <img class="img-fluid mb-4" id="profileImage" src="" alt="..." />
-            <h1 class="fs-4" id="email1"></h1>
-        </div>
-    </header>
- 
-<div class="wrapper">
-    <div id="container-signup">
-        <div class="row-group">
-            <!-- 비밀번호 입력 -->
-            <div class="user-input">
-                <h3 class="list">비밀번호</h3>
-                <span class="box int-id">
-                    <input id="input-password" class="int check" disabled />
-                </span>
-            </div>
-            <!-- 비밀번호 재확인 입력 -->
-            <div class="user-input">
-                <h3 class="list">비밀번호 재입력</h3>
-                <span class="box int-id">
-                    <input id="input-confirmPassword" class="int check" disabled/>
-                </span>
+<div class="mypage-container container">
+    <div class="row">
+        <!-- 프로필 사진 -->
+        <div class="image-wrap col-sm-12 col-md-6">
+            <div class="profile">
+                <img id="image" src="" alt="..."/>
+                <div class="email">
+                    <p id="email"></p>
+                </div>
+                <div class="button">
+                    <button type="button" onclick="location.href='user-edit'">수정하기</button>
+                    <button type="button" onclick="deleteUser()">탈퇴하기</button>
+                </div>
             </div>
         </div>
-        <div class="row-group">
-            <!-- 성명 입력 -->
-            <div class="user-input">
-                <h3 class="list">이름</h3>
-                <span class="box int-id">
-                    <input type="text" id="input-name" class="int check" value="" name="inputNameValue" disabled/>
-                </span>
-            </div>
+        <!-- 프로필 사진 -->
 
-            <!-- 성별 선택 -->
-            <div class="user-input">
-                <h3 class="list">성별</h3>
-                <span class="box int-id">
-                    <input type="text" id="input-gender" class="int check" value="" name="inputSexValue" disabled/>
-                </span>
-            </div>
-
-            <!-- 생일 선택 -->
-            <div class="user-input">
-                <h3 class="list">생일</h3>
-                <span class="box int-id">
-                    <input type="text" id="input-birthday" class="int check" value="" name="inputBirthValue" disabled/>
-                </span>
-            </div>
-
-            <!-- 전화번호 입력 -->
-            <div class="user-input">
-                <h3 class="list">전화번호</h3>
-                <span class="box int-id">
-                    <input type="number" pattern="[0-9]*" id="input-phone" class="int check" value="" name="inputPhoneValue" disabled/>
-            </span>
-            </div>
-            <!-- 주소 입력 -->
-            <div class="user-input">
-                <h3 class="list">자택 주소</h3>
-                <span class="box int-id">
-                    <input type="text" id="input-address" class="int check" value="" name="inputAddressValue" disabled/>
-                </span>
-            </div>
-
-            <!-- 자기소개 입력 -->
-            <div class="user-input">
-                <h3 class="list">자기소개</h3>
-                <span class="box int-id">
-                    <input type="text" id="input-introduction" class="int check" value="" name="inputIntroValue" disabled/>
-                </span>
+        <!-- 유저 정보 -->
+        <div class="info-wrap col-sm-12  col-md-6">
+            <div class="container-info">
+                <div class="user-info">
+                    <div class="user">
+                        <h2 class="title">이름</h2>
+                        <p id="name"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">성별</h2>
+                        <p id="sex"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">핸드폰 번호</h2>
+                        <p id="phone"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">주소</h2>
+                        <p id="address"></p>
+                    </div>
+                    <div class="user">
+                        <h2 class="title">자기소개</h2>
+                        <p id="introduction"></p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row-group">
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary" type="button">Button</button>
-                <button class="btn btn-primary" type="button">Button</button>
-            </div>
-        </div>
+        <!-- 유저 정보 -->
     </div>
 </div>
 
@@ -93,48 +58,17 @@
         success: function (response) {
             const userInfo = response.user
 
-            $('#email1').append(userInfo.email)
-            $('input[name=inputNameValue]').attr('value', userInfo.name)
-            $('input[name=inputSexValue]').attr('value', userInfo.sex)
-            $('input[name=inputBirthValue]').attr('value', userInfo.birthday)
-            $('input[name=inputPhoneValue]').attr('value', userInfo.phone)
-            $('input[name=inputAddressValue]').attr('value', userInfo.address)
-            $('input[name=inputIntroValue]').attr('value', userInfo.introduction)
-            $('img[id=profileImage]').attr('src', userInfo.profile)
+            $('#email').append(userInfo.email)
+            $('#name').append(userInfo.name)
+            $('#sex').append(userInfo.sex)
+            $('#birthday').append(userInfo.birthday)
+            $('#phone').append(userInfo.phone)
+            $('#address').append(userInfo.address)
+            $('#introduction').append(userInfo.introduction)
+            $('img[id=image]').attr('src', userInfo.profile)
 
         }
     });
-
-    function userEdit() {
-        const userData = {
-            name: $('#name').val(),
-            password: $('#password').val(),
-            confirmPassword: $('#confirmPassword').val(),
-            sex: $('#sex').val(),
-            birthday: $('#birthday').val(),
-            phone: $('#phone').val(),
-            region: region = $('#region').val(),
-            address: $('#address').val(),
-            profile: $('#profile').val(),
-            introduction: $('#introduction').val()
-        };
-        $.ajax({
-            type: 'PATCH',
-            url: `/user`,
-            data: userData,
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                alert('정보 수정 완료')
-                window.location.reload()
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.errorMessage);
-            },
-        });
-    }
 
     function deleteUser() {
         let result = confirm('탈퇴하시겠습니까?');
