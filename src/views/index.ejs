@@ -29,8 +29,8 @@
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/user-menu.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
-        <link rel="stylesheet" href="/css/user-menu-mypage.css" />
-        <link rel="stylesheet" href="/css/user-menu-edit.css" />
+        <!-- <link rel="stylesheet" href="/css/user-menu-mypage.css" />
+        <link rel="stylesheet" href="/css/user-menu-edit.css" /> -->
         <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-make.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
@@ -84,6 +84,8 @@
         <% if (components === 'party-edit') {%><%-include('party-edit.ejs') %><% } %>
         <% if (components === 'party-make') {%><%-include('party-make.ejs') %><% } %> 
         <% if (components === 'party-host-massage'){%> <%-include('party-host-massage.ejs') %><% } %>
+        <% if (components === 'party-host-detail'){%> <%-include('party-host-detail.ejs') %><% } %>
+        <% if (components === 'party-review'){%> <%-include('party-review.ejs') %><% } %>
     </body>
 </html>
 
