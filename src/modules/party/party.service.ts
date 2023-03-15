@@ -174,7 +174,7 @@ export class PartyService {
                     if (tag.freq <= 0) {
                         await queryRunner.manager.softDelete(Tag, tag.id);
                     }
-                    queryRunner.manager.save(tag)
+                    queryRunner.manager.update(Party,party.id, party)
 
                     party.tag = party.tag.filter((tag) => tag.tagName !== removeTagName[i]);
                 }

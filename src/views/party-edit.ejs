@@ -142,16 +142,18 @@
                 </section>
 
                 <section class="regionSection">
-                    <h3 class="title">지역</h3>
+                    <h3 class="title">현재주소</h3>
+                    <div class="addressWrapper"></div>
+                    <h3 class="title" style="margin-top: 20px">주소 수정하기</h3>
                     <div class="addressSearchWrapper">
                         <label for="partyAddressSearch" class="a11yHidden">주소 검색</label>
                         <input
-                        type="button"
-                        id="partyAddressSearch-1"
-                        class="partyAddressSearch"
-                        onclick="findAddr()"
-                        value="주소 검색"
-                        readonly
+                            type="button"
+                            id="partyAddressSearch-1"
+                            class="partyAddressSearch"
+                            onclick="findAddr()"
+                            value="주소 검색"
+                            readonly
                         />
                         <input
                             type="text"
@@ -160,7 +162,6 @@
                             placeholder="도로명 주소"
                             readonly
                         />
-
                     </div>
                     <div class="addressDetailWrapper">
                         <label for="partyAddressDetail" class="a11yHidden">상세 주소 입력</label>
@@ -199,53 +200,195 @@
             </div>
         </div>
 
-        <button type="button" class="partyFormSubmit btn_primary btn_point" onclick="editParty()">등록하기</button>
+        <button type="submit" class="partyFormSubmit btn_primary btn_point">등록하기</button>
     </form>
 </main>
 
 <script>
     const partyJSON = JSON.parse(sessionStorage.getItem('party'));
-    const partyId = window.location.pathname.split('/')[2];
+    const partyId = window.location.pathname.split('/')[3];
+    const partyMakeForm = document.querySelector('.partyMakeForm');
+    const formData = new FormData();
 
-    const { title, content, maxMember, date, thumbnail, tag, address } = partyJSON
-    console.log(address)
-    console.log(partyJSON)
-    // $('#partyTitle').val(title)
-    $('#partyIntroduce').val(content)
-    $('#partyTotalMemeber').val(maxMember)
-    
-    // data, address, addThumbnail , removeThumnail, addTagName, removeTagName 더미값 주고 수정해보기
+    const { title, content, date, maxMember, tag, thumbnail, address } = partyJSON;
 
-    const partyInfo = {
-        title : "오모리",
-        content : $('#partyIntroduce').val(),
-        maxMember : Number($('#partyTotalMemeber').val()),
-        // address: $('#partyAddressSearch-2').val() + ' ' + $('#partyAddressDetail').val(),
-        address : address,
-        date : date,
-        addThumbnail : [],
-        removeThumnail : [],
-        addTagName : [],
-        removeTagName : [],
+    const addTags = [];
+    const removedTags = [];
+
+    const addThumbnails = [];
+    const removedThumbnails = [];
+
+    // 스토리지에 있는 태그와 썸네일을 각 add 배열에 넣는다.
+    // 엔터키를 눌렀을 때 생성된 태그를 add 배열에 넣는다.
+    // 태그를 x  눌렀을때, 해당 태그를 remove  배열에 넣는다.
+    // 생성한 img src 를 배열에 넣는다.
+    // x 를 누른 썸네일의 img src 를 배열에 넣는다.
+    // 완전된 4개의 배열을 서버로 보내준다.
+
+    if (tag.length > 0) {
+        tag.forEach((e) => {
+            const tagItemHtml = `
+                <li class="tagItem">
+                #
+                <p class="tag">${e.tagName}</p>
+                <button type="button" class="tagResetButton" aria-label="해당 태그 삭제">
+                    <i class="bx bx-x" aria-hidden="true"></i>
+                </button>
+                </li>
+            `;
+
+            $('.tagList').prepend(tagItemHtml);
+        });
     }
-    console.log(partyInfo)
-    function editParty(){
-    $.ajax({
-        type: 'PATCH',
-        url: `/api/party/${partyId}`,
-        data: partyInfo,
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {},
+
+    if (thumbnail.length > 0) {
+        thumbnail.forEach((e, i) => {
+            const imageWrapper = document.querySelectorAll('.partyImageItem > .uploadImageWrapper')[
+                i
+            ];
+
+            imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
+            imageWrapper.parentNode.classList.add('uploaded');
+        });
+    }
+
+    $('.addressWrapper').append(`<p>${address}</p>`);
+    $('#partyTitle').val(title);
+    $('#partyIntroduce').val(content);
+    $('#partyTotalMemeber').val(maxMember);
+    $('.datePicker').val(date);
+
+    document.querySelectorAll('.partyImageItem').forEach(($imageItem, i) => {
+        // image 업로드 시
+        $imageItem.addEventListener('change', (e) => {
+            if (!e.target.matches('.partyImage') || e.target.closest('.uploaded')) return;
+
+            const file = e.target.files[0];
+
+            formData.append('files[]', file, encodeURIComponent(file.name));
+
+            $imageItem.classList.add('uploaded');
+            $imageItem.querySelector(
+                '.uploadImageWrapper',
+            ).innerHTML = `<img src="${URL.createObjectURL(file)}" class="uploadedImage" alt="">`;
+        });
+
+        // 이미지 삭제 버튼 클릭시
+        $imageItem.addEventListener('click', (e) => {
+            if (!e.target.matches('.partyImageReset')) return;
+
+            $imageItem.classList.remove('uploaded');
+            $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
+
+            if(thumbnail[i]){
+                removedThumbnails.push(thumbnail[i])
+            }
+        });
     });
-}
-    //전의 데이터를 다 붙여넣어 주거나, 클라이언트에게 보여준다.
 
-    //추가한 데이터 선우코드 가져와 하나씩 넣는다. (태그, 썹네일)
+    document.querySelector('.tagList').addEventListener('click', (e) => {
+        // 태그 삭제 버튼 클릭시
+        if (e.target.closest('.tagResetButton')) {
+            removedTags.push(e.target.closest('.tagItem').querySelector('.tag').textContent);
+            e.target.closest('.tagItem').remove();
+        }
+    });
 
-    //클라이언트가 입력한 데이터를 서버에 보내준다.
+    partyMakeForm.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
+
+        e.preventDefault(); // enter키 눌렸을 때 submit 이벤트 방지
+
+        // tag input에서 enter 입력했을 경우 태그 추가
+        if (e.target.matches('.partyTag')) {
+            addTags.push(e.target.value)
+            addTag(e.target.value);
+            e.target.value = '';
+        }
+    });
+
+    // 등록하기 버튼 눌렸을 때
+    partyMakeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '/file/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                let image = [];
+                for (let i = 0; i < response.length; i++) {
+                    image.push(response[i].filePath.location);
+                }
+                saveParty(image);
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+
+        function saveParty(image) {
+            // tag 배열로 뽑아오기
+            const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
+            // 파티 수정하기 ajax
+            console.log("추가된 태그",addTags);
+            console.log("삭제된 태그",removedTags);
+            console.log("추가된 썸네일",image);
+            console.log("삭제된 썸네일",removedThumbnails);
+            const partyInfo = {
+                title: $('#partyTitle').val(),
+                content: $('#partyIntroduce').val(),
+                maxMember: $('#partyTotalMemeber').val(),
+                address: $('#partyAddressSearch-2').val() + ' ' + $('#partyAddressDetail').val(),
+                date: $('.datePicker').val(),
+                addTagName : addTags,
+                removeTagName : removedTags,
+                addThumbnail : image,
+                removeTagName : removedThumbnails
+            };
+            $.ajax({
+                type: 'PATCH',
+                url: `/api/party/${partyId}`,
+                data: partyInfo,
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {},
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
+    });
+
+    function addTag(value) {
+        if (value.trim() === '') return;
+
+        const newTagItem = document.createElement('li');
+        newTagItem.classList.add('tagItem');
+
+        newTagItem.innerHTML = `
+        #
+        <p class="tag">${value}</p>
+        <button
+            type="button"
+            class="tagResetButton"
+            aria-label="해당 태그 삭제"
+        >
+            <i class="bx bx-x" aria-hidden="true"></i>
+        </button>
+        `;
+
+        document.querySelector('.tagInputWrapper').insertAdjacentElement('beforebegin', newTagItem);
+    }
 
     function findAddr() {
         new daum.Postcode({
@@ -267,6 +410,4 @@
             },
         }).open();
     }
-
-
 </script>

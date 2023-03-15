@@ -135,7 +135,7 @@
           <section class="calendarSection">
             <h3 class="title">날짜 선택</h3>
             <div class="datePickerWrapper">
-              <input type="text" id="date-pick" class="datePicker" placeholder="Select date" readonly />
+              <input type="text" class="datePicker" placeholder="Select date" readonly />
               <div class="calendar"></div>
             </div>
           </section>
@@ -260,9 +260,7 @@
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: $('#date-pick').val(),
-                thumbnail: image,
-                tagName: tagList,
+                date: $('.datePicker').val()
             };
 
             $.ajax({
@@ -275,9 +273,8 @@
                 },
                 success: function (response) {
                     customAlert('파티가 생성되었습니다!', function () {
-                        window.location.reload('/party');
+                        window.location.replace('/party')
                     });
-                    window.location.replace('/party');
                 },
                 error: function (error) {
                     customAlert(error.responseJSON.message, function () {
