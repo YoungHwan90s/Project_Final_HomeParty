@@ -160,4 +160,10 @@ export class AppController {
     partyhostmassage(@Req() req): { components: string } {
         return { components: 'party-host-massage' };
     }
+
+    @Get('/party-review/:partyId')
+    @Render('index')
+    partyreview(@Req() req): { components: string } {
+        return { components: 'party-review' };
+    }
 }
