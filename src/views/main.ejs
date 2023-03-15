@@ -1,5 +1,5 @@
         <!--==================== HEADER ====================-->
-        <header class="header" id="header">
+        <header class="main-header" id="main-header">
             <nav class="nav container">
                 <a href="#" class="nav__logo">
                     <img src="assets/img/logo.png" alt="" class="nav__logo-img">
@@ -233,7 +233,7 @@ navLink.forEach(n => n.addEventListener('click', linkAction))
 
 /*=============== CHANGE BACKGROUND HEADER ===============*/
 function scrollHeader() {
-const header = document.getElementById('header')
+const header = document.getElementById('main-header')
 
 if(this.scrollY >= 50) header.classList.add('scroll-header'); else header.classList.remove('scroll-header')
 }
