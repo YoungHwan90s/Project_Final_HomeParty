@@ -40,10 +40,12 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo: CreatePartyDto): Promise<void> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<Party> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
+        
+        let createdParty
 
         try {
             // Party 객체 인스턴스 맵핑
@@ -95,7 +97,7 @@ export class PartyService {
             partyMember.status = '호스트';
             party.partyMember = [partyMember];
 
-            await queryRunner.manager.save(Party, party);
+            createdParty = await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
@@ -105,6 +107,7 @@ export class PartyService {
         } finally {
             await queryRunner.release();
         }
+        return createdParty
     }
 
     async updateParty(partyId: number, data) {
