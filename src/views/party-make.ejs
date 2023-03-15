@@ -248,7 +248,6 @@
         function saveParty(image) {
             // tag 배열로 뽑아오기
             const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
-
             // 파티 만들기 ajax
             const partyInfo = {
                 title: $('#partyTitle').val(),

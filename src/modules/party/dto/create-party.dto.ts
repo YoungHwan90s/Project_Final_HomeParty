@@ -1,4 +1,5 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartyDto {
     @IsString()
@@ -8,8 +9,9 @@ export class CreatePartyDto {
     @IsString()
     readonly content: string;
 
-    @IsString()
-    readonly maxMember: string;
+    @Type(() => Number)
+    @IsNumber()
+    readonly maxMember: number;
 
     @IsOptional()
     @IsString()

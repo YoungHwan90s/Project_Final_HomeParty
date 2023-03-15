@@ -46,12 +46,16 @@
         <script src="/library/datePicker/datePicker.js"></script>
         <script src="/library/carousel/carousel.js"></script>
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
         <script src="/js/common.js" defer></script>
 
         <title>모아바 | HOMEPARTY</title>
     </head>
     <body>
-        <header id="global-header" class="p-3 mb-3 border-bottom"></header>
+        <%-include('alert-modal.ejs') %>
+        
+        <header class="main-header" id="main-header"></header>
+
         <!-- body -->
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
@@ -80,16 +84,17 @@
     </body>
 </html>
 
-<!-- <script>
+<script>
      $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let html = `<main-header class="main-header" id="main-header">
+                let html = `
                                 <nav class="nav container">
                                     <a href="#" class="nav__logo">
                                         <img src="assets/img/logo.png" alt="" class="nav__logo-img">
                                         모아바
-                                    </a>  
+                                    </a>
+                                    
                                     <div class="nav__menu" id="nav-menu">
                                         <ul class="nav__list">
                                             <li class="nav__item">
@@ -97,6 +102,9 @@
                                             </li>
                                             <li class="nav__item">
                                                 <a href="#" class="nav__link">파티 호스트</a>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a href="#" class="nav__link">내 계정</a>
                                             </li>
                                             <li class="nav__item">
                                                 <a href="#" class="nav__link">로그아웃</a>
@@ -112,15 +120,17 @@
                                         <i class='bx bx-grid-alt'></i>
                                     </div>
                                 </nav>
-                            </header>`;
-                $('#global-header').append(html);
+                                
+                            `;
+                $('#main-header').append(html);
             } else {
-                let html = `<main-header class="main-header" id="main-header">
+                let html = `
                                 <nav class="nav container">
                                     <a href="#" class="nav__logo">
                                         <img src="assets/img/logo.png" alt="" class="nav__logo-img">
                                         모아바
                                     </a>
+                                    
                                     <div class="nav__menu" id="nav-menu">
                                         <ul class="nav__list">
                                             <li class="nav__item">
@@ -143,9 +153,10 @@
                                         <i class='bx bx-grid-alt'></i>
                                     </div>
                                 </nav>
-                            </header>`;
-                $('#global-header').append(html);
+                                
+                           `;
+                $('#main-header').append(html);
             }
         });
     });
-</script> -->
+</script>

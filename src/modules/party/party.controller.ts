@@ -24,14 +24,19 @@ export class PartyController {
     // 파티 목록 조회
     @Get('/list')
     async getParties(@Query('userId') userId: number) {
-        return await this.partyService.getParties(userId);
+        console.log(userId)
+            if (userId == 0) {
+                return await this.partyService.getParties();
+            } else {
+                return await this.partyService.getPartiesWithWishList(userId);
+            }
     }
 
     //파티 상세 조회
     @Get(':partyId')
     async getPartyById(@Param('partyId') partyId: number) {
         return await this.partyService.getPartyById(partyId);
-    }
+    }q
 
     // 파티 등록
     @UseGuards(JwtAuthGuard)
@@ -39,7 +44,7 @@ export class PartyController {
     @Post('/')
     async createParty(@Req() req, @Body() partyInfo: CreatePartyDto) {
         let user = req.user;
-        return await this.partyService.createParty(user, partyInfo);
+        return this.partyService.createParty(user, partyInfo);
     }
 
     // 파티 수정

@@ -46,13 +46,23 @@
 
 <script>
     $(document).ready(function () {
-        const userId= sessionStorage.getItem('userId') ? getPartyList(userId) : getPartyList(0)
+        console.log(sessionStorage.getItem('userId'))
+        // const userId = sessionStorage.getItem('userId') ? getPartyList(userId) : getPartyList(0)
+
+        const userId = sessionStorage.getItem('userId')
+        if (userId) {
+            getPartyList(userId)
+        } else {
+            getPartyList(0)
+        }
+
     });
 
     function getPartyList(userId) {
+        console.log(userId, 123123123)
         $.ajax({
             type: 'GET',
-            url: `/api/party/list?useId=${userId}`,
+            url: `/api/party/list?userId=${userId}`,
             data: {},
             success: function (response) {
                 let partyList = response;
