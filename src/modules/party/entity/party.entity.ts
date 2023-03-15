@@ -32,8 +32,8 @@ export class Party {
     @Column('varchar', { length: 1000 })
     content: string;
 
-    @Column('varchar', { default: 1 })
-    maxMember: string;
+    @Column('int')
+    maxMember: number;
 
     @Column('int', { default: 1 })
     currMember: number;
