@@ -24,10 +24,11 @@ export class PartyController {
     // 파티 목록 조회
     @Get('/list')
     async getParties(@Query('userId') userId: number) {
-            if (userId > 0) {
-                return await this.partyService.getParties(userId);
+        console.log(userId)
+            if (userId == 0) {
+                return await this.partyService.getParties();
             } else {
-                
+                return await this.partyService.getPartiesWithWishList(userId);
             }
     }
 
