@@ -71,6 +71,12 @@ export class AppController {
         return { components: 'user-edit' };
     }
 
+    @Get('/user-mypage')
+    @Render('index')
+    usermypage(@Req() req): { components: string } {
+        return { components: 'user-mypage' };
+    }
+
     @Get('/user-wish-list')
     @Render('index')
     wishlist(@Req() req): { components: string } {

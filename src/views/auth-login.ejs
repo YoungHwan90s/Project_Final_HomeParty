@@ -104,9 +104,10 @@
             url: '/auth/login',
             data: signInfo,
             success: function (response) {
+                const userId = response.userId
                 sessionStorage.setItem('accessToken', response.accessToken);
                 sessionStorage.setItem('refreshToken', response.refreshToken);
-                window.location.replace('/party')
+                window.location.replace('/')
             },
             error: function (error) {
                 customAlert(error.responseJSON.message, function () {

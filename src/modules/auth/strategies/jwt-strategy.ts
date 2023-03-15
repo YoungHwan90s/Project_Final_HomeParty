@@ -20,7 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: any) {
         const { id } = payload;
         const user = await this.userService.getUser(id);
-
         if (!user) {
             throw new UnauthorizedException('로그인 후 이용 가능합니다.');
         }
