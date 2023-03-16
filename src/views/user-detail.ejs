@@ -15,7 +15,7 @@
     </nav>
     <!-- Header - set the background image for the header in the line below-->
     <header class="py-5 bg-image-full" style="background-color: white ">
-        <div class="text-center my-3" id="userinfo">
+        <div class="text-center my-3" id="userInfo">
     </header>
     
     <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 10%;margin-right: 10%"></div>
@@ -28,15 +28,14 @@
           <div class="row justify-content-start">
             <div class="col-lg-6">
               <h1 class="text-black fs-3 fw-bolder">⭐리뷰</h1>
-              <div id="reviews-container">
-                
+              <div id="reviews-container">            
               </div>
               <div style="margin-top: 8%;" id="reviews-container">
               </div>
             </div>
             <div class="col-lg-6">
               <h1 class="text-black fs-3 fw-bolder">파티 리스트</h1>
-              <div class="card"  id="thumbnail" style="width: 18rem; margin-top:10%;" >
+              <div class="card"  id="thumbNail" style="width: 18rem; margin-top:10%;" >
                 </div>
               </div>
             </div>
@@ -81,7 +80,7 @@
                         <p class="text-black-50 mb-0" id="host-email">이메일 : ${data.email}</p>
                         <p class="text-black-50 mb-0" id="host-email">성별 : ${data.sex}</p>
                     `;
-                    $(`#userinfo`).append(Info)
+                    $(`#userInfo`).append(Info)
                 
                 
                 let parties = data.party             
@@ -90,7 +89,7 @@
                     thumbnails=party.thumbnail
                     for(let j = 0;j < thumbnails.length;j++ ){
                    
-                    const thumbnail =`
+                    const thumbNail =`
                     <a href="http://localhost:4000/party/${party.id}">
                         <img class="card-img" src="${thumbnails[j].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
                         <div class="card-body">
@@ -100,7 +99,7 @@
                         </div>
                     </div>
                     `;
-                    $(`#thumbnail`).append(thumbnail)
+                    $(`#thumbNail`).append(thumbNail)
                     }
                     let reviewArr = parties[i].review
                     
