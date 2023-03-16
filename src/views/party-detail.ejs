@@ -1,59 +1,75 @@
 <main class="partyPage partyDetail main container"></main>
 
 <script>
+    $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let userId = userInfo.id;
+                getParty(userId);
+            }
+        });
+    });
+
     const partyId = window.location.pathname.split('/')[2];
+    function getParty(userId) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/party/${partyId}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                sessionStorage.setItem('party', JSON.stringify(response));
+                const {
+                    hostId,
+                    title,
+                    content,
+                    maxMember,
+                    currMember,
+                    address,
+                    date,
+                    status,
+                    thumbnail,
+                    partyMember,
+                    tag,
+                    user,
+                } = response;  
 
-    $.ajax({
-        type: 'GET',
-        url: `/api/party/${partyId}`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            sessionStorage.setItem('party', JSON.stringify(response));
-            console.log(response)
-            const {
-                hostId,
-                title,
-                content,
-                maxMember,
-                currMember,
-                thumbnails,
-                date,
-                status,
-                thumbnail,
-                tag,
-                // user,
-            } = response;
-
-            const tagHtml =
-                tag.length > 0
-                ? tag.map((tag) =>
-                      `<li class="tagItem">
+                
+                
+                const tagHtml =
+                    tag.length > 0
+                        ? tag
+                              .map(
+                                  (tag) =>
+                                      `<li class="tagItem">
                           #${tag.tagName}
-                      </li>`
-                  ).join('')
-                : ``;
+                      </li>`,
+                              )
+                              .join('')
+                        : ``;
 
-            const partyImageHtml =
-                thumbnail.length > 0
-                ? thumbnail.map((thumbnail) => `
-                    <li class="partyImageItem">
-                        <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
-                    </li>
-                `).join('')
-                : `
-                    <li class="partyImageItem">
-                        <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
-                    </li>`;
+                const partyImageHtml =
+                    thumbnail.length > 0
+                        ? thumbnail .map((thumbnail) => `
+                            <li class="partyImageItem">
+                                <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
+                            </li>
+                            `,
+                                )
+                                .join('')
+                        : `
+                            <li class="partyImageItem">
+                                <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
+                            </li>`;
 
-            // const hostProfileSrc =
-            //     user.profile ??
-            //     `https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage`;
+                // const hostProfileSrc =
+                //     user.profile ??
+                //     `https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage`;
 
-            const html = `
+                const html = `
                 <header class="mainHeader">
                     <h2 class="title">
                         ${title}
@@ -77,8 +93,10 @@
                                     ${maxMember}
                                 </dd>
                             </div>
+                            <div class="partyMemberBox">
+                                
+                            </div>
                         </dl>
-
                         <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i class="bx bxs-heart" aria-hidden="true"></i>
                         </button>
@@ -121,9 +139,7 @@
 
                         <section class="calendarSection">
                             <h3 class="a11yHidden">달력</h3>
-
                             <div class="calendar"></div>
-
                             <div class="calendarButtonWrapper">
                                 <button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
                                 ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>
@@ -133,7 +149,7 @@
                         <section class="regionSection">
                             <h3 class="title">지역</h3>
                             <p>
-                        
+                                ${address}
                             </p>
 
                             <!-- 지도 삽입 -->
@@ -142,34 +158,35 @@
                         <section class="hostSection">
                             <h3 class="a11yHidden">호스트 정보</h3>
                             <div class="hostInfoWrapper">
-                                <a href="/party-host-detail/${hostId}" class="hostInfoLink">
+                                <a href="/user-detail/${hostId}" class="hostInfoLink">
                                     <figure class="hostFigure">
                                         <div class="hostImageWrapper">
-                                            <img src="" alt="" />
+                                            <img src="${user.profile}" alt="" />
                                         </div>
 
                                         <figcaption>
                                             <h3 class="hostTitle">호스트</h3>
                                             <p class="hostName">
-                                                
+                                                ${user.name}
                                             </p>
                                             <p class="a11yHidden">호스트 정보 더보기</p>
                                         </figcaption>
                                     </figure>
                                 </a>
 
-                                <a href="/party-host-message" class="hostContactLink">호스트에게 연락하기</a>
+                                <a href="#" class="hostContactLink"><button onclick="prepareAlert()">호스트에게 연락하기</button></a>
                             </div>
                         </section>
                     </div>
                 </div>`;
-            $('.partyPage').append(html);
-                if(document.querySelector('.partyPage')){
+                $('.partyPage').append(html);
+
+                if (document.querySelector('.partyPage')) {
                     new Calendar(document.querySelector('.partyPage .calendar'));
 
-                    document.querySelector('time[datetime="2023-03-03"]').classList.add("selected")
+                    document.querySelector(`time[datetime="${date}"]`).classList.add('selected');
 
-                    document.querySelector('.today').classList.remove('today')
+                    document.querySelector('.today').classList.remove('today');
 
                     const partyDetailSlide = tns({
                         container: '.partyDetail .partyImageList',
@@ -179,63 +196,159 @@
                         autoplayButtonOutput: false,
                     });
                 }
-        },
-    });
+                
+                if (hostId === userId) {
+                    const buttonEdit = `<a href="/party/edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`;
+
+                    $('.partyPage').prepend(buttonEdit);
+
+                    const partyMemberDropDownHtml = `
+                        <button
+                        type="button"
+                        class="partyMemberDropDown"
+                        aria-label="파티 신청 인원 관리 열기"
+                        >
+                        <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <ul class="memberList"></ul>
+                    `;
+
+                    $('.partyMemberBox').append(partyMemberDropDownHtml);
+                    partyMember.shift();
+                    partyMember.forEach((item) => {
+                        if (item.user.profile === null) {
+                            item.user.profile =
+                                'https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg';
+                        }
+
+                        const partyMemberHtml = `
+                            <li class="memberItem">
+                                <a href="/user-detail/${item.user.id}" class="memberLink">
+                                    <figure class="profileWrapper">
+                                    <img
+                                        src="${item.user.profile}"
+                                        alt=""
+                                        class="profile"
+                                    />
+                                    </figure>
+                                    <p class="memberName">${item.user.name}</p>
+                                </a>
+                                <div class="memberButtonWrapper">
+                                    <button type="button" class="memberButton memberAcceptButton"  onclick="acceptMember(${item.user.id},'신청승낙')">
+                                    승낙
+                                    </button>
+                                    <button type="button" class="memberButton memberDeclineButton" onclick="acceptMember(${item.user.id},'거절')">
+                                    거절
+                                    </button>
+                                </div>
+                            </li>   
+                        `;
+                        $('.memberList').append(partyMemberHtml);
+                    });
+
+                    document
+                        .querySelector('.partyMemberDropDown')
+                        .addEventListener('click', (e) => {
+                            e.target.classList.toggle('opened');
+                        });
+
+                    document.querySelector('.memberList').addEventListener('click', (e) => {
+                        if (!e.target.matches('.memberButton')) return;
+
+                        [...e.target.parentNode.children].forEach((button) => {
+                            button.classList.toggle(
+                                'selected',
+                                !e.target.classList.contains('selected') && button === e.target,
+                            );
+                        });
+
+
+                        // 승낙한 멤버 배열
+                        const acceptedMembers = [
+                            ...e.currentTarget.querySelectorAll('.memberAcceptButton.selected'),
+                        ].map((button) =>
+                            button.closest('.memberItem').querySelector('.memberLink'),
+                        );
+                        // 거절한 멤버 배열
+                        const declinedMembers = [
+                            ...e.currentTarget.querySelectorAll('.memberDeclineButton.selected'),
+                        ].map((button) =>
+                            button.closest('.memberItem').querySelector('.memberLink'),
+                        );
+                    });
+                }
+            },
+        });
+    }
 
     function applyParty(partyId) {
         $.ajax({
-        type: 'POST',
-        url: `/api/party/apply/${partyId}`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            customAlert(
-                '신청되었습니다.',
-                    function () {
-                        window.location.reload();
-                    },
-            )
-        },
-        error: function (error) {
-            customAlert(
-                error.responseJSON.message,
-                function () {
-                    window.location.reload();
-                    },
-                );
+            type: 'POST',
+            url: `/api/party/apply/${partyId}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
-        })
+            success: function (response) {
+                customAlert('신청되었습니다.', function () {
+                    window.location.reload();
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
     }
 
     function cancelParty(partyId) {
-
         $.ajax({
-        type: 'DELETE',
-        url: `/api/party/apply-cancel/${partyId}`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            customAlert(
-                "취소되었습니다.",
-                    function () {
-                        window.location.reload();
-                    },
-            )
-        },
-        error: function (error) {
-            customAlert(
-                error.responseJSON.message,
-                function () {
-                    window.location.reload();
-                    },
-                );
+            type: 'DELETE',
+            url: `/api/party/apply-cancel/${partyId}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
-        })
+            success: function (response) {
+                customAlert('취소되었습니다.', function () {
+                    window.location.reload();
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+
+    function acceptMember(userId, status) {
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/party/apply/${partyId}`,
+            data: {userId, status},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                // customAlert('변경되었습니다.', function () {
+                //     window.location.reload();
+                // });
+            },
+            error: function (error) {
+                // customAlert(error.responseJSON.message, function () {
+                //     window.location.reload();
+                // });
+            },
+    }
+
+    function prepareAlert() {
+        customAlert('해당 서비스는 준비중 입니다.', function () {
+            window.location.reload();
+        });
     }
 </script>

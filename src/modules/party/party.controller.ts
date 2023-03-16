@@ -75,13 +75,13 @@ export class PartyController {
 
     // 파티 승낙 / 거절
     @UseGuards(JwtAuthGuard)
-    @Patch('/apply/:partyId/members/:userId')
+    @Patch('/apply/:partyId')
     async acceptMember(
-        @Param('userId') userId: number,
         @Param('partyId') partyId: number,
-        @Body() status: string,
+        @Body('userId') userId: number,
+        @Body('status') status: string,
     ) {
-        return await this.partyService.acceptMember(userId, partyId, status);
+        return await this.partyService.acceptMember(partyId, userId, status);
     }
 
     // 파티 삭제

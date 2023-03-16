@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ForbiddenException,
     Injectable,
     NotAcceptableException,
@@ -33,7 +34,7 @@ export class PartyService {
 
     async getPartyById(partyId: number) {
         return await this.partyRepository.findOne({
-            relations: ['thumbnail', 'partyMember', 'tag', 'wishList'],
+            relations: ['thumbnail', 'partyMember', 'tag', 'wishList', 'partyMember.user', 'user'],
             where: { id: partyId, deletedAt: null },
         });
     }
@@ -207,6 +208,7 @@ export class PartyService {
         const existingPartyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId: user.id },
         });
+        
 
         if (existingPartyMember) {
             throw new NotFoundException(`이미 신청하셨습니다.`);
@@ -248,7 +250,7 @@ export class PartyService {
         });
     }
 
-    async acceptMember(partyId: number, userId: number, status) {
+    async acceptMember(partyId: number, userId: number, status: string) {
         const partyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId },
         });
@@ -261,14 +263,30 @@ export class PartyService {
         }
 
         if (status === '신청승낙') {
-            partyMember.status = '신청승낙';
-            party.currMember += 1;
+            if (partyMember && partyMember.status === '신청승낙') {
+                party.status === '신청대기'
+                party.currMember--;
+            } else {
+                partyMember.status = '신청승낙';
+                party.currMember++;
+            }
+            await this.partyRepository.update(partyId, party)
             return await this.partyMemberRepository.save(partyMember);
         }
 
         if (status === '거절') {
-            partyMember.status = '거절';
-            party.currMember -= 1;
+            if(partyMember.status === '신청대기') {
+                throw new BadRequestException('아직 신청하지 않았습니다.');
+            }
+
+            if (partyMember && partyMember.status === '거절') {
+                party.status === '신청대기'
+                party.currMember++;
+            } else {
+                partyMember.status = '거절';
+                party.currMember--;
+            }
+            await this.partyRepository.update(partyId, party)
             return await this.partyMemberRepository.save(partyMember);
         }
     }

@@ -149,10 +149,10 @@ export class AppController {
         return { components: 'party-make' };
     }
 
-    @Get('/party-host-detail/:hostId')
+    @Get('/user-detail/:hostId')
     @Render('index')
     partyhostdetail(@Req() req): { components: string } {
-        return { components: 'party-host-detail' };
+        return { components: 'user-detail' };
     }
 
     @Get('/party-host-massage')
