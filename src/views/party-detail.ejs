@@ -35,8 +35,10 @@
                     partyMember,
                     tag,
                     user,
-                } = response;
-                console.log(thumbnail)
+                } = response;  
+
+                
+                
                 const tagHtml =
                     tag.length > 0
                         ? tag
@@ -51,17 +53,17 @@
 
                 const partyImageHtml =
                     thumbnail.length > 0
-                        ? thumbnail
-                              .map(
-                                  (thumbnail) => `
-                        <li class="partyImageItem">
-                            <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
-                        </li>
-                        `,).join('')
+                        ? thumbnail .map((thumbnail) => `
+                            <li class="partyImageItem">
+                                <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
+                            </li>
+                            `,
+                                )
+                                .join('')
                         : `
-                        <li class="partyImageItem">
-                            <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
-                        </li>`;
+                            <li class="partyImageItem">
+                                <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
+                            </li>`;
 
                 // const hostProfileSrc =
                 //     user.profile ??
@@ -137,9 +139,7 @@
 
                         <section class="calendarSection">
                             <h3 class="a11yHidden">달력</h3>
-
                             <div class="calendar"></div>
-
                             <div class="calendarButtonWrapper">
                                 <button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
                                 ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>
@@ -161,7 +161,7 @@
                                 <a href="/user-detail/${hostId}" class="hostInfoLink">
                                     <figure class="hostFigure">
                                         <div class="hostImageWrapper">
-                                            <img src="" alt="" />
+                                            <img src="${user.profile}" alt="" />
                                         </div>
 
                                         <figcaption>
@@ -180,10 +180,11 @@
                     </div>
                 </div>`;
                 $('.partyPage').append(html);
+
                 if (document.querySelector('.partyPage')) {
                     new Calendar(document.querySelector('.partyPage .calendar'));
 
-                    document.querySelector('time[datetime="2023-03-03"]').classList.add('selected');
+                    document.querySelector(`time[datetime="${date}"]`).classList.add('selected');
 
                     document.querySelector('.today').classList.remove('today');
 
@@ -195,8 +196,9 @@
                         autoplayButtonOutput: false,
                     });
                 }
-
-                if (hostId == userId) {
+                
+                console.log("host", hostId, "user", userId)
+                if (hostId === userId) {
                     const buttonEdit = `<a href="/party/edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`;
 
                     $('.partyPage').prepend(buttonEdit);
@@ -213,11 +215,13 @@
                     `;
 
                     $('.partyMemberBox').append(partyMemberDropDownHtml);
-
-                    partyMember.forEach( item => {
-                        console.log(item)
-                        if(item.user.profile === null){
-                            item.user.profile = "https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg"
+                    console.log(partyMember)
+                    partyMember.shift();
+                    partyMember.forEach((item) => {
+                        console.log(item.status)
+                        if (item.user.profile === null) {
+                            item.user.profile =
+                                'https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg';
                         }
 
                         const partyMemberHtml = `
@@ -233,20 +237,17 @@
                                     <p class="memberName">${item.user.name}</p>
                                 </a>
                                 <div class="memberButtonWrapper">
-                                    <button type="button" class="memberButton memberAcceptButton">
+                                    <button type="button" class="memberButton memberAcceptButton"  onclick="acceptMember(${item.user.id},'신청승낙')">
                                     승낙
                                     </button>
-                                    <button type="button" class="memberButton memberDeclineButton">
+                                    <button type="button" class="memberButton memberDeclineButton" onclick="acceptMember(${item.user.id},'거절')">
                                     거절
                                     </button>
                                 </div>
                             </li>   
-                        `
-                        $('.memberList').append(partyMemberHtml)
+                        `;
+                        $('.memberList').append(partyMemberHtml);
                     });
-                    
-
-
 
                     document
                         .querySelector('.partyMemberDropDown')
@@ -263,6 +264,7 @@
                                 !e.target.classList.contains('selected') && button === e.target,
                             );
                         });
+
 
                         // 승낙한 멤버 배열
                         const acceptedMembers = [
@@ -326,8 +328,27 @@
         });
     }
 
-    function acceptMember() {
-
+    function acceptMember(userId, status) {
+        console.log("U", userId, "status", status)
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/party/apply/${partyId}`,
+            data: {userId, status},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                // customAlert('변경되었습니다.', function () {
+                //     window.location.reload();
+                // });
+            },
+            error: function (error) {
+                // customAlert(error.responseJSON.message, function () {
+                //     window.location.reload();
+                // });
+            },
+        });
     }
 
     function prepareAlert() {
