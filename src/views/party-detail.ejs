@@ -7,6 +7,7 @@
                 let userId = userInfo.id;
                 getParty(userId);
             }
+            getParty();
         });
     });
 
@@ -141,8 +142,8 @@
                             <h3 class="a11yHidden">달력</h3>
                             <div class="calendar"></div>
                             <div class="calendarButtonWrapper">
-                                <button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
-                                ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>
+                                <button type="button" class="btn_primary btn_point" onclick="applyParty(${userId}, ${partyId})">파티신청</button
+                                ><button type="button" class="btn_primary" onclick="cancelParty(${userId}, ${partyId})">신청취소</button>
                             </div>
                         </section>
 
@@ -276,53 +277,64 @@
                         autoplayButtonOutput: false,
                     });
                 }
-                
             },
         });
     }
 
-    function applyParty(partyId) {
-        $.ajax({
-            type: 'POST',
-            url: `/api/party/apply/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                customAlert('신청되었습니다.', function () {
-                    window.location.reload();
-                });
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+    function applyParty(userId, partyId) {
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.reload();
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: `/api/party/apply/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    customAlert('신청되었습니다.', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
     }
 
-    function cancelParty(partyId) {
-        $.ajax({
-            type: 'DELETE',
-            url: `/api/party/apply-cancel/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                customAlert('취소되었습니다.', function () {
-                    window.location.reload();
-                });
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+    function cancelParty(userId, partyId) {
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.reload();
+            });
+        } else {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/party/apply-cancel/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    customAlert('취소되었습니다.', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
     }
 
     function acceptMember(userId, status) {
@@ -346,5 +358,4 @@
             },
         });
     }
-
 </script>
