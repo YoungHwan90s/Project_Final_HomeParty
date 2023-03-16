@@ -1,42 +1,48 @@
-<%- include('header.ejs') %>
 <main class="partySearch main container">
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
 
         <form class="partySearchForm">
-            <fieldset>
-                <legend class="a11yHidden">파티 검색 폼</legend>
+          <fieldset>
+            <legend class="a11yHidden">파티 검색 폼</legend>
 
-                <input
-                    type="text"
-                    name="partyWhere"
-                    placeholder="어디에서"
-                    class="partyWhere"
-                    id="partyWhere"
-                />
+            <input
+              type="text"
+              name="partyWhere"
+              placeholder="어디에서"
+              class="partyWhere"
+              id="partyWhere"
+            />
 
-                <div class="partyWhen">
-                    <div class="datePickerWrapper">
-                        <input type="text" class="datePicker" placeholder="Select date" readonly />
-                        <div class="calendar"></div>
-                    </div>
-                </div>
+            <div class="divider" aria-hidden="true"></div>
 
-                <input
-                    type="text"
-                    name="partyName"
-                    placeholder="파티 명"
-                    class="partyName"
-                    id="partyName"
-                />
+            <div class="partyWhen">
+              <div class="datePickerWrapper">
+                <input type="text" class="datePicker" placeholder="Select date" readonly />
+                <div class="calendar"></div>
+              </div>
+            </div>
 
-                <button type="submit" class="partySubmitButton" aria-label="파티 검색하기 버튼">
-                    <i class="bx bx-search" aria-hidden="true"></i>
-                </button>
-            </fieldset>
+            <div class="divider" aria-hidden="true"></div>
+
+            <input
+              type="text"
+              name="partyName"
+              placeholder="파티 명"
+              class="partyName"
+              id="partyName"
+            />
+
+            <button
+              type="submit"
+              class="partySubmitButton"
+              aria-label="파티 검색하기 버튼"
+            >
+              <i class="bx bx-search" aria-hidden="true"></i>
+            </button>
+          </fieldset>
         </form>
-    </header>
-
+      </header>
     <div class="mainSection">
         <ul class="partyList partyGrid"></ul>
     </div>
@@ -62,7 +68,7 @@
                 const date = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
-                
+
                 //prettier-ignore
                 const thumbnailHtml = `
                     ${thumbnailList.length === 0 
@@ -155,14 +161,17 @@
 
                 $('.partyList').append(partyItem);
             }
+            [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
+                new Carousel($carousel);
+            });
         },
     });
 
-    function updateWishList(partyId) {
+    function updateWishList(userId, partyId) {
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
-            data: {},
+            data: { userId },
             authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             success: function (response) {
                 if (response.updateOrDelete == 0) {

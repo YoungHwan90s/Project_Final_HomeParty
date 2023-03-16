@@ -1,0 +1,190 @@
+<div class="mypage-container">
+    <div class="mypage-wrap">
+        <!-- 프로필 사진 -->
+        <div class="image-wrap">
+            <div class="profile-wrap">
+                <div class="profile-image">
+                    <img class="profile-img" id="image" src="" alt="..."/>
+                </div>
+                <div class="profil-email">
+                    <p  class="mypage-text" id="email"></p>
+                </div>
+                <div class="mypage-btn">
+                    <button type="mypage-edit-btn" onclick="userEdit()">수정완료</button>
+                </div>
+            </div>
+        </div>
+        <!-- 프로필 사진 -->
+
+        <!-- 유저 정보 -->
+        <div class="info-wrap">
+            <div class="container-info">
+                <div class="user-info">
+                    <div class="my-info">
+                        <h2 class="title">비밀번호<span id="pw-error"></span></h2>
+                        <span>
+                            <input type="password" id="password" value="" name="password" maxlength="20" />
+                        </span>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">비밀번호 재입력<span id="pw-check-error"></span></h2>
+                        <span>
+                            <input type="password" id="confirmPassword" value="" name="confirmPassword" maxlength="20"/>
+                        </span>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">이름<span id="name-error"></span></h2>
+                        <span>
+                            <input type="text" id="name" value="" name="name" maxlength="20"/>
+                        </span>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">성별<span id="sex-error"></span></h2>
+                        <select name="gender" id="sex">
+                            <option value="남성">남성</option>
+                            <option value="여성">여성</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">핸드폰 번호( - 제외)<span id="phone-num-error"></span></h2>
+                        <span>
+                            <input type="number" pattern="[0-9]*" id="phone" value="" name="phone" maxlength="11"/>
+                        </span>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">변경 전 주소</h2>
+                        <div id="past-addr"></div>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">변경할 주소<span id="addressError"></span></h2>
+                        <div id="address" class="int-id">
+                            <span>
+                                <input type="text" id="input-address-1" placeholder="도로명 주소" disabled/>
+                                <input type="button" id="addressButton" onclick="findAddr()" value="주소 검색"/>
+                            </span>
+                            <span id="guide" style="color: #999; display: none"></span>
+                        </br><input type="text" id="address-2" placeholder="상세주소"/>
+                        </div>
+                    </div>
+                    <div class="my-info">
+                        <h2 class="title">자기소개</h2>
+                        <span>
+                            <textarea  cols="50" rows="10" id="introduction"></textarea>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 유저 정보 -->
+    </div>
+</div>
+
+
+<div class="avatar-upload">
+    <div class="avatar-edit">
+        <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
+        <input type="hidden" id="imageUrl" />
+        <label for="imageUpload"></label>
+    </div>
+    <div class="avatar-preview">
+        <div
+            id="imagePreview"
+            style="background-image: url(http://i.pravatar.cc/500?img=7)"
+        ></div>
+    </div>
+</div>
+
+<script>
+     $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if(userInfo) {
+                $('#email').append(userInfo.email)
+                $('input[name=name]').attr('value', userInfo.name)
+                $('option[name=sex]').attr('value', userInfo.sex)
+                $('input[name=phone]').attr('value', userInfo.phone)
+                $('#sex').append(userInfo.sex)
+                $("sex option:selected").text()
+                $('#sex').val(userInfo.sex)
+                $('#phone').append(userInfo.phone)
+                $('#past-addr').append(userInfo.address)
+                $('#introduction').append(userInfo.introduction)
+                $('img[id=image]').attr('src', userInfo.profile)
+            } else {
+                customAlert("로그인 후 이용가능합니다.", function () {
+                    window.location.replace('/login');
+                });
+            }
+        });
+    });
+
+    $('#imageUpload').change(function () {
+    readURL(this);
+    });
+
+    function userEdit() {
+        const image = $('#imageUpload').get(0);
+        const file = image.files[0];
+
+        if (!file) {
+            customAlert('업로드된 이미지가 없습니다.', function () {
+                window.location.reload();
+            });
+        }
+        const formData = new FormData();
+        formData.append('files[]', file, encodeURIComponent(file.name));
+
+        $.ajax({
+            type: 'POST',
+            url: '/file/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                $('#imageUrl').val(response[0].filePath.location);
+                $('#imageUrl').trigger('change');
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+
+    $('#imageUrl').on('change', () => {
+        const userData = {
+            name: $('#name').val(),
+            password: $('#password').val(),
+            confirmPassword: $('#confirmPassword').val(),
+            sex: $('#sex').val(),
+            phone: $('#phone').val(),
+            region: region = $('#region').val(),
+            address: $('#address-1').val() + ', ' + $('#address-2').val(),
+            profile: $('#profile').val(),
+            introduction: $('#introduction').val()
+        };
+
+        $.ajax({
+            type: 'PATCH',
+            url: `/user`,
+            data: userData,
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                customAlert('회원정보 수정이 완료되었습니다.', function () {
+                    window.location.replace('/user-mypag');
+                });
+            },
+            error: function (error) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    })
+
+</script>

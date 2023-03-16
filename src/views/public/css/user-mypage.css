@@ -1,0 +1,150 @@
+@charset "UTF-8";
+@keyframes headerMove{
+      0% {transform: translate(0px); }
+      50% {transform: translate(400px); }
+      100% {transform: translate(0,0);}
+}
+
+/* #address input text{
+    margin-left : 60%;
+ 
+ }
+ #addressButton{
+    text-align : center;
+    text-indent : 0px auto; 
+    background-color : #00c3e6;
+    width :  0px auto;
+    font-weight : bold;
+    color : #353535;
+ }
+ #input-address-1{
+    width : 40%;
+    margin-right: 12px;
+ }
+ #input-address-2{
+    width : 60%;
+    background-color : white;
+ } */
+
+* .mypage-text {
+   width: 250px;
+   height: 60px;
+   font-weight: 900;
+}
+
+.mypage-container {
+   width: 100%;
+   height: 100%;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.mypage-wrap {
+   width: 80%;
+   height: 80%;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+}
+
+.image-wrap {
+   width: 40%;
+   height: 100%;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.profile-wrap {
+   width: 60%;
+   height: 70%;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.profile-image {
+   width: 100%;
+   height: 30%;
+   border-radius: 100%;
+}
+
+.profile-img {
+   width: 200px;
+   height: 200px;
+   border-radius: 100%;
+   object-fit: fill;
+}
+
+.profil-email {
+   width: 100%;
+   height: 10%;
+
+   display: flex;
+   justify-content: center;
+   margin-top: 3%
+}
+
+.mypage-btn {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.mypage-edit-btn, .mypage-delete-btn {
+   margin: 2.5%
+}
+
+.info-wrap {
+   width: 60%;
+   height: 100%;
+   padding: 5%;
+
+   display: flex;
+   align-items: center;
+}
+
+.user-info {
+   margin-top: 5%;
+}
+
+.my-info {
+   margin-bottom: 5%;
+}
+
+/*태블릿*/
+/* @media all and (min-width:576px){
+   .mypage-container {
+      margin-top: 30%;
+      display: flex;
+      flex-direction: column;
+   }
+   img {
+      width: 300px;
+      height: 300px;
+      border-radius: 100%;
+      object-fit: fill;
+   }
+} */
+
+/*데스크톱*/
+/* @media all and (min-width:1200px){
+   .mypage-container {
+      margin-top: 50%;
+      display: flex;
+      flex-direction: column;
+   }
+   img {
+      width: 300px;
+      height: 300px;
+      border-radius: 100%;
+      object-fit: fill;
+   }
+}  */

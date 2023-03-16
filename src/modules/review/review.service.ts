@@ -5,37 +5,47 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+import { Party } from '../party/entity/party.entity';
+import { User } from '../user/entity/user.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { Review } from './entity/review.entity';
 
+
 @Injectable()
 export class ReviewService {
-    constructor(@InjectRepository(Review) private reviewRepository: Repository<Review>) {}
+    constructor(
+        @InjectRepository(Review) private reviewRepository: Repository<Review>,
+        @InjectRepository(User) private userRepository: Repository<User>,
+        @InjectRepository(Party) private partyRepository: Repository<Party>) {}
+    
 
-    async writeReview(userId: number, partyId: number, data: CreateReviewDto): Promise<Review> {
-        const review = new Review();
-        review.userId = userId;
-        review.partyId = partyId;
-        review.rating = data.rating;
-        review.review = data.review;
 
-        return await this.reviewRepository.save(review);
+    async writeReview( userId:number,partyId: number, data: CreateReviewDto):Promise<Review> {
+        const review = new Review()
+        review.userId = userId
+        review.partyId = partyId
+        review.rating = data.rating
+        review.review = data.review
+      
+        return await this.reviewRepository.save(review)
     }
-
-    async readReview(partyId: number): Promise<Review[]> {
-        const reviews = await this.reviewRepository.find({
-            where: { partyId, deletedAt: null },
-            order: { createdAt: 'DESC' },
+    async readReview(hostId: number) :Promise<any>{        
+        const reviewInfo = await this.userRepository.findOne({
+            where: { id: hostId , deletedAt: null },
+            relations:['party','party.thumbnail','party.review','party.review.user']
         });
-
-        if (!reviews || reviews.length === 0) {
-            throw new BadRequestException('잘못된 요청입니다.');
-        }
-        return reviews;
+        
+        
+        if (!reviewInfo) {
+            throw new NotFoundException("리뷰가 없습니다.");
+        }        
+        return reviewInfo;
     }
 
-    async updateReview(reviewId: number, rating: string, review: string): Promise<UpdateResult> {
+
+
+    async updateReview(reviewId: number, rating: string, review: string) {
         return await this.reviewRepository.update(reviewId, { rating, review });
     }
 

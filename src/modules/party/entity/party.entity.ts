@@ -32,8 +32,8 @@ export class Party {
     @Column('varchar', { length: 1000 })
     content: string;
 
-    @Column('varchar', { default: 1 })
-    maxMember: string;
+    @Column('int')
+    maxMember: number;
 
     @Column('int', { default: 1 })
     currMember: number;
@@ -56,8 +56,8 @@ export class Party {
     @DeleteDateColumn()
     deletedAt: Date | null;
 
-    // 파티 <-> 유저: 더대일 관계
-    @ManyToOne(() => User, (user) => user.party, { cascade: true })
+    // 파티 <-> 유저: 다대일 관계
+    @ManyToOne(() => User, (user) => user.party)
     user: User;
     
     // 파티 <-> 장바구니: 일대일 관계

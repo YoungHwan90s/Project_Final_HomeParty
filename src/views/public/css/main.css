@@ -308,7 +308,7 @@ button {
 }
 
 /*=============== HEADER & NAV ===============*/
-.header {
+.main-header {
   width: 100%;
   background: #000;
   position: fixed;
@@ -847,3 +847,6 @@ button {
 on the image of the gif */
 
 
+.logout{
+  cursor: pointer;
+}

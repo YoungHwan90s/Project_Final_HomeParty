@@ -1,5 +1,4 @@
 import {
-    ConsoleLogger,
     ForbiddenException,
     Injectable,
     NotAcceptableException,
@@ -10,39 +9,39 @@ import { DataSource, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
-import { UpdatePartyDto } from './dto/update-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
+import { WishList } from '../user/entity/wish-list.entity';
 
 @Injectable()
 export class PartyService {
     constructor(
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
-        @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
-        @InjectRepository(Tag) private tagRepository: Repository<Tag>,
         private readonly dataSource: DataSource,
     ) {}
 
-    async getParties() {
+    async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
-            relations: ['thumbnail', 'wishList'],
-            where: { wishList: {} },
+            where: {deletedAt: null},
+            relations: ['thumbnail'],
         });
     }
 
     async getPartyById(partyId: number) {
         return await this.partyRepository.findOne({
             relations: ['thumbnail', 'partyMember', 'tag', 'wishList'],
-            where: { id: partyId },
+            where: { id: partyId, deletedAt: null },
         });
     }
 
-    async createParty(user: User, partyInfo): Promise<void> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<Party> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
+
+        let createdParty;
 
         try {
             // Party 객체 인스턴스 맵핑
@@ -94,7 +93,7 @@ export class PartyService {
             partyMember.status = '호스트';
             party.partyMember = [partyMember];
 
-            await queryRunner.manager.save(Party, party);
+            createdParty = await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
@@ -104,6 +103,7 @@ export class PartyService {
         } finally {
             await queryRunner.release();
         }
+        return createdParty;
     }
 
     async updateParty(partyId: number, data) {
@@ -128,12 +128,11 @@ export class PartyService {
                 for (let i = 0; i < addThumbnail.length; i++) {
                     let thumbnail = new Thumbnail();
                     thumbnail.thumbnail = addThumbnail[i];
-                    thumbnail.party = party
-                    
+                    thumbnail.party = party;
+
                     newThumbnails.push(thumbnail);
                 }
                 party.thumbnail = newThumbnails;
-
             }
 
             if (addTagName?.length) {
@@ -182,7 +181,6 @@ export class PartyService {
 
             await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
-
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
@@ -209,7 +207,7 @@ export class PartyService {
         if (!party) {
             throw new NotFoundException('신청하신 파티가 삭제되었거나 존재하지 않습니다.');
         }
-        
+
         const partyMember = new PartyMember();
         partyMember.user = user;
         partyMember.party = party;
@@ -233,8 +231,9 @@ export class PartyService {
         }
 
         return await this.partyMemberRepository.softDelete({
-            userId, partyId
-        })
+            userId,
+            partyId,
+        });
     }
 
     async acceptMember(partyId: number, userId: number, status) {

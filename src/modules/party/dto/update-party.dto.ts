@@ -20,19 +20,17 @@ export class UpdatePartyDto {
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    addThumbnail: string[];
+    addThumbnail: [];
 
     @IsOptional()
     @IsArray()
-    removeThumnail: number[];
+    removeThumnail: [];
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    addTagName: string[];
+    addTagName: [];
 
     @IsOptional()
     @IsArray()
-    removeTagName: number[];
+    removeTagName: [];
 }
