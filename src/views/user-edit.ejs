@@ -1,25 +1,28 @@
 <div class="mypage-container">
     <div class="mypage-wrap">
-        <!-- 프로필 사진 -->
-        <div class="image-wrap">
-            <div class="profile-wrap">
-                <div class="profile-image">
-                    <img class="profile-img" id="image" src="" alt="..."/>
-                </div>
-                <div class="profil-email">
-                    <p  class="mypage-text" id="email"></p>
-                </div>
-                <div class="mypage-btn">
-                    <button type="mypage-edit-btn" onclick="userEdit()">수정완료</button>
-                </div>
+        <div class="avatar-upload">
+            <div class="avatar-edit">
+                <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
+                <input type="hidden" id="imageUrl" />
+                <label for="imageUpload"></label>
+            </div>
+            <div class="avatar-preview">
+                <div
+                    id="imagePreview"
+                    style="background-image: url(http://i.pravatar.cc/500?img=7)"
+                ></div>
             </div>
         </div>
-        <!-- 프로필 사진 -->
 
         <!-- 유저 정보 -->
         <div class="info-wrap">
             <div class="container-info">
-                <div class="user-info">
+                <div class="user-info" style="margin-top: 300px;">
+                    <div class="my-info">
+                        <h2 class="title">계정</h2>
+                        <sapn class="mypage-text" id="email"></sapn>
+                    </div>
+                    
                     <div class="my-info">
                         <h2 class="title">비밀번호<span id="pw-error"></span></h2>
                         <span>
@@ -73,32 +76,21 @@
                             <textarea  cols="50" rows="10" id="introduction"></textarea>
                         </span>
                     </div>
+                    <div class="mypage-btn">
+                        <button type="mypage-edit-btn" onclick="userEdit()">수정완료</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- 유저 정보 -->
-    </div>
-</div>
-
-
-<div class="avatar-upload">
-    <div class="avatar-edit">
-        <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
-        <input type="hidden" id="imageUrl" />
-        <label for="imageUpload"></label>
-    </div>
-    <div class="avatar-preview">
-        <div
-            id="imagePreview"
-            style="background-image: url(http://i.pravatar.cc/500?img=7)"
-        ></div>
+        </div>        
     </div>
 </div>
 
 <script>
+    let originProfile
      $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if(userInfo) {
+                originProfile = userInfo.profile
                 $('#email').append(userInfo.email)
                 $('input[name=name]').attr('value', userInfo.name)
                 $('option[name=sex]').attr('value', userInfo.sex)
@@ -109,7 +101,8 @@
                 $('#phone').append(userInfo.phone)
                 $('#past-addr').append(userInfo.address)
                 $('#introduction').append(userInfo.introduction)
-                $('img[id=image]').attr('src', userInfo.profile)
+                $('#imagePreview').css('background-image', 'url(' + userInfo.profile + ')');
+
             } else {
                 customAlert("로그인 후 이용가능합니다.", function () {
                     window.location.replace('/login');
@@ -154,6 +147,13 @@
     }
 
     $('#imageUrl').on('change', () => {
+        let newProfile
+        if ($('#imageUrl').val()){
+            newProfile = $('#imageUrl').val()
+        } else {
+            newProfile = originProfile
+        }
+
         const userData = {
             name: $('#name').val(),
             password: $('#password').val(),
@@ -162,7 +162,7 @@
             phone: $('#phone').val(),
             region: region = $('#region').val(),
             address: $('#address-1').val() + ', ' + $('#address-2').val(),
-            profile: $('#profile').val(),
+            profile: newProfile,
             introduction: $('#introduction').val()
         };
 
@@ -176,7 +176,7 @@
             },
             success: function (response) {
                 customAlert('회원정보 수정이 완료되었습니다.', function () {
-                    window.location.replace('/user-mypag');
+                    window.location.replace('/user-mypage');
                 });
             },
             error: function (error) {

@@ -42,7 +42,7 @@ export class User {
     @Column('varchar', { nullable: true, length: 100 })
     address: string | null;
 
-    @Column('varchar', { nullable: true, length: 100 })
+    @Column('text', { nullable: true} )
     profile: string | null;
 
     @Column('varchar', { nullable: true, length: 1000 })

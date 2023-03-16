@@ -4,14 +4,7 @@
         <div class="image-wrap">
             <div class="profile-wrap">
                 <div class="profile-image">
-                    <img class="profile-img" id="image" src="" alt="..."/>
-                </div>
-                <div class="profil-email">
-                    <p class="mypage-text" id="email"></p>
-                </div>
-                <div class="mypage-btn">
-                    <button class="mypage-edit-btn" type="button" onclick="location.href='user-edit'">수정하기</button>
-                    <button class="mypage-delete-btn" type="button" onclick="deleteUser()">탈퇴하기</button>
+                    <img class="profile-img" id="maypage-profile-image" src="" accept=".png, .jpg, .jpeg," >
                 </div>
             </div>
         </div>
@@ -21,6 +14,10 @@
         <div class="info-wrap">
             <div class="container-info">
                 <div class="user-info">
+                    <div class="my-info">
+                        <h2 class="title">계정</h2>
+                        <p class="mypage-text" id="email"></p>
+                    </div>
                     <div class="my-info">
                         <h2 class="title">이름</h2>
                         <p class="mypage-text" id="name"></p>
@@ -42,9 +39,12 @@
                         <p class="mypage-text" id="introduction"></p>
                     </div>
                 </div>
+                <div class="mypage-btn">
+                    <button class="mypage-edit-btn" type="button" onclick="location.href='user-edit'">수정하기</button>
+                    <button class="mypage-delete-btn" type="button" onclick="deleteUser()">탈퇴하기</button>
+                </div>
             </div>
         </div>
-        <!-- 유저 정보 -->
     </div>
 </div>
 
@@ -58,6 +58,7 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
+            console.log(response)
             const userInfo = response.user
 
             $('#email').append(userInfo.email)
@@ -67,7 +68,7 @@
             $('#phone').append(userInfo.phone)
             $('#address').append(userInfo.address)
             $('#introduction').append(userInfo.introduction)
-            $('img[id=image]').attr('src', userInfo.profile)
+            $('img[id=maypage-profile-image]').attr('src', userInfo.profile)
 
         }
     });

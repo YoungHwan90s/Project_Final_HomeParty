@@ -5,8 +5,6 @@ import { User } from '../user/entity/user.entity';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../../util/cache/cache.service';
-import { AccessToken } from 'aws-sdk/clients/amplify';
-import { RefreshToken } from 'aws-sdk/clients/ssooidc';
 
 @Injectable()
 export class AuthService {
