@@ -14,10 +14,12 @@ import { MailModule } from '../../util/node-mailer/node-mailer.module';
 import { UserService } from '../user/user.service';
 import { WishList } from '../user/entity/wish-list.entity';
 import { Party } from '../party/entity/party.entity';
+import { PartyService } from '../party/party.service';
+import { PartyMember } from '../party/entity/party-member.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, WishList, Party]),
+        TypeOrmModule.forFeature([User, WishList, Party, PartyMember]),
         PassportModule.register({
             session: false,
         }),
@@ -29,7 +31,7 @@ import { Party } from '../party/entity/party.entity';
         MailModule,
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService, UserService],
+    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService, UserService, PartyService],
     exports: [AuthService]
 })
 export class AuthModule {}

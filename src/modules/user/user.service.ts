@@ -12,14 +12,14 @@ import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { WishList } from './entity/wish-list.entity';
-import { Party } from '../party/entity/party.entity';
+import { PartyService } from '../party/party.service';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
-        @InjectRepository(Party) private partyRepository: Repository<Party>,
+        private readonly partyService: PartyService,
     ) {}
 
     async createUser(data: CreateUserDto): Promise<User> {
@@ -112,7 +112,7 @@ export class UserService {
 
             return 1;
         } else {
-            const party = await this.partyRepository.findOne({ where: { id: partyId } });
+            const party = await this.partyService.getPartyById(partyId);
             if (!party) {
                 throw new NotFoundException('파티가 존재하지 않습니다.');
             }
@@ -169,5 +169,17 @@ export class UserService {
             secureEmail = email.substring(0, index - 3) + '***' + email.substring(index);
         }
         return secureEmail;
+    }
+
+    async readReview(hostId: number): Promise<any> {
+        const reviewInfo = await this.userRepository.findOne({
+            where: { id: hostId, deletedAt: null },
+            relations: ['party', 'party.thumbnail', 'party.review', 'party.review.user'],
+        });
+
+        if (!reviewInfo) {
+            throw new NotFoundException('리뷰가 없습니다.');
+        }
+        return reviewInfo;
     }
 }

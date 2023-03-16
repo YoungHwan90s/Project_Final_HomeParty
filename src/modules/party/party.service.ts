@@ -6,7 +6,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -20,8 +20,6 @@ export class PartyService {
     constructor(
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
-        @InjectRepository(Tag) private tegRepository: Repository<Tag>,
-        @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
         private readonly dataSource: DataSource,
     ) {}
 
@@ -32,7 +30,11 @@ export class PartyService {
         });
     }
 
-    async getPartyById(partyId: number) {
+    async getPartyById(partyId: number): Promise<Party> {
+        return await this.partyRepository.findOne({ where: { id: partyId } });
+    }
+
+    async getPartyByIdWithRelations(partyId: number): Promise<Party> {
         return await this.partyRepository.findOne({
             relations: ['thumbnail', 'partyMember', 'tag', 'wishList', 'partyMember.user', 'user'],
             where: { id: partyId, deletedAt: null },
@@ -109,7 +111,7 @@ export class PartyService {
         return createdParty;
     }
 
-    async updateParty(partyId: number, data: UpdatePartyDto) {
+    async updateParty(partyId: number, data: UpdatePartyDto): Promise<any> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -129,7 +131,7 @@ export class PartyService {
 
             // 썸네일 추가
             if (addThumbnail?.length) {
-                let thumbnailArray;
+                let thumbnailArray = [];
                 for (let i = 0; i < addThumbnail.length; i++) {
                     let thumbnail = new Thumbnail();
                     thumbnail.thumbnail = addThumbnail[i];
@@ -204,11 +206,10 @@ export class PartyService {
         }
     }
 
-    async applyParty(user: User, partyId: number) {
+    async applyParty(user: User, partyId: number):Promise<PartyMember> {
         const existingPartyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId: user.id },
         });
-        
 
         if (existingPartyMember) {
             throw new NotFoundException(`이미 신청하셨습니다.`);
@@ -229,13 +230,13 @@ export class PartyService {
         return await this.partyMemberRepository.save(partyMember);
     }
 
-    async getPartyMembers(partyId: number) {
+    async getPartyMembers(partyId: number): Promise<PartyMember[]> {
         return await this.partyMemberRepository.find({
             where: { partyId },
         });
     }
 
-    async cancelParty(userId: number, partyId: number) {
+    async cancelParty(userId: number, partyId: number): Promise<DeleteResult> {
         const partyMember = await this.partyMemberRepository.findOne({
             where: { userId, partyId },
         });
@@ -250,7 +251,7 @@ export class PartyService {
         });
     }
 
-    async acceptMember(partyId: number, userId: number, status: string) {
+    async acceptMember(partyId: number, userId: number, status: string): Promise<PartyMember> {
         const partyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId },
         });
@@ -264,34 +265,34 @@ export class PartyService {
 
         if (status === '신청승낙') {
             if (partyMember && partyMember.status === '신청승낙') {
-                party.status === '신청대기'
+                party.status === '신청대기';
                 party.currMember--;
             } else {
                 partyMember.status = '신청승낙';
                 party.currMember++;
             }
-            await this.partyRepository.update(partyId, party)
+            await this.partyRepository.update(partyId, party);
             return await this.partyMemberRepository.save(partyMember);
         }
 
         if (status === '거절') {
-            if(partyMember.status === '신청대기') {
+            if (partyMember.status === '신청대기') {
                 throw new BadRequestException('아직 신청하지 않았습니다.');
             }
 
             if (partyMember && partyMember.status === '거절') {
-                party.status === '신청대기'
+                party.status === '신청대기';
                 party.currMember++;
             } else {
                 partyMember.status = '거절';
                 party.currMember--;
             }
-            await this.partyRepository.update(partyId, party)
+            await this.partyRepository.update(partyId, party);
             return await this.partyMemberRepository.save(partyMember);
         }
     }
 
-    async deleteParty(userId: number, partyId: number) {
+    async deleteParty(userId: number, partyId: number): Promise<Party> {
         const party = await this.partyRepository.findOne({
             where: { id: partyId },
             relations: ['wishList', 'partyMember', 'review', 'tag', 'thumbnail'],

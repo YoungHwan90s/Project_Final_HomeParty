@@ -180,14 +180,17 @@
                         <a href="" class="hostInfoLink">
                             <figure class="hostFigure">
                                 <div class="hostImageWrapper">
-                                    <img src="http://placehold.it/320x100?text=sample" alt="" />
+                                    <img
+                                        id="hostProfile"
+                                        src="http://placehold.it/320x100?text=sample"
+                                        alt=""
+                                    />
                                 </div>
 
                                 <figcaption>
                                     <h3 class="hostTitle">호스트</h3>
                                     <p class="hostName">
                                         <!-- Backend -->
-                                        이정기
                                     </p>
                                     <p class="a11yHidden">호스트 정보 더보기</p>
                                 </figcaption>
@@ -198,12 +201,21 @@
             </div>
         </div>
 
-        <button type="submit" class="partyFormSubmit btn_primary btn_point">등록하기</button>
+        <button type="submit" class="partyFormSubmit btn_primary btn_point">수정하기</button>
     </form>
 </main>
 
 <script>
-    const partyId = Number(window.location.pathname.split('/')[3]);
+    $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                $('.hostName').text(userInfo.name);
+                $('#hostProfile').attr('src', userInfo.profile);
+            }
+        });
+    });
+
+    const partyId = Number(window.location.pathname.split('/')[2]);
 
     let hostId;
     let title;
@@ -216,35 +228,35 @@
     let thumbnail;
     let tag;
 
-        $.ajax({
-            type: 'GET',
-            url: `/api/party/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                hostId = response.hostId;
-                title = response.title;
-                content = response.content;
-                maxMember = response.maxMember;
-                currMember = response.currMember;
-                thumbnails = response.thumbnail;
-                address = response.address;
-                date = response.date;
-                thumbnail = response.thumbnail;
-                tag = response.tag;
+    $.ajax({
+        type: 'GET',
+        url: `/api/party/${partyId}`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            hostId = response.hostId;
+            title = response.title;
+            content = response.content;
+            maxMember = response.maxMember;
+            currMember = response.currMember;
+            thumbnails = response.thumbnail;
+            address = response.address;
+            date = response.date;
+            thumbnail = response.thumbnail;
+            tag = response.tag;
 
-                $('.addressWrapper').append(`<p>${address}</p>`);
-                $('#partyTitle').val(title);
-                $('#partyIntroduce').val(content);
-                $('#partyTotalMemeber').val(maxMember);
-                $('.datePicker').val(date);
+            $('.addressWrapper').append(`<p>${address}</p>`);
+            $('#partyTitle').val(title);
+            $('#partyIntroduce').val(content);
+            $('#partyTotalMemeber').val(maxMember);
+            $('.datePicker').val(date);
 
-                if (tag.length > 0) {
-                    tag.forEach((e) => {
-                        const tagItemHtml = `
+            if (tag.length > 0) {
+                tag.forEach((e) => {
+                    const tagItemHtml = `
                 <li class="tagItem">
                 #
                 <p class="tag">${e.tagName}</p>
@@ -252,22 +264,22 @@
                     <i class="bx bx-x" aria-hidden="true"></i>
                 </button>
                 </li>`;
-                        $('.tagList').prepend(tagItemHtml);
-                    });
-                }
+                    $('.tagList').prepend(tagItemHtml);
+                });
+            }
 
-                if (thumbnail.length > 0) {
-                    thumbnail.forEach((e, i) => {
-                        const imageWrapper = document.querySelectorAll(
-                            '.partyImageItem > .uploadImageWrapper')[i];
+            if (thumbnail.length > 0) {
+                thumbnail.forEach((e, i) => {
+                    const imageWrapper = document.querySelectorAll(
+                        '.partyImageItem > .uploadImageWrapper',
+                    )[i];
 
-                        imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
-                        imageWrapper.parentNode.classList.add('uploaded');
-                    });
-                }
-            },
-        });
-
+                    imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
+                    imageWrapper.parentNode.classList.add('uploaded');
+                });
+            }
+        },
+    });
 
     const formData = new FormData();
 
@@ -330,6 +342,7 @@
 
     // 등록하기 버튼 눌렸을 때
     partyMakeForm.addEventListener('submit', (e) => {
+        console.log(123)
         e.preventDefault();
         $.ajax({
             type: 'POST',
@@ -341,6 +354,7 @@
             success: function (response) {
                 let image = [];
                 for (let i = 0; i < response.length; i++) {
+                    console.log(response[i].filePath.location)
                     image.push(response[i].filePath.location);
                 }
                 saveParty(image);
@@ -353,7 +367,6 @@
         });
 
         function saveParty(image) {
-            console.log(addTags);
             let editedAddress;
             if ($('#partyAddressSearch').val()) {
                 editedAddress =
@@ -379,7 +392,6 @@
                 addTagName: addTags,
                 removeTagName: removedTags,
             };
-
 
             $.ajax({
                 type: 'PATCH',

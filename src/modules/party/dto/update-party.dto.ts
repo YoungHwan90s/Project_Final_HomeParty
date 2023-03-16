@@ -17,9 +17,8 @@ export class UpdatePartyDto {
     @IsString()
     readonly address: string;
 
-    @Type(() => Date)
-    @IsDate()
-    readonly date: Date;
+    @IsString()
+    readonly date: string;
 
     @IsOptional()
     @IsArray()

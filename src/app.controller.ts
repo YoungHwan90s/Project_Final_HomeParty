@@ -137,16 +137,16 @@ export class AppController {
         return { components: 'party-id' };
     }
 
-    @Get('/party/edit/:partyId/')
+    @Get('/party-edit/:partyId')
     @Render('index')
     partyEdit(@Req() req): { components: string } {
         return { components: 'party-edit' };
     }
 
-    @Get('/party-make')
+    @Get('/party-new')
     @Render('index')
     partymake(@Req() req): { components: string } {
-        return { components: 'party-make' };
+        return { components: 'party-new' };
     }
 
     @Get('/user-detail/:hostId')
@@ -155,10 +155,10 @@ export class AppController {
         return { components: 'user-detail' };
     }
 
-    @Get('/party-host-massage')
+    @Get('/party-host-message')
     @Render('index')
     partyhostmassage(@Req() req): { components: string } {
-        return { components: 'party-host-massage' };
+        return { components: 'party-host-message' };
     }
 
     @Get('/party-review/:partyId')
@@ -166,4 +166,12 @@ export class AppController {
     partyreview(@Req() req): { components: string } {
         return { components: 'party-review' };
     }
+
+    @Get('/no-page')
+    @Render('index')
+    servicePending(@Req() req): { components: string } {
+        return { components: 'no-page' };
+    }
+
+
 }

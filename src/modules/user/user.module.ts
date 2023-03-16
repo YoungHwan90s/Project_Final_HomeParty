@@ -5,12 +5,14 @@ import { UserService } from './user.service';
 import { User } from './entity/user.entity';
 import { WishList } from './entity/wish-list.entity';
 import { AuthModule } from '../auth/auth.module';
+import { PartyService } from '../party/party.service';
 import { Party } from '../party/entity/party.entity';
+import { PartyMember } from '../party/entity/party-member.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User, WishList, Party]), AuthModule],
+    imports: [TypeOrmModule.forFeature([User, WishList, Party, PartyMember]), AuthModule],
     controllers: [UserController],
-    providers: [UserService],
+    providers: [UserService, PartyService],
     exports: [UserService],
 })
 export class UserModule {}

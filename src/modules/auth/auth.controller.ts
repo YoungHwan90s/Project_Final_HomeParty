@@ -59,7 +59,7 @@ export class AuthController {
     }
 
     @Post('/sign-up')
-    // @UsePipes(new JoiValidationPipe(createUserSchema))
+    @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)
     async createUser(@Res() res, @Body() data: CreateUserDto): Promise<SaveOptions> {
         const { id } = await this.userService.createUser(data);
