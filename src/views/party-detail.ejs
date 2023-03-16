@@ -197,7 +197,6 @@
                     });
                 }
                 
-                console.log("host", hostId, "user", userId)
                 if (hostId === userId) {
                     const buttonEdit = `<a href="/party/edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`;
 
@@ -215,10 +214,8 @@
                     `;
 
                     $('.partyMemberBox').append(partyMemberDropDownHtml);
-                    console.log(partyMember)
                     partyMember.shift();
                     partyMember.forEach((item) => {
-                        console.log(item.status)
                         if (item.user.profile === null) {
                             item.user.profile =
                                 'https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg';
@@ -329,7 +326,6 @@
     }
 
     function acceptMember(userId, status) {
-        console.log("U", userId, "status", status)
         $.ajax({
             type: 'PATCH',
             url: `/api/party/apply/${partyId}`,
