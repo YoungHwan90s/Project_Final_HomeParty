@@ -50,11 +50,11 @@ a {
   white-space: nowrap;
 }
 
-.container {
+/* .container {
   max-width: var(--max-container);
   width: 90%;
   margin: 0 auto;
-}
+} */
 
 .mainSection {
   margin-top: 60px;
