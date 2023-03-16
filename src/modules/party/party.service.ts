@@ -31,7 +31,7 @@ export class PartyService {
 
     async getPartyById(partyId: number) {
         return await this.partyRepository.findOne({
-            relations: ['thumbnail', 'partyMember', 'tag', 'wishList'],
+            relations: ['thumbnail', 'partyMember', 'tag', 'wishList', 'partyMember.user', 'user'],
             where: { id: partyId, deletedAt: null },
         });
     }

@@ -142,7 +142,7 @@
                             type="button"
                             id="partyAddressSearch"
                             class="partyAddressSearch"
-                            onclick="findAddr()"
+                            onclick="findAddress()"
                             value="주소 검색"
                             readonly
                         />
@@ -254,7 +254,7 @@
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: $('#date-pick').val(),
+                date: $('.datePicker').val(),
                 thumbnail: image,
                 tagName: tagList,
             };
@@ -302,7 +302,7 @@
         document.querySelector('.tagInputWrapper').insertAdjacentElement('beforebegin', newTagItem);
     }
 
-    function findAddr() {
+    function findAddress() {
         new daum.Postcode({
             oncomplete: function (data) {
                 // 사용자 주소를 받아올 변수를 정의한다.
