@@ -81,14 +81,12 @@ export class UserService {
             },
         );
     }
-    async updateUser(user: object, data: UpdateUserDto): Promise<UpdateResult> {
+    async updateUser(user: User, data: UpdateUserDto): Promise<UpdateResult> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
         } else {
-            const hashedPassword = await bcrypt.hash(data.password, 10);
 
-            return this.userRepository.update(user['id'], {
-                password: hashedPassword,
+            return this.userRepository.update(user.id, {
                 name: data.name,
                 sex: data.sex,
                 phone: data.phone,
@@ -103,19 +101,6 @@ export class UserService {
     async deleteUser(id: number): Promise<DeleteResult> {
         return this.userRepository.softDelete(id);
     }
-
-    // private async checkPassword(id: number, password: string) {
-    //     const user = await this.userRepository.findOne({
-    //         where: { id, deletedAt: null },
-    //         select: [ "password" ],
-    //     });
-    //     if (!user) {
-    //         throw new NotFoundException(`User not found. id: ${id}`);
-    //     }
-    //     if (user.password !== password.toString()) {
-    //         throw new UnauthorizedException(`User password is not correct. id: ${id}`);
-    //     }
-    // }
 
     async updateWishList(user: User, partyId: number): Promise<WishList | Number> {
         const checkWishList = await this.wishListRepository.findOne({
@@ -146,5 +131,43 @@ export class UserService {
             relations: ['party', 'party.thumbnail', 'party.tag'],
         });
         return wishList;
+    }
+
+    async validateUser(email: string, password: string) {
+        const user = await this.userRepository.findOne({
+            where: { email, deletedAt: null },
+        });
+
+        if (!user) {
+            throw new NotFoundException('회원이 존재하지 않습니다.');
+        }
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (!comparePassword) {
+            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+        }
+        return user;
+    }
+
+    async findEmail(data): Promise<string> {
+        const user = await this.userRepository.findOne({
+            where: { name: data.name, phone: data.phone },
+            select: ['email'],
+        });
+
+        if (!user) {
+            throw new UnauthorizedException('회원이 존재하지 않습니다.');
+        }
+
+        const email = user.email;
+        const index = email.indexOf('@');
+
+        let secureEmail = null;
+
+        if (index <= 3) {
+            secureEmail = email.substring(0, index - 2) + '**' + email.substring(index);
+        } else {
+            secureEmail = email.substring(0, index - 3) + '***' + email.substring(index);
+        }
+        return secureEmail;
     }
 }
