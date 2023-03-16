@@ -28,11 +28,10 @@ export class PartyController {
     }
 
     //파티 상세 조회
-    @Get(':partyId')
+    @Get('/:partyId')
     async getPartyById(@Param('partyId') partyId: number) {
         return await this.partyService.getPartyById(partyId);
     }
-    q;
 
     // 파티 등록
     @UseGuards(JwtAuthGuard)

@@ -42,7 +42,7 @@ export class Party {
     address: string;
 
     @Column()
-    date: string;
+    date: Date;
 
     @Column('varchar', { default: '모집중' })
     status: string;

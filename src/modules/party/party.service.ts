@@ -12,19 +12,21 @@ import { CreatePartyDto } from './dto/create-party.dto';
 import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
-import { WishList } from '../user/entity/wish-list.entity';
+import { UpdatePartyDto } from './dto/update-party.dto';
 
 @Injectable()
 export class PartyService {
     constructor(
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
+        @InjectRepository(Tag) private tegRepository: Repository<Tag>,
+        @InjectRepository(Thumbnail) private thumbnailRepository: Repository<Thumbnail>,
         private readonly dataSource: DataSource,
     ) {}
 
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
-            where: {deletedAt: null},
+            where: { deletedAt: null },
             relations: ['thumbnail'],
         });
     }
@@ -106,7 +108,7 @@ export class PartyService {
         return createdParty;
     }
 
-    async updateParty(partyId: number, data) {
+    async updateParty(partyId: number, data: UpdatePartyDto) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -115,6 +117,7 @@ export class PartyService {
             const { addThumbnail, removeThumbnail, addTagName, removeTagName } = data;
             let party = await queryRunner.manager.findOne(Party, {
                 where: { id: partyId },
+                relations: ['thumbnail', 'tag'],
             });
 
             party.title = data.title;
@@ -123,21 +126,23 @@ export class PartyService {
             party.address = data.address;
             party.date = data.date;
 
+            // 썸네일 추가
             if (addThumbnail?.length) {
-                let newThumbnails = [];
+                let thumbnailArray;
                 for (let i = 0; i < addThumbnail.length; i++) {
                     let thumbnail = new Thumbnail();
                     thumbnail.thumbnail = addThumbnail[i];
-                    thumbnail.party = party;
 
-                    newThumbnails.push(thumbnail);
+                    thumbnailArray.push(thumbnail);
                 }
-                party.thumbnail = newThumbnails;
+                party.thumbnail = [...party.thumbnail, ...thumbnailArray];
             }
 
+            // 태그 추가
             if (addTagName?.length) {
-                let newTags = [];
+                let tagArray = [];
                 for (let i = 0; i < addTagName.length; i++) {
+                    console.log(addTagName[i]);
                     let tag = await queryRunner.manager.findOne(Tag, {
                         where: {
                             tagName: addTagName[i],
@@ -145,35 +150,41 @@ export class PartyService {
                     });
                     if (tag) {
                         tag.freq += 1;
-                    }
-                    if (!tag) {
+                        tagArray.push(tag);
+
+                        await queryRunner.manager.update(Tag, tag.id, tag);
+                    } else {
                         tag = new Tag();
                         tag.tagName = addTagName[i];
-                    }
-                    newTags.push(tag);
-                }
 
-                party.tag = newTags;
+                        tagArray.push(tag);
+                    }
+                }
+                party.tag = [...party.tag, ...tagArray];
             }
 
-            if (removeThumbnail) {
+            // 썸네일 삭제
+            if (removeThumbnail?.length) {
                 for (let i = 0; i < removeThumbnail.length; i++) {
+                    let removeThumbnailId = removeThumbnail[i]['id'];
+
                     party.thumbnail = party.thumbnail.filter(
-                        (thumbnail) => thumbnail.id !== removeThumbnail[i],
+                        (thumbnail) => thumbnail.id !== Number(removeThumbnailId),
                     );
                 }
             }
 
-            if (removeTagName) {
+            // 태그 삭제
+            if (removeTagName?.length) {
                 for (let i = 0; i < removeTagName.length; i++) {
                     const tag = await queryRunner.manager.findOne(Tag, {
-                        where: { id: removeTagName[i] },
+                        where: { tagName: removeTagName[i] },
                     });
                     tag.freq -= 1;
                     if (tag.freq <= 0) {
                         await queryRunner.manager.softDelete(Tag, tag.id);
                     }
-                    queryRunner.manager.save(tag)
+                    await queryRunner.manager.save(tag);
 
                     party.tag = party.tag.filter((tag) => tag.tagName !== removeTagName[i]);
                 }
@@ -182,6 +193,7 @@ export class PartyService {
             await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
+            console.log(error.message);
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
                 '파티수정에 실패하였습니다. 파티정보를 다시 확인하시고 시도하여 주시기 바랍니다.',

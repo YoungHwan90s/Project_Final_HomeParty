@@ -132,7 +132,7 @@
                 </section>
 
                 <section class="calendarSection">
-                    <h3 class="title" style="color: red">날짜 변경</h3>
+                    <h3 class="title">날짜 선택</h3>
                     <div class="datePickerWrapper">
                         <input type="text" class="datePicker" placeholder="Select date" readonly />
                         <div class="calendar"></div>
@@ -142,20 +142,20 @@
                 <section class="regionSection">
                     <h3 class="title">현재주소</h3>
                     <div class="addressWrapper"></div>
-                    <h3 class="title" style="margin-top: 20px; color: red">주소 수정하기</h3>
+                    <h3 class="title" style="margin-top: 20px">주소 수정하기</h3>
                     <div class="addressSearchWrapper">
                         <label for="partyAddressSearch" class="a11yHidden">주소 검색</label>
                         <input
                             type="button"
                             id="partyAddressSearch-1"
                             class="partyAddressSearch"
-                            onclick="findAddress()"
+                            onclick="findAddr()"
                             value="주소 검색"
                             readonly
                         />
                         <input
                             type="text"
-                            id="partyAddressSearch"
+                            id="partyAddressSearch-2"
                             class="partyAddressSearch"
                             placeholder="도로명 주소"
                             readonly
@@ -203,75 +203,58 @@
 </main>
 
 <script>
-    const partyId = Number(window.location.pathname.split('/')[3]);
+    const partyJSON = JSON.parse(sessionStorage.getItem('party'));
+    const partyId = window.location.pathname.split('/')[3];
+    const partyMakeForm = document.querySelector('.partyMakeForm');
+    const formData = new FormData();
 
-    let hostId;
-    let title;
-    let content;
-    let maxMember;
-    let currMember;
-    let thumbnails;
-    let address;
-    let date;
-    let thumbnail;
-    let tag;
+    const { title, content, date, maxMember, tag, thumbnail, address } = partyJSON;
 
-        $.ajax({
-            type: 'GET',
-            url: `/api/party/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                hostId = response.hostId;
-                title = response.title;
-                content = response.content;
-                maxMember = response.maxMember;
-                currMember = response.currMember;
-                thumbnails = response.thumbnail;
-                address = response.address;
-                date = response.date;
-                thumbnail = response.thumbnail;
-                tag = response.tag;
+    const addTags = [];
+    const removedTags = [];
 
-                $('.addressWrapper').append(`<p>${address}</p>`);
-                $('#partyTitle').val(title);
-                $('#partyIntroduce').val(content);
-                $('#partyTotalMemeber').val(maxMember);
-                $('.datePicker').val(date);
+    const addThumbnails = [];
+    const removedThumbnails = [];
 
-                if (tag.length > 0) {
-                    tag.forEach((e) => {
-                        const tagItemHtml = `
+    // 스토리지에 있는 태그와 썸네일을 각 add 배열에 넣는다.
+    // 엔터키를 눌렀을 때 생성된 태그를 add 배열에 넣는다.
+    // 태그를 x  눌렀을때, 해당 태그를 remove  배열에 넣는다.
+    // 생성한 img src 를 배열에 넣는다.
+    // x 를 누른 썸네일의 img src 를 배열에 넣는다.
+    // 완전된 4개의 배열을 서버로 보내준다.
+
+    if (tag.length > 0) {
+        tag.forEach((e) => {
+            const tagItemHtml = `
                 <li class="tagItem">
                 #
                 <p class="tag">${e.tagName}</p>
                 <button type="button" class="tagResetButton" aria-label="해당 태그 삭제">
                     <i class="bx bx-x" aria-hidden="true"></i>
                 </button>
-                </li>`;
-                        $('.tagList').prepend(tagItemHtml);
-                    });
-                }
+                </li>
+            `;
 
-                if (thumbnail.length > 0) {
-                    thumbnail.forEach((e, i) => {
-                        const imageWrapper = document.querySelectorAll(
-                            '.partyImageItem > .uploadImageWrapper')[i];
-
-                        imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
-                        imageWrapper.parentNode.classList.add('uploaded');
-                    });
-                }
-            },
+            $('.tagList').prepend(tagItemHtml);
         });
+    }
 
+    if (thumbnail.length > 0) {
+        thumbnail.forEach((e, i) => {
+            const imageWrapper = document.querySelectorAll('.partyImageItem > .uploadImageWrapper')[
+                i
+            ];
 
-    const formData = new FormData();
+            imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
+            imageWrapper.parentNode.classList.add('uploaded');
+        });
+    }
 
-    let removedThumbnails = [];
+    $('.addressWrapper').append(`<p>${address}</p>`);
+    $('#partyTitle').val(title);
+    $('#partyIntroduce').val(content);
+    $('#partyTotalMemeber').val(maxMember);
+    $('.datePicker').val(date);
 
     document.querySelectorAll('.partyImageItem').forEach(($imageItem, i) => {
         // image 업로드 시
@@ -295,14 +278,11 @@
             $imageItem.classList.remove('uploaded');
             $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
 
-            if (thumbnail[i]) {
-                removedThumbnails.push(thumbnail[i]);
+            if(thumbnail[i]){
+                removedThumbnails.push(thumbnail[i])
             }
         });
     });
-
-    let addTags = [];
-    let removedTags = [];
 
     document.querySelector('.tagList').addEventListener('click', (e) => {
         // 태그 삭제 버튼 클릭시
@@ -312,8 +292,6 @@
         }
     });
 
-    const partyMakeForm = document.querySelector('.partyMakeForm');
-
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
@@ -322,7 +300,7 @@
 
         // tag input에서 enter 입력했을 경우 태그 추가
         if (e.target.matches('.partyTag')) {
-            addTags.push(e.target.value);
+            addTags.push(e.target.value)
             addTag(e.target.value);
             e.target.value = '';
         }
@@ -353,34 +331,24 @@
         });
 
         function saveParty(image) {
-            console.log(addTags);
-            let editedAddress;
-            if ($('#partyAddressSearch').val()) {
-                editedAddress =
-                    $('#partyAddressSearch').val() + ' ' + $('#partyAddressDetail').val();
-            } else {
-                editedAddress = $('.addressWrapper').text();
-            }
-
-            let editedDate;
-            if ($('.datePicker').val()) {
-                editedDate = $('.datePicker').val();
-            } else {
-                editedDate = date;
-            }
+            // tag 배열로 뽑아오기
+            const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
+            // 파티 수정하기 ajax
+            console.log("추가된 태그",addTags);
+            console.log("삭제된 태그",removedTags);
+            console.log("추가된 썸네일",image);
+            console.log("삭제된 썸네일",removedThumbnails);
             const partyInfo = {
                 title: $('#partyTitle').val(),
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
-                address: editedAddress,
-                date: new Date(editedDate),
-                addThumbnail: image,
-                removeThumbnail: removedThumbnails,
-                addTagName: addTags,
-                removeTagName: removedTags,
+                address: $('#partyAddressSearch-2').val() + ' ' + $('#partyAddressDetail').val(),
+                date: $('.datePicker').val(),
+                addTagName : addTags,
+                removeTagName : removedTags,
+                addThumbnail : image,
+                removeTagName : removedThumbnails
             };
-
-
             $.ajax({
                 type: 'PATCH',
                 url: `/api/party/${partyId}`,
@@ -389,11 +357,7 @@
                     authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
-                success: function (response) {
-                    customAlert('파티가 성공적으로 등록되었습니다.', function () {
-                        window.location.replace('/party');
-                    });
-                },
+                success: function (response) {},
                 error: function (error) {
                     customAlert(error.responseJSON.message, function () {
                         window.location.reload();
@@ -424,7 +388,7 @@
         document.querySelector('.tagInputWrapper').insertAdjacentElement('beforebegin', newTagItem);
     }
 
-    function findAddress() {
+    function findAddr() {
         new daum.Postcode({
             oncomplete: function (data) {
                 // 사용자 주소를 받아올 변수를 정의한다.
@@ -440,7 +404,7 @@
                 }
 
                 // 부모창의 주소칸에 받아온 주소를 넣는다.
-                $('#partyAddressSearch').val(addr);
+                $('#partyAddressSearch-2').val(addr);
             },
         }).open();
     }
