@@ -23,7 +23,7 @@ export class ReviewController {
     // @UseGuards(JwtAuthGuard)
     @Get('/:hostId')
     @HttpCode(200)
-    async readReview(@Res() res ,@Req() req, @Param('hostId') hostId: number):Promise<Review[]> {
+    async readReview(@Param('hostId') hostId: number):Promise<Review[]> {
        return await this.reviewService.readReview(hostId);
 
     }
