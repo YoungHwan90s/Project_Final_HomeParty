@@ -24,18 +24,6 @@
                     </div>
                     
                     <div class="my-info">
-                        <h2 class="title">비밀번호<span id="pw-error"></span></h2>
-                        <span>
-                            <input type="password" id="password" value="" name="password" maxlength="20" />
-                        </span>
-                    </div>
-                    <div class="my-info">
-                        <h2 class="title">비밀번호 재입력<span id="pw-check-error"></span></h2>
-                        <span>
-                            <input type="password" id="confirmPassword" value="" name="confirmPassword" maxlength="20"/>
-                        </span>
-                    </div>
-                    <div class="my-info">
                         <h2 class="title">이름<span id="name-error"></span></h2>
                         <span>
                             <input type="text" id="name" value="" name="name" maxlength="20"/>
@@ -67,7 +55,7 @@
                                 <input type="button" id="addressButton" onclick="findAddr()" value="주소 검색"/>
                             </span>
                             <span id="guide" style="color: #999; display: none"></span>
-                        </br><input type="text" id="address-2" placeholder="상세주소"/>
+                        </br><input type="text" id="input-address-2" placeholder="상세주소"/>
                         </div>
                     </div>
                     <div class="my-info">
@@ -77,7 +65,7 @@
                         </span>
                     </div>
                     <div class="mypage-btn">
-                        <button type="mypage-edit-btn" onclick="userEdit()">수정완료</button>
+                        <button type="mypage-edit-btn" onclick="updateUser()">수정완료</button>
                     </div>
                 </div>
             </div>
@@ -86,11 +74,16 @@
 </div>
 
 <script>
-    let originProfile
+    let originProfile;
+    let newProfile;
+    let originAddress;
+
      $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if(userInfo) {
                 originProfile = userInfo.profile
+                originAddress = userInfo.address
+
                 $('#email').append(userInfo.email)
                 $('input[name=name]').attr('value', userInfo.name)
                 $('option[name=sex]').attr('value', userInfo.sex)
@@ -115,57 +108,56 @@
     readURL(this);
     });
 
-    function userEdit() {
+    function updateUser() {
         const image = $('#imageUpload').get(0);
         const file = image.files[0];
 
-        if (!file) {
-            customAlert('업로드된 이미지가 없습니다.', function () {
-                window.location.reload();
+        if (file) {
+            const formData = new FormData();
+            formData.append('files[]', file, encodeURIComponent(file.name));
+    
+            $.ajax({
+                type: 'POST',
+                url: '/file/upload',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    newProfile = response[0].filePath.location
+                    saveUpdatedInformation(newProfile)
+                },
+                error: function (response) {
+                    customAlert(response.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
             });
-        }
-        const formData = new FormData();
-        formData.append('files[]', file, encodeURIComponent(file.name));
-
-        $.ajax({
-            type: 'POST',
-            url: '/file/upload',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: formData,
-            success: function (response) {
-                $('#imageUrl').val(response[0].filePath.location);
-                $('#imageUrl').trigger('change');
-            },
-            error: function (response) {
-                customAlert(response.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
-    }
-
-    $('#imageUrl').on('change', () => {
-        let newProfile
-        if ($('#imageUrl').val()){
-            newProfile = $('#imageUrl').val()
         } else {
-            newProfile = originProfile
+            saveUpdatedInformation(originProfile)
+        }   
+    }
+    
+    function saveUpdatedInformation(profile) {
+        let address;
+        if($('#input-address-1').val()) {
+            address = $('#input-address-1').val() + ' ' + $('#input-address-2').val()
+        } else {
+            address = originAddress
         }
 
         const userData = {
             name: $('#name').val(),
-            password: $('#password').val(),
-            confirmPassword: $('#confirmPassword').val(),
+            // password: $('#password').val(),
+            // confirmPassword: $('#confirmPassword').val(),
             sex: $('#sex').val(),
             phone: $('#phone').val(),
             region: region = $('#region').val(),
-            address: $('#address-1').val() + ', ' + $('#address-2').val(),
-            profile: newProfile,
+            address: address,
+            profile: profile,
             introduction: $('#introduction').val()
         };
-
+    
         $.ajax({
             type: 'PATCH',
             url: `/user`,
@@ -185,6 +177,7 @@
                 });
             },
         });
-    })
+    }
+
 
 </script>
