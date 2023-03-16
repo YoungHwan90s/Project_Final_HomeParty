@@ -2,509 +2,221 @@
     <h2 class="title">위시리스트</h2>
 
     <div class="mainSection">
-      <div class="mapWrapper">
-        <div class="mapBox">
-          <!-- Backend 지도 넣어주세요 -->
+        <div class="mapWrapper">
+            <div class="mapBox">
+                <!-- Backend 지도 넣어주세요 -->
+                <div id="map" style="width: 45%; height: 100%"></div>
+            </div>
         </div>
-      </div>
 
-      <div class="partyListWrapper">
-        <ul class="partyList partyGrid">
-          <li class="partyItem">
-            <div class="thumbnailWrapper carousel">
-              <a href="" class="partyLink thumbnailLink">
-                <ul class="thumbnailList carouselList">
-                  <li class="thumbnailItem carouselItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                  <li class="thumbnailItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              </a>
-
-              <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton prev"
-                  aria-label="이전 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton next"
-                  aria-label="다음 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-
-            <a href="" class="partyLink">
-              <dl class="partyInfoList">
-                <div class="partyInfoItem partyTitle">
-                  <dt class="a11yHidden">제목</dt>
-                  <dd>
-                    <!-- Backend -->
-                    어디까지 작성되는지 봅시다. 한 줄까지만 출력되게 해야지.
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyHeadcount">
-                  <dt>현재</dt>
-                  <dd class="currentCount">
-                    <!-- Backend -->
-                    3명
-                  </dd>
-                  <dt>총</dt>
-                  <dd class="totalCount">
-                    <!-- Backend -->
-                    18명
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyEtc">
-                  <dt class="a11yHidden">지역</dt>
-                  <dd class="partyPlace">
-                    <!-- Backend -->
-                    서울
-                  </dd>
-                  <dt class="a11yHidden">날짜</dt>
-                  <dd class="partyDate">
-                    <!-- Backend -->
-                    3월 11일
-                  </dd>
-                </div>
-              </dl>
-            </a>
-
-            <button
-              type="button"
-              class="partyLikeButton"
-              aria-label="좋아요 목록에 추가 버튼"
-            >
-              <i class="bx bxs-heart" aria-hidden="true"></i>
-            </button>
-          </li>
-          <li class="partyItem">
-            <div class="thumbnailWrapper carousel">
-              <a href="" class="partyLink thumbnailLink">
-                <ul class="thumbnailList carouselList">
-                  <li class="thumbnailItem carouselItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                  <li class="thumbnailItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              </a>
-
-              <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton prev"
-                  aria-label="이전 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton next"
-                  aria-label="다음 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-
-            <a href="" class="partyLink">
-              <dl class="partyInfoList">
-                <div class="partyInfoItem partyTitle">
-                  <dt class="a11yHidden">제목</dt>
-                  <dd>
-                    <!-- Backend -->
-                    어디까지 작성되는지 봅시다. 한 줄까지만 출력되게 해야지.
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyHeadcount">
-                  <dt>현재</dt>
-                  <dd class="currentCount">
-                    <!-- Backend -->
-                    3명
-                  </dd>
-                  <dt>총</dt>
-                  <dd class="totalCount">
-                    <!-- Backend -->
-                    18명
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyEtc">
-                  <dt class="a11yHidden">지역</dt>
-                  <dd class="partyPlace">
-                    <!-- Backend -->
-                    서울
-                  </dd>
-                  <dt class="a11yHidden">날짜</dt>
-                  <dd class="partyDate">
-                    <!-- Backend -->
-                    3월 11일
-                  </dd>
-                </div>
-              </dl>
-            </a>
-
-            <button
-              type="button"
-              class="partyLikeButton"
-              aria-label="좋아요 목록에 추가 버튼"
-            >
-              <i class="bx bxs-heart" aria-hidden="true"></i>
-            </button>
-          </li>
-          <li class="partyItem">
-            <div class="thumbnailWrapper carousel">
-              <a href="" class="partyLink thumbnailLink">
-                <ul class="thumbnailList carouselList">
-                  <li class="thumbnailItem carouselItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                  <li class="thumbnailItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              </a>
-
-              <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton prev"
-                  aria-label="이전 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton next"
-                  aria-label="다음 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-
-            <a href="" class="partyLink">
-              <dl class="partyInfoList">
-                <div class="partyInfoItem partyTitle">
-                  <dt class="a11yHidden">제목</dt>
-                  <dd>
-                    <!-- Backend -->
-                    어디까지 작성되는지 봅시다. 한 줄까지만 출력되게 해야지.
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyHeadcount">
-                  <dt>현재</dt>
-                  <dd class="currentCount">
-                    <!-- Backend -->
-                    3명
-                  </dd>
-                  <dt>총</dt>
-                  <dd class="totalCount">
-                    <!-- Backend -->
-                    18명
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyEtc">
-                  <dt class="a11yHidden">지역</dt>
-                  <dd class="partyPlace">
-                    <!-- Backend -->
-                    서울
-                  </dd>
-                  <dt class="a11yHidden">날짜</dt>
-                  <dd class="partyDate">
-                    <!-- Backend -->
-                    3월 11일
-                  </dd>
-                </div>
-              </dl>
-            </a>
-
-            <button
-              type="button"
-              class="partyLikeButton"
-              aria-label="좋아요 목록에 추가 버튼"
-            >
-              <i class="bx bxs-heart" aria-hidden="true"></i>
-            </button>
-          </li>
-          <li class="partyItem">
-            <div class="thumbnailWrapper carousel">
-              <a href="" class="partyLink thumbnailLink">
-                <ul class="thumbnailList carouselList">
-                  <li class="thumbnailItem carouselItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                  <li class="thumbnailItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              </a>
-
-              <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton prev"
-                  aria-label="이전 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton next"
-                  aria-label="다음 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-
-            <a href="" class="partyLink">
-              <dl class="partyInfoList">
-                <div class="partyInfoItem partyTitle">
-                  <dt class="a11yHidden">제목</dt>
-                  <dd>
-                    <!-- Backend -->
-                    어디까지 작성되는지 봅시다. 한 줄까지만 출력되게 해야지.
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyHeadcount">
-                  <dt>현재</dt>
-                  <dd class="currentCount">
-                    <!-- Backend -->
-                    3명
-                  </dd>
-                  <dt>총</dt>
-                  <dd class="totalCount">
-                    <!-- Backend -->
-                    18명
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyEtc">
-                  <dt class="a11yHidden">지역</dt>
-                  <dd class="partyPlace">
-                    <!-- Backend -->
-                    서울
-                  </dd>
-                  <dt class="a11yHidden">날짜</dt>
-                  <dd class="partyDate">
-                    <!-- Backend -->
-                    3월 11일
-                  </dd>
-                </div>
-              </dl>
-            </a>
-
-            <button
-              type="button"
-              class="partyLikeButton"
-              aria-label="좋아요 목록에 추가 버튼"
-            >
-              <i class="bx bxs-heart" aria-hidden="true"></i>
-            </button>
-          </li>
-          <li class="partyItem">
-            <div class="thumbnailWrapper carousel">
-              <a href="" class="partyLink thumbnailLink">
-                <ul class="thumbnailList carouselList">
-                  <li class="thumbnailItem carouselItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                  <li class="thumbnailItem">
-                    <div class="thumbnailRatio">
-                      <img
-                        src="http://placehold.it/320x100?text=sample"
-                        alt=""
-                        class="thumbnailImage"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              </a>
-
-              <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton prev"
-                  aria-label="이전 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  class="thumbnailButton carouselButton next"
-                  aria-label="다음 썸네일 보기"
-                >
-                  <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-
-            <a href="" class="partyLink">
-              <dl class="partyInfoList">
-                <div class="partyInfoItem partyTitle">
-                  <dt class="a11yHidden">제목</dt>
-                  <dd>
-                    <!-- Backend -->
-                    어디까지 작성되는지 봅시다. 한 줄까지만 출력되게 해야지.
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyHeadcount">
-                  <dt>현재</dt>
-                  <dd class="currentCount">
-                    <!-- Backend -->
-                    3명
-                  </dd>
-                  <dt>총</dt>
-                  <dd class="totalCount">
-                    <!-- Backend -->
-                    18명
-                  </dd>
-                </div>
-                <div class="partyInfoItem partyEtc">
-                  <dt class="a11yHidden">지역</dt>
-                  <dd class="partyPlace">
-                    <!-- Backend -->
-                    서울
-                  </dd>
-                  <dt class="a11yHidden">날짜</dt>
-                  <dd class="partyDate">
-                    <!-- Backend -->
-                    3월 11일
-                  </dd>
-                </div>
-              </dl>
-            </a>
-
-            <button
-              type="button"
-              class="partyLikeButton"
-              aria-label="좋아요 목록에 추가 버튼"
-            >
-              <i class="bx bxs-heart" aria-hidden="true"></i>
-            </button>
-          </li>
-        </ul>
-      </div>
+        <div class="partyListWrapper">
+            <ul class="partyList partyGrid" id="partyItem"></ul>
+        </div>
     </div>
-  </main>
+</main>
 
 <!-- <button id="like-button${id}" onclick="updateWishList(id, partyId)">좋아요 취소</button>
 
 <button id="like-button${id}" onclick="myWishLists()">파티불러오기</button> -->
 
 <script>
-    // function myWishLists() {
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: `/user/wish-list`,
-    //         data: {},
-    //         headers: {
-    //             authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-    //             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-    //         },
-    //         success: function (response) {
-    //             let wishList = response['wishList'];
-    //             sessionStorage.setItem('wishList', JSON.stringify(wishList));
+        // function myWishLists() {
+            $.ajax({
+                type: 'GET',
+                url: `/user/wish-list`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    let wishList = response['wishList'];
+                    sessionStorage.setItem('wishList', JSON.stringify(wishList));
 
-    //             for (let i = 0; i < wishList.length; i++) {
-    //                 let partyId = wishList[i]['party']['id'];
-    //                 let title = wishList[i]['party']['title'];
-    //                 let maxMember = wishList[i]['party']['maxMember'];
-    //                 let currMember = wishList[i]['party']['currMember'];
-    //                 let thumbnails = wishList[i]['party']['thumbnail'];
-    //                 let date = wishList[i]['party']['date'];
-    //                 let status = wishList[i]['party']['status'];
-    //                 let thumbnail = wishList[i]['party']['thumbnail'];
+                    for (let i = 0; i < wishList.length; i++) {
+                        let partyId = wishList[i]['party']['id'];
+                        let title = wishList[i]['party']['title'];
+                        let maxMember = wishList[i]['party']['maxMember'];
+                        let currMember = wishList[i]['party']['currMember'];
+                        let thumbnails = wishList[i]['party']['thumbnail'];
+                        let date = wishList[i]['party']['date'];
+                        let status = wishList[i]['party']['status'];
+                        // console.log(thumbnails);
+                        for (let j = 0; j < thumbnails.length; j++) {
+                            let thumbnail = thumbnails[j];
+                            console.log(thumbnail.partyId);
+                          
+                          
+                        // let thumbnail = thumbnails[i]['thumbnail']
+                        // console.log(thumbnail);
+                       let addresses = wishList[i]['party']['address']
+                      let partyItem = `
+                      <li class="partyItem">
+                <div class="thumbnailWrapper carousel">
+                  <a href="" class="partyLink thumbnailLink">
+                    <ul class="thumbnailList carouselList">
+                      <li class="thumbnailItem carouselItem">
+                        <div class="thumbnailRatio">
+                          <a href="http://localhost:4000/party/${thumbnail.partyId}">
+                          <img
+                            src="${thumbnail.thumbnail}"
+                            alt=""
+                            class="thumbnailImage"
+                          />
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
+                  </a>
+
+                  <div class="thumbnailButtonWrapper carouselButtonWrapper">
+                    <button
+                      type="button"
+                      class="thumbnailButton carouselButton prev"
+                      aria-label="이전 썸네일 보기"
+                    >
+                      <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="thumbnailButton carouselButton next"
+                      aria-label="다음 썸네일 보기"
+                    >
+                      <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <a href="" class="partyLink">
+                  <dl class="partyInfoList">
+                    <div class="partyInfoItem partyTitle">
+                      <dt class="a11yHidden">제목</dt>
+                      <dd>
+                        <!-- Backend -->
+                        ${title}
+                      </dd>
+                    </div>
+                    <div class="partyInfoItem partyHeadcount">
+                      <dt>현재</dt>
+                      <dd class="currentCount">
+                        <!-- Backend -->
+                        ${currMember}명
+                      </dd>
+                      <dt>총</dt>
+                      <dd class="totalCount">
+                        <!-- Backend -->
+                        ${maxMember}명
+                      </dd>
+                    </div>
+                    <div class="partyInfoItem partyEtc">
+                      <dt class="a11yHidden">지역</dt>
+                      <dd class="partyPlace">
+                        <!-- Backend -->
+                        서울
+                      </dd>
+                      <dt class="a11yHidden">날짜</dt>
+                      <dd class="partyDate">
+                        <!-- Backend -->
+                        ${date}
+                      </dd>
+                    </div>
+                  </dl>
+                </a>
+                <button
+                  type="button"
+                  class="partyLikeButton"
+                  aria-label="좋아요 목록에 추가 버튼"
+                >
+                  <i class="bx bxs-heart" aria-hidden="true"></i>
+                </button>
+              </li>
+                `
+
+                $(`#partyItem`).append(partyItem)
+                    }}
+                },
+            });
 
 
-    
-    //             }
-    //         },
-    //     });
-    // }
+        function updateWishList(id, partyId) {
+            $.ajax({
+                type: 'POST',
+                url: `/user/wish-list/${partyId}`,
+                data: {},
+                success: function (response) {
+                    if (response.updateOrDelete == 0) {
+                        $('#like-button${id}').css('color', 'red');
+                    } else {
+                        $('#like-button${id}').css('color', '');
+                    }
+                },
+                error: function (error) {
+                    customAlert(
+                        '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                        function () {
+                            window.location.reload();
+                        },
+                    );
+                },
+            });
+        }
+</script>
 
-    // function updateWishList(id, partyId) {
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: `/user/wish-list/${partyId}`,
-    //         data: {},
-    //         success: function (response) {
-    //             if (response.updateOrDelete == 0) {
-    //                 $('#like-button${id}').css('color', 'red');
-    //             } else {
-    //                 $('#like-button${id}').css('color', '');
-    //             }
-    //         },
-    //         error: function (error) {
-    //             customAlert(
-    //                 '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
-    //                 function () {
-    //                     window.location.reload();
-    //                 },
-    //             );
-    //         },
-    //     });
-    // }
+<script
+    type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services"
+></script>
+
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 6, // 지도의 확대 레벨
+        };
+
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    // 마우스 휠과 모바일 터치를 이용한 지도 확대, 축소를 막는다
+    // map.setZoomable(false);
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+    // 지도 타입 변경 컨트롤을 생성한다
+    var mapTypeControl = new kakao.maps.MapTypeControl();
+    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
+    // 지도에 확대 축소 컨트롤을 생성한다
+    var zoomControl = new kakao.maps.ZoomControl();
+    // 지도의 우측에 확대 축소 컨트롤을 추가한다
+    map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 주소들 배열
+    var addresses = ['건원대로', '건원대로76번길', '건원대로76번길 123'];
+
+    // 마커 이미지 정보
+    var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
+        markerImageSize = new kakao.maps.Size(51, 52),
+        markerImageOptions = {
+            offset: new kakao.maps.Point(25, 25),
+        };
+
+    // 주소로 좌표를 검색하고 마커를 생성합니다
+    for (var i = 0; i < addresses.length; i++) {
+        geocoder.addressSearch(addresses[i], function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                    image: new kakao.maps.MarkerImage(
+                        markerImageUrl,
+                        markerImageSize,
+                        markerImageOptions,
+                    ),
+                });
+                map.setCenter(coords);
+            }
+        });
+    }
 </script>
