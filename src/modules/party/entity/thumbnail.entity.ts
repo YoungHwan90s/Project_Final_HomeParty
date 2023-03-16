@@ -14,7 +14,7 @@ export class Thumbnail {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
-    @Column('varchar', { length: 1000, nullable: true })
+    @Column('text', { nullable: true })
     thumbnail: string | null
 
     @Column('int')

@@ -1,37 +1,28 @@
 <div class="mypage-container">
     <div class="mypage-wrap">
-        <!-- 프로필 사진 -->
-        <div class="image-wrap">
-            <div class="profile-wrap">
-                <div class="profile-image">
-                    <img class="profile-img" id="image" src="" alt="..."/>
-                </div>
-                <div class="profil-email">
-                    <p  class="mypage-text" id="email"></p>
-                </div>
-                <div class="mypage-btn">
-                    <button type="mypage-edit-btn" onclick="userEdit()">수정완료</button>
-                </div>
+        <div class="avatar-upload">
+            <div class="avatar-edit">
+                <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
+                <input type="hidden" id="imageUrl" />
+                <label for="imageUpload"></label>
+            </div>
+            <div class="avatar-preview">
+                <div
+                    id="imagePreview"
+                    style="background-image: url(http://i.pravatar.cc/500?img=7)"
+                ></div>
             </div>
         </div>
-        <!-- 프로필 사진 -->
 
         <!-- 유저 정보 -->
         <div class="info-wrap">
             <div class="container-info">
-                <div class="user-info">
+                <div class="user-info" style="margin-top: 300px;">
                     <div class="my-info">
-                        <h2 class="title">비밀번호<span id="pw-error"></span></h2>
-                        <span>
-                            <input type="password" id="password" value="" name="password" maxlength="20" />
-                        </span>
+                        <h2 class="title">계정</h2>
+                        <sapn class="mypage-text" id="email"></sapn>
                     </div>
-                    <div class="my-info">
-                        <h2 class="title">비밀번호 재입력<span id="pw-check-error"></span></h2>
-                        <span>
-                            <input type="password" id="confirmPassword" value="" name="confirmPassword" maxlength="20"/>
-                        </span>
-                    </div>
+                    
                     <div class="my-info">
                         <h2 class="title">이름<span id="name-error"></span></h2>
                         <span>
@@ -64,7 +55,7 @@
                                 <input type="button" id="addressButton" onclick="findAddr()" value="주소 검색"/>
                             </span>
                             <span id="guide" style="color: #999; display: none"></span>
-                        </br><input type="text" id="address-2" placeholder="상세주소"/>
+                        </br><input type="text" id="input-address-2" placeholder="상세주소"/>
                         </div>
                     </div>
                     <div class="my-info">
@@ -73,32 +64,26 @@
                             <textarea  cols="50" rows="10" id="introduction"></textarea>
                         </span>
                     </div>
+                    <div class="mypage-btn">
+                        <button type="mypage-edit-btn" onclick="updateUser()">수정완료</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- 유저 정보 -->
-    </div>
-</div>
-
-
-<div class="avatar-upload">
-    <div class="avatar-edit">
-        <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
-        <input type="hidden" id="imageUrl" />
-        <label for="imageUpload"></label>
-    </div>
-    <div class="avatar-preview">
-        <div
-            id="imagePreview"
-            style="background-image: url(http://i.pravatar.cc/500?img=7)"
-        ></div>
+        </div>        
     </div>
 </div>
 
 <script>
+    let originProfile;
+    let newProfile;
+    let originAddress;
+
      $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if(userInfo) {
+                originProfile = userInfo.profile
+                originAddress = userInfo.address
+
                 $('#email').append(userInfo.email)
                 $('input[name=name]').attr('value', userInfo.name)
                 $('option[name=sex]').attr('value', userInfo.sex)
@@ -109,7 +94,8 @@
                 $('#phone').append(userInfo.phone)
                 $('#past-addr').append(userInfo.address)
                 $('#introduction').append(userInfo.introduction)
-                $('img[id=image]').attr('src', userInfo.profile)
+                $('#imagePreview').css('background-image', 'url(' + userInfo.profile + ')');
+
             } else {
                 customAlert("로그인 후 이용가능합니다.", function () {
                     window.location.replace('/login');
@@ -122,50 +108,56 @@
     readURL(this);
     });
 
-    function userEdit() {
+    function updateUser() {
         const image = $('#imageUpload').get(0);
         const file = image.files[0];
 
-        if (!file) {
-            customAlert('업로드된 이미지가 없습니다.', function () {
-                window.location.reload();
+        if (file) {
+            const formData = new FormData();
+            formData.append('files[]', file, encodeURIComponent(file.name));
+    
+            $.ajax({
+                type: 'POST',
+                url: '/file/upload',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    newProfile = response[0].filePath.location
+                    saveUpdatedInformation(newProfile)
+                },
+                error: function (response) {
+                    customAlert(response.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
             });
-        }
-        const formData = new FormData();
-        formData.append('files[]', file, encodeURIComponent(file.name));
-
-        $.ajax({
-            type: 'POST',
-            url: '/file/upload',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: formData,
-            success: function (response) {
-                $('#imageUrl').val(response[0].filePath.location);
-                $('#imageUrl').trigger('change');
-            },
-            error: function (response) {
-                customAlert(response.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+        } else {
+            saveUpdatedInformation(originProfile)
+        }   
     }
+    
+    function saveUpdatedInformation(profile) {
+        let address;
+        if($('#input-address-1').val()) {
+            address = $('#input-address-1').val() + ' ' + $('#input-address-2').val()
+        } else {
+            address = originAddress
+        }
 
-    $('#imageUrl').on('change', () => {
         const userData = {
             name: $('#name').val(),
-            password: $('#password').val(),
-            confirmPassword: $('#confirmPassword').val(),
+            // password: $('#password').val(),
+            // confirmPassword: $('#confirmPassword').val(),
             sex: $('#sex').val(),
             phone: $('#phone').val(),
             region: region = $('#region').val(),
-            address: $('#address-1').val() + ', ' + $('#address-2').val(),
-            profile: $('#profile').val(),
+            address: address,
+            profile: profile,
             introduction: $('#introduction').val()
         };
-
+    
         $.ajax({
             type: 'PATCH',
             url: `/user`,
@@ -176,7 +168,7 @@
             },
             success: function (response) {
                 customAlert('회원정보 수정이 완료되었습니다.', function () {
-                    window.location.replace('/user-mypag');
+                    window.location.replace('/user-mypage');
                 });
             },
             error: function (error) {
@@ -185,6 +177,7 @@
                 });
             },
         });
-    })
+    }
+
 
 </script>

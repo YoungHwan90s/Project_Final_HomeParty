@@ -1,35 +1,13 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../user/entity/user.entity';
-import bcrypt from 'bcrypt';
+import { Injectable} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../../util/cache/cache.service';
-import { AccessToken } from 'aws-sdk/clients/amplify';
-import { RefreshToken } from 'aws-sdk/clients/ssooidc';
 
 @Injectable()
 export class AuthService {
     constructor(
-        @InjectRepository(User) private userRepository: Repository<User>,
         private jwtService: JwtService,
         private readonly cacheService: CacheService,
     ) {}
-
-    async validateUser(email: string, password: string) {
-        const user = await this.userRepository.findOne({
-            where: { email, deletedAt: null },
-        });
-
-        if (!user) {
-            throw new NotFoundException('회원이 존재하지 않습니다.');
-        }
-        const comparePassword = await bcrypt.compare(password, user.password);
-        if (!comparePassword) {
-            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
-        }
-        return user;
-    }
 
     async login(user: any): Promise<any> {
         const accessToken = await this.generateAccessToken(user.id);
@@ -82,28 +60,5 @@ export class AuthService {
         } catch (err) {
             return false;
         }
-    }
-
-    async findEmail(data): Promise<string> {
-        const user = await this.userRepository.findOne({
-            where: { name: data.name, phone: data.phone },
-            select: ['email'],
-        });
-
-        if (!user) {
-            throw new UnauthorizedException('회원이 존재하지 않습니다.');
-        }
-
-        const email = user.email;
-        const index = email.indexOf('@');
-
-        let secureEmail = null;
-
-        if (index <= 3) {
-            secureEmail = email.substring(0, index - 2) + '**' + email.substring(index);
-        } else {
-            secureEmail = email.substring(0, index - 3) + '***' + email.substring(index);
-        }
-        return secureEmail;
     }
 }
