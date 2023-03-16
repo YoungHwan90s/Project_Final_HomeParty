@@ -27,8 +27,8 @@
                 tag,
                 // user,
             } = response;
+            console.log(maxMember)
 
-            //prettier-ignore
             const tagHtml =
                 tag.length > 0
                 ? tag.map((tag) =>
@@ -38,12 +38,11 @@
                   ).join('')
                 : ``;
 
-            //prettier-ignore
             const partyImageHtml =
                 thumbnail.length > 0
                 ? thumbnail.map((thumbnail) => `
                     <li class="partyImageItem">
-                        <img src="${thumbnail}" alt="" class="partyImage" />
+                        <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
                     </li>
                 `).join('')
                 : `

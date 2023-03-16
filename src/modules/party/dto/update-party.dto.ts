@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdatePartyDto {
     @IsString()
@@ -8,8 +8,8 @@ export class UpdatePartyDto {
     @IsString()
     readonly content: string;
 
-    @IsString()
-    readonly maxMember: string;
+    @IsNumber()
+    readonly maxMember: number;
 
     @IsOptional()
     @IsString()
