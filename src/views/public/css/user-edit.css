@@ -1,13 +1,35 @@
-@charset "UTF-8";
+/* #address input text{
+    margin-left : 60%;
+ 
+ }
+ #addressButton{
+    text-align : center;
+    text-indent : 0px auto; 
+    background-color : #00c3e6;
+    width :  0px auto;
+    font-weight : bold;
+    color : #353535;
+ }
+ #input-address-1{
+    width : 40%;
+    margin-right: 12px;
+ }
+ #input-address-2{
+    width : 60%;
+    background-color : white;
+ } */
+
+ @charset "UTF-8";
 @keyframes headerMove{
       0% {transform: translate(0px); }
       50% {transform: translate(400px); }
       100% {transform: translate(0,0);}
 }
 
-* p {
+* .mypage-text {
    width: 250px;
    height: 60px;
+   font-weight: 900;
 }
 
 .mypage-container {
@@ -38,7 +60,7 @@
    align-items: center;
 }
 
-.profile {
+.profile-wrap {
    width: 60%;
    height: 70%;
 
@@ -48,20 +70,20 @@
    align-items: center;
 }
 
-.image {
+.profile-image {
    width: 100%;
    height: 30%;
    border-radius: 100%;
 }
 
-img {
+.profile-img {
    width: 200px;
    height: 200px;
    border-radius: 100%;
    object-fit: fill;
 }
 
-.email {
+.profil-email {
    width: 100%;
    height: 10%;
 
@@ -70,17 +92,13 @@ img {
    margin-top: 3%
 }
 
-#email {
-   font-weight: 900;
-}
-
-.button {
+.mypage-btn {
    display: flex;
    flex-direction: column;
    justify-content: center;
 }
 
-button {
+.mypage-edit-btn {
    margin: 2.5%
 }
 
@@ -97,36 +115,6 @@ button {
    margin-top: 5%;
 }
 
-.user {
+.my-info {
    margin-bottom: 5%;
 }
-
-/*태블릿*/
-/* @media all and (min-width:576px){
-   .mypage-container {
-      margin-top: 30%;
-      display: flex;
-      flex-direction: column;
-   }
-   img {
-      width: 300px;
-      height: 300px;
-      border-radius: 100%;
-      object-fit: fill;
-   }
-} */
-
-/*데스크톱*/
-/* @media all and (min-width:1200px){
-   .mypage-container {
-      margin-top: 50%;
-      display: flex;
-      flex-direction: column;
-   }
-   img {
-      width: 300px;
-      height: 300px;
-      border-radius: 100%;
-      object-fit: fill;
-   }
-}  */

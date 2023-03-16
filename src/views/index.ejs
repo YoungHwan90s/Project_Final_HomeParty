@@ -29,8 +29,8 @@
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/user-menu.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
-        <!-- <link rel="stylesheet" href="/css/user-menu-mypage.css" />
-        <link rel="stylesheet" href="/css/user-menu-edit.css" /> -->
+        <link rel="stylesheet" href="/css/user-mypage.css" />
+        <link rel="stylesheet" href="/css/user-edit.css" />
         <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-make.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
@@ -69,9 +69,9 @@
         <% if (components === 'authentication') {%><%-include('auth-authentication.ejs') %><% } %> 
         <% if (components === 'reset-password') {%><%-include('auth-reset-password.ejs') %><% } %> 
         <% if (components === 'user-menu') {%><%-include('user-menu.ejs') %><% } %>
-        <% if (components === 'user-edit') {%><%-include('user-menu-edit.ejs') %><% } %>
-        <% if (components === 'user-mypage') {%><%-include('user-menu-mypage.ejs') %><% } %>
-        <% if (components === 'wish-list') {%><%-include('user-menu-wish-list.ejs') %><% } %>
+        <% if (components === 'user-edit') {%><%-include('user-edit.ejs') %><% } %>
+        <% if (components === 'user-mypage') {%><%-include('user-mypage.ejs') %><% } %>
+        <% if (components === 'wish-list') {%><%-include('user-wish-list.ejs') %><% } %>
         <% if (components === 'manage') {%><%-include('manage.ejs') %><% } %>
         <% if (components === 'manage-host') {%><%-include('manage-host.ejs') %><% } %>
         <% if (components === 'manage-guest') {%><%-include('manage-guest.ejs') %><% } %>
@@ -124,7 +124,7 @@
                 $('#main-header').append(html);
             } else {
                 let html = `<nav class="nav container">
-                                    <a href="#" class="nav__logo">
+                                    <a href="/" class="nav__logo">
                                         <img src="assets/img/logo.png" alt="" class="nav__logo-img">
                                         모아바
                                     </a>
@@ -150,6 +150,75 @@
                                 </nav>`;
                 $('#main-header').append(html);
             }
+            /*=============== SHOW MENU ===============*/
+            const navMenu = document.getElementById('nav-menu'),
+                navToggle = document.getElementById('nav-toggle'),
+                navClose = document.getElementById('nav-close');
+
+            if (navToggle) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.add('show-menu');
+                });
+            }
+
+            if (navClose) {
+                navClose.addEventListener('click', () => {
+                    navMenu.classList.remove('show-menu');
+                });
+            }
+
+            /*=============== REMOVE MENU MOBILE ===============*/
+            const navLink = document.querySelectorAll('.nav__link');
+
+            function linkAction() {
+                const navMenu = document.getElementById('nav-menu');
+                navMenu.classList.remove('show-menu');
+            }
+            navLink.forEach((n) => n.addEventListener('click', linkAction));
+
+            /*=============== CHANGE BACKGROUND HEADER ===============*/
+            function scrollHeader() {
+                const header = document.getElementById('main-header');
+
+                if (this.scrollY >= 50) header.classList.add('scroll-header');
+                else header.classList.remove('scroll-header');
+            }
+            window.addEventListener('scroll', scrollHeader);
+
+            /*=============== MIXITUP FILTER PRODUCTS ===============*/
+
+            /* Default filter products */
+
+            /* Link active products */
+
+            /*=============== SHOW SCROLL UP ===============*/
+            function scrollUp() {
+                const scrollUpButton = document.getElementById('scroll-up');
+                //스크롤이 350 뷰포트 높이보다 높을때, a 태그에 show-scroll 클래스를 scroll-top 클래스랑 같이 더함
+                if (this.scrollY >= 350) scrollUpButton.classList.add('show-scroll');
+                else scrollUpButton.classList.remove('show-scroll');
+            }
+            window.addEventListener('scroll', scrollUp);
+
+            /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
+            const sections = document.querySelectorAll('section[id]');
+
+            // function scrollActive() {
+            // const scrollY = window.pageYOffset
+
+            // sections.forEach(current => {
+            //     const sectionHeight = current.offsetHeight,
+            //     sectionTop = current.offsetTop - 58,
+            //     sectionId = current.getAttribute('id')
+
+            //     if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+            //         document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
+            //     } else {
+            //         document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
+            //     }
+            // })
+            // }
+            // window.addEventListener('scroll', scrollActive)
         });
     });
 </script>
