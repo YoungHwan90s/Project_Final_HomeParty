@@ -11,9 +11,11 @@ import {
     Res,
     UseGuards,
 } from '@nestjs/common';
+import { DeleteResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
+import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 
@@ -28,17 +30,16 @@ export class PartyController {
     }
 
     //파티 상세 조회
-    @Get(':partyId')
-    async getPartyById(@Param('partyId') partyId: number) {
-        return await this.partyService.getPartyById(partyId);
+    @Get('/:partyId')
+    async getPartyById(@Param('partyId') partyId: number): Promise<Party> {
+        return await this.partyService.getPartyByIdWithRelations(partyId);
     }
-    q;
 
     // 파티 등록
     @UseGuards(JwtAuthGuard)
     @HttpCode(201)
     @Post('/')
-    async createParty(@Req() req, @Body() partyInfo: CreatePartyDto) {
+    async createParty(@Req() req, @Body() partyInfo: CreatePartyDto): Promise<Party> {
         let user = req.user;
         return this.partyService.createParty(user, partyInfo);
     }
@@ -53,7 +54,11 @@ export class PartyController {
     // 파티 신청
     @UseGuards(JwtAuthGuard)
     @Post('/apply/:partyId')
-    async applyParty(@Req() req, @Res() res, @Param('partyId') partyId: number) {
+    async applyParty(
+        @Req() req,
+        @Res() res,
+        @Param('partyId') partyId: number,
+    ): Promise<PartyMember> {
         const user = req.user;
         await this.partyService.applyParty(user, partyId);
         return res.send({});
@@ -62,14 +67,14 @@ export class PartyController {
     // 파티 신청자 목록 조회
     @UseGuards(JwtAuthGuard)
     @Get('/apply/:partyId/members')
-    async getPartyMembers(@Param('partyId') partyId: number) {
+    async getPartyMembers(@Param('partyId') partyId: number): Promise<PartyMember[]> {
         return await this.partyService.getPartyMembers(partyId);
     }
 
     // 파티 신청 취소
     @UseGuards(JwtAuthGuard)
     @Delete('/apply-cancel/:partyId')
-    async cancelApply(@Req() req, @Param('partyId') partyId: number) {
+    async cancelApply(@Req() req, @Param('partyId') partyId: number): Promise<DeleteResult> {
         const { id: userId } = req.user;
         return await this.partyService.cancelParty(userId, partyId);
     }
@@ -81,14 +86,14 @@ export class PartyController {
         @Param('partyId') partyId: number,
         @Body('userId') userId: number,
         @Body('status') status: string,
-    ) {
+    ): Promise<PartyMember> {
         return await this.partyService.acceptMember(partyId, userId, status);
     }
 
     // 파티 삭제
     @UseGuards(JwtAuthGuard)
     @Delete('/:partyId')
-    async deleteParty(@Req() req, @Param('partyId') partyId: number) {
+    async deleteParty(@Req() req, @Param('partyId') partyId: number): Promise<Party> {
         const { id: userId } = req.user;
         return await this.partyService.deleteParty(userId, partyId);
     }

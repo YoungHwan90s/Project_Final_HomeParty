@@ -32,7 +32,7 @@
         <link rel="stylesheet" href="/css/user-mypage.css" />
         <link rel="stylesheet" href="/css/user-edit.css" />
         <link rel="stylesheet" href="/css/partyGrid.css" />
-        <link rel="stylesheet" href="/css/party-make.css" />
+        <link rel="stylesheet" href="/css/party-new.css" />
         <link rel="stylesheet" href="/css/profile-upload.css" />
         <link rel="stylesheet" href="/css/partyPage.css" />
 
@@ -82,10 +82,11 @@
         <% if (components === 'admin-tag') {%><%-include('admin-tag.ejs') %><% } %>
         <% if (components === 'party-id') {%><%-include('party-detail.ejs') %><% } %>
         <% if (components === 'party-edit') {%><%-include('party-edit.ejs') %><% } %>
-        <% if (components === 'party-make') {%><%-include('party-make.ejs') %><% } %> 
-        <% if (components === 'party-host-massage'){%> <%-include('party-host-massage.ejs') %><% } %>
+        <% if (components === 'party-new') {%><%-include('party-new.ejs') %><% } %> 
+        <% if (components === 'party-host-message'){%> <%-include('party-host-message.ejs') %><% } %>
         <% if (components === 'user-detail'){%> <%-include('user-detail.ejs') %><% } %>
         <% if (components === 'party-review'){%> <%-include('party-review.ejs') %><% } %>
+        <% if (components === 'no-page'){%> <%-include('404-page.ejs') %><% } %>
     </body>
 </html>
 
@@ -95,7 +96,7 @@
             if (userInfo) {
                 let html = `<nav class="nav container">
                                     <a href="/" class="nav__logo">
-                                        <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                                        <img src="" alt="" class="nav__logo-img">
                                         모아바
                                     </a>
                                     <div class="nav__menu" id="nav-menu">
@@ -104,7 +105,7 @@
                                                 <a href="/party" class="nav__link active-link">파티 탐색하기</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="/party-make" class="nav__link">파티 호스트</a>
+                                                <a href="/party-new" class="nav__link">파티 호스트</a>
                                             </li>
                                             <li class="nav__item">
                                                 <a href="/user-menu" class="nav__link">내 계정</a>
@@ -125,7 +126,7 @@
             } else {
                 let html = `<nav class="nav container">
                                     <a href="/" class="nav__logo">
-                                        <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                                        <img src="" alt="" class="nav__logo-img">
                                         모아바
                                     </a>
                                     <div class="nav__menu" id="nav-menu">
@@ -134,7 +135,7 @@
                                                 <a href="/party" class="nav__link active-link">파티 탐색하기</a>
                                             </li>
                                             <li class="nav__item">
-                                                <a href="/party-make" class="nav__link">파티 호스트</a>
+                                                <a href="/party-new" class="nav__link">파티 호스트</a>
                                             </li>
                                             <li class="nav__item">
                                                 <a href="/login" class="nav__link">로그인</a>

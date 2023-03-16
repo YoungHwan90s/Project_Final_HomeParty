@@ -13,5 +13,6 @@ import { AuthModule } from '../auth/auth.module';
     ],
     controllers: [PartyController],
     providers: [PartyService],
+    exports: [PartyService],
 })
 export class PartyModule {}

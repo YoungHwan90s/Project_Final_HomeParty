@@ -35,10 +35,8 @@
                     partyMember,
                     tag,
                     user,
-                } = response;  
+                } = response;
 
-                
-                
                 const tagHtml =
                     tag.length > 0
                         ? tag
@@ -53,13 +51,15 @@
 
                 const partyImageHtml =
                     thumbnail.length > 0
-                        ? thumbnail .map((thumbnail) => `
+                        ? thumbnail
+                              .map(
+                                  (thumbnail) => `
                             <li class="partyImageItem">
                                 <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
                             </li>
                             `,
-                                )
-                                .join('')
+                              )
+                              .join('')
                         : `
                             <li class="partyImageItem">
                                 <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
@@ -174,31 +174,15 @@
                                     </figure>
                                 </a>
 
-                                <a href="#" class="hostContactLink"><button onclick="prepareAlert()">호스트에게 연락하기</button></a>
+                                <a href="#" class="hostContactLink"><button onclick="location.href='/no-page'">호스트에게 연락하기</button></a>
                             </div>
                         </section>
                     </div>
                 </div>`;
                 $('.partyPage').append(html);
 
-                if (document.querySelector('.partyPage')) {
-                    new Calendar(document.querySelector('.partyPage .calendar'));
-
-                    document.querySelector(`time[datetime="${date}"]`).classList.add('selected');
-
-                    document.querySelector('.today').classList.remove('today');
-
-                    const partyDetailSlide = tns({
-                        container: '.partyDetail .partyImageList',
-                        slideBy: 'page',
-                        controlsContainer: '.partyImageButtonWrapper',
-                        autoplay: true,
-                        autoplayButtonOutput: false,
-                    });
-                }
-                
                 if (hostId === userId) {
-                    const buttonEdit = `<a href="/party/edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`;
+                    const buttonEdit = `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`;
 
                     $('.partyPage').prepend(buttonEdit);
 
@@ -262,7 +246,6 @@
                             );
                         });
 
-
                         // 승낙한 멤버 배열
                         const acceptedMembers = [
                             ...e.currentTarget.querySelectorAll('.memberAcceptButton.selected'),
@@ -277,6 +260,23 @@
                         );
                     });
                 }
+
+                if (document.querySelector('.partyPage')) {
+                    new Calendar(document.querySelector('.partyPage .calendar'));
+
+                    document.querySelector(`time[datetime="${date}"]`).classList.add('selected');
+
+                    document.querySelector('.today').classList.remove('today');
+
+                    const partyDetailSlide = tns({
+                        container: '.partyDetail .partyImageList',
+                        slideBy: 'page',
+                        controlsContainer: '.partyImageButtonWrapper',
+                        autoplay: true,
+                        autoplayButtonOutput: false,
+                    });
+                }
+                
             },
         });
     }
@@ -329,7 +329,7 @@
         $.ajax({
             type: 'PATCH',
             url: `/api/party/apply/${partyId}`,
-            data: {userId, status},
+            data: { userId, status },
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
@@ -347,9 +347,4 @@
         });
     }
 
-    function prepareAlert() {
-        customAlert('해당 서비스는 준비중 입니다.', function () {
-            window.location.reload();
-        });
-    }
 </script>
