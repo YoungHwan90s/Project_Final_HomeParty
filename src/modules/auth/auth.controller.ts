@@ -27,7 +27,6 @@ import { createUserSchema } from 'src/util/joi/joi-validation';
 import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
 import { SaveOptions, UpdateResult } from 'typeorm';
 import { User } from 'aws-sdk/clients/budgets';
-import { tokenType } from 'aws-sdk/clients/sts';
 import { Token } from 'aws-sdk/clients/cloudwatchlogs';
 import { Email } from 'aws-sdk/clients/organizations';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -78,7 +77,7 @@ export class AuthController {
     @Post('/find-email')
     @HttpCode(200)
     async findEmail(@Res() res, @Body() data: FindEmailDto): Promise<Email> {
-        const email = await this.authService.findEmail(data);
+        const email = await this.userService.findEmail(data);
 
         return res.send({ email });
     }
