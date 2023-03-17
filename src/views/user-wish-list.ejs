@@ -5,7 +5,7 @@
         <div class="mapWrapper">
             <div class="mapBox">
                 <!-- Backend 지도 넣어주세요 -->
-                <div id="map" style="width: 45%; height: 100%"></div>
+                <div id="map" style="width: 50%; height: 100%"></div>
             </div>
         </div>
 
@@ -41,13 +41,8 @@
                 let thumbnails = wishList[i]['party']['thumbnail'];
                 let date = wishList[i]['party']['date'];
                 let status = wishList[i]['party']['status'];
-                // console.log(thumbnails);
-                for (let j = 0; j < thumbnails.length; j++) {
-                    let thumbnail = thumbnails[j];
-                    console.log(thumbnail.partyId);
-
-                    // let thumbnail = thumbnails[i]['thumbnail']
-                    // console.log(thumbnail);
+                let thumbnail = thumbnails[0];
+                    
                     let addresses = wishList[i]['party']['address'];
                     let partyItem = `
                       <li class="partyItem">
@@ -56,7 +51,7 @@
                     <ul class="thumbnailList carouselList">
                       <li class="thumbnailItem carouselItem">
                         <div class="thumbnailRatio">
-                          <a href="http://localhost:4000/party/${thumbnail.partyId}">
+                          <a href="http://localhost:4000/party/${thumbnail.thumbnail}">
                           <img
                             src="${thumbnail.thumbnail}"
                             alt=""
@@ -134,7 +129,7 @@
                     $(`#partyItem`).append(partyItem);
                 }
             }
-        },
+        ,
     });
 
     function updateWishList(id, partyId) {
