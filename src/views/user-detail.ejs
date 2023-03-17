@@ -1,19 +1,5 @@
 <body>
-    <!-- Responsive navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand fs-3 " href="#!">MoAvA </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">메세지</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Header - set the background image for the header in the line below-->
+     <!-- Header - set the background image for the header in the line below-->
     <header class="py-5 bg-image-full" style="background-color: white ">
         <div class="text-center my-3" id="userInfo">
     </header>
@@ -72,7 +58,7 @@
                 
                 const date = new Date(data.createdAt)
                 const Info = `
-                    <img class="img-fluid rounded-circle mb-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 15%; height: 15%;" />
+                    <img class="img-fluid rounded-circle mb-4" src="${data.profile}" alt="..." style="width: 15%; height: 15%;" />
                         <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${data.name} 입니다.</h1>
                         <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
                         <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
@@ -87,11 +73,9 @@
                 for(let i=0; i < parties.length; i++){ 
                     let party = parties[i]
                     thumbnails=party.thumbnail
-                    for(let j = 0;j < thumbnails.length;j++ ){
-                   
                     const thumbNail =`
                     <a href="http://localhost:4000/party/${party.id}">
-                        <img class="card-img" src="${thumbnails[j].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
+                        <img class="card-img" src="${thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
                         <div class="card-body">
                             <h5 class="card-title" style="font-weight: bold; font-family: Arial, sans-serif;">파티 제목: ${party.title}</h5>
                         <p class="card-text" style="color: #009900;">${party.status}</p>
@@ -100,7 +84,7 @@
                     </div>
                     `;
                     $(`#thumbNail`).append(thumbNail)
-                    }
+                    
                     let reviewArr = parties[i].review
                     
                     for(let j = 0; j<reviewArr.length;j++){
