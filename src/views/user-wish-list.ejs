@@ -20,37 +20,36 @@
 <button id="like-button${id}" onclick="myWishLists()">파티불러오기</button> -->
 
 <script>
-        // function myWishLists() {
-            $.ajax({
-                type: 'GET',
-                url: `/user/wish-list`,
-                data: {},
-                headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
-                success: function (response) {
-                    let wishList = response['wishList'];
-                    sessionStorage.setItem('wishList', JSON.stringify(wishList));
+    // function myWishLists() {
+    $.ajax({
+        type: 'GET',
+        url: `/user/wish-list`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            let wishList = response['wishList'];
+            sessionStorage.setItem('wishList', JSON.stringify(wishList));
 
-                    for (let i = 0; i < wishList.length; i++) {
-                        let partyId = wishList[i]['party']['id'];
-                        let title = wishList[i]['party']['title'];
-                        let maxMember = wishList[i]['party']['maxMember'];
-                        let currMember = wishList[i]['party']['currMember'];
-                        let thumbnails = wishList[i]['party']['thumbnail'];
-                        let date = wishList[i]['party']['date'];
-                        let status = wishList[i]['party']['status'];
-                        // console.log(thumbnails);
-                        for (let j = 0; j < thumbnails.length; j++) {
-                            let thumbnail = thumbnails[j];
-                            console.log(thumbnail.partyId);
-                          
-                          
-                        // let thumbnail = thumbnails[i]['thumbnail']
-                        // console.log(thumbnail);
-                       let addresses = wishList[i]['party']['address']
-                      let partyItem = `
+            for (let i = 0; i < wishList.length; i++) {
+                let partyId = wishList[i]['party']['id'];
+                let title = wishList[i]['party']['title'];
+                let maxMember = wishList[i]['party']['maxMember'];
+                let currMember = wishList[i]['party']['currMember'];
+                let thumbnails = wishList[i]['party']['thumbnail'];
+                let date = wishList[i]['party']['date'];
+                let status = wishList[i]['party']['status'];
+                // console.log(thumbnails);
+                for (let j = 0; j < thumbnails.length; j++) {
+                    let thumbnail = thumbnails[j];
+                    console.log(thumbnail.partyId);
+
+                    // let thumbnail = thumbnails[i]['thumbnail']
+                    // console.log(thumbnail);
+                    let addresses = wishList[i]['party']['address'];
+                    let partyItem = `
                       <li class="partyItem">
                 <div class="thumbnailWrapper carousel">
                   <a href="" class="partyLink thumbnailLink">
@@ -130,44 +129,37 @@
                   <i class="bx bxs-heart" aria-hidden="true"></i>
                 </button>
               </li>
-                `
+                `;
 
-                $(`#partyItem`).append(partyItem)
-                    }}
-                },
-            });
+                    $(`#partyItem`).append(partyItem);
+                }
+            }
+        },
+    });
 
+    function updateWishList(id, partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    $('#like-button${id}').css('color', 'red');
+                } else {
+                    $('#like-button${id}').css('color', '');
+                }
+            },
+            error: function (error) {
+                customAlert(
+                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    function () {
+                        window.location.reload();
+                    },
+                );
+            },
+        });
+    }
 
-        function updateWishList(id, partyId) {
-            $.ajax({
-                type: 'POST',
-                url: `/user/wish-list/${partyId}`,
-                data: {},
-                success: function (response) {
-                    if (response.updateOrDelete == 0) {
-                        $('#like-button${id}').css('color', 'red');
-                    } else {
-                        $('#like-button${id}').css('color', '');
-                    }
-                },
-                error: function (error) {
-                    customAlert(
-                        '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
-                        function () {
-                            window.location.reload();
-                        },
-                    );
-                },
-            });
-        }
-</script>
-
-<script
-    type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services"
-></script>
-
-<script>
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
             center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표

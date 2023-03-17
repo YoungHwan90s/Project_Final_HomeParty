@@ -72,10 +72,10 @@ function findAddr() {
     }).open();
 }
 
-/*=============== log out ===============*/
+/*---------------------------------------- log out ----------------------------------------*/
 function logout() {
     sessionStorage.clear();
     customAlert('정상적으로 로그아웃 되었습니다.', function () {
-        window.location.replace('/')
+        window.location.replace('/');
     });
 }
