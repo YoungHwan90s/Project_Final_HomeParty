@@ -1,15 +1,14 @@
-<body>
+
     <!-- Header - set the background image for the header in the line below-->
     <header class="py-5 bg-image-full" style="background-color: white ">
         <div class="text-center my-3" id="userinfo">
     </header>
     
-    <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 10%;margin-right: 10%"></div>
+    <div class="border width" data-width="0.5px" role="presentation"></div>
     <div id="reply"></div>
   
 
-  
-</body>
+
 <div class="mainSection">
     <ul class="partyList"></ul>
 </div>
@@ -60,7 +59,7 @@
                                     <input type="text"  readonly class="form-control-plaintext" placeholder="${data.name}" id="replyId" style="width: 20%;">
                                     <input type="range" oninput="drawStar(this)" value="5" step="1" min="1" max="10">
                                 <textarea class="form-control" id="reviewtextarea" rows="3" style = "resize: none"></textarea>
-                                <button type="button" class="btn btn-dark mt-3" onClick="reviewcreate(${data.id});">post reply</button>
+                                <button type="button" class="btn btn-dark mt-3" onClick="reviewcreate(${data.id});">리뷰 남기기</button>
                                 </li>
                             </ul>
                         </div>
