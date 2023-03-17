@@ -20,7 +20,8 @@
 <button id="like-button${id}" onclick="myWishLists()">파티불러오기</button> -->
 
 <script>
-    // function myWishLists() {
+    let addresses = [];
+
     $.ajax({
         type: 'GET',
         url: `/user/wish-list`,
@@ -42,9 +43,11 @@
                 let date = wishList[i]['party']['date'];
                 let status = wishList[i]['party']['status'];
                 let thumbnail = thumbnails[0];
-                    
-                    let addresses = wishList[i]['party']['address'];
-                    let partyItem = `
+
+                let address = wishList[i]['party']['address'];
+                addresses.push(address);
+
+                let partyItem = `
                       <li class="partyItem">
                 <div class="thumbnailWrapper carousel">
                   <a href="" class="partyLink thumbnailLink">
@@ -126,10 +129,46 @@
               </li>
                 `;
 
-                    $(`#partyItem`).append(partyItem);
-                }
+                $(`#partyItem`).append(partyItem);
             }
-        ,
+            var mapContainer = document.getElementById('map'),
+                mapOption = {
+                    center: new kakao.maps.LatLng(33.450701, 126.570667),
+                    level: 9,
+                };
+
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+            var geocoder = new kakao.maps.services.Geocoder();
+            var mapTypeControl = new kakao.maps.MapTypeControl();
+            map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
+            var zoomControl = new kakao.maps.ZoomControl();
+            map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
+                markerImageSize = new kakao.maps.Size(30, 30),
+                markerImageOptions = {
+                    offset: new kakao.maps.Point(25, 25),
+                };
+
+            for (var i = 0; i < addresses.length; i++) {
+                geocoder.addressSearch(addresses[i], function (result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        var marker = new kakao.maps.Marker({
+                            map: map,
+                            position: coords,
+                            image: new kakao.maps.MarkerImage(
+                                markerImageUrl,
+                                markerImageSize,
+                                markerImageOptions,
+                            ),
+                        });
+                        map.setCenter(coords);
+                    }
+                });
+            }
+        },
     });
 
     function updateWishList(id, partyId) {
@@ -152,58 +191,6 @@
                     },
                 );
             },
-        });
-    }
-
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 6, // 지도의 확대 레벨
-        };
-
-    // 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-    // 마우스 휠과 모바일 터치를 이용한 지도 확대, 축소를 막는다
-    // map.setZoomable(false);
-    // 주소-좌표 변환 객체를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
-    // 지도 타입 변경 컨트롤을 생성한다
-    var mapTypeControl = new kakao.maps.MapTypeControl();
-    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
-    // 지도에 확대 축소 컨트롤을 생성한다
-    var zoomControl = new kakao.maps.ZoomControl();
-    // 지도의 우측에 확대 축소 컨트롤을 추가한다
-    map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
-    // 주소-좌표 변환 객체를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
-
-    // 주소들 배열
-    var addresses = ['건원대로', '건원대로76번길', '건원대로76번길 123'];
-
-    // 마커 이미지 정보
-    var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
-        markerImageSize = new kakao.maps.Size(51, 52),
-        markerImageOptions = {
-            offset: new kakao.maps.Point(25, 25),
-        };
-
-    // 주소로 좌표를 검색하고 마커를 생성합니다
-    for (var i = 0; i < addresses.length; i++) {
-        geocoder.addressSearch(addresses[i], function (result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: coords,
-                    image: new kakao.maps.MarkerImage(
-                        markerImageUrl,
-                        markerImageSize,
-                        markerImageOptions,
-                    ),
-                });
-                map.setCenter(coords);
-            }
         });
     }
 </script>

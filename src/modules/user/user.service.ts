@@ -102,7 +102,7 @@ export class UserService {
         return this.userRepository.softDelete(id);
     }
 
-    async updateWishList(user: User, partyId: number): Promise<WishList | Number> {
+    async updateWishList(user: User, partyId: number) {
         const checkWishList = await this.wishListRepository.findOne({
             where: { partyId, userId: user.id },
         });

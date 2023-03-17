@@ -48,9 +48,20 @@
     </div>
 </main>
 
-<button id="like-button${id}" onclick="updateWishList(partyId)">좋아요</button>
-
 <script>
+
+$(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let userId = userInfo.id
+                getParties(userId)
+            } else {
+                getParties()
+            }
+        });
+    });
+
+function getParties(userId) {
     $.ajax({
         type: 'GET',
         url: `/api/party/list`,
@@ -152,8 +163,8 @@
                             </dl>
                         </a>
 
-                        <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
-                            <i class="bx bxs-heart" aria-hidden="true"></i>
+                        <button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                            <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
                         </button>
                     </li>
                 `;
@@ -165,23 +176,28 @@
             });
         },
     });
-
-    function updateWishList(userId, partyId) {
+}
+    function updateWishList(partyId) {
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
-            data: { userId },
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    $(`#like-button${partyId}`).css('color', 'red');
+                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
                 } else {
-                    $(`#like-button${partyId}`).css('color', '');
+                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
                 }
             },
             error: function (error) {
                 customAlert(
-                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    error.responseJSON.message,
                     function () {
                         window.location.reload();
                     },
