@@ -282,10 +282,10 @@ export class PartyService {
 
             if (partyMember && partyMember.status === '거절') {
                 party.status === '신청대기';
-                party.currMember++;
+                party.currMember += 1;
             } else {
                 partyMember.status = '거절';
-                party.currMember--;
+                party.currMember -= 1;
             }
             await this.partyRepository.update(partyId, party);
             return await this.partyMemberRepository.save(partyMember);
