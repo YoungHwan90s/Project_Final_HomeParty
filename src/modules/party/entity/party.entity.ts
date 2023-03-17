@@ -60,7 +60,7 @@ export class Party {
     @ManyToOne(() => User, (user) => user.party)
     user: User;
     
-    // 파티 <-> 장바구니: 일대일 관계
+    // 파티 <-> 장바구니: 일대다 관계
     @OneToMany(() => WishList, (wishList) => wishList.party, { cascade: true })
     wishList: WishList[];
 
