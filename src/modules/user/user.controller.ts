@@ -43,7 +43,7 @@ export class UserController {
     async deleteUser(@Req() req, @Res() res) {
         const { id } = req.user;
         await this.userService.deleteUser(id);
-        return res.json({});
+        return await res.json({});
     }
 
     @UseGuards(JwtAuthGuard)
@@ -58,11 +58,10 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/wish-list/:partyId')
-    @HttpCode(204)
+    @HttpCode(200)
     async updateWishList(@Req() req, @Res() res, @Param('partyId') partyId: number) {
         const user = req.user;
         const updateOrDelete = await this.userService.updateWishList(user, partyId);
-
         return res.json({ updateOrDelete });
     }
 }
