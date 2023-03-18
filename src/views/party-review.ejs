@@ -31,8 +31,7 @@
                 console.log(data);
                 const thumbnails = data.thumbnail
                 const date = new Date(data.createdAt)
-                  console.log(thumbnails[0].thumbnail);
-                
+        
                 const Info = `
                 <a href="http://localhost:4000/party/${data.id}">
                     <img class="img-fluid rounded-circle mb-4" src="${thumbnails[0].thumbnail}" alt="..." style="width: 15%; height: 15%;" />
@@ -41,8 +40,7 @@
                         <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
                         <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
                         <h1 class="text-black fs-3 fw-bolder" >소개</h1>
-                        <p class="text-black-50 mb-0" id="party-content">내용 : ${data.content}</p>
-                        
+                        <p class="text-black-50 mb-0" id="party-content" style="margin-right : 20%; margin-left: 20%; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;"> 내용 :  ${data.content}</p>
                     `;
                     $(`#userinfo`).append(Info)
                 
@@ -66,9 +64,6 @@
                     </div>
                 `
                 $(`#reply`).append(replyform)
-                
-                
-                    
                 }
                 })
             }
@@ -77,11 +72,18 @@
         
 
     // 서버로 데이터 전송
+    const drawStar = (target) => {
+  document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
+}
+
     function reviewcreate(hostid) {
         const reviewInfo = {
             review: $('#reviewtextarea').val(), //  리뷰 내용
             rating: $('.input-star input[type="range"]').val(), // 별점
         };
+
+        const accessToken = sessionStorage.getItem('accessToken');
+        const refreshToken = sessionStorage.getItem('refreshToken');
 
         $.ajax({
             type: 'POST',
