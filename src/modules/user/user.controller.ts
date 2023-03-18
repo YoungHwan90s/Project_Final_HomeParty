@@ -10,11 +10,14 @@ import {
     HttpCode,
     Post,
     Res,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
+import { CheckPasswordDto } from './dto/check-password.dto';
+import bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
@@ -44,6 +47,19 @@ export class UserController {
         const { id } = req.user;
         await this.userService.deleteUser(id);
         return await res.json({});
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/check-password')
+    @HttpCode(200)
+    async checkPw(@Req() req, @Res() res, @Body() data:CheckPasswordDto) {
+        const user = req.user;
+        const isValidPassword = await bcrypt.compare(data.password, user.password);
+        if (!isValidPassword) {
+            throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+        }
+        const check = await this.userService.checkPw(user)
+        return res.json({})
     }
 
     @UseGuards(JwtAuthGuard)

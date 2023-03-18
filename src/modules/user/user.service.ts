@@ -13,6 +13,7 @@ import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { WishList } from './entity/wish-list.entity';
 import { PartyService } from '../party/party.service';
+import { CheckPasswordDto } from './dto/check-password.dto';
 
 @Injectable()
 export class UserService {
@@ -100,6 +101,13 @@ export class UserService {
 
     async deleteUser(id: number): Promise<DeleteResult> {
         return this.userRepository.softDelete(id);
+    }
+
+    async checkPw(user: User) {
+        return await this.userRepository.findOne({
+            where: {password: user.password}
+        });
+            
     }
 
     async updateWishList(user: User, partyId: number) {
