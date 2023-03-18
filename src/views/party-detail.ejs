@@ -7,7 +7,7 @@
                 let userId = userInfo.id;
                 getParty(userId);
             } else {
-                getParty();
+                getParty(0);
             }
         });
     });
@@ -25,6 +25,7 @@
             },
             success: function (response) {
                 const {
+                    id : partyId,
                     hostId,
                     title,
                     content,
@@ -37,8 +38,9 @@
                     partyMember,
                     tag,
                     user,
+                    wishList,
                 } = response;
-
+                const userWishListMatch = wishList.find((user) => user.userId == userId)
                 const tagHtml =
                     tag.length > 0
                         ? tag.map((tag) => `<li class="tagItem">#${tag.tagName}</li>`).join('')
@@ -92,9 +94,14 @@
                                 
                             </div>
                         </dl>
-                        <button type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
-                            <i class="bx bxs-heart" aria-hidden="true"></i>
-                        </button>
+                        ${userWishListMatch ? 
+                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                            <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red;"></i>
+                        </button>` :
+                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                            <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
+                        </button>`
+                        }
                     </div>
                 </header>
 
@@ -393,4 +400,36 @@
             },
         });
     }
+    
+    function updateWishList(partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
+                } else {
+                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                }
+            },
+            error: function (error) {
+                customAlert(
+                    error.responseJSON.message,
+                    function () {
+                        window.location.reload();
+                    },
+                );
+            },
+        });
+    }
+
+
+
 </script>

@@ -56,7 +56,7 @@ $(document).ready(function () {
                 let userId = userInfo.id
                 getParties(userId)
             } else {
-                getParties()
+                getParties(0)
             }
         });
     });
@@ -64,7 +64,7 @@ $(document).ready(function () {
 function getParties(userId) {
     $.ajax({
         type: 'GET',
-        url: `/api/party/list`,
+        url: `/api/party/list/`,
         data: {},
         success: function (response) {
             let partyList = response;
@@ -78,6 +78,9 @@ function getParties(userId) {
                 const date = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
+                const wishList = partyList[i]['wishList'];
+
+                const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
 
                 //prettier-ignore
                 const thumbnailHtml = `
@@ -162,10 +165,14 @@ function getParties(userId) {
                                 </div>
                             </dl>
                         </a>
-
-                        <button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                        ${isWishListMatchWithParty ? 
+                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                            <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red";></i>
+                        </button>` :
+                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
-                        </button>
+                        </button>`
+                        }
                     </li>
                 `;
 
