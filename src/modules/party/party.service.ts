@@ -26,7 +26,7 @@ export class PartyService {
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
             where: { deletedAt: null },
-            relations: ['thumbnail'],
+            relations: ['thumbnail','wishList'],
         });
     }
 
