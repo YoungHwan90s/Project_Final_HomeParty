@@ -24,8 +24,8 @@ export class PartyController {
     constructor(private readonly partyService: PartyService) {}
 
     // 파티 목록 조회
-    @Get('/list')
-    async getParties(): Promise<Party[]> {
+    @Get('/list/')
+    async getParties() {
         return await this.partyService.getParties();
     }
 

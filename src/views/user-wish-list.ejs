@@ -119,12 +119,8 @@
                     </div>
                   </dl>
                 </a>
-                <button
-                  type="button"
-                  class="partyLikeButton"
-                  aria-label="좋아요 목록에 추가 버튼"
-                >
-                  <i class="bx bxs-heart" aria-hidden="true"></i>
+                <button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                    <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red;"></i>
                 </button>
               </li>
                 `;
@@ -171,21 +167,27 @@
         },
     });
 
-    function updateWishList(id, partyId) {
+    function updateWishList(partyId) {
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
             data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
             success: function (response) {
-                if (response.updateOrDelete == 0) {
-                    $('#like-button${id}').css('color', 'red');
+                if (response.updateOrDelete == 1) {
+                  document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
+                  document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                  window.location.reload();
                 } else {
-                    $('#like-button${id}').css('color', '');
+                  window.location.reload();
                 }
             },
             error: function (error) {
                 customAlert(
-                    '찜 목록 담기에 실패했습니다. 잠시 후 다시 시도해 주십시오.',
+                    error.responseJSON.message,
                     function () {
                         window.location.reload();
                     },

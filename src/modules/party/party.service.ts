@@ -26,7 +26,7 @@ export class PartyService {
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
             where: { deletedAt: null },
-            relations: ['thumbnail'],
+            relations: ['thumbnail','wishList'],
         });
     }
 
@@ -206,7 +206,7 @@ export class PartyService {
         }
     }
 
-    async applyParty(user: User, partyId: number):Promise<PartyMember> {
+    async applyParty(user: User, partyId: number): Promise<PartyMember> {
         const existingPartyMember = await this.partyMemberRepository.findOne({
             where: { partyId, userId: user.id },
         });
@@ -266,10 +266,10 @@ export class PartyService {
         if (status === '신청승낙') {
             if (partyMember && partyMember.status === '신청승낙') {
                 party.status === '신청대기';
-                party.currMember--;
+                party.currMember -= 1;
             } else {
                 partyMember.status = '신청승낙';
-                party.currMember++;
+                party.currMember += 1;
             }
             await this.partyRepository.update(partyId, party);
             return await this.partyMemberRepository.save(partyMember);
@@ -282,10 +282,10 @@ export class PartyService {
 
             if (partyMember && partyMember.status === '거절') {
                 party.status === '신청대기';
-                party.currMember++;
+                party.currMember += 1;
             } else {
                 partyMember.status = '거절';
-                party.currMember--;
+                party.currMember -= 1;
             }
             await this.partyRepository.update(partyId, party);
             return await this.partyMemberRepository.save(partyMember);

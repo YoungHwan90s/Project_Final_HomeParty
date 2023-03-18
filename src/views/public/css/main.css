@@ -572,7 +572,6 @@ button {
 .footer__content {
   row-gap: 2.5rem;
   padding-bottom: 2.5rem;
-  border-bottom: 1px solid var(--text-color);
 }
 .footer__subtitle {
   color: #fff;
@@ -597,7 +596,8 @@ button {
 }
 .footer__copy {
   font-size: var(--smaller-font-size);
-}#footer {
+}
+#footer {
   padding: 4rem 0 2.5rem;
 }
 .footer-grid {
@@ -762,6 +762,13 @@ button {
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
   }
+  .footer__container {
+    max-width: 1024px;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    text-align: center;
+    padding: 20px 0;
+  }
 }
 
 /* For large devices */
@@ -843,10 +850,24 @@ button {
     margin-bottom: 1rem;
   }
 
+  .footer__container {
+    padding-top: 70px;
+    padding-bottom: 30px;
+    position: relative;
+    margin: 0 auto;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1240px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 0;
+    letter-spacing: 0;
+    }
+  
   .footer__content {
-    grid-template-columns: repeat(4, max-content);
+    grid-template-columns: repeat(2, max-content);
     column-gap: 4rem;
-    padding-bottom: 5.5rem;
+    padding-bottom: 3.5rem;
   }
   .footer__group {
     margin-top: 3rem;
@@ -854,7 +875,7 @@ button {
     justify-content: space-between;
   }
   .footer__title {
-    font-size: var(--h2-font-size);
+    font-size: 13px;
   }
   .footer__social {
     column-gap: 2rem;
@@ -863,33 +884,48 @@ button {
   .scrollup {
     right: 3rem;
   }
+
+  #wrap-home .content {
+    height: 100%;
+  }
+  #wrap-home .content .cont-bx {
+    top: 33%;
+    left: 51%;
+  }
+  #wrap-home .content .cont-bx p {
+    font-size: 110px;
+  }
+  #wrap-home .content .cont-bx2 {
+    bottom: 15%;
+    left: 50%;
+  }
+  #wrap-home .content .cont-bx2 p {
+    font-size: 110px;
+  }
+  #wrap-home .content p {
+    bottom: 11%;
+  }
 }
 
 @media screen and (min-width: 1200px) {
-  .home__container {
-    padding-top: 10rem;
-  }
-  .home__data {
-    padding-top: 3rem;
-  }
-  .home__title {
-    margin-bottom: 2rem;
-  }
-  .home__description {
-    margin-bottom: 3rem;
-  }
-  .home__scroll {
-    width: 130px;
+  .footer-container {
+    padding-top: 70px;
+    padding-bottom: 30px;
+    position: relative;
+    margin: 0 auto;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1240px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 0;
+    letter-spacing: 0;
   }
 }
 
 /* Alternative code, for larger screens */
 @media screen and (min-width: 1700px) {
-  .home {
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+ 
 }
 
 .logout{
