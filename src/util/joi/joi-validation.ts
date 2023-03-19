@@ -30,6 +30,7 @@ export const findPasswordSchema = Joi.object({
 
 // 비밀번호 업데이트
 export const updatePasswordSchema = Joi.object({
+    email: Joi.string().email().required(),
     password: Joi.string().min(10).max(20).pattern(new RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/)).required(),
     confirmPassword: Joi.ref('password'),
 });
