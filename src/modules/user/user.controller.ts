@@ -10,14 +10,11 @@ import {
     HttpCode,
     Post,
     Res,
-    UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { CheckPasswordDto } from './dto/check-password.dto';
-import bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
