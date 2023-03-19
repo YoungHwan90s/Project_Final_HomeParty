@@ -79,3 +79,7 @@ function logout() {
         window.location.replace('/');
     });
 }
+
+function preventSubmit(event) {
+    event.preventDefault();
+}

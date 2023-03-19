@@ -23,9 +23,9 @@ import { CacheService } from '../../util/cache/cache.service';
 import { AuthenticateCodeDto } from './dto/authenticate-code.dto';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
-import { createUserSchema } from 'src/util/joi/joi-validation';
+import { createUserSchema, findEmailSchema, findPasswordSchema, loginSchema, updatePasswordSchema } from 'src/util/joi/joi-validation';
 import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
-import { SaveOptions, UpdateResult } from 'typeorm';
+import { UpdateResult } from 'typeorm';
 import { User } from 'aws-sdk/clients/budgets';
 import { Token } from 'aws-sdk/clients/cloudwatchlogs';
 import { Email } from 'aws-sdk/clients/organizations';
@@ -42,6 +42,7 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post('/login')
+    @UsePipes(new JoiValidationPipe(loginSchema))
     @HttpCode(200)
     async login(@Req() req, @Res() res): Promise<Token> {
         const user = req.user
@@ -59,12 +60,12 @@ export class AuthController {
     }
 
     @Post('/sign-up')
-    // @UsePipes(new JoiValidationPipe(createUserSchema))
+    @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)
-    async createUser(@Res() res, @Body() data: CreateUserDto): Promise<SaveOptions> {
-        const { id } = await this.userService.createUser(data);
+    async createUser(@Res() res, @Body() data: CreateUserDto): Promise<User> {
+        const user = await this.userService.createUser(data);
 
-        return res.send({ id });
+        return res.send({ user });
     }
 
     @Patch('/profile-update')
@@ -75,6 +76,7 @@ export class AuthController {
     }
 
     @Post('/find-email')
+    @UsePipes(new JoiValidationPipe(findEmailSchema))
     @HttpCode(200)
     async findEmail(@Res() res, @Body() data: FindEmailDto): Promise<Email> {
         const email = await this.userService.findEmail(data);
@@ -83,6 +85,7 @@ export class AuthController {
     }
 
     @Post('/email-authenticate')
+    @UsePipes(new JoiValidationPipe(findPasswordSchema))
     @HttpCode(200)
     async findPassword(@Res() res, @Body() data: AuthenticateEmailDto): Promise<void> {
         const user = await this.userService.getUser(data.email);
@@ -115,6 +118,7 @@ export class AuthController {
     }
 
     @Patch('/reset-password')
+    @UsePipes(new JoiValidationPipe(updatePasswordSchema))
     @HttpCode(200)
     async authenticateNumber(@Res() res, @Body() data: ResetPasswordDTO): Promise<UpdateResult> {
         await this.userService.resetPassword(data);
