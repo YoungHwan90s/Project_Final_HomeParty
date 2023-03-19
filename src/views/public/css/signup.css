@@ -62,7 +62,7 @@ select{
    margin : 5px;
    font-size : 15px;
 }
-#idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, #addressError, #email-error, #consentError {
+#idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, #addressError, #email-error, #sex-error {
    width:0px auto;
    display : inline-block;
    color : red;

@@ -40,8 +40,6 @@ export class UserService {
             phone: data.phone,
             birthday: data.birthday,
             address: data.address,
-            profile: data.profile,
-            introduction: data.introduction,
         });
 
         return user;
