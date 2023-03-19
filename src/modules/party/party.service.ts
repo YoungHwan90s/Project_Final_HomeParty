@@ -145,11 +145,11 @@ export class PartyService {
             if (addTagName?.length) {
                 let tagArray = [];
                 for (let i = 0; i < addTagName.length; i++) {
-                    console.log(addTagName[i]);
                     let tag = await queryRunner.manager.findOne(Tag, {
                         where: {
                             tagName: addTagName[i],
                         },
+                        lock: { mode: 'pessimistic_write'}
                     });
                     if (tag) {
                         tag.freq += 1;
