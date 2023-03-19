@@ -62,7 +62,7 @@
         <!-- body -->
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
-        <% if (components==='login') { %> <%-include('auth-login.ejs') %><% } %>
+        <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %>
         <% if (components === 'sign-up'){%><%-include('auth-sign-up.ejs') %><% } %>
         <% if (components === 'profile-upload'){%><%-include('auth-profile-upload') %><% } %> 
         <% if (components === 'find-email') {%><%-include('auth-find-email.ejs') %><% } %> 
@@ -71,6 +71,7 @@
         <% if (components === 'reset-password') {%><%-include('auth-reset-password.ejs') %><% } %> 
         <% if (components === 'user-menu') {%><%-include('user-menu.ejs') %><% } %>
         <% if (components === 'user-edit') {%><%-include('user-edit.ejs') %><% } %>
+        <% if (components === 'user-check') {%><%-include('user-check.ejs') %><% } %>
         <% if (components === 'user-mypage') {%><%-include('user-mypage.ejs') %><% } %>
         <% if (components === 'wish-list') {%><%-include('user-wish-list.ejs') %><% } %>
         <% if (components === 'manage') {%><%-include('manage.ejs') %><% } %>

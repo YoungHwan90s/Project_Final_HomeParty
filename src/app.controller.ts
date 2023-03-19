@@ -71,6 +71,12 @@ export class AppController {
         return { components: 'user-edit' };
     }
 
+    @Get('/user-check')
+    @Render('index')
+    usercheck(@Req() req): { components: string } {
+        return { components: 'user-check' };
+    }
+
     @Get('/user-mypage')
     @Render('index')
     usermypage(@Req() req): { components: string } {

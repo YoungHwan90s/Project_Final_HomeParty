@@ -13,6 +13,7 @@ import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { WishList } from './entity/wish-list.entity';
 import { PartyService } from '../party/party.service';
+import { CheckPasswordDto } from './dto/check-password.dto';
 
 @Injectable()
 export class UserService {
