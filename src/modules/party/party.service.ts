@@ -26,7 +26,7 @@ export class PartyService {
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
             where: { deletedAt: null },
-            relations: ['thumbnail','wishList'],
+            relations: ['thumbnail', 'wishList'],
         });
     }
 
@@ -251,44 +251,65 @@ export class PartyService {
         });
     }
 
-    async acceptMember(partyId: number, userId: number, status: string): Promise<PartyMember> {
-        const partyMember = await this.partyMemberRepository.findOne({
-            where: { partyId, userId },
-        });
-        const party = await this.partyRepository.findOne({
-            where: { id: partyId },
-        });
+    async acceptMember(partyId: number, userId: number, status: string): Promise<any> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+    
+        try {
+            let partyMember = await queryRunner.manager.findOne(PartyMember, {
+                where: { userId, partyId },
+            });
 
-        if (!partyMember) {
-            throw new NotFoundException('해당 유저가 존재하지 않습니다.');
-        }
+            let party = await queryRunner.manager.findOne(Party, {
+                where: { id : partyId },
+            });
 
-        if (status === '신청승낙') {
-            if (partyMember && partyMember.status === '신청승낙') {
-                party.status === '신청대기';
-                party.currMember -= 1;
-            } else {
-                partyMember.status = '신청승낙';
-                party.currMember += 1;
+            if (!partyMember) {
+                throw new NotFoundException('해당 유저가 존재하지 않습니다.');
             }
-            await this.partyRepository.update(partyId, party);
-            return await this.partyMemberRepository.save(partyMember);
-        }
-
-        if (status === '거절') {
+            
             if (partyMember.status === '신청대기') {
-                throw new BadRequestException('아직 신청하지 않았습니다.');
-            }
-
-            if (partyMember && partyMember.status === '거절') {
-                party.status === '신청대기';
-                party.currMember += 1;
-            } else {
-                partyMember.status = '거절';
+                if (status === '신청승낙') {
+                    if (party.currMember >= party.maxMember) {
+                        throw new BadRequestException('인원이 가득 찼습니다.');
+                    }
+                    party.currMember += 1;
+                    partyMember.status = status;
+                } else if (status === '거절') {
+                    throw new BadRequestException('아직 신청하지 않았습니다.');
+                } else {
+                    throw new BadRequestException('잘못된 요청 입니다.');
+                }
+            } else if (partyMember.status === '신청승낙') {
+                if (status === '신청승낙') {
+                    partyMember.status = '신청대기';
+                } else if (status === '거절') {
+                    partyMember.status = '거절';
+                } else {
+                    throw new BadRequestException('잘못된 요청 입니다.');
+                }
                 party.currMember -= 1;
+            } else if (partyMember.status === '거절') {
+                if (status === '신청승낙') {
+                    if (party.currMember >= party.maxMember) {
+                        throw new BadRequestException('인원이 가득 찼습니다.');
+                    }
+                    partyMember.status = status;
+                    party.currMember += 1;
+                } else if (status === '거절') {
+                    partyMember.status = '신청대기';
+                    party.currMember -= 1;
+                } else {
+                    throw new BadRequestException('잘못된 요청 입니다.');
+                }
             }
-            await this.partyRepository.update(partyId, party);
-            return await this.partyMemberRepository.save(partyMember);
+            await queryRunner.manager.save(Party, party);
+            return await queryRunner.manager.save(PartyMember, partyMember);
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+        } finally {
+            await queryRunner.release();
         }
     }
 
