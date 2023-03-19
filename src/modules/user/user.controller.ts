@@ -52,14 +52,9 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Post('/check-password')
     @HttpCode(200)
-    async checkPw(@Req() req, @Res() res, @Body() data:CheckPasswordDto) {
+    async checkPw(@Req() req, @Body() data:CheckPasswordDto) {
         const user = req.user;
-        const isValidPassword = await bcrypt.compare(data.password, user.password);
-        if (!isValidPassword) {
-            throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
-        }
-        const check = await this.userService.checkPw(user)
-        return res.json({})
+        return this.userService.validateUser(user.email, data.password)
     }
 
     @UseGuards(JwtAuthGuard)

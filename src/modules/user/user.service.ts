@@ -101,13 +101,6 @@ export class UserService {
         return this.userRepository.softDelete(id);
     }
 
-    async checkPw(user: User) {
-        return await this.userRepository.findOne({
-            where: {password: user.password}
-        });
-            
-    }
-
     async updateWishList(user: User, partyId: number) {
         const checkWishList = await this.wishListRepository.findOne({
             where: { partyId, userId: user.id },
