@@ -22,6 +22,9 @@ export class WishList {
     @CreateDateColumn()
     createdAt: Date;
 
+    @DeleteDateColumn()
+    deletedAt: Date | null;
+
     // 장바구니 <-> 유저: 다대일 관계
     @ManyToOne(() => User, (user) => user.wishList)
     user: User;

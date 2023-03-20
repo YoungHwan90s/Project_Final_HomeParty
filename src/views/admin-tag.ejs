@@ -1,1 +1,101 @@
-<h2>관리자 태그목록</h2>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 2%">Reviews</h1>
+    <p class="mb-4">
+        이 페이지는 태그 관리하는 페이지이므로 부절한 단어 또는 위험적인 단어는 선택적으로
+        삭제해주세요.
+    </p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Reviews DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Tag</th>
+                            <th>Frequency</th>
+                            <th>Create Date</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Number</th>
+                            <th>Tag</th>
+                            <th>Frequency</th>
+                            <th>Create Date</th>
+                            <th>Delete</th>
+                        </tr>
+                    </tfoot>
+                    <tbody id="tagTables"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        $.ajax({
+            type: 'GET',
+            url: `/admin/tags`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    const { tagId, id, tagName, freq, createdAt } = response[i];
+                    let tagid = i + 1;
+                    let Id = response[i].id;
+                    let tagNames = response[i].tagName;
+                    let Freq = response[i].freq;
+                    let createDate = new Date(response[i].createdAt);
+
+                    const year = createDate.getFullYear();
+                    const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                    const day = ('0' + createDate.getDate()).slice(-2);
+                    const tagTable = `
+                    <tr>
+                            <td>${tagid}</td>
+                            <td>${tagNames}</td>
+                            <td>${Freq}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td><button type="button" id = "deleteTag(${Id})" onclick="deleteTag(${Id})" class="btn btn-danger">Delete</button></td>s
+                        </tr>
+                    `;
+
+                    $('#tagTables').append(tagTable);
+                }
+            },
+        });
+    });
+
+    function deleteTag(tagId) {
+        const result = confirm('해당 태그를 삭제하시겠습니까?');
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/admin/tag/${tagId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    alert('태그 삭제 되었습니다.');
+                    $(`#id{tagId}`).remove();
+                    window.location.reload(true);
+                },
+            });
+        } else {
+            alert('삭제 취소되었습니다.');
+        }
+    }
+</script>

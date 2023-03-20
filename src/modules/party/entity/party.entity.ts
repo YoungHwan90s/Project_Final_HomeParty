@@ -32,7 +32,7 @@ export class Party {
     @Column('varchar', { length: 1000 })
     content: string;
 
-    @Column('int')
+    @Column('int', { default: 2 })
     maxMember: number;
 
     @Column('int', { default: 1 })
@@ -41,8 +41,8 @@ export class Party {
     @Column('varchar', { length: 100 })
     address: string;
 
-    @Column()
-    date: string;
+    @Column({ type: 'datetime' })
+    date: Date;
 
     @Column('varchar', { default: '모집중' })
     status: string;
@@ -73,7 +73,7 @@ export class Party {
     review: Review[];
     
     // 파티 <-> 태그: 다대다 관계
-    @ManyToMany(() => Tag, { cascade: true })
+    @ManyToMany(() => Tag, { cascade: true, orphanedRowAction: 'delete'})
     @JoinTable({
         name: 'PartyTagMapping',
         joinColumn: {
