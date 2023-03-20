@@ -72,4 +72,12 @@ export class UserController {
         const updateOrDelete = await this.userService.updateWishList(user, partyId);
         return res.json({ updateOrDelete });
     }
+
+    // @UseGuards(JwtAuthGuard)
+    @Get('/history')
+    @HttpCode(200)
+    async userHistory(@Req() req) {
+        const user = req.user;
+        return await this.userService.userHistory(user);
+    }
 }
