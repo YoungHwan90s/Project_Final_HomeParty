@@ -60,6 +60,7 @@ export class AuthController {
     kakaoLoginCallback(@Req() req,  @Res() res) {
         
         const { user, accessToken, refreshToken } = req.user
+        console.log(user, accessToken, refreshToken)
         // return res.json({ user, accessToken, refreshToken})
         return res.redirect('/')
     }
