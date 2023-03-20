@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsDate, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdatePartyDto {
     @IsString()
@@ -17,7 +17,7 @@ export class UpdatePartyDto {
     @IsString()
     readonly address: string;
 
-    @IsDate()
+    @IsDateString()
     readonly date: Date;
 
     @IsOptional()
