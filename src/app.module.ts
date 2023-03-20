@@ -18,6 +18,7 @@ import { JwtConfigService } from './config/config.jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailerConfigService } from './config/config.nodemailer';
 import { ImageUploadModule } from './util/s3/image-upload.module';
+import { ChatGateway } from './chat.gateway';
 
 @Module({
     imports: [
@@ -52,6 +53,6 @@ import { ImageUploadModule } from './util/s3/image-upload.module';
         ImageUploadModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, ChatGateway],
 })
 export class AppModule {}

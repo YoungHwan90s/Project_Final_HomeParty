@@ -1,12 +1,4 @@
-import {
-    Controller,
-    Delete,
-    Get,
-    HttpCode,
-    Param,
-    Res,
-    UseGuards,
-} from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, Param, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminService } from './admin.service';
 
@@ -38,8 +30,19 @@ export class AdminController {
         return await this.adminService.getReviewAdmin();
     }
 
-    // // 태그 추가
-    // @Post('/tag')
+    // // 파티 조회
+    @Get('/praties')
+    @HttpCode(200)
+    async getPartyAdmin() {
+        return await this.adminService.getPartyAdmin();
+    }
+
+    // 파티 삭제
+    @Delete('/parties/:partyId')
+    @HttpCode(204)
+    async deletedPartyAdmin(@Param('partyId') partyId: number) {
+        return await this.adminService.deletedPartyAdmin(partyId);
+    }
 
     // // 태그 조회
     @Get('tags')
@@ -50,6 +53,7 @@ export class AdminController {
 
     // 태그 삭제
     @Delete('/tag/:tagId')
+    @HttpCode(204)
     async deletetag(@Param('tagId') tagId: number) {
         return await this.adminService.deletetag(tagId);
     }

@@ -52,7 +52,7 @@ export class PartyController {
     @UseGuards(JwtAuthGuard)
     @HttpCode(201)
     @Post('/')
-    async createParty(@Req() req, @Body() partyInfo: CreatePartyDto): Promise<Party> {
+    async createParty(@Req() req, @Body() partyInfo): Promise<Party> {
         let user = req.user;
         return this.partyService.createParty(user, partyInfo);
     }
