@@ -23,7 +23,7 @@ export class UserService {
         private readonly partyService: PartyService,
     ) {}
 
-    async createUser(data: CreateUserDto): Promise<User> {
+    async createUser(data): Promise<User> {
         const existUser = await this.getUser(data.email);
 
         if (existUser) {
@@ -40,6 +40,22 @@ export class UserService {
             phone: data.phone,
             birthday: data.birthday,
             address: data.address,
+            profile: data.profile
+        });
+
+        return user;
+    }
+
+    async createKakaoUser(data) {
+        
+        const user = await this.userRepository.save({
+            email: data.email,
+            name: data.name,
+            sex: data.sex,
+            phone: data.phone,
+            birthday: data.birthday,
+            address: data.address,
+            profile: data.profile
         });
 
         return user;
