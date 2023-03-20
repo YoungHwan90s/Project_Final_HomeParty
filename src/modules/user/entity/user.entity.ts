@@ -5,6 +5,7 @@ import {
     DeleteDateColumn,
     Entity,
     Index,
+    JoinColumn,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
@@ -19,9 +20,6 @@ import { WishList } from './wish-list.entity';
 export class User {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
-
-    @Column('varchar', { nullable: true, length: 30 })
-    kakaoId: string | null;
 
     @Column('varchar', { length: 50 })
     email: string;
@@ -77,7 +75,6 @@ export class User {
 
     // 유저 <-> 카카오 일대일 관계
     @OneToOne(() => Kakao, (kakao) => kakao.user, { cascade: true })
+    @JoinColumn()
     kakao: Kakao;
-
-
 }

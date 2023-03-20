@@ -2,7 +2,7 @@
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
 
-        <form class="partySearchForm">
+        <form class="partySearchForm" onsubmit="preventSubmit(event)">
           <fieldset>
             <legend class="a11yHidden">파티 검색 폼</legend>
 
@@ -93,7 +93,7 @@ function getParties(userId) {
                             <li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
-                                        src="https://velog.velcdn.com/images/joosing/post/459e7cff-f9fc-470a-8856-824560ea9c45/image.png"
+                                        src="/imgs/temporary.png"
                                         alt=""
                                         class="thumbnailImage"
                                     />
