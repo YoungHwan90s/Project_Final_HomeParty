@@ -3,12 +3,16 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-kakao';
 import { UserService } from 'src/modules/user/user.service';
+import { CacheService } from 'src/util/cache/cache.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     constructor(
         private readonly userService: UserService,
         private readonly configService: ConfigService,
+        private readonly authService: AuthService,
+        private readonly cacheService: CacheService,
     ) {
         super({
             clientID: configService.get<string>('RESTAPI_KEY'),
@@ -32,29 +36,25 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
                 profileImage,
             }
 
-            const newUser = await this.authService.createUser(
+            const user = await this.userService.createKakaoUser(
                 userProfile
             )
-            const accessToken = await this.authService.generateAccessToken(
-                newUser.id
-            )
+
+            const accessToken = await this.authService.generateAccessToken(user.id)
             const refreshToken = await this.authService.generateRefreshToken()
+            
+            const redisKey = String(user.id)
+            await this.cacheService.set(redisKey, refreshToken);
 
-            await this.authService.saveRefreshToken(
-                newUser.id,
-                refreshToken
-            )
+            return { user, accessToken, refreshToken }
 
-            return { accessToken, refreshToken }
+        } else {
+            const accessToken = await this.authService.generateAccessToken(user.id)
+            const refreshToken = await this.authService.generateRefreshToken()
+            const redisKey = String(user.id)
+            await this.cacheService.set(redisKey, refreshToken);    
+
+            return { user, accessToken, refreshToken }
         }
-
-        const userAccessToken = await this.authService.createAccessToken(
-            user.id
-        )
-
-        const userRefreshToken = await this.authService.createRefreshToken()
-        await this.authService.saveRefreshToken(user.id, userRefreshToken)
-
-        return { userAccessToken, userRefreshToken }
     }
 }

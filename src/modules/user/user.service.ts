@@ -14,6 +14,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { WishList } from './entity/wish-list.entity';
 import { PartyService } from '../party/party.service';
 import { CheckPasswordDto } from './dto/check-password.dto';
+import { AuthService } from '../auth/auth.service';
+import { CacheService } from 'src/util/cache/cache.service';
 
 @Injectable()
 export class UserService {
@@ -40,25 +42,21 @@ export class UserService {
             phone: data.phone,
             birthday: data.birthday,
             address: data.address,
-            profile: data.profile
+            profile: data.profile,
         });
 
         return user;
     }
 
     async createKakaoUser(data) {
-        
-        const user = await this.userRepository.save({
-            email: data.email,
-            name: data.name,
-            sex: data.sex,
-            phone: data.phone,
-            birthday: data.birthday,
-            address: data.address,
-            profile: data.profile
-        });
+        let user = new User();
 
-        return user;
+        user.email = data.email;
+        user.name = data.nickname;
+        user.profile = data.profileImage;
+        user.kakao.kakaoId = data.id;
+
+        return await this.userRepository.save(user);
     }
 
     async updateUserProfile(data): Promise<UpdateResult> {
@@ -100,7 +98,6 @@ export class UserService {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
         } else {
-
             return this.userRepository.update(user.id, {
                 name: data.name,
                 sex: data.sex,
