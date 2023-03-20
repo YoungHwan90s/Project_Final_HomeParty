@@ -80,7 +80,9 @@
                 </span>
             </section>
             <div class="login-box">
-                <button><img src="/imgs/kakaologo.png" />카카오 로그인</button>
+                <button onclick="kakaoSignIn()">
+                    <img src="/imgs/kakaologo.png" />카카오 로그인
+                </button>
             </div>
         </div>
     </form>
@@ -117,15 +119,12 @@
         let pwLimit = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/;
         if (!pwLimit.test(input[1].value)) {
             document.getElementById(errorId[1]).innerHTML =
-                '10~20자의 문자와 숫자 조합으로 작성해주세요.'
+                '10~20자의 문자와 숫자 조합으로 작성해주세요.';
         }
     };
-    
+
     function signIn() {
-        let errorStr = [
-            ' 이메일을',
-            ' 비밀번호를'
-        ];
+        let errorStr = [' 이메일을', ' 비밀번호를'];
 
         innerReset(error);
 
@@ -143,7 +142,6 @@
             document.getElementById(errorId[0]).innerHTML = ' 이메일을 선택해주세요.';
             return false;
         }
-
 
         // 정규식 변수 모음
         let emailLimit = /^[a-zA-Z0-9._-]+$/;
@@ -182,6 +180,18 @@
                 customAlert(error.responseJSON.message, function () {
                     window.location.reload();
                 });
+            },
+        });
+    }
+    function kakao() {
+        $.ajax({
+            type: 'GET',
+            url: '/auth/kakao',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response) {
+                console.log(response);
             },
         });
     }
