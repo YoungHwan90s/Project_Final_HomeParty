@@ -34,7 +34,7 @@ export class PartyController {
     ) {
         console.log(123)
         const result = await this.partyService.searchParties(date, address, title)
-        console.log({result})
+        console.log(result)
         return res.send({result});
     }
 
