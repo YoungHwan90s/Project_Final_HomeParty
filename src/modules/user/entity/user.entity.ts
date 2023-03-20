@@ -6,11 +6,13 @@ import {
     Entity,
     Index,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { PartyMember } from '../../party/entity/party-member.entity';
 import { Review } from '../../review/entity/review.entity';
+import { Kakao } from './kakao.entitiy';
 import { WishList } from './wish-list.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'users' })
@@ -24,10 +26,10 @@ export class User {
     @Column('varchar', { length: 50 })
     email: string;
 
-    @Column('varchar', { length: 100 })
+    @Column('varchar', { nullable: true, length: 100 })
     password: string;
 
-    @Column('varchar', { length: 10 })
+    @Column('varchar', { nullable: true, length: 10 })
     name: string;
 
     @Column('varchar', { length: 2 })
@@ -72,4 +74,10 @@ export class User {
     // 유저 <-> 리뷰: 일대다 관계
     @OneToMany(() => Review, (review) => review.user, { cascade: true })
     review: Review[];
+
+    // 유저 <-> 카카오 일대일 관계
+    @OneToOne(() => Kakao, (kakao) => kakao.user, { cascade: true })
+    kakao: Kakao;
+
+
 }
