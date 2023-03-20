@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Param,
+    Patch,
+    Post,
+    Req,
+    Res,
+    UseGuards,
+} from '@nestjs/common';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserService } from '../user/user.service';
@@ -11,14 +23,18 @@ import { ReviewService } from './review.service';
 export class ReviewController {
     constructor(
         private readonly reviewService: ReviewService,
-        private readonly userService: UserService
-        ) {}
+        private readonly userService: UserService,
+    ) {}
 
     // // 리뷰 등록
     @UseGuards(JwtAuthGuard)
     @Post('/:partyId')
     @HttpCode(201)
-    async write(@Req() req, @Param('partyId') partyId: number, @Body() data: CreateReviewDto): Promise<Review> {
+    async write(
+        @Req() req,
+        @Param('partyId') partyId: number,
+        @Body() data: CreateReviewDto,
+    ): Promise<Review> {
         const { id } = req.user;
         return await this.reviewService.writeReview(id, partyId, data);
     }
@@ -26,16 +42,18 @@ export class ReviewController {
     // // 리뷰 조회
     @Get('/:hostId')
     @HttpCode(200)
-    async readReview(@Param('hostId') hostId: number):Promise<Review[]> {
-       return await this.userService.readReview(hostId);
-
+    async readReview(@Param('hostId') hostId: number): Promise<Review[]> {
+        return await this.userService.readReview(hostId);
     }
 
     // // 리뷰 수정
     @UseGuards(JwtAuthGuard)
     @Patch('/:reviewId')
     @HttpCode(201)
-    async updateReview(@Param('reviewId') reviewId: number, @Body() data: UpdateReviewDto):Promise<UpdateResult> {
+    async updateReview(
+        @Param('reviewId') reviewId: number,
+        @Body() data: UpdateReviewDto,
+    ): Promise<UpdateResult> {
         return await this.reviewService.updateReview(reviewId, data.rating, data.review);
     }
 
