@@ -16,10 +16,12 @@ import { WishList } from '../user/entity/wish-list.entity';
 import { Party } from '../party/entity/party.entity';
 import { PartyService } from '../party/party.service';
 import { PartyMember } from '../party/entity/party-member.entity';
+import { KakaoStrategy } from './strategies/kakao.strategy';
+import { Kakao } from '../user/entity/kakao.entitiy';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, WishList, Party, PartyMember]),
+        TypeOrmModule.forFeature([User, WishList, Party, PartyMember, Kakao]),
         PassportModule.register({
             session: false,
         }),
@@ -31,7 +33,7 @@ import { PartyMember } from '../party/entity/party-member.entity';
         MailModule,
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService, UserService, PartyService],
+    providers: [AuthService, LocalStrategy, JwtStrategy, CacheService, UserService, PartyService, KakaoStrategy],
     exports: [AuthService]
 })
 export class AuthModule {}

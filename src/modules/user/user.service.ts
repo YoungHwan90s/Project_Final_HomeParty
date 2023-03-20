@@ -16,12 +16,15 @@ import { PartyService } from '../party/party.service';
 import { CheckPasswordDto } from './dto/check-password.dto';
 import { AuthService } from '../auth/auth.service';
 import { CacheService } from 'src/util/cache/cache.service';
+import { Kakao } from './entity/kakao.entitiy';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
+        @InjectRepository(Kakao) private kakaoRepository: Repository<Kakao>,
+
         private readonly partyService: PartyService,
     ) {}
 
@@ -49,12 +52,18 @@ export class UserService {
     }
 
     async createKakaoUser(data) {
-        let user = new User();
+        let newUserWithKakao = new User();
+        newUserWithKakao.email = data.email;
+        newUserWithKakao.name = data.nickname;
+        newUserWithKakao.profile = data.profileImage;
 
-        user.email = data.email;
-        user.name = data.nickname;
-        user.profile = data.profileImage;
-        user.kakao.kakaoId = data.id;
+        const user = await this.userRepository.save(newUserWithKakao);
+
+        let userKakaoInfo = new Kakao();
+        userKakaoInfo.userId = user.id;
+        userKakaoInfo.kakaoId = data.kakaoId;
+
+        await this.kakaoRepository.save(userKakaoInfo);
 
         return await this.userRepository.save(user);
     }

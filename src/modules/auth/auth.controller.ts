@@ -16,7 +16,6 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthenticateEmailDto } from './dto/authenticate-email.dto';
 import { LocalAuthGuard } from './guards/auth.guard';
-
 import { UserService } from '../user/user.service';
 import { FindEmailDto } from './dto/find-email.dto';
 import { CacheService } from '../../util/cache/cache.service';
@@ -52,14 +51,17 @@ export class AuthController {
         return res.json({ accessToken, refreshToken });
     }
 
+    @UseGuards(KakaoAuthGuard)
     @Get('/kakao')
-    @UseGuards(KakaoAuthGuard)
     kakaoLogin() {}
-  
-    @Get('/kakao/callback')
+
     @UseGuards(KakaoAuthGuard)
-    kakaoLoginCallback(@Req() req) {
-      return req.user;
+    @Get('/kakao/callback')
+    kakaoLoginCallback(@Req() req,  @Res() res) {
+        
+        const { user, accessToken, refreshToken } = req.user
+        // return res.json({ user, accessToken, refreshToken})
+        return res.redirect('/')
     }
 
     @UseGuards(JwtAuthGuard)

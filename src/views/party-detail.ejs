@@ -33,7 +33,7 @@
                     maxMember,
                     currMember,
                     address,
-                    date : isoDate,
+                    date,
                     status,
                     thumbnail,
                     partyMember,
@@ -41,7 +41,12 @@
                     user,
                     wishList,
                 } = response;
-                console.log(isoDate)
+                
+                const year = date.substr(0, 4);
+                const month = date.substr(5, 2);
+                const day = date.substr(8, 2);
+                const dateDetail = `${year}-${month}-${day}`;
+
                 currMembers = currMember
                 maxMembers = maxMember
                 const userWishListMatch = wishList.find((user) => 
@@ -57,15 +62,15 @@
                         ? thumbnail
                               .map(
                                   (thumbnail) => `
-                              <li class="partyImageItem">
+                            <li class="partyImageItem">
                                 <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
                             </li>
                             `,
                               )
                               .join('')
-                        : `
+                        :   `
                             <li class="partyImageItem">
-                                <img src="https://velog.velcdn.com/images/tjdtn4484/post/99a19289-f4a8-4442-a949-3797436031e0/image.PNG" alt="" class="partyImage" />
+                                <img src="./public/imgs/temporary.png" alt="" class="partyImage" />
                             </li>`;
 
                 // const hostProfileSrc =
@@ -329,7 +334,7 @@
                 if (document.querySelector('.partyPage')) {
                     new Calendar(document.querySelector('.partyPage .calendar'));
 
-                    document.querySelector(`time[datetime="${date}"]`).classList.add('selected');
+                    document.querySelector(`time[datetime="${dateDetail}"]`).classList.add('selected');
 
                     document.querySelector('.today').classList.remove('today');
 

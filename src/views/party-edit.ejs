@@ -244,9 +244,14 @@
             currMember = response.currMember;
             thumbnails = response.thumbnail;
             address = response.address;
-            date = response.date;
+            isoDate = response.date;
             thumbnail = response.thumbnail;
             tag = response.tag;
+
+            const year = isoDate.substr(0, 4);
+            const month = isoDate.substr(5, 2);
+            const day = isoDate.substr(8, 2);
+            date = `${year}-${month}-${day}`;
 
             $('.addressWrapper').append(`<p>${address}</p>`);
             $('#partyTitle').val(title);
@@ -353,7 +358,6 @@
             success: function (response) {
                 let image = [];
                 for (let i = 0; i < response.length; i++) {
-                    console.log(response[i].filePath.location)
                     image.push(response[i].filePath.location);
                 }
                 saveParty(image);
@@ -373,12 +377,17 @@
             } else {
                 editedAddress = $('.addressWrapper').text();
             }
+            
+            console.log("첫번째",date)
 
             let editedDate;
             if ($('.datePicker').val()) {
                 editedDate = $('.datePicker').val();
+                console.log("두번째",editedDate)
             } else {
                 editedDate = date;
+                console.log("세번째",editedDate)
+
             }
             const partyInfo = {
                 title: $('#partyTitle').val(),
@@ -391,6 +400,8 @@
                 addTagName: addTags,
                 removeTagName: removedTags,
             };
+
+            console.log("네번째",partyInfo.date)
 
             $.ajax({
                 type: 'PATCH',
