@@ -25,13 +25,12 @@
     width : 60%;
     background-color : white;
  } */
-
-* .mypage-text {
-   width: 250px;
-   height: 60px;
-   font-weight: 900;
+.h2bold {
+   font-weight: 700;
+   font-size: 27px;
 }
-
+/* .h3bold {
+ } */
 .mypage-container {
    position: relative;
    display: flex;
@@ -67,6 +66,8 @@
    height: 100%;
    padding-bottom: 8px;
    padding-top: 8px;
+   padding-left: 24px;
+    padding-right: 24px;
    display: block;
    background: none;
    border: none;
@@ -78,8 +79,6 @@
 .img-cont {
    padding-top: 15px;
    padding-bottom: 16px;
-   min-height: 1px;
-   padding-left: 24px;
    padding-right: 24px;
 }
 .img-wrap {
@@ -109,7 +108,6 @@
 .profil-email {
    width: 100%;
    height: 10%;
-
    display: flex;
    justify-content: center;
    margin-top: 3%
@@ -117,8 +115,9 @@
 
 .mypage-btn {
    height: 100%;
-   padding-bottom: 8px;
-   padding-top: 8px;
+   padding-bottom: 22px;
+   padding-top: 55px;
+   text-align: center;
 }
 
 .mypage-edit-btn, .password-edit-btn, .mypage-delete-btn {
@@ -153,6 +152,7 @@
 }
 
 .my-info {
+   display: flex;
    background: none;
    border: none;
    color: inherit;
@@ -163,8 +163,8 @@
    box-sizing: border-box;
    padding-top: 15px;
    padding-bottom: 16px;
-   display: block;
-   width: 100%;
+   padding-left: 24px;
+   padding-right: 24px;
 }
 
 /*태블릿*/
