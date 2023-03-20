@@ -2,10 +2,9 @@
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
 
-        <form class="partySearchForm">
+        <form class="partySearchForm" onsubmit="preventSubmit(event)">
           <fieldset>
             <legend class="a11yHidden">파티 검색 폼</legend>
-
             <input
               type="text"
               name="partyWhere"
@@ -28,14 +27,13 @@
             <input
               type="text"
               name="partyName"
-              placeholder="파티 명"
+              placeholder="파티명"
               class="partyName"
               id="partyName"
             />
 
             <button
               onclick="partySearch()"
-              type="submit"
               class="partySubmitButton"
               aria-label="파티 검색하기 버튼"
             >
@@ -52,22 +50,22 @@
 <script>
 
 $(document).ready(function () {
-        getMyInfo(function (userInfo) {
-            if (userInfo) {
-                let userId = userInfo.id
-                getParties(userId)
-            } else {
-                getParties(0)
-            }
-        });
+    getMyInfo(function (userInfo) {
+        if (userInfo) {
+            let userId = userInfo.id
+            getParties(userId)
+        } else {
+            getParties(0)
+        }
     });
+});
 
 function partySearch() {
-    console.log(123)
-
     const address = $('#partyWhere').val()
     const date = $('#partyWhen').val()
     const title = $('#partyName').val()
+
+    console.log(date)
 
     $.ajax({
         type: 'GET',
@@ -75,6 +73,7 @@ function partySearch() {
         data: {},
         success: function(response) {
             console.log(response)
+            
             
         }
     })

@@ -12,6 +12,7 @@ import {
     Res,
     UseGuards,
 } from '@nestjs/common';
+import { url } from 'inspector';
 import { DeleteResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -32,7 +33,9 @@ export class PartyController {
         @Query('title') title: string,
         @Res() res,
     ) {
-        console.log(123)
+        console.log(date)
+        console.log(address)
+        console.log(title)
         const result = await this.partyService.searchParties(date, address, title)
         console.log(result)
         return res.send({result});
