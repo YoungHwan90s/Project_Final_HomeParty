@@ -14,11 +14,11 @@ export class Kakao {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
-    @Column('varchar', { nullable: true, length: 30 })
-    userId: string | null;
+    @Column('int')
+    userId: number;
 
-    @Column('varchar', { nullable: true, length: 30 })
-    kakaoId: string | null;
+    @Column('int')
+    kakaoId: number;
 
     @CreateDateColumn()
     createdAt: Date;
