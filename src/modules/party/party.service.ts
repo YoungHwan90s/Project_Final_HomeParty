@@ -352,7 +352,7 @@ export class PartyService {
     async deleteParty(userId: number, partyId: number): Promise<Party> {
         const party = await this.partyRepository.findOne({
             where: { id: partyId },
-            relations: ['wishList', 'partyMember', 'review', 'tag', 'thumbnail'],
+            relations: ['wishList', 'partyMember', 'review', 'thumbnail'],
         });
 
         if (party.hostId !== userId) {
