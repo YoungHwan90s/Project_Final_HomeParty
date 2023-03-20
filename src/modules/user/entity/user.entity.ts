@@ -4,7 +4,6 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    Index,
     JoinColumn,
     OneToMany,
     OneToOne,
@@ -25,16 +24,16 @@ export class User {
     email: string;
 
     @Column('varchar', { nullable: true, length: 100 })
-    password: string;
+    password: string | null;
 
     @Column('varchar', { nullable: true, length: 10 })
     name: string;
 
     @Column('varchar', { length: 2 })
-    sex: string;
+    sex: string | null;
 
     @Column('varchar', { length: 20 })
-    phone: string;
+    phone: string | null;
 
     @Column('varchar', { nullable: true, length: 50 })
     birthday: string | null;

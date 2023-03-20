@@ -10,6 +10,7 @@ import {
     UnauthorizedException,
     UsePipes,
     Get,
+    Render,
 } from '@nestjs/common';
 import { MailService } from '../../util/node-mailer/mail.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -60,8 +61,9 @@ export class AuthController {
     kakaoLoginCallback(@Req() req,  @Res() res) {
         
         const { user, accessToken, refreshToken } = req.user
-        // return res.json({ user, accessToken, refreshToken})
-        return res.redirect('/')
+        const email = user.email
+        const password = user.password
+        return res.render('index.ejs', { components: 'kakao', email, password, accessToken, refreshToken })
     }
 
     @UseGuards(JwtAuthGuard)
