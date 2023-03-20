@@ -254,7 +254,7 @@
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: $('.datePicker').val(),
+                date: new Date($('.datePicker').val()),
                 thumbnail: image,
                 tagName: tagList,
             };
