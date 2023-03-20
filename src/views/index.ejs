@@ -33,7 +33,6 @@
         <link rel="stylesheet" href="/css/user-edit.css" />
         <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-new.css" />
-        <link rel="stylesheet" href="/css/profile-upload.css" />
         <link rel="stylesheet" href="/css/partyPage.css" />
 
         <!-- js -->
@@ -51,6 +50,8 @@
         <script
         type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services"></script>
+        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+        <script src="/js/socket.js" defer></script>
         <script src="/js/common.js" defer></script>
 
         <title>모아바 | HOMEPARTY</title>
@@ -63,7 +64,7 @@
         <!-- body -->
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
-        <% if (components==='login') { %> <%-include('auth-login.ejs') %><% } %>
+        <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %>
         <% if (components === 'sign-up'){%><%-include('auth-sign-up.ejs') %><% } %>
         <% if (components === 'profile-upload'){%><%-include('auth-profile-upload') %><% } %> 
         <% if (components === 'find-email') {%><%-include('auth-find-email.ejs') %><% } %> 
@@ -72,6 +73,7 @@
         <% if (components === 'reset-password') {%><%-include('auth-reset-password.ejs') %><% } %> 
         <% if (components === 'user-menu') {%><%-include('user-menu.ejs') %><% } %>
         <% if (components === 'user-edit') {%><%-include('user-edit.ejs') %><% } %>
+        <% if (components === 'user-check') {%><%-include('user-check.ejs') %><% } %>
         <% if (components === 'user-mypage') {%><%-include('user-mypage.ejs') %><% } %>
         <% if (components === 'wish-list') {%><%-include('user-wish-list.ejs') %><% } %>
         <% if (components === 'manage') {%><%-include('manage.ejs') %><% } %>

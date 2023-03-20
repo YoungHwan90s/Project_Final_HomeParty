@@ -4,6 +4,7 @@ import {
     Injectable,
     NotAcceptableException,
     NotFoundException,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, DeleteResult, Repository } from 'typeorm';
@@ -26,7 +27,7 @@ export class PartyService {
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
             where: { deletedAt: null },
-            relations: ['thumbnail','wishList'],
+            relations: ['thumbnail', 'wishList'],
         });
     }
 
@@ -145,11 +146,11 @@ export class PartyService {
             if (addTagName?.length) {
                 let tagArray = [];
                 for (let i = 0; i < addTagName.length; i++) {
-                    console.log(addTagName[i]);
                     let tag = await queryRunner.manager.findOne(Tag, {
                         where: {
                             tagName: addTagName[i],
                         },
+                        lock: { mode: 'pessimistic_write' },
                     });
                     if (tag) {
                         tag.freq += 1;
@@ -196,7 +197,6 @@ export class PartyService {
             await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
-            console.log(error.message);
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
                 '파티수정에 실패하였습니다. 파티정보를 다시 확인하시고 시도하여 주시기 바랍니다.',
@@ -251,44 +251,100 @@ export class PartyService {
         });
     }
 
-    async acceptMember(partyId: number, userId: number, status: string): Promise<PartyMember> {
-        const partyMember = await this.partyMemberRepository.findOne({
-            where: { partyId, userId },
-        });
-        const party = await this.partyRepository.findOne({
-            where: { id: partyId },
-        });
+    async acceptMember(partyId: number, userId: number, status: string): Promise<any> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
 
-        if (!partyMember) {
-            throw new NotFoundException('해당 유저가 존재하지 않습니다.');
-        }
+        try {
+            let partyMember = await queryRunner.manager.findOne(PartyMember, {
+                where: { userId, partyId },
+                relations: ['party'],
+            });
 
-        if (status === '신청승낙') {
-            if (partyMember && partyMember.status === '신청승낙') {
-                party.status === '신청대기';
-                party.currMember -= 1;
+            if (!partyMember) {
+                throw new NotFoundException('신청 유저가 존재하지 않습니다.');
+            }
+
+            if (partyMember.party.status === '모집중') {
+                if (partyMember.status === '신청대기' && status === '신청승낙') {
+                    partyMember.status = status;
+                    partyMember.party.currMember += 1;
+
+                    await queryRunner.manager.update(Party, partyId, {
+                        currMember: partyMember.party.currMember,
+                    });
+
+                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.commitTransaction();
+
+                    return updatedMember
+                }
+
+                if (partyMember.status === '신청대기' && status === '거절') {
+
+                    partyMember.status = status;
+                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.commitTransaction();
+
+                    return updatedMember
+                }
+
+                if (partyMember.status === '신청승낙' && status === '신청승낙') {
+                    partyMember.status = '신청대기';
+                    partyMember.party.currMember -= 1;
+                    await queryRunner.manager.update(Party, partyId, {
+                        currMember: partyMember.party.currMember,
+                    });
+
+                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.commitTransaction();
+
+                    return updatedMember
+                }
+
+                if (partyMember.status === '신청승낙' && status === '거절') {
+                    partyMember.status = status;
+                    partyMember.party.currMember -= 1;
+
+                    await queryRunner.manager.update(Party, partyId, {
+                        currMember: partyMember.party.currMember,
+                    });
+
+                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.commitTransaction();
+
+                    return updatedMember
+                }
+
+                if (partyMember.status === '거절' && status === '거절') {
+                    partyMember.status = '신청대기';
+
+                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.commitTransaction();
+
+                    return updatedMember
+                }
+
+                if (partyMember.status === '거절' && status === '신청승낙') {
+                    partyMember.status = status;
+                    partyMember.party.currMember += 1;
+
+                    await queryRunner.manager.update(Party, partyId, {
+                        currMember: partyMember.party.currMember,
+                    });
+                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.commitTransaction();
+
+                    return updatedMember
+                }
             } else {
-                partyMember.status = '신청승낙';
-                party.currMember += 1;
+                throw new UnauthorizedException('현재 모집중인 파티가 아닙니다.')
             }
-            await this.partyRepository.update(partyId, party);
-            return await this.partyMemberRepository.save(partyMember);
-        }
-
-        if (status === '거절') {
-            if (partyMember.status === '신청대기') {
-                throw new BadRequestException('아직 신청하지 않았습니다.');
-            }
-
-            if (partyMember && partyMember.status === '거절') {
-                party.status === '신청대기';
-                party.currMember += 1;
-            } else {
-                partyMember.status = '거절';
-                party.currMember -= 1;
-            }
-            await this.partyRepository.update(partyId, party);
-            return await this.partyMemberRepository.save(partyMember);
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+        } finally {
+            await queryRunner.release();
         }
     }
 
