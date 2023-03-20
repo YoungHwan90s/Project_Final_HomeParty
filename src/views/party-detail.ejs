@@ -41,7 +41,7 @@
                     user,
                     wishList,
                 } = response;
-                
+
                 const year = date.substr(0, 4);
                 const month = date.substr(5, 2);
                 const day = date.substr(8, 2);
@@ -51,6 +51,8 @@
                 maxMembers = maxMember
                 const userWishListMatch = wishList.find((user) => 
                 user.userId == userId)
+
+                user.profile = user.profile ?? `/imgs/temporary.png`
 
                 const tagHtml =
                     tag.length > 0
@@ -70,7 +72,7 @@
                               .join('')
                         :   `
                             <li class="partyImageItem">
-                                <img src="imgs/temporary.png" alt="" class="partyImage" />
+                                <img src="/imgs/temporary.png" alt="" class="partyImage" />
                             </li>`;
 
                 // const hostProfileSrc =
@@ -237,17 +239,17 @@
                 }
 
                 if (hostId === userId) {
-                    const buttonEdit = `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`;
+                    const buttonEdit = `${status === "마감" ? `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>` : `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`}`
 
                     $('.partyPage').prepend(buttonEdit);
 
                     const partyMemberDropDownHtml = `
                         <button
-                        type="button"
-                        class="partyMemberDropDown"
-                        aria-label="파티 신청 인원 관리 열기"
+                            type="button"
+                            class="partyMemberDropDown"
+                            aria-label="파티 신청 인원 관리 열기"
                         >
-                        <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                            <i class="bx bx-chevron-down" aria-hidden="true"></i>
                         </button>
                         <ul class="memberList"></ul>
                     `;
@@ -256,60 +258,49 @@
                     partyMember.shift();
                     
                     if(!partyMember.length){
-                        const partyMemberZeroHtml = `
-                            <li>파티 맴버가 아직 없습니다.</li>
-                        ` 
+                        const partyMemberZeroHtml = `<li>파티 맴버가 아직 없습니다.</li>` 
                         $('.memberList').append(partyMemberZeroHtml);
                     }
                     partyMember.forEach((item) => {
-                        console.log(item)
-                        if (item.user.profile === null) {
-                            item.user.profile =
-                                'https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg';
-                        }
+                        item.user.profile = item.user.profile ?? '/imgs/temporary.png';
 
-                        const partyMemberHtml = `
+                        let partyMemberHtml
+
+                        if(status === '모집중'){
+                            partyMemberHtml = `
                             <li class="memberItem">
                                 <a href="/user-detail/${item.user.id}" class="memberLink">
                                     <figure class="profileWrapper">
-                                    <img
-                                        src="${item.user.profile}"
-                                        alt=""
-                                        class="profile"
-                                    />
+                                        <img
+                                            src="${item.user.profile}"
+                                            alt=""
+                                            class="profile"
+                                        />
                                     </figure>
                                     <p class="memberName">${item.user.name}</p>
                                 </a>
                                 <div class="memberButtonWrapper">
-                                    ${item.status == '신청승낙'?
-                                    `
-                                    <button type="button" id="AcceptBun${item.user.id}" class="memberButton memberAcceptButton selected"  onclick="acceptMember(${item.user.id},'신청승낙')">
-                                    승낙
-                                    </button>
-                                    `
-                                    :
-                                    `
-                                    <button type="button" id="AcceptBun${item.user.id}" class="memberButton memberAcceptButton"  onclick="acceptMember(${item.user.id},'신청승낙')">
-                                    승낙
-                                    </button>
-                                    `
-                                    }
-                                    ${item.status == '거절'?
-                                    `
-                                    <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton selected" onclick="acceptMember(${item.user.id},'거절')">
-                                    거절
-                                    </button>
-                                    `
-                                    :
-                                    `
-                                    <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton" onclick="acceptMember(${item.user.id},'거절')">
-                                    거절
-                                    </button>
-                                    `
-                                    }
+                                        <button type="button" id="AcceptBtn${item.user.id}" class="memberButton memberAcceptButton ${ item.status === '승낙' ? 'selected' : ''}"  onclick="acceptMember(${item.user.id}, '승낙')">승낙</button>
+                                        <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton ${ item.status === '거절' ? 'selected' : ''}"  onclick="acceptMember(${item.user.id}, '거절')">거절</button>
                                 </div>
-                            </li>   
-                        `;
+                            </li>
+                            `;
+                        } else if (status === '마감' && item.status === '승낙'){
+                            partyMemberHtml = `<li class="memberItem">
+                                <a href="/user-detail/${item.user.id}" class="memberLink">
+                                    <figure class="profileWrapper">
+                                        <img
+                                            src="${item.user.profile}"
+                                            alt=""
+                                            class="profile"
+                                        />
+                                    </figure>
+                                    <p class="memberName">${item.user.name}</p>
+                                </a>
+                            </li>
+                            `
+                        }
+                        
                         $('.memberList').append(partyMemberHtml);
                     });
 
@@ -409,7 +400,7 @@
     function acceptMember(userId, status) {
         $currMember = document.querySelector('#currMem');
         let count = parseInt($currMember.textContent)
-        if(currMembers >= maxMembers  && status == '신청승낙' && !document.querySelector(`#AcceptBun${userId}`).classList.contains("selected")){
+        if(currMembers >= maxMembers  && status == '승낙' && !document.querySelector(`#AcceptBtn${userId}`).classList.contains("selected")){
             return customAlert("클라이언트에서 정원이 초과하였습니다", function () {
                     window.location.reload();
             });   
@@ -423,39 +414,34 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                if(response == 0 && status == '신청승낙') {
-                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                if(response == 0 && status == '승낙') {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
                     count--;
                     $currMember.textContent = count;
                     currMembers = $currMember.textContent
-                    console.log(response)
 
                 } else if (response == 0 && status == '거절'){
-                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
-                    console.log(response)
 
                 } else if(response == 1) {
-                    document.querySelector(`#AcceptBun${userId}`).classList.add("selected")
+                    document.querySelector(`#AcceptBtn${userId}`).classList.add("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
                     count++;
                     $currMember.textContent = count;
                     currMembers = $currMember.textContent
-                    console.log(response)
 
                 } else if(response == 2) {
-                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
                     count--;
                     $currMember.textContent = count;
                     currMembers = $currMember.textContent
-                    console.log(response)
 
                 } else if(response == 3 && status == '거절') {
-                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
-                    console.log(response)
                 }
             },
             error: function (error) {

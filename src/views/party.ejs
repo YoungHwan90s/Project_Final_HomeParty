@@ -89,8 +89,7 @@ function getParties(userId) {
                 //prettier-ignore
                 const thumbnailHtml = `
                     ${thumbnailList.length === 0 
-                        ?  `
-                            <li class="thumbnailItem">
+                        ?  `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
                                         src="/imgs/temporary.png"
@@ -98,8 +97,7 @@ function getParties(userId) {
                                         class="thumbnailImage"
                                     />
                                 </div>
-                            </li>
-                            ` 
+                            </li>` 
                         : thumbnailList.map(({ thumbnail }) => `
                             <li class="thumbnailItem">
                                 <div class="thumbnailRatio">
