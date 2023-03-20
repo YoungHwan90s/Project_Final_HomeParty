@@ -24,7 +24,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         // access token 유효성 확인
         try {
             const decodedAccessToken = await this.authService.verifyAccessToken(token);
-
             if (decodedAccessToken.type === true) {
                 return super.canActivate(context);
             }

@@ -378,15 +378,12 @@
                 editedAddress = $('.addressWrapper').text();
             }
             
-            console.log("첫번째",date)
 
             let editedDate;
             if ($('.datePicker').val()) {
                 editedDate = $('.datePicker').val();
-                console.log("두번째",editedDate)
             } else {
                 editedDate = date;
-                console.log("세번째",editedDate)
 
             }
             const partyInfo = {
@@ -400,8 +397,6 @@
                 addTagName: addTags,
                 removeTagName: removedTags,
             };
-
-            console.log("네번째",partyInfo.date)
 
             $.ajax({
                 type: 'PATCH',

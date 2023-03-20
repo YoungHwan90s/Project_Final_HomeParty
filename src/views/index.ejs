@@ -63,7 +63,7 @@
 
         <header class="main-header" id="main-header"></header>
 
-        <!-- body -->
+        <!-- body -->    
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
         <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %>
@@ -93,6 +93,25 @@
         <% if (components === 'user-detail'){%> <%-include('user-detail.ejs') %><% } %>
         <% if (components === 'party-review'){%> <%-include('party-review.ejs') %><% } %>
         <% if (components === 'no-page'){%> <%-include('404-page.ejs') %><% } %>
+        <% if (components === 'kakao') { %>
+            <script>
+              const accessToken = '<%= accessToken %>';
+              const refreshToken = '<%= refreshToken %>';
+              const email = '<%= email %>';
+              const password = '<%= password %>';
+
+              sessionStorage.setItem('accessToken', accessToken);
+              sessionStorage.setItem('refreshToken', refreshToken);
+
+              if (password) {
+                window.location.replace('/')
+              } else {
+                sessionStorage.setItem('email', email);
+                window.location.href = '/reset-password'
+            }
+            </script>
+            <% } %>
+
     </body>
 </html>
 
@@ -192,40 +211,34 @@
             }
             window.addEventListener('scroll', scrollHeader);
 
-            /*=============== MIXITUP FILTER PRODUCTS ===============*/
-
-            /* Default filter products */
-
-            /* Link active products */
-
             /*=============== SHOW SCROLL UP ===============*/
-            // function scrollUp() {
-            //     const scrollUpButton = document.getElementById('scroll-up');
-            //     //스크롤이 350 뷰포트 높이보다 높을때, a 태그에 show-scroll 클래스를 scroll-top 클래스랑 같이 더함
-            //     if (this.scrollY >= 350) scrollUpButton.classList.add('show-scroll');
-            //     else scrollUpButton.classList.remove('show-scroll');
-            // }
-            // window.addEventListener('scroll', scrollUp);
+            function scrollUp() {
+                const scrollUpButton = document.getElementById('scroll-up');
+                //스크롤이 350 뷰포트 높이보다 높을때, a 태그에 show-scroll 클래스를 scroll-top 클래스랑 같이 더함
+                if (this.scrollY >= 350) scrollUpButton.classList.add('show-scroll');
+                else scrollUpButton.classList.remove('show-scroll');
+            }
+            window.addEventListener('scroll', scrollUp);
 
             /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
             const sections = document.querySelectorAll('section[id]');
 
-            // function scrollActive() {
-            // const scrollY = window.pageYOffset
+            function scrollActive() {
+            const scrollY = window.pageYOffset
 
-            // sections.forEach(current => {
-            //     const sectionHeight = current.offsetHeight,
-            //     sectionTop = current.offsetTop - 58,
-            //     sectionId = current.getAttribute('id')
+            sections.forEach(current => {
+                const sectionHeight = current.offsetHeight,
+                sectionTop = current.offsetTop - 58,
+                sectionId = current.getAttribute('id')
 
-            //     if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            //         document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
-            //     } else {
-            //         document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
-            //     }
-            // })
-            // }
-            // window.addEventListener('scroll', scrollActive)
+                if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
+                } else {
+                    document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
+                }
+            })
+            }
+            window.addEventListener('scroll', scrollActive)
         });
     });
 </script>

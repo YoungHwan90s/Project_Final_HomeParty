@@ -59,7 +59,6 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
-            console.log(response)
             const userInfo = response.user
 
             $('#email').append(userInfo.email)
@@ -86,7 +85,6 @@
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
                 success: function (response) {
-                    console.log(response)
                     alert('회원 탈퇴');
                     window.location.href="/"
                 }

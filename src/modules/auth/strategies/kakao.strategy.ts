@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { access } from 'fs';
 import { Strategy } from 'passport-kakao';
 import { UserService } from 'src/modules/user/user.service';
 import { CacheService } from 'src/util/cache/cache.service';
@@ -20,41 +21,35 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         });
     }
     async validate(accessToken: string, refreshToken: string, profile: any): Promise<any> {
-        
         const id = profile.id;
-        const email = profile._json.kakao_account.email
-        const nickname = profile._json.properties.nickname
-        const profileImage = profile._json.properties.profile_image
+        const email = profile._json.kakao_account.email;
+        const nickname = profile._json.properties.nickname;
+        const profileImage = profile._json.properties.profile_image;
 
-        const user = await this.userService.getUser(email)
+        const user = await this.userService.getUser(email);
         if (!user) {
-
             const userProfile = {
-                kakaoId : id,
+                kakaoId: id,
                 email,
                 nickname,
                 profileImage,
-            }
+            };
 
-            const user = await this.userService.createKakaoUser(
-                userProfile
-            )
+            const user = await this.userService.createKakaoUser(userProfile);
+            const accessToken = await this.authService.generateAccessToken(user.id);
+            const refreshToken = await this.authService.generateRefreshToken();
 
-            const accessToken = await this.authService.generateAccessToken(user.id)
-            const refreshToken = await this.authService.generateRefreshToken()
-            
-            const redisKey = String(user.id)
+            const redisKey = String(user.id);
             await this.cacheService.set(redisKey, refreshToken);
 
-            return { user, accessToken, refreshToken }
-
+            return { user, accessToken, refreshToken };
         } else {
-            const accessToken = await this.authService.generateAccessToken(user.id)
-            const refreshToken = await this.authService.generateRefreshToken()
-            const redisKey = String(user.id)
-            await this.cacheService.set(redisKey, refreshToken);    
+            const accessToken = await this.authService.generateAccessToken(user.id);
+            const refreshToken = await this.authService.generateRefreshToken();
+            const redisKey = String(user.id);
+            await this.cacheService.set(redisKey, refreshToken);
 
-            return { user, accessToken, refreshToken }
+            return { user, accessToken, refreshToken };
         }
     }
 }
