@@ -20,6 +20,9 @@ export class User {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
+    @Column('varchar', { nullable: true, length: 30 })
+    kakaoId: string | null;
+
     @Column('varchar', { length: 50 })
     email: string;
 
