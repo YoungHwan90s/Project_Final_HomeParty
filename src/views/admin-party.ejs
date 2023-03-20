@@ -1,1 +1,141 @@
-<h2>관리자 파티목록</h2>
+<body>
+    <!-- Header-->
+    <header class="bg-white py-3">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-black">
+                <h1 class="display-4 fw-bolder">Parties</h1>
+                <p class="lead fw-normal text-black-50 mb-0">
+                    이 페이지는 파리를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가
+                    보이면 삭제해주세요.
+                </p>
+            </div>
+        </div>
+    </header>
+    <!-- Section-->
+    <section class="py-9">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="col mb-5" id="partycards"></div>
+            </div>
+        </div>
+    </section>
+</body>
+<script>
+    $(document).ready(() => {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/praties',
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                console.log(response);
+
+                for (let i = 0; i < response.length; i++) {
+                    const {
+                        partyId,
+                        id,
+                        title,
+                        currMember,
+                        maxMember,
+                        status,
+                        partyMember,
+                        thumbnail,
+                        createdAt,
+                    } = response[i];
+                    let partyid = i + 1;
+                    let Id = response[i].id;
+                    let titles = response[i].title;
+                    let curr = response[i].currMember;
+                    let max = response[i].maxMember;
+                    let statuses = response[i].status;
+                    let partyMembers = response[i].partyMember;
+                    let thumbnails = response[i].thumbnail;
+                    let createDate = new Date(response[i].createdAt);
+
+                    let partyMemberarr = [];
+                    for (let j = 0; j < partyMembers.length; j++) {
+                        if (j === 0) {
+                            continue;
+                        }
+                        partyMemberarr = partyMembers[j].user;
+
+                        console.log(partyMemberarr);
+                    }
+                }
+                // console.log(userarr);
+                const year = createDate.getFullYear();
+                const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                const day = ('0' + createDate.getDate()).slice(-2);
+
+                const partycard = `
+                    <div class="d-flex flex-column">
+                    <div class="card ">
+                        <a href="/user-detail/${partyMembers}" class="memberLink">
+                                    <figure class="profileWrapper">
+                                    <img
+                                        src="${partyMembers}"
+                                        alt=""
+                                        class="profile"
+                                    />
+                                    </figure>
+                                    <p class="memberName">${partyMembers}</p>
+                                </a>
+                        <!-- Product image-->
+                        <a href="http://localhost:4000/party/${id}">
+                        <img
+                            class="card-img-top"
+                            src="${thumbnails[0].thumbnail}"
+                            alt="..."
+                        />
+                        </a>
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">${titles}</h5>
+                                <!-- Product price-->
+                                <h5>${year}-${month}-${day}</h5>
+                                ${curr} / ${max}
+                                <h5>${statuses}</h5>
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto"onclick="deleteParty(${id})">삭제버튼</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    `;
+
+                $('#partycards').append(partycard);
+            },
+        });
+    });
+
+    function deleteParty(partyid) {
+        const result = confirm('해당 파티를 삭제하시겠습니까?');
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/admin/parties/${partyid}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    alert('파티 삭제 되었습니다.');
+                    $(`#id{partyid}`).remove();
+                    window.location.reload();
+                },
+            });
+        } else {
+            alert('삭제 취소되었습니다.');
+        }
+    }
+</script>
