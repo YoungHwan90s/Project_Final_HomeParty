@@ -19,7 +19,7 @@ export class User {
     id: number;
 
     @Column('varchar', { nullable: true, length: 30 })
-    kakaologinEmail: string | null;
+    kakaoId: string | null;
 
     @Column('varchar', { length: 50 })
     email: string;
