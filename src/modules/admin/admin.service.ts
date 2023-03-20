@@ -4,6 +4,7 @@ import { async } from 'rxjs';
 import { Repository } from 'typeorm';
 import { Party } from '../party/entity/party.entity';
 import { Tag } from '../party/entity/tag.entity';
+import { Thumbnail } from '../party/entity/thumbnail.entity';
 import { Review } from '../review/entity/review.entity';
 import { User } from '../user/entity/user.entity';
 
@@ -35,13 +36,18 @@ export class AdminService {
 
     async getPartyAdmin(): Promise<Party[]> {
         return await this.partyRepository.find({
-            relations: ['thumbnail', 'partyMember', 'partyMember.user'],
+            relations: ['thumbnail'],
             order: { date: 'DESC' },
         });
     }
 
     async deletedPartyAdmin(partyId: number) {
-        return await this.partyRepository.softDelete(partyId);
+        const party = await this.partyRepository.findOne({
+            where: { id: partyId },
+            relations: ['thumbnail', 'review', 'partyMember', 'wishList'],
+        });
+
+        return await this.partyRepository.softRemove(party);
     }
 
     async getReviewAdmin(): Promise<Review[]> {

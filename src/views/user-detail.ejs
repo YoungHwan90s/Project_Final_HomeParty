@@ -61,7 +61,7 @@
                         <p class="text-black-50 mb-0" id="host-email">📧 : ${data.email}</p>
                         <p class="text-black-50 mb-0" id="host-email">♀︎♂ : ${data.sex}</p>
                         <p class="text-black-50 mb-0" id="host-email" style="margin-right : 20%; margin-left: 20%; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;"> ${
-                            data.introduction
+                            data.introduction ? data.introduction : '자기소개를 입력해주세요.'
                         }</p>
                     `;
                 $(`#userInfo`).append(Info);
@@ -71,7 +71,7 @@
                     let party = parties[i];
                     thumbnails = party.thumbnail;
                     const thumbNail = `
-                    <a href="http://localhost:4000/party/${party.id}">
+                    <a href="/party/${party.id}">
                         <img class="card-img" src="${thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
                         <div class="card-body">
                             <h5 class="card-title" style="font-weight: bold; font-family: Arial, sans-serif;">파티 제목: ${party.title}</h5>
@@ -92,8 +92,8 @@
                         const signUpMonth = `${signUpYear}년${createdAt.getMonth() + 1}월`;
                         const html = `
                         <div style="margin-top: 20%; width: 120%" >
-                            <a href="http://localhost:4000/party-host-detail/${reviewInfo.user.id}">
-                                <img class="img-fluid rounded-circle me-4" src="http://i.pravatar.cc/500?img=7" alt="..." style="width: 35%;  float: left;"/>
+                            <a href="/user-detail/${reviewInfo.user.id}">
+                                <img class="img-fluid rounded-circle me-4" src="${reviewInfo.user.profile}" alt="..." style="width: 35%;  float: left;"/>
                             </a>
                             <div>
                                 <h1 class="text-black fs-5 fw-bolder text-start" style="margin-bottom: 15px;">${reviewInfo.user.name}</h1>

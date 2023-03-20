@@ -50,8 +50,6 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                console.log(response);
-
                 for (let i = 0; i < response.length; i++) {
                     const { tagId, id, tagName, freq, createdAt } = response[i];
                     let tagid = i + 1;

@@ -45,7 +45,7 @@
                     const date = new Date(data.createdAt);
 
                     const Info = `
-                <a href="http://localhost:4000/party/${data.id}">
+                <a href="/party/${data.id}">
                     <img class="img-fluid rounded-circle mb-4" src="${
                         thumbnails[0].thumbnail
                     }" alt="..." style="width: 15%; height: 15%;" />
@@ -71,7 +71,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                 <div class="form-inline mb-2">     
-                                    <a for="replyId" href="http://localhost:4000/user-detail/${id}">
+                                    <a for="replyId" href="/user-detail/${id}">
                                         <img src="${profile}" class="rounded-circle" alt="profile image" style="width: 32px; height: 32px;">
                                     </a>
                                     <input type="text"  readonly class="form-control-plaintext" placeholder="${name}" id="replyId" style="width: 20%;">
@@ -94,19 +94,16 @@
         document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
     };
 
-    function reviewcreate(hostid) {
+    function reviewcreate(partyId) {
         const reviewInfo = {
             review: $('#reviewTextArea').val(), //  리뷰 내용
             rating: $('#inputRating').val(), // 별점
         };
         console.log(reviewInfo);
 
-        const accessToken = sessionStorage.getItem('accessToken');
-        const refreshToken = sessionStorage.getItem('refreshToken');
-
         $.ajax({
             type: 'POST',
-            url: `/review/${hostid}`,
+            url: `/review/${partyId}`,
             data: reviewInfo,
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
