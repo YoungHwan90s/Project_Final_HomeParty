@@ -63,18 +63,18 @@ $(document).ready(function () {
     });
 
 function partySearch() {
+    console.log(123)
+
     const address = $('#partyWhere').val()
     const date = $('#partyWhen').val()
     const title = $('#partyName').val()
-    const searchData = { address, date, title }
 
     $.ajax({
         type: 'GET',
-        url: `/api/party`,
-        data: searchData,
+        url: `/api/party?address=${address}&date=${date}&title=${title}`,
+        data: {},
         success: function(response) {
             console.log(response)
-
             
         }
     })

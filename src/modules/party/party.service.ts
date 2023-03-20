@@ -47,6 +47,7 @@ export class PartyService {
         }
       
         const result = await query.getMany();
+        console.log(result)
         return result;
       }
 

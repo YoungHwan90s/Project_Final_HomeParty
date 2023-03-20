@@ -27,12 +27,14 @@ export class PartyController {
     // 파티 검색
     @Get('/')
     async searchParties(
-        @Res() res,
         @Query('date') date: string,
         @Query('address') address: string,
         @Query('title') title: string,
+        @Res() res,
     ) {
+        console.log(123)
         const result = await this.partyService.searchParties(date, address, title)
+        console.log({result})
         return res.send({result});
     }
 
@@ -52,7 +54,7 @@ export class PartyController {
     @UseGuards(JwtAuthGuard)
     @HttpCode(201)
     @Post('/')
-    async createParty(@Req() req, @Body() partyInfo): Promise<Party> {
+    async createParty(@Req() req, @Body() partyInfo: CreatePartyDto): Promise<Party> {
         let user = req.user;
         return this.partyService.createParty(user, partyInfo);
     }
