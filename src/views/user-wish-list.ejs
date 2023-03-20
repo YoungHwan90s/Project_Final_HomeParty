@@ -34,36 +34,60 @@
             let wishList = response['wishList'];
             console.log(wishList);
             sessionStorage.setItem('wishList', JSON.stringify(wishList));
-           
+
             for (let i = 0; i < wishList.length; i++) {
                 let partyId = wishList[i]['party']['id'];
                 let title = wishList[i]['party']['title'];
                 let maxMember = wishList[i]['party']['maxMember'];
                 let currMember = wishList[i]['party']['currMember'];
                 let thumbnails = wishList[i]['party']['thumbnail'];
-                let date = wishList[i]['party']['date'];
+                let isoDate = wishList[i]['party']['date'];
                 let status = wishList[i]['party']['status'];
                 let thumbnail = thumbnails[0];
                 console.log(thumbnail);
                 let address = wishList[i]['party']['address'];
                 addresses.push(address);
 
+                const year = isoDate.substr(0, 4);
+                const month = isoDate.substr(5, 2);
+                const day = isoDate.substr(8, 2);
+                const date = `${year}-${month}-${day}`;
+
+                console.log(thumbnails)
+                const partyImageHtml =
+                  thumbnails.length > 0 
+                        ? thumbnails.map((thumbnail) => `
+                                <li class="thumbnailItem carouselItem">
+                                  <div class="thumbnailRatio">
+                                    <a href="http://localhost:4000/party/${partyId}">
+                                    <img
+                                      src="${thumbnail.thumbnail}"
+                                      alt=""
+                                      class="thumbnailImage"
+                                    />
+                                    </a>
+                                  </div>
+                                </li>
+                            `,).join('')
+                        :   `
+                                <li class="thumbnailItem carouselItem">
+                                    <div class="thumbnailRatio">
+                                        <a href="http://localhost:4000/party/${partyId}">
+                                        <img
+                                          src="./public/imgs/temporary.png"
+                                          alt=""
+                                          class="thumbnailImage"
+                                        />
+                                        </a>
+                                    </div>
+                                </li>`;
+
                 let partyItem = `
                       <li class="partyItem">
                 <div class="thumbnailWrapper carousel">
                   <a href="" class="partyLink thumbnailLink">
                     <ul class="thumbnailList carouselList">
-                      <li class="thumbnailItem carouselItem">
-                        <div class="thumbnailRatio">
-                          <a href="http://localhost:4000/party/${partyId}">
-                          <img
-                            src="${thumbnail.thumbnail}"
-                            alt=""
-                            class="thumbnailImage"
-                          />
-                          </a>
-                        </div>
-                      </li>
+                      ${partyImageHtml}
                     </ul>
                   </a>
 
@@ -179,20 +203,19 @@
             },
             success: function (response) {
                 if (response.updateOrDelete == 1) {
-                  document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
-                  document.querySelector(`#likeOrNot${partyId}`).style.color = '';
-                  window.location.reload();
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-solid', 'fa-regular');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                    window.location.reload();
                 } else {
-                  window.location.reload();
+                    window.location.reload();
                 }
             },
             error: function (error) {
-                customAlert(
-                    error.responseJSON.message,
-                    function () {
-                        window.location.reload();
-                    },
-                );
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     }
