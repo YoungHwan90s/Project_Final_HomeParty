@@ -7,6 +7,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     Res,
     UseGuards,
@@ -22,6 +23,18 @@ import { PartyService } from './party.service';
 @Controller('/api/party')
 export class PartyController {
     constructor(private readonly partyService: PartyService) {}
+
+    // 파티 검색
+    @Get('/')
+    async searchParties(
+        @Res() res,
+        @Query('date') date: string,
+        @Query('address') address: string,
+        @Query('title') title: string,
+    ) {
+        const result = await this.partyService.searchParties(date, address, title)
+        return res.send({result});
+    }
 
     // 파티 목록 조회
     @Get('/list/')

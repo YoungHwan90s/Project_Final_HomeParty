@@ -6,7 +6,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Like, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -14,6 +14,7 @@ import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
+import { query } from 'express';
 
 @Injectable()
 export class PartyService {
@@ -22,6 +23,31 @@ export class PartyService {
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
         private readonly dataSource: DataSource,
     ) {}
+
+    async searchParties(date: string, address: string, title: string): Promise<Party[]> {
+        let query = this.partyRepository.createQueryBuilder("party");
+      
+        if (date) {
+          query = query.andWhere(`party.date = :date`, { date });
+        }
+        if (address) {
+          const regExp = /^[0-9a-zA-Z가-힣\s]+$/; // 유효한 문자열 패턴 정규표현식
+          if (!regExp.test(address)) {
+            throw new BadRequestException('Invalid input');
+          }
+          query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
+        }
+        if (title) {
+          const regExp = /^[0-9a-zA-Z가-힣\s]+$/; // 유효한 문자열 패턴 정규표현식
+          if (!regExp.test(title)) {
+            throw new BadRequestException('Invalid input');
+          }
+          query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
+        }
+      
+        const result = await query.getMany();
+        return result;
+      }
 
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({

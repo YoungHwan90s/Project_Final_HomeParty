@@ -18,7 +18,7 @@
 
             <div class="partyWhen">
               <div class="datePickerWrapper">
-                <input type="text" class="datePicker" placeholder="Select date" readonly />
+                <input type="text" id="partyWhen" class="datePicker" placeholder="Select date" readonly />
                 <div class="calendar"></div>
               </div>
             </div>
@@ -34,6 +34,7 @@
             />
 
             <button
+              onclick="partySearch()"
               type="submit"
               class="partySubmitButton"
               aria-label="파티 검색하기 버튼"
@@ -60,6 +61,24 @@ $(document).ready(function () {
             }
         });
     });
+
+function partySearch() {
+    const address = $('#partyWhere').val()
+    const date = $('#partyWhen').val()
+    const title = $('#partyName').val()
+    const searchData = { address, date, title }
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/party`,
+        data: searchData,
+        success: function(response) {
+            console.log(response)
+
+            
+        }
+    })
+}
 
 function getParties(userId) {
     $.ajax({
