@@ -70,7 +70,7 @@ export class AppController {
     useredit(@Req() req): { components: string } {
         return { components: 'user-edit' };
     }
-
+    
     @Get('/user-check')
     @Render('index')
     usercheck(@Req() req): { components: string } {
