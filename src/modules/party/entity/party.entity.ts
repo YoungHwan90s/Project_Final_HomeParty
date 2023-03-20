@@ -73,7 +73,7 @@ export class Party {
     review: Review[];
     
     // 파티 <-> 태그: 다대다 관계
-    @ManyToMany(() => Tag, { cascade: true })
+    @ManyToMany(() => Tag, { cascade: true, orphanedRowAction: 'delete'})
     @JoinTable({
         name: 'PartyTagMapping',
         joinColumn: {

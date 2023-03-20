@@ -26,7 +26,7 @@
             },
             success: function (response) {
                 const {
-                    id : partyId,
+                    id: partyId,
                     hostId,
                     title,
                     content,
@@ -99,11 +99,12 @@
                                 
                             </div>
                         </dl>
-                        ${userWishListMatch ? 
-                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                        ${
+                            userWishListMatch
+                                ? `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
                             <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red;"></i>
-                        </button>` :
-                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                        </button>`
+                                : `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
                             <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
                         </button>`
                         }
@@ -188,10 +189,10 @@
                 </div>`;
                 $('.partyPage').append(html);
 
-                var mapContainer = document.getElementById('map'), 
+                var mapContainer = document.getElementById('map'),
                     mapOption = {
                         center: new kakao.maps.LatLng(33.450701, 126.570667),
-                        level: 4, 
+                        level: 4,
                     };
 
                 var map = new kakao.maps.Map(mapContainer, mapOption);
@@ -203,7 +204,7 @@
                 var geocoder = new kakao.maps.services.Geocoder();
 
                 const addresses = [];
-                addresses.push(address)
+                addresses.push(address);
 
                 var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
                     markerImageSize = new kakao.maps.Size(51, 52),
@@ -458,7 +459,7 @@
             },
         });
     }
-    
+
     function updateWishList(partyId) {
         $.ajax({
             type: 'POST',
@@ -470,24 +471,22 @@
             },
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-regular', 'fa-solid');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
                 } else {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-solid', 'fa-regular');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = '';
                 }
             },
             error: function (error) {
-                customAlert(
-                    error.responseJSON.message,
-                    function () {
-                        window.location.reload();
-                    },
-                );
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     }
-
-
-
 </script>
