@@ -361,4 +361,14 @@ export class PartyService {
 
         return this.partyRepository.softRemove(party);
     }
+
+    async userHistory() {
+        console.log(2);
+        const userInfo = await this.partyMemberRepository.find({
+            
+            relations: ['party']
+        })
+        return userInfo
+    }
+    
 }

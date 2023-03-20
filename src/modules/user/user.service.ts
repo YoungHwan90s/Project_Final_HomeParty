@@ -195,10 +195,10 @@ export class UserService {
         return reviewInfo;
     }
 
-    async userHistory(user: User): Promise<any> {
+    async userHistory(user: number): Promise<any> {
         const userInfo = await this.userRepository.find({
-            where: { id: user.id, deletedAt: null },
-            relations: ['party', 'party.thumbnail','party.PartyMember']
+            where: { id :user, deletedAt: null },
+            relations: ['partyMember']
         })
         return userInfo
     }
