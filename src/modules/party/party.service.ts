@@ -42,7 +42,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo: CreatePartyDto): Promise<Party> {
+    async createParty(user: User, partyInfo): Promise<Party> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
