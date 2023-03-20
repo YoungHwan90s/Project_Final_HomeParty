@@ -20,9 +20,21 @@
                 <div class="user-info" style="margin-top: 300px;">
                     <div class="my-info">
                         <h2 class="title">계정</h2>
-                        <sapn class="mypage-text" id="email"></sapn>
+                        <span class="mypage-text" id="email"></span>
                     </div>
-                    
+                    <!-- <div class="my-info">
+                        <h2 class="title">비밀번호<span id="pw-error"></span></h2>
+                        <span>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                maxlength="20"
+                                disabled="disabled"
+                            />
+                            <button id="activePw">수정</button>
+                        </span>
+                    </div> -->
                     <div class="my-info">
                         <h2 class="title">이름<span id="name-error"></span></h2>
                         <span>
@@ -135,7 +147,7 @@
             });
         } else {
             saveUpdatedInformation(originProfile)
-        }   
+        }
     }
     
     function saveUpdatedInformation(profile) {
@@ -148,8 +160,6 @@
 
         const userData = {
             name: $('#name').val(),
-            // password: $('#password').val(),
-            // confirmPassword: $('#confirmPassword').val(),
             sex: $('#sex').val(),
             phone: $('#phone').val(),
             region: region = $('#region').val(),
