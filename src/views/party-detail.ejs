@@ -11,7 +11,8 @@
             }
         });
     });
-
+    let currMembers
+    let maxMembers
     const partyId = window.location.pathname.split('/')[2];
 
     function getParty(userId) {
@@ -40,7 +41,11 @@
                     user,
                     wishList,
                 } = response;
-                const userWishListMatch = wishList.find((user) => user.userId == userId);
+                currMembers = currMember
+                maxMembers = maxMember
+                const userWishListMatch = wishList.find((user) => 
+                user.userId == userId)
+
                 const tagHtml =
                     tag.length > 0
                         ? tag.map((tag) => `<li class="tagItem">#${tag.tagName}</li>`).join('')
@@ -80,8 +85,8 @@
                         <dl class="headcountList">
                             <div class="headcountItem">
                                 <dt>현재 참여 인원</dt>
-                                <dd>
-                                  ${currMember}
+                                <dd id="currMem">
+                                ${currMembers}
                                 </dd>
                             </div>
                             <div class="headcountItem">
@@ -243,7 +248,15 @@
 
                     $('.partyMemberBox').append(partyMemberDropDownHtml);
                     partyMember.shift();
+                    
+                    if(!partyMember.length){
+                        const partyMemberZeroHtml = `
+                            <li>파티 맴버가 아직 없습니다.</li>
+                        ` 
+                        $('.memberList').append(partyMemberZeroHtml);
+                    }
                     partyMember.forEach((item) => {
+                        console.log(item)
                         if (item.user.profile === null) {
                             item.user.profile =
                                 'https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg';
@@ -262,12 +275,32 @@
                                     <p class="memberName">${item.user.name}</p>
                                 </a>
                                 <div class="memberButtonWrapper">
-                                    <button type="button" class="memberButton memberAcceptButton"  onclick="acceptMember(${item.user.id},'신청승낙')">
+                                    ${item.status == '신청승낙'?
+                                    `
+                                    <button type="button" id="AcceptBun${item.user.id}" class="memberButton memberAcceptButton selected"  onclick="acceptMember(${item.user.id},'신청승낙')">
                                     승낙
                                     </button>
-                                    <button type="button" class="memberButton memberDeclineButton" onclick="acceptMember(${item.user.id},'거절')">
+                                    `
+                                    :
+                                    `
+                                    <button type="button" id="AcceptBun${item.user.id}" class="memberButton memberAcceptButton"  onclick="acceptMember(${item.user.id},'신청승낙')">
+                                    승낙
+                                    </button>
+                                    `
+                                    }
+                                    ${item.status == '거절'?
+                                    `
+                                    <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton selected" onclick="acceptMember(${item.user.id},'거절')">
                                     거절
                                     </button>
+                                    `
+                                    :
+                                    `
+                                    <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton" onclick="acceptMember(${item.user.id},'거절')">
+                                    거절
+                                    </button>
+                                    `
+                                    }
                                 </div>
                             </li>   
                         `;
@@ -289,19 +322,6 @@
                                 !e.target.classList.contains('selected') && button === e.target,
                             );
                         });
-
-                        // // 승낙한 멤버 배열
-                        // const acceptedMembers = [
-                        //     ...e.currentTarget.querySelectorAll('.memberAcceptButton.selected'),
-                        // ].map((button) =>
-                        //     button.closest('.memberItem').querySelector('.memberLink'),
-                        // );
-                        // // 거절한 멤버 배열
-                        // const declinedMembers = [
-                        //     ...e.currentTarget.querySelectorAll('.memberDeclineButton.selected'),
-                        // ].map((button) =>
-                        //     button.closest('.memberItem').querySelector('.memberLink'),
-                        // );
                     });
                 }
 
@@ -339,11 +359,9 @@
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
                 success: function (response) {
-                    if(response.updateMember.staus === "신청승낙") {
-                        
-                    } else {
-
-                    }
+                    customAlert('신청되었습니다!', function () {
+                        window.location.reload();
+                    });
                 },
                 error: function (error) {
                     customAlert(error.responseJSON.message, function () {
@@ -381,8 +399,15 @@
             });
         }
     }
-
+    
     function acceptMember(userId, status) {
+        $currMember = document.querySelector('#currMem');
+        let count = parseInt($currMember.textContent)
+        if(currMembers >= maxMembers  && status == '신청승낙' && !document.querySelector(`#AcceptBun${userId}`).classList.contains("selected")){
+            return customAlert("클라이언트에서 정원이 초과하였습니다", function () {
+                    window.location.reload();
+            });   
+        }
         $.ajax({
             type: 'PATCH',
             url: `/api/party/apply/${partyId}`,
@@ -392,9 +417,40 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                customAlert('변경되었습니다.', function () {
-                    window.location.reload();
-                });
+                if(response == 0 && status == '신청승낙') {
+                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                    count--;
+                    $currMember.textContent = count;
+                    currMembers = $currMember.textContent
+                    console.log(response)
+
+                } else if (response == 0 && status == '거절'){
+                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                    console.log(response)
+
+                } else if(response == 1) {
+                    document.querySelector(`#AcceptBun${userId}`).classList.add("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                    count++;
+                    $currMember.textContent = count;
+                    currMembers = $currMember.textContent
+                    console.log(response)
+
+                } else if(response == 2) {
+                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
+                    count--;
+                    $currMember.textContent = count;
+                    currMembers = $currMember.textContent
+                    console.log(response)
+
+                } else if(response == 3 && status == '거절') {
+                    document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
+                    console.log(response)
+                }
             },
             error: function (error) {
                 customAlert(error.responseJSON.message, function () {

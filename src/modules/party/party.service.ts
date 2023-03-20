@@ -267,6 +267,7 @@ export class PartyService {
             }
 
             if (partyMember.party.status === '모집중') {
+
                 if (partyMember.status === '신청대기' && status === '신청승낙') {
                     partyMember.status = status;
                     partyMember.party.currMember += 1;
@@ -275,19 +276,19 @@ export class PartyService {
                         currMember: partyMember.party.currMember,
                     });
 
-                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return updatedMember
+                    return 1
                 }
 
                 if (partyMember.status === '신청대기' && status === '거절') {
 
                     partyMember.status = status;
-                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return updatedMember
+                    return 3
                 }
 
                 if (partyMember.status === '신청승낙' && status === '신청승낙') {
@@ -297,10 +298,10 @@ export class PartyService {
                         currMember: partyMember.party.currMember,
                     });
 
-                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return updatedMember
+                    return 0
                 }
 
                 if (partyMember.status === '신청승낙' && status === '거절') {
@@ -311,19 +312,19 @@ export class PartyService {
                         currMember: partyMember.party.currMember,
                     });
 
-                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return updatedMember
+                    return 2
                 }
 
                 if (partyMember.status === '거절' && status === '거절') {
                     partyMember.status = '신청대기';
 
-                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return updatedMember
+                    return 0
                 }
 
                 if (partyMember.status === '거절' && status === '신청승낙') {
@@ -333,10 +334,10 @@ export class PartyService {
                     await queryRunner.manager.update(Party, partyId, {
                         currMember: partyMember.party.currMember,
                     });
-                    const updatedMember = await queryRunner.manager.save(PartyMember, partyMember);
+                    await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return updatedMember
+                    return 1
                 }
             } else {
                 throw new UnauthorizedException('현재 모집중인 파티가 아닙니다.')
