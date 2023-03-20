@@ -15,7 +15,6 @@ import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
-import { query } from 'express';
 
 @Injectable()
 export class PartyService {
@@ -25,30 +24,15 @@ export class PartyService {
         private readonly dataSource: DataSource,
     ) {}
 
-    async searchParties(date: string, address: string, title: string): Promise<Party[]> {
-        let query = this.partyRepository.createQueryBuilder("party");
-      
-        if (date) {
-          query = query.andWhere(`party.date = :date`, { date });
-        }
-        if (address) {
-          const regExp = /^[0-9a-zA-Z가-힣\s]+$/; // 유효한 문자열 패턴 정규표현식
-          if (!regExp.test(address)) {
-            throw new BadRequestException('Invalid input');
-          }
-          query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
-        }
-        if (title) {
-          const regExp = /^[0-9a-zA-Z가-힣\s]+$/; // 유효한 문자열 패턴 정규표현식
-          if (!regExp.test(title)) {
-            throw new BadRequestException('Invalid input');
-          }
-          query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
-        }
-      
-        const result = await query.getMany();
-        console.log(result)
-        return result;
+    async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
+        return await this.partyRepository.find({
+            where: [
+                { address: Like(`%${address}%`) },
+                { date: Like(`%${date}%`) },
+                { title: Like(`%${title}%`) },
+            ],
+            relations: ['thumbnail', 'wishList'],
+        });
       }
 
     async getParties(): Promise<Party[]> {

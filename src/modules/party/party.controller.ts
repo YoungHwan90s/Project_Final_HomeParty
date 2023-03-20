@@ -28,16 +28,12 @@ export class PartyController {
     // 파티 검색
     @Get('/')
     async searchParties(
-        @Query('date') date: string,
+        @Query('date') date: Date,
         @Query('address') address: string,
         @Query('title') title: string,
         @Res() res,
-    ) {
-        console.log(date)
-        console.log(address)
-        console.log(title)
-        const result = await this.partyService.searchParties(date, address, title)
-        console.log(result)
+    ):Promise<Party[]> {
+        const result = await this.partyService.searchParties( date, address, title )
         return res.send({result});
     }
 
