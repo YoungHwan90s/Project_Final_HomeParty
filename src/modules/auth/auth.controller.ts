@@ -58,8 +58,11 @@ export class AuthController {
   
     @Get('/kakao/callback')
     @UseGuards(KakaoAuthGuard)
-    kakaoLoginCallback(@Req() req) {
-      return req.user;
+    kakaoLoginCallback(@Req() req,  @Res() res) {
+        
+        const { user, accessToken, refreshToken } = req.user
+        
+        return res.json({ user, accessToken, refreshToken})
     }
 
     @UseGuards(JwtAuthGuard)
