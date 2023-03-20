@@ -33,7 +33,7 @@
                     maxMember,
                     currMember,
                     address,
-                    date,
+                    date : isoDate,
                     status,
                     thumbnail,
                     partyMember,
@@ -41,6 +41,7 @@
                     user,
                     wishList,
                 } = response;
+                console.log(isoDate)
                 currMembers = currMember
                 maxMembers = maxMember
                 const userWishListMatch = wishList.find((user) => 

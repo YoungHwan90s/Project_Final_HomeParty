@@ -255,10 +255,11 @@
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: new Date($('.datePicker').val()),
+                date: new Date($('.datePicker').val()).toISOString(),
                 thumbnail: image,
                 tagName: tagList,
             };
+            console.log(partyInfo)
             $.ajax({
                 type: 'POST',
                 url: `api/party`,

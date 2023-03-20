@@ -13,14 +13,14 @@
         success: function (response) {
             const userList = response.users
             for (let i = 0; i < userList.length; i++) {
-                const { id: userId, email, kakaologinEmail, name, sex, birthday, phone, address, profile, introduction,
+                const { id: userId, email, kakaoId, name, sex, birthday, phone, address, profile, introduction,
                     createdAt, updatedAt, deletedAt
                 } = userList[i]
 
                 const html = `<div>
                                 <h3>번호: ${i+1}</h3>
                                 <span>이름: ${name}</span></br>
-                                <span>카카오: ${kakaologinEmail}</span></br>
+                                <span>카카오: ${kakaoId}</span></br>
                                 <span>이메일: ${email}</span></br>
                                 <span>성별: ${sex}</span></br>
                                 <span>생년월일: ${birthday}</span></br>
