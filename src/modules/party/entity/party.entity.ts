@@ -32,7 +32,7 @@ export class Party {
     @Column('varchar', { length: 1000 })
     content: string;
 
-    @Column('int')
+    @Column('int', { default: 2 })
     maxMember: number;
 
     @Column('int', { default: 1 })
