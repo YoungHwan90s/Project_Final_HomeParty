@@ -262,7 +262,6 @@
                         $('.memberList').append(partyMemberZeroHtml);
                     }
                     partyMember.forEach((item) => {
-                        console.log(item)
                         if (item.user.profile === null) {
                             item.user.profile =
                                 'https://velog.velcdn.com/images/junho5336/post/67484caf-0da9-4db1-b174-cda7498a5138/image.jpeg';
@@ -429,12 +428,10 @@
                     count--;
                     $currMember.textContent = count;
                     currMembers = $currMember.textContent
-                    console.log(response)
 
                 } else if (response == 0 && status == '거절'){
                     document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
-                    console.log(response)
 
                 } else if(response == 1) {
                     document.querySelector(`#AcceptBun${userId}`).classList.add("selected")
@@ -442,7 +439,6 @@
                     count++;
                     $currMember.textContent = count;
                     currMembers = $currMember.textContent
-                    console.log(response)
 
                 } else if(response == 2) {
                     document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
@@ -450,12 +446,10 @@
                     count--;
                     $currMember.textContent = count;
                     currMembers = $currMember.textContent
-                    console.log(response)
 
                 } else if(response == 3 && status == '거절') {
                     document.querySelector(`#AcceptBun${userId}`).classList.remove("selected")
                     document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
-                    console.log(response)
                 }
             },
             error: function (error) {
