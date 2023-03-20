@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
 import cookieParser from 'cookie-parser'
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -14,6 +15,8 @@ async function bootstrap() {
     app.setBaseViewsDir(join(__dirname, '../src', 'views'));
     app.setViewEngine('ejs');
 
-    await app.listen(4000);
+    const configService = app.get(ConfigService);
+    const port = configService.get<number>('PORT')
+    await app.listen(port);
 }
 bootstrap();

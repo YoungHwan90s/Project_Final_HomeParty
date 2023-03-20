@@ -30,6 +30,7 @@ import { User } from 'aws-sdk/clients/budgets';
 import { Token } from 'aws-sdk/clients/cloudwatchlogs';
 import { Email } from 'aws-sdk/clients/organizations';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { KakaoAuthGuard } from './guards/kakao-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -49,6 +50,16 @@ export class AuthController {
         const { accessToken, refreshToken } = await this.authService.login(user);
         
         return res.json({ accessToken, refreshToken });
+    }
+
+    @Get('/kakao')
+    @UseGuards(KakaoAuthGuard)
+    kakaoLogin() {}
+  
+    @Get('/kakao/callback')
+    @UseGuards(KakaoAuthGuard)
+    kakaoLoginCallback(@Req() req) {
+      return req.user;
     }
 
     @UseGuards(JwtAuthGuard)
