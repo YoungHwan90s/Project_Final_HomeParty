@@ -1,6 +1,7 @@
 import { Injectable} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService } from '../../util/cache/cache.service';
+import { User } from '../user/entity/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -9,11 +10,12 @@ export class AuthService {
         private readonly cacheService: CacheService,
     ) {}
 
-    async login(user: any): Promise<any> {
+    async login(user: User): Promise<any> {
         const accessToken = await this.generateAccessToken(user.id);
         const refreshToken = await this.generateRefreshToken();
-
-        await this.cacheService.set(user.id, refreshToken);
+        
+        const redisKey = String(user.id)
+        await this.cacheService.set(redisKey, refreshToken);
 
         return { accessToken, refreshToken };
     }
