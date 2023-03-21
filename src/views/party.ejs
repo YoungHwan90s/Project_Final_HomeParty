@@ -17,9 +17,10 @@
 
             <div class="partyWhen">
               <div class="datePickerWrapper">
-                <input type="text" class="datePicker" placeholder="Select date" readonly />
+                <input type="text" id="partyWhen" class="datePicker" placeholder="Select date" readonly />
                 <div class="calendar"></div>
               </div>
+              <button id="clearButton" style="display: none;">❌</button>
             </div>
 
             <div class="divider" aria-hidden="true"></div>
@@ -58,14 +59,22 @@ $(document).ready(function () {
             getParties(0)
         }
     });
-    
 });
+
+$("#partyWhen").click(function() {
+    $("#clearButton").show();
+  });
+  
+  $("#clearButton").click(function() {
+    $("#partyWhen").val("");
+    $(this).hide();
+  });
 
 function partySearch() {
     const address = $('#partyWhere').val()
-    const date = new Date($('.datePicker').val()).toISOString()
+    const date = $('#partyWhen').val()
     const title = $('#partyName').val()
-    console.log(date)
+
     let webUrl = '/party?';
     if (address) {
         webUrl += `address=${address}&`
@@ -83,11 +92,12 @@ function partySearch() {
         url: `/api${webUrl}`,
         data: {},
         success: function(response) {
-            console.log(response)
-
             history.pushState({ data: 'response.result' }, null, `${webUrl}`)
             
             let partyList = response.result
+
+            $('.partyList').empty()
+
             for (let i = 0; i < partyList.length; i++) {
                 const partyId = partyList[i]['id'];
                 const title = partyList[i]['title'];
@@ -103,14 +113,13 @@ function partySearch() {
                 const month = isoDate.substr(5, 2);
                 const day = isoDate.substr(8, 2);
                 const date = `${year}-${month}-${day}`;
-                
+
                 const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
                 
                 //prettier-ignore
                 const thumbnailHtml = `
                     ${thumbnailList.length === 0 
-                        ?  `
-                            <li class="thumbnailItem">
+                        ?  `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
                                         src="/imgs/temporary.png"
@@ -118,8 +127,7 @@ function partySearch() {
                                         class="thumbnailImage"
                                     />
                                 </div>
-                            </li>
-                            ` 
+                            </li>` 
                         : thumbnailList.map(({ thumbnail }) => `
                             <li class="thumbnailItem">
                                 <div class="thumbnailRatio">
@@ -205,6 +213,7 @@ function partySearch() {
             [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
                 new Carousel($carousel);
             });
+            
         }
     })
 }
