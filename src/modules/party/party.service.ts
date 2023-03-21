@@ -1,5 +1,4 @@
 import {
-    BadRequestException,
     ForbiddenException,
     Injectable,
     NotAcceptableException,
@@ -15,7 +14,7 @@ import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
-import { query } from 'express';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class PartyService {
@@ -38,7 +37,7 @@ export class PartyService {
 
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
-            where: { deletedAt: null },
+            where: { deletedAt: null, status: '모집중' },
             relations: ['thumbnail', 'wishList'],
         });
     }
@@ -54,7 +53,7 @@ export class PartyService {
         });
     }
 
-    async createParty(user: User, partyInfo): Promise<Party> {
+    async createParty(user: User, partyInfo: CreatePartyDto): Promise<Party> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -279,8 +278,7 @@ export class PartyService {
             }
 
             if (partyMember.party.status === '모집중') {
-
-                if (partyMember.status === '신청대기' && status === '신청승낙') {
+                if (partyMember.status === '신청대기' && status === '승낙') {
                     partyMember.status = status;
                     partyMember.party.currMember += 1;
 
@@ -291,19 +289,18 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 1
+                    return 1;
                 }
 
                 if (partyMember.status === '신청대기' && status === '거절') {
-
                     partyMember.status = status;
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 3
+                    return 3;
                 }
 
-                if (partyMember.status === '신청승낙' && status === '신청승낙') {
+                if (partyMember.status === '승낙' && status === '승낙') {
                     partyMember.status = '신청대기';
                     partyMember.party.currMember -= 1;
                     await queryRunner.manager.update(Party, partyId, {
@@ -313,10 +310,10 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 0
+                    return 0;
                 }
 
-                if (partyMember.status === '신청승낙' && status === '거절') {
+                if (partyMember.status === '승낙' && status === '거절') {
                     partyMember.status = status;
                     partyMember.party.currMember -= 1;
 
@@ -327,7 +324,7 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 2
+                    return 2;
                 }
 
                 if (partyMember.status === '거절' && status === '거절') {
@@ -336,10 +333,10 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 0
+                    return 0;
                 }
 
-                if (partyMember.status === '거절' && status === '신청승낙') {
+                if (partyMember.status === '거절' && status === '승낙') {
                     partyMember.status = status;
                     partyMember.party.currMember += 1;
 
@@ -349,10 +346,10 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 1
+                    return 1;
                 }
             } else {
-                throw new UnauthorizedException('현재 모집중인 파티가 아닙니다.')
+                throw new UnauthorizedException('현재 모집중인 파티가 아닙니다.');
             }
         } catch (error) {
             await queryRunner.rollbackTransaction();
@@ -372,5 +369,22 @@ export class PartyService {
         }
 
         return this.partyRepository.softRemove(party);
+    }
+
+    @Cron('0 0 0 * * *')
+    async updateCompletionStatus() {
+        const currentDate = new Date();
+    
+        const party = await this.partyRepository.find({
+            where: { status: '모집중', deletedAt: null },
+        });
+    
+        for (let i = 0; i < party.length; i++) {
+            if (party[i].date <= currentDate) {
+                party[i].status = "마감";
+                await this.partyRepository.save(party[i]);
+            }
+        }
+        console.log("변경완료")
     }
 }

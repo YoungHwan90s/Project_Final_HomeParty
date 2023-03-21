@@ -38,7 +38,7 @@ export class PartyController {
     }
 
     // 파티 목록 조회
-    @Get('/list/')
+    @Get('/list')
     async getParties() {
         return await this.partyService.getParties();
     }

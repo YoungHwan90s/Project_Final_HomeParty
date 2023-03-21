@@ -221,7 +221,7 @@ button > i::before {
   justify-content: center;
   width: 200px;
   height: 40px;
-  margin: 0 0 40px auto;
+  margin: 10px 0 40px auto;
   color: var(--whiteColor);
   background: var(--pointColor);
   border: 0;
@@ -262,6 +262,7 @@ button > i::before {
 .partyDetail .memberList {
   position: absolute;
   top: 100%;
+  left: 0px;
   z-index: 999;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
