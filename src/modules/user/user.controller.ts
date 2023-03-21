@@ -75,13 +75,13 @@ export class UserController {
         return res.json({ updateOrDelete });
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get('/history')
-    // @HttpCode(200)
-    // async getUserHost(@Req() req) {
-    //     const { id } = req.user;
-    //     return await this.partyService.getUserHost(id);
-    // }
+    @UseGuards(JwtAuthGuard)
+    @Get('/user-host')
+    @HttpCode(200)
+    async getUserHost(@Req() req) {
+        const { id } = req.user;
+        return await this.partyService.getUserHost(id);
+    }
 
     // @UseGuards(JwtAuthGuard)
     // @Get('/history')
