@@ -18,6 +18,11 @@
     font-size: 20px;
     height: 100px;
 }
+
+#partyTag {
+    width: 100%;
+}
+
 .board-content {
     border-top: 2px solid #000;
 }
@@ -83,19 +88,10 @@
     resize: vertical;
 }
 
-/* 주소 입력 */
-.list {
-    margin : 0px auto;
-    width: 60%;
-    font-size: 14px;
-    font-weight: 700;
-}
-.list h3 {
-    display : inline-block;
-}
 #address .add-input text{
     margin-left : 60%;
 }
+
 #addressButton{
     text-align : center;
     background-color : #ddd;
