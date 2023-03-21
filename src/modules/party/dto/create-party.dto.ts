@@ -17,9 +17,10 @@ export class CreatePartyDto {
     @IsString()
     readonly address: string;
 
+    @Type(() => Date)
     @IsDate()
     readonly date: Date;
-
+    
     @IsOptional()
     @IsArray()
     thumbnail: [];

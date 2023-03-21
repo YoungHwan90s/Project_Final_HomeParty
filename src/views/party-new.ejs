@@ -177,6 +177,14 @@
 </main>
 
 <script>
+    $(document).ready(function () {
+            getMyInfo(function (userInfo) {
+                userInfo ?? customAlert('로그인 후 이용 가능합니다.', function () {
+                        window.location.replace('/login');
+                    });
+            });
+        });
+
     const partyMakeForm = document.querySelector('.partyMakeForm');
     const formData = new FormData();
 
@@ -255,7 +263,7 @@
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: new Date($('.datePicker').val()).toISOString(),
+                date: new Date($('.datePicker').val()),
                 thumbnail: image,
                 tagName: tagList,
             };

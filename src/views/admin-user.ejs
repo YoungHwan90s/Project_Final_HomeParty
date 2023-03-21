@@ -1,9 +1,56 @@
-<h2>관리자 유저목록</h2>
-    <div id="allUser"></div>
-
+<main class="admin-wrap-main">
+    <div class="responsive-wrapper">
+        <div class="admin-1-header">
+            <h1>Uers Page</h1>
+        </div>
+        <p class="mb-4">이 페이지는 유저 관리하는 페이지입니다</p>
+        <div class="horizontal-tabs">
+            <a href="/admin-user">User</a>
+            <a href="/admin-party">Party</a>
+            <a href="/admin-review">Review</a>
+            <a href="/admin-tag">Tags</a>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Users DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Num</th>
+                            <th>Name(정보보기)</th>
+                            <th>Sex</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Create</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Num</th>
+                            <th>Name</th>
+                            <th>Sex</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Create</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </tfoot>
+                    <tbody id="userTables"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
 <script>
     $.ajax({
-        type:'GET',
+        type: 'GET',
         url: `/admin/users`,
         data: {},
         headers: {
@@ -11,35 +58,52 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
-            const userList = response.users
+            const userList = response.users;
+            let count = 0;
             for (let i = 0; i < userList.length; i++) {
-                const { id: userId, email, kakaoId, name, sex, birthday, phone, address, profile, introduction,
-                    createdAt, updatedAt, deletedAt
-                } = userList[i]
+                const {
+                    id: userId,
+                    name,
+                    sex,
+                    phone,
+                    address,
+                    createdAt,
+                    updatedAt,
+                    deletedAt,
+                } = userList[i];
 
-                const html = `<div>
-                                <h3>번호: ${i+1}</h3>
-                                <span>이름: ${name}</span></br>
-                                <span>카카오: ${kakaoId}</span></br>
-                                <span>이메일: ${email}</span></br>
-                                <span>성별: ${sex}</span></br>
-                                <span>생년월일: ${birthday}</span></br>
-                                <span>핸드폰번호: ${phone}</span></br>
-                                <span>주소: ${address}</span></br>
-                                <span>프로필: ${profile}</span></br>
-                                <span>자기소개: ${introduction}</span></br>
-                                <span>생성일자: ${createdAt}</span></br>
-                                <span>수정일자: ${updatedAt}</span></br>
-                                <span>삭제일자: ${deletedAt}</span></br>
-                                <button onclick="deleteUserByAdmin(${userId})">삭제</button>
-                            </div>`
-                $('#allUser').append(html)
+                if (deletedAt === null) {
+                    const createdate = new Date();
+                    const year = createdate.getFullYear();
+                    const month = ('0' + (createdate.getMonth() + 1)).slice(-2);
+                    const day = ('0' + createdate.getDate()).slice(-2);
+
+                    const update = new Date();
+                    const updateYear = update.getFullYear();
+                    const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+                    const updateDay = ('0' + update.getDate()).slice(-2);
+
+                    const tagTable = `
+                    <tr>
+                            <td>${count + 1}</td>
+                            <td><a href="/user-detail/${userId}">${name}</a></td>
+                            <td>${sex}</td>
+                            <td>${phone}</td>
+                            <td>${address}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td>${updateYear}-${updateMonth}-${updateDay}</td>
+                            <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">Delete</button></td>
+                        </tr>
+                    `;
+                    $('#userTables').append(tagTable);
+                    count++;
+                }
             }
-        }
-    })
+        },
+    });
 
     function deleteUserByAdmin(userId) {
-        const result = confirm('삭제하시겠습니까?');
+        const result = confirm('회원삭제 하시겠습니까?');
         if (result) {
             $.ajax({
                 type: 'DELETE',
@@ -50,13 +114,13 @@
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
                 success: function (response) {
-                    alert('회원 삭제');
-                    $(`#id${userId}`).remove()
-                    window.location.reload()
-                }
-            })
+                    alert('회원삭제 완료');
+                    $(`#id${userId}`).remove();
+                    window.location.reload();
+                },
+            });
         } else {
-            alert('삭제 취소')
+            alert('삭제 취소');
         }
     }
 </script>
