@@ -20,13 +20,9 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
-            console.log(response)
             for (let i = 0; i < response.length; i++) {
                 const { id:reviewId, userId, partyId, party, user, rating, review, createdAt, updatedAt, deletedAt } = response[i]
-                // console.log(response[i])
                 // const review = response[i]
-                console.log(response[i].party.title)
-                // console.log(user)
 
                 // function checkAlreadyDeleted() {
                 //     if (deletedAt !== 'null') {
