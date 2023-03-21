@@ -73,6 +73,21 @@ export class UserService {
         return await this.userRepository.update(id, { profile });
     }
 
+    async validateUser(email: string, password: string) {
+        const user = await this.userRepository.findOne({
+            where: { email, deletedAt: null },
+        });
+
+        if (!user) {
+            throw new NotFoundException('회원이 존재하지 않습니다.');
+        }
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (!comparePassword) {
+            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+        }
+        return user;
+    }
+
     async getUser(data: any): Promise<User> {
         let where = {};
         // 인자 값 id 일 때
@@ -152,21 +167,6 @@ export class UserService {
             relations: ['party', 'party.thumbnail', 'party.tag'],
         });
         return wishList;
-    }
-
-    async validateUser(email: string, password: string) {
-        const user = await this.userRepository.findOne({
-            where: { email, deletedAt: null },
-        });
-
-        if (!user) {
-            throw new NotFoundException('회원이 존재하지 않습니다.');
-        }
-        const comparePassword = await bcrypt.compare(password, user.password);
-        if (!comparePassword) {
-            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
-        }
-        return user;
     }
 
     async findEmail(data): Promise<string> {
