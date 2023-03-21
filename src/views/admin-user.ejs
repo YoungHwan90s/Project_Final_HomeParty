@@ -58,7 +58,6 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
-            console.log(response);
             const userList = response.users;
             let count = 0;
             for (let i = 0; i < userList.length; i++) {

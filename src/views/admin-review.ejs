@@ -17,7 +17,7 @@
     </div>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Users DataTables</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Reviews DataTables</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -25,7 +25,7 @@
                     <thead>
                         <tr>
                             <th>Num</th>
-                            <th>Name</th>
+                            <th>Name(자세히 보기)</th>
                             <th>Rating</th>
                             <th>Content</th>
                             <th>Party</th>
@@ -78,7 +78,6 @@
                 } = response[i];
                 let name = response[i].user.name;
 
-                console.log(reviewId);
                 if (deletedAt === null) {
                     const createdate = new Date();
                     const year = createdate.getFullYear();
@@ -92,7 +91,7 @@
 
                     const reviewTable = `<tr>
                             <td>${count + 1}</td>
-                            <td>${name}</td>
+                            <td><a href="/user-detail/${userId}">${name}</a></td>
                             <td>${rating}</td>
                             <td>${review}</td>
                             <td><a href="/party/${partyId}">파티확인하기</a></td>

@@ -29,11 +29,11 @@ export class AdminController {
     async getReviewAdmin() {
         return await this.adminService.getReviewAdmin();
     }
-
+    // 리뷰 삭제
     @Delete('/review/:reviewId')
     @HttpCode(204)
     async deletedReviewAdmin(@Param('reviewId') reviewId: number) {
-        return await this.adminService.deletedPartyAdmin(reviewId);
+        return await this.adminService.deletedReviewAdmin(reviewId);
     }
 
     // // 파티 조회

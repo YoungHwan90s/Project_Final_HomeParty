@@ -78,7 +78,7 @@
                         updatedAt,
                         deletedAt,
                     } = response[i];
-                    console.log(thumbnail[0].partyId);
+                    console.log(id);
                     const createDate = new Date
 
                     if (deletedAt === null) {
@@ -94,14 +94,14 @@
                     const partyItem = `
                     <tr>
                             <td>${count + 1}</td>
-                            <td><a href="/party/${thumbnail[0].partyId}">${title.substring(0, 8)}...</a></td>
+                            <td><a href="/party/${id}">${title.substring(0, 8)}...</a></td>
                             <td>${status}</td>
                             <td>${address}</td>
                             <td>${currMember}</td>
                             <td>${maxMember}</td>
                             <td>${year}-${month}-${day}</td>
                             <td>${updateYear}-${updateMonth}-${updateDay}</td>
-                            <td><button type="button" onclick="deleteParty(${partyId})" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" onclick="deleteParty(${id})" class="btn btn-danger">Delete</button></td>
                         </tr>
                 `;
                     $('#partyTable').append(partyItem);
@@ -125,7 +125,7 @@
                 },
                 success: function (response) {
                     alert('파티 삭제 되었습니다.');
-                    $(`#id{partyid}`).remove();
+                    $(`#id${partyid}`).remove();
                     window.location.reload();
                 },
             });
