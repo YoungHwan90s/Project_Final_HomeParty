@@ -14,7 +14,6 @@ import {
 import { UserService } from './user.service';
 import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { PartyService } from '../party/party.service';
 
 @Controller('user')
 export class UserController {
@@ -74,21 +73,21 @@ export class UserController {
         return res.json({ updateOrDelete });
     }
 
-    // @UseGuards(JwtAuthGuard)
-    @Get('/history')
+    @UseGuards(JwtAuthGuard)
+    @Get('/party-history')
     @HttpCode(200)
-    async userHistory(@Req() req) {
-        // const { id } = req.user;
-        const history = await this.userService.userHistory(5);
-
-        return history;
+    async userPartyHistory(@Req() req) {
+        const { id } = req.user;
+        return await this.userService.userPartyHistory(id);
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get('/history')
-    // @HttpCode(200)
-    // async getUserHistory(@Req() req) {
-    //     const { id } = req.user;
-    //     return await this.partyService.getUserHistory(id);
-    // }
+    @UseGuards(JwtAuthGuard)
+    @Get('/party-applied')
+    @HttpCode(200)
+    async userApplyPartyList(@Req() req) {
+        const { id } = req.user;
+        return await this.userService.userApplyPartyList(id);
+    }
+
+
 }

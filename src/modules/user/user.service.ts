@@ -219,9 +219,29 @@ export class UserService {
     }
 
     async userPartyHistory(id: number): Promise<any> {
-        let parties = await this.userRepository.find({
+        let user = await this.userRepository.findOne({
             where: { id, deletedAt: null },
-            relations: ['partyMember', 'partyMember.party'],
+            relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
+
+        user.partyMember = user.partyMember.filter(
+            (partyMember) => partyMember.status === '승낙' && partyMember.party.status === '마감',
+        );
+
+        return user;
     }
+
+    async userApplyPartyList(id: number): Promise<any> {
+        let user = await this.userRepository.findOne({
+            where: { id, deletedAt: null },
+            relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
+        });
+
+        user.partyMember = user.partyMember.filter(
+            (partyMember) => partyMember.party.status === '모집중',
+        );
+
+        return user;
+    }
+
 }

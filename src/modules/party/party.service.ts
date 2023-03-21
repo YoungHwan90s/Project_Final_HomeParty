@@ -382,11 +382,4 @@ export class PartyService {
             relations: ['party'],
         });
     }
-
-    // async getUserHistory(id): Promise<PartyMember[]> {
-    //     return await this.partyMemberRepository.find({
-    //         where: { deletedAt: null,},
-    //         relations: ['party'],
-    //     });
-    // }
 }
