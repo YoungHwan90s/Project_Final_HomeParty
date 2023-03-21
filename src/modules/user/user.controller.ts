@@ -17,7 +17,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+        private readonly userService: UserService) {}
 
     @UseGuards(JwtAuthGuard)
     @Get('/')
@@ -72,13 +73,11 @@ export class UserController {
         return res.json({ updateOrDelete });
     }
 
-    // @UseGuards(JwtAuthGuard)
-    @Get('/history')
+    @UseGuards(JwtAuthGuard)
+    @Get('/party-history')
     @HttpCode(200)
     async userHistory(@Req() req) {
-        // const { id } = req.user;
-        const history = await this.userService.userHistory(5);
-
-        return history;
+        const { id } = req.user;
+        return await this.userService.userPartyHistory(id);
     }
 }
