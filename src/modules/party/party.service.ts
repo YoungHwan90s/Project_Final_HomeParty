@@ -374,6 +374,5 @@ export class PartyService {
                 await this.partyRepository.save(party[i]);
             }
         }
-        console.log("변경완료")
     }
 }
