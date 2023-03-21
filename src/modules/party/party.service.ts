@@ -47,7 +47,7 @@ export class PartyService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
-        let createdParty;
+        let createdParty: Party;
 
         try {
             // Party 객체 인스턴스 맵핑

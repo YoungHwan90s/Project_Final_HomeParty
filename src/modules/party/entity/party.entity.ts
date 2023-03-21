@@ -41,7 +41,7 @@ export class Party {
     @Column('varchar', { length: 100 })
     address: string;
 
-    @Column({ type: 'datetime' })
+    @Column('date')
     date: Date;
 
     @Column('varchar', { default: '모집중' })
