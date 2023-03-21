@@ -64,7 +64,7 @@ $(document).ready(function () {
 function getParties(userId) {
     $.ajax({
         type: 'GET',
-        url: `/user/party-history`,
+        url: `/user/party-applied`,
         data: {},
         headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
