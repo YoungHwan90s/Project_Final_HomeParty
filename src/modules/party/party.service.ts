@@ -47,7 +47,7 @@ export class PartyService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
-        let createdParty;
+        let createdParty: Party;
 
         try {
             // Party 객체 인스턴스 맵핑
@@ -374,7 +374,6 @@ export class PartyService {
                 await this.partyRepository.save(party[i]);
             }
         }
-        console.log("변경완료")
     }
 
     // async getUserHost(id): Promise<PartyMember[]> {

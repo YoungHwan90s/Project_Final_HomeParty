@@ -72,14 +72,30 @@ function findAddr() {
     }).open();
 }
 
-/*---------------------------------------- log out ----------------------------------------*/
+/*----------------------------------- log out -----------------------------------*/
 function logout() {
-    sessionStorage.clear();
-    customAlert('정상적으로 로그아웃 되었습니다.', function () {
-        window.location.replace('/');
+    $.ajax({
+        type: 'GET',
+        url: '/auth/logout',
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            customAlert('정상적으로 로그아웃 되었습니다.', function () {
+                window.location.replace('/');
+                sessionStorage.clear();
+            });
+        },
+        error: function (response) {
+            customAlert(response.responseJSON.message, function () {
+                sessionStorage.clear();
+                window.location.replace('/');
+            });
+        },
     });
 }
-
+/*--------------------------- Prevent Enter Key Action ---------------------------*/
 function preventSubmit(event) {
     event.preventDefault();
 }

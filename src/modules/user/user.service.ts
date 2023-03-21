@@ -1,34 +1,33 @@
 import {
     ConflictException,
     Injectable,
+    NotAcceptableException,
     NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DataSource, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { PartialUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { WishList } from './entity/wish-list.entity';
 import { PartyService } from '../party/party.service';
-import { CheckPasswordDto } from './dto/check-password.dto';
-import { AuthService } from '../auth/auth.service';
-import { CacheService } from 'src/util/cache/cache.service';
 import { Kakao } from './entity/kakao.entitiy';
+import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(WishList) private wishListRepository: Repository<WishList>,
-        @InjectRepository(Kakao) private kakaoRepository: Repository<Kakao>,
 
         private readonly partyService: PartyService,
+        private readonly dataSource: DataSource,
     ) {}
 
-    async createUser(data): Promise<User> {
+    async createUser(data: CreateUserDto): Promise<User> {
         const existUser = await this.getUser(data.email);
 
         if (existUser) {
@@ -51,29 +50,59 @@ export class UserService {
         return user;
     }
 
-    async createKakaoUser(data) {
-        let newUserWithKakao = new User();
-        newUserWithKakao.email = data.email;
-        newUserWithKakao.name = data.nickname;
-        newUserWithKakao.profile = data.profileImage;
+    async createKakaoUser(data): Promise<User> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
 
-        const user = await this.userRepository.save(newUserWithKakao);
+        let user: User;
+        try {
+            let newUserWithKakao = new User();
+            newUserWithKakao.email = data.email;
+            newUserWithKakao.name = data.nickname;
+            newUserWithKakao.profile = data.profileImage;
 
-        let userKakaoInfo = new Kakao();
-        userKakaoInfo.userId = user.id;
-        userKakaoInfo.kakaoId = data.kakaoId;
+            user = await queryRunner.manager.save(User, newUserWithKakao);
 
-        await this.kakaoRepository.save(userKakaoInfo);
+            let userKakaoInfo = new Kakao();
+            userKakaoInfo.userId = user.id;
+            userKakaoInfo.kakaoId = data.kakaoId;
 
-        return await this.userRepository.save(user);
+            await queryRunner.manager.save(Kakao, userKakaoInfo);
+
+            await queryRunner.commitTransaction();
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw new NotAcceptableException(
+                '로그인에 실패하였습니다. 로그인에 필요한 정보가 제공되지 않았습니다.',
+            );
+        } finally {
+            await queryRunner.release();
+        }
+        return user;
     }
 
-    async updateUserProfile(data): Promise<UpdateResult> {
+    async updateUserProfile(data: CreateUserProfileDto): Promise<UpdateResult> {
         const { id, profile } = data;
         return await this.userRepository.update(id, { profile });
     }
 
-    async getUser(data: any): Promise<User> {
+    async validateUser(email: string, password: string) {
+        const user = await this.userRepository.findOne({
+            where: { email, deletedAt: null },
+        });
+
+        if (!user) {
+            throw new NotFoundException('회원이 존재하지 않습니다.');
+        }
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (!comparePassword) {
+            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+        }
+        return user;
+    }
+
+    async getUser(data: number | string): Promise<User> {
         let where = {};
         // 인자 값 id 일 때
         if (typeof data === 'number') {
@@ -103,7 +132,7 @@ export class UserService {
             },
         );
     }
-    async updateUser(user: User, data: UpdateUserDto): Promise<UpdateResult> {
+    async updateUser(user: User, data: PartialUserDto): Promise<UpdateResult> {
         if (data.password !== data.confirmPassword) {
             throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
         } else {
@@ -152,21 +181,6 @@ export class UserService {
             relations: ['party', 'party.thumbnail', 'party.tag'],
         });
         return wishList;
-    }
-
-    async validateUser(email: string, password: string) {
-        const user = await this.userRepository.findOne({
-            where: { email, deletedAt: null },
-        });
-
-        if (!user) {
-            throw new NotFoundException('회원이 존재하지 않습니다.');
-        }
-        const comparePassword = await bcrypt.compare(password, user.password);
-        if (!comparePassword) {
-            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
-        }
-        return user;
     }
 
     async findEmail(data): Promise<string> {

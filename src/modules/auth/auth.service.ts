@@ -11,17 +11,21 @@ export class AuthService {
     ) {}
 
     async login(user: User): Promise<any> {
-        const accessToken = await this.generateAccessToken(user.id);
+        const accessToken = await this.generateAccessToken(user.id, user.email);
         const refreshToken = await this.generateRefreshToken();
         
-        const redisKey = String(user.id)
-        await this.cacheService.set(redisKey, refreshToken);
+        const IdkeyForRefreshToken = String(user.id)
+        await this.cacheService.set(IdkeyForRefreshToken, refreshToken);
+
+        const EmailkeyForUser= user.email
+        const userInfo = JSON.stringify(user)
+        await this.cacheService.set(EmailkeyForUser, userInfo);
 
         return { accessToken, refreshToken };
     }
 
-    async generateAccessToken(id: number): Promise<string> {
-        const payload = { id };
+    async generateAccessToken(id: number, email: string): Promise<string> {
+        const payload = { id, email };
         return this.jwtService.sign(payload);
     }
 
@@ -35,12 +39,14 @@ export class AuthService {
             return {
                 type: true,
                 id: decoded.id,
+                email: decoded.email,
             };
         } catch (error) {
             const decoded = await this.jwtService.verify(token, { ignoreExpiration: true });
             return {
                 type: false,
                 id: decoded.id,
+                email: decoded.email,
                 message: error.message,
             };
         }
