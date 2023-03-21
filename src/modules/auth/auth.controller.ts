@@ -67,6 +67,18 @@ export class AuthController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('/logout')
+    @HttpCode(200)
+    async logout(@Req() req, @Res() res) {
+        const user = req.user
+
+        await this.cacheService.del(user.id)
+        await this.cacheService.del(user.email)
+
+        return res.json({})
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get('/my-info')
     @HttpCode(200)
     async getMyInfo(@Req() req, @Res() res): Promise<User> {
