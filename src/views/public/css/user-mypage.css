@@ -25,90 +25,140 @@
     width : 60%;
     background-color : white;
  } */
-
-* .mypage-text {
-   width: 250px;
-   height: 60px;
-   font-weight: 900;
+.h2bold {
+   font-weight: 700;
+   font-size: 27px;
 }
-
+.h3bold {
+   padding-top: 4px;
+   flex-basis: 156px;
+   margin-right: 24px;
+   font-size: 12px;
+ }
+ .mypage-text {
+   font-size: 16px;
+   color: rgb(32,33,36);
+ }
+ .underlines {
+   padding-left: 35px;
+ }
+ .underline {
+   border-top: 1px solid rgb(218,220,224);
+ }
 .mypage-container {
-   width: 100%;
-   height: 100%;
-
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
-
-.mypage-wrap {
-   width: 80%;
-   height: 80%;
-
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   align-items: center;
-}
-
-.image-wrap {
-   width: 40%;
-   height: 100%;
-
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
-
-.profile-wrap {
-   width: 60%;
-   height: 70%;
-
+   position: relative;
    display: flex;
    flex-direction: column;
-   justify-content: center;
+   width: 100%;
+   padding-bottom: 90px;
+}
+.newtainer {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+}
+.container-info {
+   display: flex;
+   background-color: #fff;
+   box-sizing: border-box;
+   overflow: hidden;
+   margin-top: 8px;
+   border-radius: 8px;
+   border: 1px solid rgb(218,220,224);
+}
+.mypage-wrap {
+   display: flex;
+   flex-grow: 1;
+   flex-shrink: 1;
+   background-color: #fff;
+   box-sizing: border-box;
+   overflow: hidden;
+   margin-top: 50px;
+}
+
+.info-header {
+   height: 100%;
+   padding-bottom: 8px;
+   padding-top: 30px;
+   padding-left: 24px;
+    padding-right: 24px;
+   display: block;
+   background: none;
+   border: none;
+   text-decoration: none;
+   text-align: left;
+   width: 100%;
+   box-sizing: border-box;
+}
+.img-cont {
+   padding-top: 22px;
+   padding-bottom: 23px;
+   padding-right: 24px;
+}
+.img-wrap {
+   display: flex;
    align-items: center;
 }
 
-.profile-image {
-   width: 100%;
-   height: 30%;
-   border-radius: 100%;
+.prof-wrap {
+   flex-grow: 0;
+   flex-shrink: 0;
+   border-radius: 50%;
+   margin-left: 30px;
+   overflow: hidden;
+   position: relative;
 }
 
-.profile-img {
-   width: 200px;
-   height: 200px;
-   border-radius: 100%;
-   object-fit: fill;
+.prof-image {
+   width: 100px;
+   height: 100px;
+}
+
+.prof-img {
+   height: 100%;
+   width: auto;
 }
 
 .profil-email {
    width: 100%;
    height: 10%;
-
    display: flex;
    justify-content: center;
    margin-top: 3%
 }
 
 .mypage-btn {
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
+   height: 100%;
+   padding-bottom: 22px;
+   padding-top: 55px;
+   text-align: center;
 }
 
 .mypage-edit-btn, .password-edit-btn, .mypage-delete-btn {
-   margin: 2.5%
+   display: inline-flex;
+   align-items: center;
+   margin-left: 24px;
+   margin-right: 24px;
+   width: 174px;
+   justify-content: center;
+   height: 36px;
+   border-width: 1px;
+   border-radius: 20px;
+   border-style: solid;
+   border-color: rgb(218,220,224);
+   background: transparent;
 }
 
 .info-wrap {
-   width: 60%;
-   height: 100%;
-   padding: 5%;
-
+   position: relative;
    display: flex;
-   align-items: center;
+   flex-direction: column;
+   width: 100%;
+   padding-left: 48px;
+   padding-right: 48px;
+   margin-left: auto;
+   margin-right: auto;
+   max-width: 840px;
 }
 
 .user-info {
@@ -116,7 +166,19 @@
 }
 
 .my-info {
-   margin-bottom: 5%;
+   display: flex;
+   background: none;
+   border: none;
+   color: inherit;
+   font: inherit;
+   margin: 0;
+   padding: 0;
+   text-align: left;
+   box-sizing: border-box;
+   padding-top: 15px;
+   padding-bottom: 16px;
+   padding-left: 35px;
+   padding-right: 35px;
 }
 
 /*태블릿*/
