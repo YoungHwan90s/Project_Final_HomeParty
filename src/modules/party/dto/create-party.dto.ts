@@ -20,7 +20,7 @@ export class CreatePartyDto {
     @Type(() => Date)
     @IsDate()
     readonly date: Date;
-
+    
     @IsOptional()
     @IsArray()
     thumbnail: [];
