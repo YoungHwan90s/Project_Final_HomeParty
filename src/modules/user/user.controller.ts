@@ -50,7 +50,7 @@ export class UserController {
     @HttpCode(200)
     async checkPw(@Req() req, @Body() data: PartialUserDto) {
         const user = req.user;
-        return this.userService.validateUser(user.email, data.password)
+        return this.userService.validateUser(user.email, data.password);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -70,5 +70,15 @@ export class UserController {
         const user = req.user;
         const updateOrDelete = await this.userService.updateWishList(user, partyId);
         return res.json({ updateOrDelete });
+    }
+
+    // @UseGuards(JwtAuthGuard)
+    @Get('/history')
+    @HttpCode(200)
+    async userHistory(@Req() req) {
+        // const { id } = req.user;
+        const history = await this.userService.userHistory(5);
+
+        return history;
     }
 }
