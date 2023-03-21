@@ -27,9 +27,9 @@ export class PartyService {
     async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
         return await this.partyRepository.find({
             where: [
-                { address: Like(`%${address}%`) },
-                { date: Like(`%${date}%`) },
-                { title: Like(`%${title}%`) },
+                { address: Like(`%${address}%`), deletedAt: null, status: '모집중' },
+                { date, deletedAt: null, status: '모집중' },
+                { title: Like(`%${title}%`), deletedAt: null, status: '모집중' },
             ],
             relations: ['thumbnail', 'wishList'],
         });

@@ -17,7 +17,7 @@
 
             <div class="partyWhen">
               <div class="datePickerWrapper">
-                <input type="text" id="partyWhen" class="datePicker" placeholder="Select date" readonly />
+                <input type="text" class="datePicker" placeholder="Select date" readonly />
                 <div class="calendar"></div>
               </div>
             </div>
@@ -63,9 +63,9 @@ $(document).ready(function () {
 
 function partySearch() {
     const address = $('#partyWhere').val()
-    const date = $('#partyWhen').val()
+    const date = new Date($('.datePicker').val()).toISOString()
     const title = $('#partyName').val()
-
+    console.log(date)
     let webUrl = '/party?';
     if (address) {
         webUrl += `address=${address}&`
@@ -87,7 +87,7 @@ function partySearch() {
 
             history.pushState({ data: 'response.result' }, null, `${webUrl}`)
             
-            let partyList = response
+            let partyList = response.result
             for (let i = 0; i < partyList.length; i++) {
                 const partyId = partyList[i]['id'];
                 const title = partyList[i]['title'];
