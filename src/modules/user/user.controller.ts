@@ -12,14 +12,15 @@ import {
     Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { PartyService } from '../party/party.service';
 import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { PartyService } from '../party/party.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService,
-        private readonly partyService: PartyService
+    constructor(
+        private readonly userService: UserService,
+        private readonly partyService: PartyService,
         ) {}
 
     @UseGuards(JwtAuthGuard)
@@ -83,11 +84,21 @@ export class UserController {
         return await this.partyService.getUserHost(id);
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get('/history')
-    // @HttpCode(200)
-    // async getUserHistory(@Req() req) {
-    //     const { id } = req.user;
-    //     return await this.partyService.getUserHistory(id);
-    // }
+    @UseGuards(JwtAuthGuard)
+    @Get('/party-history')
+    @HttpCode(200)
+    async userPartyHistory(@Req() req) {
+        const { id } = req.user;
+        return await this.userService.userPartyHistory(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/party-applied')
+    @HttpCode(200)
+    async userApplyPartyList(@Req() req) {
+        const { id } = req.user;
+        return await this.userService.userApplyPartyList(id);
+    }
+
+
 }

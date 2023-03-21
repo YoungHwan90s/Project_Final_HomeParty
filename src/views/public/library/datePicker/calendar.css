@@ -93,3 +93,8 @@ time {
   border: 1px solid var(--pointColor);
   border-radius: 50%;
 }
+
+.pastDay {
+  pointer-events: none !important;
+  color: gray !important;
+}

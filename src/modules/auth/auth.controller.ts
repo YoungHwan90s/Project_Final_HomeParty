@@ -132,7 +132,6 @@ export class AuthController {
     async authenticateCode(@Res() res, @Body() data: AuthenticateCodeDto): Promise<void> {
         const authenticationCode = await this.cacheService.get(data.email);
 
-        // 인증번호가 다를 때 에러
         if (authenticationCode !== data.userAuthenticationCode) {
             throw new UnauthorizedException('인증번호가 일치하지 않습니다.');
         }
