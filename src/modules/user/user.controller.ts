@@ -14,13 +14,11 @@ import {
 import { UserService } from './user.service';
 import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { PartyService } from '../party/party.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService,
-        private readonly partyService: PartyService
-        ) {}
+    constructor(
+        private readonly userService: UserService) {}
 
     @UseGuards(JwtAuthGuard)
     @Get('/')
@@ -76,18 +74,20 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/user-host')
+    @Get('/party-history')
     @HttpCode(200)
-    async getUserHost(@Req() req) {
+    async userPartyHistory(@Req() req) {
         const { id } = req.user;
-        return await this.partyService.getUserHost(id);
+        return await this.userService.userPartyHistory(id);
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get('/history')
-    // @HttpCode(200)
-    // async getUserHistory(@Req() req) {
-    //     const { id } = req.user;
-    //     return await this.partyService.getUserHistory(id);
-    // }
+    @UseGuards(JwtAuthGuard)
+    @Get('/party-applied')
+    @HttpCode(200)
+    async userApplyPartyList(@Req() req) {
+        const { id } = req.user;
+        return await this.userService.userApplyPartyList(id);
+    }
+
+
 }

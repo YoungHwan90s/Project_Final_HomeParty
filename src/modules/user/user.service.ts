@@ -218,10 +218,30 @@ export class UserService {
         return reviewInfo;
     }
 
-    async userHistory(user: number): Promise<any> {
-        return await this.userRepository.find({
-            where: { id: user, deletedAt: null },
-            relations: ['partyMember', 'partyMember.party'],
+    async userPartyHistory(id: number): Promise<any> {
+        let user = await this.userRepository.findOne({
+            where: { id, deletedAt: null },
+            relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
+
+        user.partyMember = user.partyMember.filter(
+            (partyMember) => partyMember.status === '승낙' && partyMember.party.status === '마감',
+        );
+
+        return user;
     }
+
+    async userApplyPartyList(id: number): Promise<any> {
+        let user = await this.userRepository.findOne({
+            where: { id, deletedAt: null },
+            relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
+        });
+
+        user.partyMember = user.partyMember.filter(
+            (partyMember) => partyMember.party.status === '모집중',
+        );
+
+        return user;
+    }
+
 }
