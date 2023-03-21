@@ -1,10 +1,13 @@
-/* common.css에 옮겨주세요 */
 button > i,
 button > i::before {
   pointer-events: none;
 }
 
 /* partyPage */
+.partyPage {
+  max-width: 800px;
+}
+
 .partyPage .mainHeader .title {
   font-size: 32px;
 }
@@ -72,6 +75,7 @@ button > i::before {
 
 .partyPage .partyImageList {
   display: flex;
+  justify-content: center;
   height: 300px;
 }
 
