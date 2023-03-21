@@ -15,6 +15,7 @@ import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
+import { query } from 'express';
 
 @Injectable()
 export class PartyService {
