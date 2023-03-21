@@ -1,0 +1,26 @@
+<main class="partySearch main container"></main>
+
+<script>
+$(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let userId = userInfo.id
+                getParties(userId)
+            } else {
+                getParties(0)
+            }
+        });
+    });
+
+    function getParties(userId) {
+    $.ajax({
+          type: 'GET',
+          url: `user/user-host/`,
+          data: {},
+          success: function (response) {
+            console.log(response)
+            }
+        })
+    }
+
+</script>

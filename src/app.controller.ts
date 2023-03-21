@@ -89,28 +89,22 @@ export class AppController {
         return { components: 'wish-list' };
     }
 
-    @Get('/manage')
-    @Render('index')
-    manage(@Req() req): { components: string } {
-        return { components: 'manage' };
-    }
-
-    @Get('/manage-host')
+    @Get('/user-host')
     @Render('index')
     managehost(@Req() req): { components: string } {
-        return { components: 'manage-host' };
+        return { components: 'user-host' };
     }
 
-    @Get('/manage-guest')
+    @Get('/user-party')
     @Render('index')
     manageguest(@Req() req): { components: string } {
-        return { components: 'manage-guest' };
+        return { components: 'user-party' };
     }
 
-    @Get('/manage-history')
+    @Get('/user-history')
     @Render('index')
     managehistory(@Req() req): { components: string } {
-        return { components: 'manage-history' };
+        return { components: 'user-history' };
     }
 
     @Get('/admin-user')
