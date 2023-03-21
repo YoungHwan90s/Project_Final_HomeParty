@@ -145,13 +145,8 @@ header{
 .list h3 {
    display : inline-block;
 }
-.user-input{
-   margin : 3%;
-   
-}
 .line{
    margin-left : 20%;
-/*margin : 2px;*/
 }
 #address input text{
    margin-left : 60%;
