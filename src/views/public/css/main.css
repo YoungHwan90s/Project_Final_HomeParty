@@ -11,15 +11,6 @@
   --header-height: 3.5rem;
   
   /*========== Colors ==========*/
-  --first-color: hsl(36, 72%, 48%);
-  --first-color-alt: hsl(36, 72%, 44%);
-  --black-color: hsl(206, 12%, 12%);
-  --card-color: hsl(0, 0%, 90%);
-  --title-color: hsl(206, 12%, 12%);
-  --text-color: hsl(206, 4%, 42%);
-  --text-color-light: hsl(206, 4%, 75%);
-  --body-color: hsl(206, 4%, 97%);
-  --container-color: #fff;
 
   /*========== Font and typography ==========*/
   --biggest-font-size: 2.25rem;
@@ -285,20 +276,17 @@ img {
   position: relative;
   text-align: left;
   font-size: 33px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  /* letter-spacing: -0.03em; */
   line-height: 1.5em;
 }
-/* 
-.section__title::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 0;
-  width: 3px;
-  height: 20px;
-  /* background-color: #D8273A;
-} */
+.quality-section__title {
+  position: relative;
+  text-align: left;
+  font-size: 33px;
+  font-weight: 600;
+  line-height: 1.5em;
+}
 
 /*=============== HEADER & NAV ===============*/
 .main-header {
@@ -433,7 +421,7 @@ img {
   display: grid;
   grid-template-columns: 300px;
   justify-content: center;
-  row-gap: 2.5rem;
+  row-gap: 3.5rem;
 }
 .specialty__img {
   border-radius: 10px;
@@ -455,7 +443,6 @@ img {
   margin-bottom: .25rem;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.03em;
   line-height: 1.5em;
   color: #000000;
   text-align: left;
@@ -476,7 +463,13 @@ img {
 .section-wrap-color {
   width: 100%;
   height: 16vh;
-  max-width: 1240px;
+  padding: 0 20px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+.section-wrap-map {
+  width: 100%;
+  height: 16vh;
   padding: 0 20px;
   margin: 0 auto;
   background-color: #fff;
@@ -681,14 +674,15 @@ img {
     top: 18%;
   }
   #wrap-home .content .cont-bx p {
-    font-size: 30px;
+    font-size: 50px;
   }
   #wrap-home .content .cont-bx2 p {
-    font-size: 30px;
+    font-size: 50px;
   }
   #wrap-home .content .text-main {
-    width: 240px;
-    font-size: 12px;
+    width: 327px;
+    font-size: 14px;
+    line-height: 1.5;
   }
   .king-container {
     margin-left: 1rem;
@@ -696,10 +690,19 @@ img {
   }
 
   .specialty__description {
-    letter-spacing: -0.04em;
+    /* letter-spacing: -0.04em; */
     line-height: 1.8em;
   }
+  .specialty__container {
+    margin-bottom: 50px;
+  }
 
+  .quality-section__title {
+    margin-left: 25px;
+  }
+  .quality__content {
+    margin-top: 33px;
+  }
   .quality__img-small {
     transform: translateX(-6rem);
     /* width: 90px; */
@@ -709,7 +712,10 @@ img {
     row-gap: 1rem;
   }
   .section-wrap-color {
-    height: 1vh;
+    height: 10vh;
+  }
+  .section-wrap-map {
+    height: 7vh;
   }
 }
 
@@ -849,6 +855,7 @@ img {
     margin: 0 auto;
     padding: 0 20px;
     max-width: 1240px;
+    padding: 130px 16px 16px 16px;
   }
  
   .home__content {
@@ -860,15 +867,26 @@ img {
   .section-wrapper {
     height: 15vh;
   }
+  .section-wrap-map {
+    height: 15vh;
+  }
 
   .section__title {
     text-align: left;
     font-size: 46px;
     font-weight: 700;
-    letter-spacing: -0.03em;
     line-height: 1.5em;
   }
-  
+  .quality-section__title {
+    text-align: left;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.5em;
+  }
+
+  .specialty__container {
+    padding: 16px 16px 145px 16px;
+  }
   .specialty__box {
     display: grid;
   }
@@ -878,12 +896,12 @@ img {
   .specialty__category {
     grid-template-columns: repeat(4, 262px);
     column-gap: 2rem;
-    margin-top: 3rem;
+    margin-top: 4rem;
   }
   .specialty__description {
     font-size: 18px;
     text-align: left;
-    letter-spacing: -0.04em;
+    /* letter-spacing: -0.04em; */
     line-height: 1.8em;
   }
   .specialty__line {
@@ -909,7 +927,7 @@ img {
   }
 
   .quality {
-    padding: 8rem 0 8rem;
+    padding: 0rem 0 1rem;
   }
   .quality__data {
     margin-top: 2rem;
@@ -936,7 +954,7 @@ img {
     margin-bottom: 1rem;
     color: #000000;
     font-weight: 700;
-    letter-spacing: -0.03em;
+    /* letter-spacing: -0.03em; */
     line-height: 1.5em;
     font-size: 24px;
   }
@@ -995,8 +1013,8 @@ img {
     height: 369px;
   }
   #wrap-home .content .cont-bx {
-    top: 3%;
-    left: 37%;
+    top: 9%;
+    left: 46%;
   }
   #wrap-home .content .cont-bx p {
     font-size: 120px;
