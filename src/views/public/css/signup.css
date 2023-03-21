@@ -17,18 +17,11 @@
     font-weight: 300
 }
 #header img{
-   width : 700px;
-   height: 230px;
+   width : auto
 }
 
 #container-signup, #footer, #header {
-    min-width: 220px;
     margin: 0 15px;
-    margin-top: 0px;
-    margin-right: 15px;
-    margin-bottom: 0px;
-    margin-left: 15px;
-    box-sizing: border-box;
 }
 
 #container-signup {
@@ -40,6 +33,7 @@
 header{
    text-align : center;
 }
+
 .input-sex {
    padding : 4px 12px;
    border: 1px solid #dddddd;
@@ -47,22 +41,7 @@ header{
    padding : 16px;
    border-radius: 4px;
 }
-.box input {
-	height: 100%;
-	padding: 4px 12px;
-	cursor: pointer;
-}
-#mail-select option{
-   text-height : 30px;
-}
-#mail_Input{
-   display : inline-block;
-   width : 50%;
-}
-#text{
-   margin : 5px;
-   font-size : 15px;
-}
+
 #idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, #addressError, #email-error, #sex-error {
    width:0px auto;
    display : inline-block;
@@ -74,8 +53,6 @@ header{
 }
 #container-signup, #footer {
    margin: 0 auto;
-   max-width: 768px;
-   min-width: 460px;
 }
 
 #header {
@@ -87,8 +64,7 @@ header{
 #header .h_logo {
    display: block;
    margin: 0 auto;
-   width: 240px;
-   height: 44px;
+   width: auto;
    background-repeat: no-repeat;
    background-position: 0 0;
    background-size: 240px auto;
@@ -105,27 +81,9 @@ header{
    justify-content: space-between;
    align-items: center;
    position: relative;
-   width: 60%;
+   width: 100%;
    height: 51px;
    border: solid 1px #dadada;
-   border-top-color: rgb(218, 218, 218);
-   border-top-style: solid;
-   border-top-width: 1px;
-   border-right-color: rgb(218, 218, 218);
-   border-right-style: solid;
-   border-right-width: 1px;
-   border-bottom-color: rgb(218, 218, 218);
-   border-bottom-style: solid;
-   border-bottom-width: 1px;
-   border-left-color: rgb(218, 218, 218);
-   border-left-style: solid;
-   border-left-width: 1px;
-   border-image-source: initial;
-   border-image-slice: initial;
-   border-image-width: initial;
-   border-image-outset: initial;
-   border-image-repeat: initial;
-   box-sizing: border-box;
 }
 .box.int-id, .box.int-id input {
    background: #fff;
@@ -138,54 +96,35 @@ header{
 }
 .list {
    margin : 0px auto;
-   width: 60%;
+   width: 100%;
    font-size: 14px;
    font-weight: 700;
-}
-.list h3 {
-   display : inline-block;
 }
 .user-input{
    margin : 3%;
    
 }
-.line{
-   margin-left : 20%;
-/*margin : 2px;*/
-}
-#address input text{
-   margin-left : 60%;
 
-}
 #addressButton{
-   text-align : center;
-   text-width : 0px auto; 
-   background-color : #00c3e6;
-   width :  0px auto;
+   width: 100%;
+   text-align : center; 
+   background-color: #b7b7b7;
    font-weight : bold;
-   color : #353535;
+   color: #222;
 }
+
 #input-address-1{
-   width : 40%;
-   margin-right: 12px;
+   width : 100%;
 }
+
 #input-address-2{
-   width : 60%;
+   width : 100%;
    background-color : white;
 }
 
 .input {
    display: inline;
 }
-
-/* .box {
-   margin : 0px auto;
-   display: block;
-   width: 60%;
-   height: 51px;
-   background: #fff;
-   box-sizing: border-box;
-} */
 
 .int {
    display: block;
@@ -203,11 +142,9 @@ header{
 }
 #email-int{
    display: flex;
-   /*position: relative;*/
    width: 50%;
    height: 29px;
    border: solid 1px #dadada;
-   /*padding-right: 25px;*/
    line-height: 29px;
    border: none;
    background: #fff;
@@ -223,17 +160,6 @@ header{
 #btn {
    width: 100%;
    height: 50px;
-}
-.btn_area {
-   margin: 30px 3% 60px;
-}
-
-@media (max-width: 1024px) {
-   
-}
-
-@media (max-width: 1024px) {
-   
 }
 
 hr {
