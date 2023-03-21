@@ -95,10 +95,10 @@ export class AppController {
         return { components: 'user-host' };
     }
 
-    @Get('/user-guest')
+    @Get('/user-party')
     @Render('index')
     manageguest(@Req() req): { components: string } {
-        return { components: 'user-guest' };
+        return { components: 'user-party' };
     }
 
     @Get('/user-history')
