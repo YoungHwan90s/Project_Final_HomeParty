@@ -4,71 +4,23 @@
       50% {transform: translate(400px); }
       100% {transform: translate(0,0);}
 }
-@font-face {
-   font-family: 'NanumSquare';
-   font-weight: 300; 
-   font-style: normal; 
-   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acL.woff2) format('woff2');
-   font-display: swap;
-}
-@font-face {
-   font-family: 'NanumSquare';
-   font-weight: 400; 
-   font-style: normal; 
-   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acR.woff2) format('woff2');
-   font-display: swap;
-}
-@font-face {
-   font-family: 'NanumSquare';
-   font-weight: 500; 
-   font-style: normal; 
-   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acB.woff2) format('woff2');
-   font-display: swap;
-}
-@font-face {
-   font-family: 'NanumSquare';
-   font-weight: 700; 
-   font-style: normal; 
-   src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumSquare_acEB.woff2) format('woff2');
-   font-display: swap;
-}
+
 #header-login img{
-   width : 700px;
-   height: 230px;
+   width : auto;
 }
 
 #container-login, #footer, #header-login {
-    min-width: 220px;
-    margin: 0 15px;
-    margin-top: 0px;
-    margin-right: 15px;
-    margin-bottom: 0px;
-    margin-left: 15px;
+    margin: 0 auto;
     box-sizing: border-box;
-}
-#container-login {
-   width: auto;
-   max-width: 768px;
+    max-width: 600px;
 }
 
-
-.login-header{
-   text-align : center;
-}
 .box input {
 	height: 100%;
 	padding: 4px 12px;
 	cursor: pointer;
 }
-#mail_Input{
-   display : inline-block;
-   width : 50%;
-}
 
-#text{
-   margin : 5px;
-   font-size : 15px;
-}
 #idError, #pw-error, #pw-check-error, #email-error {
    width:0px auto;
    display : inline-block;
@@ -79,10 +31,7 @@
    margin-left : 10px;
 }
 #container-login{
-   padding-top:80px;
    margin: 0 auto;
-   max-width: 768px;
-   min-width: 460px;
 }
 
 #header-login {
@@ -94,7 +43,7 @@
 #header-login .h_logo {
    display: block;
    margin: 0 auto;
-   width: 240px;
+   width: 100%;
    height: 44px;
    background-repeat: no-repeat;
    background-position: 0 0;
@@ -109,35 +58,9 @@
 }
 .box{
    margin : 0px auto;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   position: relative;
-   width: 60%;
    height: 51px;
    border: solid 1px #dadada;
-   border-top-color: rgb(218, 218, 218);
-   border-top-style: solid;
-   border-top-width: 1px;
-   border-right-color: rgb(218, 218, 218);
-   border-right-style: solid;
-   border-right-width: 1px;
-   border-bottom-color: rgb(218, 218, 218);
-   border-bottom-style: solid;
-   border-bottom-width: 1px;
-   border-left-color: rgb(218, 218, 218);
-   border-left-style: solid;
-   border-left-width: 1px;
-   border-image-source: initial;
-   border-image-slice: initial;
-   border-image-width: initial;
-   border-image-outset: initial;
-   border-image-repeat: initial;
-   box-sizing: border-box;
    background-color: white;
-}
-.box.int-id, .box.int-id input {
-   background: #fff;
 }
 #emailBox{
    display: flex;
@@ -147,7 +70,6 @@
 }
 .list {
    margin : 0px auto;
-   width: 60%;
    font-size: 14px;
    font-weight: 700;
 }
@@ -157,9 +79,7 @@
 .user-input{
    margin : 3%;
 }
-.line{
-   margin-left : 20%;
-}
+
 .input {
    display: inline;
 }
@@ -179,10 +99,8 @@
 }
 #email-int{
    display: flex;
-   /*position: relative;*/
    width: 50%;
    border: solid 1px #dadada;
-   /*padding-right: 25px;*/
    line-height: 29px;
    border: none;
    background: #fff;
@@ -239,6 +157,7 @@ input::placeholder {
     width: 18px;
     margin-right: 10px;
 }
+
 .login-box button {
     width: 58%;
     height: 51px;
@@ -254,10 +173,6 @@ input::placeholder {
     background-color: #FEE500;
 }
 
-@media (max-width: 1024px) {
-   
-}
-
-@media (max-width: 1024px) {
-   
+#input-email {
+   width: 50%;
 }
