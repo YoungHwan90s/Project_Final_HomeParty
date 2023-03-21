@@ -53,7 +53,7 @@ export class UserController {
     @HttpCode(200)
     async checkPw(@Req() req, @Body() data: PartialUserDto) {
         const user = req.user;
-        return this.userService.validateUser(user.email, data.password)
+        return this.userService.validateUser(user.email, data.password);
     }
 
     @UseGuards(JwtAuthGuard)
