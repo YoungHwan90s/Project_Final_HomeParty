@@ -14,6 +14,12 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Users DataTables</h6>
+            <body>
+                <section>
+                    <input id="searchInput" type="text" placeholder="이름으로 검색">
+                    <button id="searchButton" type="button">검색</button>
+                </section>
+            </body>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -49,9 +55,11 @@
     </div>
 </main>
 <script>
+    function searchUsers() {
+  const searchInput = $('#searchInput').val();
     $.ajax({
         type: 'GET',
-        url: `/admin/users`,
+        url: `/admin/users?search=${searchInput}`,
         data: {},
         headers: {
             authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -60,6 +68,7 @@
         success: function (response) {
             const userList = response.users;
             let count = 0;
+            $('#userTables').empty(); // 기존 테이블을 지우고
             for (let i = 0; i < userList.length; i++) {
                 const {
                     id: userId,
@@ -92,7 +101,7 @@
                             <td>${address}</td>
                             <td>${year}-${month}-${day}</td>
                             <td>${updateYear}-${updateMonth}-${updateDay}</td>
-                            <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">탈퇴하기</button></td>
                         </tr>
                     `;
                     $('#userTables').append(tagTable);
@@ -101,7 +110,8 @@
             }
         },
     });
-
+    }
+    $('#searchButton').click(searchUsers);
     function deleteUserByAdmin(userId) {
         const result = confirm('회원삭제 하시겠습니까?');
         if (result) {
