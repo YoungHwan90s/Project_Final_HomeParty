@@ -1,41 +1,55 @@
-<h2>관리자 리뷰목록</h2>
-<div style="display: flex; justify-content:center">
-    <table style="border: 1.5px solid black; width: 80%">
-        <tr>
-            <th><center>&nbsp;&nbsp;구분&nbsp;&nbsp;</center></th>
-            <th><center>파티</center></th>
-            <th><center>리뷰</center></th>
-        </tr>
-        <tbody id="reviews" style="border: 1px solid black"></tbody>
-    </table>
-</div>
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 2%">Reviews</h1>
+    <p class="mb-4">
+        이 페이지는 리뷰 관리하는 페이지이므로 부절한 리뷰 또는 비하 발언하는 리뷰가 있을시에는
+        선택적으로 삭제해주세요.
+    </p>
 
-<script>
-    $.ajax({
-        type: 'GET',
-        url: `/admin/review`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            for (let i = 0; i < response.length; i++) {
-                const { id:reviewId, userId, partyId, party, user, rating, review, createdAt, updatedAt, deletedAt } = response[i]
-                // const review = response[i]
+    <div style="display: flex; justify-content: center">
+        <table style="border: 1.5px solid black; width: 80%">
+            <tr>
+                <th><center>&nbsp;&nbsp;구분&nbsp;&nbsp;</center></th>
+                <th><center>파티</center></th>
+                <th><center>리뷰</center></th>
+            </tr>
+            <tbody id="reviews" style="border: 1px solid black"></tbody>
+        </table>
+    </div>
 
-                // function checkAlreadyDeleted() {
-                //     if (deletedAt !== 'null') {
-                //         document.getElementById('delete').style.display = 'none';
-                //     } else {
-                //         document.getElementById('delete').style.display = 'block';
-                //     }
-                // };
-                // window.onload = function() {checkAlreadyDeleted()}
+    <script>
+        $.ajax({
+            type: 'GET',
+            url: `/admin/review`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    const {
+                        id: reviewId,
+                        userId,
+                        partyId,
+                        party,
+                        user,
+                        rating,
+                        review,
+                        createdAt,
+                        updatedAt,
+                        deletedAt,
+                    } = response[i];
 
-                const reviewTable = `<tr style="border: 1px solid black">
-                                    <td><center>${i+1}</center></td>
-                                    <td>${partyId}번 파티</br>파티명: ${party.title}</br>${party.date}</td>
+                    const year = createdAt.getFullYear();
+                    const month = ('0' + (createdAt.getMonth() + 1)).slice(-2);
+                    const day = ('0' + createdAt.getDate()).slice(-2);
+
+                    const reviewTable = `<tr style="border: 1px solid black">
+                                    <td><center>${i + 1}</center></td>
+                                    <td>${partyId}번 파티</br>파티명: ${party.title}</br>${
+                        party.date
+                    }</td>
                                     <td>
                                         <span>&nbsp;&nbsp;리뷰 번호: ${reviewId}번</span>&nbsp;&nbsp;
                                         <button id="delete" onclick="deleteReviewByAdmin(${reviewId})">삭제</button>
@@ -44,36 +58,37 @@
                                         <span>&nbsp;&nbsp;이름: ${user.name}</span></br>
                                         <span>&nbsp;&nbsp;⭐별점: ${rating}</span></br>
                                         <span>&nbsp;&nbsp;내용: ${review}</span></br>
-                                        <span>&nbsp;&nbsp;⏰생성일자: ${createdAt}</span>
+                                        <span>&nbsp;&nbsp;⏰생성일자: ${year}-${month}-${day}</span>
                                         <span>&nbsp;&nbsp;⏰수정일자: ${updatedAt}</span>
                                         <span>&nbsp;&nbsp;⏰삭제일자: ${deletedAt}</span></br>
                                     </td>
-                                </tr>`
-                    
-                $('#reviews').append(reviewTable)
+                                </tr>`;
+
+                    $('#reviews').append(reviewTable);
+                }
+            },
+        });
+
+        function deleteReviewByAdmin(reviewId) {
+            const result = confirm('해당 리뷰를 삭제하시겠습니까?');
+            if (result) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/admin/review/${reviewId}`,
+                    data: {},
+                    headers: {
+                        authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                        refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                    },
+                    success: function (response) {
+                        alert('리뷰 삭제');
+                        $(`#id{reviewId}`).remove();
+                        window.location.reload();
+                    },
+                });
+            } else {
+                alert('삭제 취소');
             }
         }
-    })
-
-    function deleteReviewByAdmin(reviewId) {
-        const result = confirm('해당 리뷰를 삭제하시겠습니까?');
-        if (result) {
-            $.ajax({
-                type: 'DELETE',
-                url: `/admin/review/${reviewId}`,
-                data: {},
-                headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
-                success: function (response) {
-                    alert('리뷰 삭제');
-                    $(`#id{reviewId}`).remove()
-                    window.location.reload()
-                }
-            }) 
-        } else {
-            alert('삭제 취소')
-        }
-    }
-</script>
+    </script>
+</div>
