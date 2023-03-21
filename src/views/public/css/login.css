@@ -99,10 +99,8 @@
 }
 #email-int{
    display: flex;
-   /*position: relative;*/
    width: 50%;
    border: solid 1px #dadada;
-   /*padding-right: 25px;*/
    line-height: 29px;
    border: none;
    background: #fff;

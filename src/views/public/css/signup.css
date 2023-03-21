@@ -142,11 +142,9 @@ header{
 }
 #email-int{
    display: flex;
-   /*position: relative;*/
    width: 50%;
    height: 29px;
    border: solid 1px #dadada;
-   /*padding-right: 25px;*/
    line-height: 29px;
    border: none;
    background: #fff;
