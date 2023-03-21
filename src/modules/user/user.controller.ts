@@ -12,13 +12,15 @@ import {
     Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CheckPasswordDto } from './dto/check-password.dto';
+import { PartyService } from '../party/party.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService,
+        private readonly partyService: PartyService
+        ) {}
 
     @UseGuards(JwtAuthGuard)
     @Get('/')
@@ -31,7 +33,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Patch('/')
     @HttpCode(201)
-    async updateUser(@Req() req, @Res() res, @Body() data: UpdateUserDto) {
+    async updateUser(@Req() req, @Res() res, @Body() data: PartialUserDto) {
         const user = req.user;
         await this.userService.updateUser(user, data);
         return res.json({});
@@ -49,9 +51,9 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Post('/check-password')
     @HttpCode(200)
-    async checkPw(@Req() req, @Body() data:CheckPasswordDto) {
+    async checkPw(@Req() req, @Body() data: PartialUserDto) {
         const user = req.user;
-        return this.userService.validateUser(user.email, data.password)
+        return this.userService.validateUser(user.email, data.password);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -72,4 +74,20 @@ export class UserController {
         const updateOrDelete = await this.userService.updateWishList(user, partyId);
         return res.json({ updateOrDelete });
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/user-host')
+    @HttpCode(200)
+    async getUserHost(@Req() req) {
+        const { id } = req.user;
+        return await this.partyService.getUserHost(id);
+    }
+
+    // @UseGuards(JwtAuthGuard)
+    // @Get('/history')
+    // @HttpCode(200)
+    // async getUserHistory(@Req() req) {
+    //     const { id } = req.user;
+    //     return await this.partyService.getUserHistory(id);
+    // }
 }

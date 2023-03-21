@@ -40,11 +40,12 @@
 header{
    text-align : center;
 }
-select{
-   font-size : 3px;
-   border : 1px solid gray;
+.input-sex {
+   padding : 4px 12px;
+   border: 1px solid #dddddd;
    height : 30px;
-   padding : 5px;
+   padding : 16px;
+   border-radius: 4px;
 }
 .box input {
 	height: 100%;

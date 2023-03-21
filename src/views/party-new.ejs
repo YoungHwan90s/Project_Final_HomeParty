@@ -172,6 +172,7 @@
 
         <!-- <button onclick="saveImage()" class="partyFormSubmit btn_primary btn_point">등록하기</button> -->
         <button type="submit" class="partyFormSubmit btn_primary btn_point">등록하기</button>
+        <div class="button-padding" style="padding-bottom: 50px;"></div>
     </form>
 </main>
 
@@ -254,10 +255,11 @@
                 content: $('#partyIntroduce').val(),
                 maxMember: $('#partyTotalMemeber').val(),
                 address: $('#partyAddressDetail').val() + ' ' + $('#partyAddressDetails').val(),
-                date: new Date($('.datePicker').val()).toISOString(),
+                date: new Date($('.datePicker').val()),
                 thumbnail: image,
                 tagName: tagList,
             };
+            console.log(partyInfo.date)
             $.ajax({
                 type: 'POST',
                 url: `api/party`,

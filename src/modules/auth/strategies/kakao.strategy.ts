@@ -36,7 +36,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
             };
 
             const user = await this.userService.createKakaoUser(userProfile);
-            const accessToken = await this.authService.generateAccessToken(user.id);
+            const accessToken = await this.authService.generateAccessToken(user.id, user.email);
             const refreshToken = await this.authService.generateRefreshToken();
 
             const redisKey = String(user.id);
@@ -44,7 +44,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
 
             return { user, accessToken, refreshToken };
         } else {
-            const accessToken = await this.authService.generateAccessToken(user.id);
+            const accessToken = await this.authService.generateAccessToken(user.id, user.email);
             const refreshToken = await this.authService.generateRefreshToken();
             const redisKey = String(user.id);
             await this.cacheService.set(redisKey, refreshToken);

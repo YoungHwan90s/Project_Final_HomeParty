@@ -12,7 +12,7 @@ import {
     Res,
     UseGuards,
 } from '@nestjs/common';
-import { url } from 'inspector';
+
 import { DeleteResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePartyDto } from './dto/create-party.dto';

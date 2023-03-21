@@ -34,7 +34,7 @@
         <link rel="stylesheet" href="/css/partyGrid.css" />
         <link rel="stylesheet" href="/css/party-new.css" />
         <link rel="stylesheet" href="/css/partyPage.css" />
-
+        <link rel="stylesheet" href="/css/admin-page.css" />
         <!-- js -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script
@@ -78,10 +78,10 @@
         <% if (components === 'user-check') {%><%-include('user-check.ejs') %><% } %>
         <% if (components === 'user-mypage') {%><%-include('user-mypage.ejs') %><% } %>
         <% if (components === 'wish-list') {%><%-include('user-wish-list.ejs') %><% } %>
-        <% if (components === 'manage') {%><%-include('manage.ejs') %><% } %>
-        <% if (components === 'manage-host') {%><%-include('manage-host.ejs') %><% } %>
-        <% if (components === 'manage-guest') {%><%-include('manage-guest.ejs') %><% } %>
-        <% if (components === 'manage-history') {%><%-include('manage-history.ejs') %><% } %>
+        <% if (components === 'user-host') {%><%-include('user-host.ejs') %><% } %>
+        <% if (components === 'user-party') {%><%-include('user-party.ejs') %><% } %>
+        <% if (components === 'user-history') {%><%-include('user-history.ejs') %><% } %>
+        
         <% if (components === 'admin-user') {%><%-include('admin-user.ejs') %><% } %>
         <% if (components === 'admin-party') {%><%-include('admin-party.ejs') %><% } %>
         <% if (components === 'admin-review') {%><%-include('admin-review.ejs') %><% } %>

@@ -64,13 +64,13 @@ html {
 body {
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
-  background-color: var(--body-color);
+  background-color: #fff;
   color: var(--text-color);
 }
 
 h1, h2, h3 {
   color: var(--title-color);
-  font-weight: var(--font-bold);
+  /* font-weight: var(--font-bold); */
 }
 
 h1, h2, h3, p {

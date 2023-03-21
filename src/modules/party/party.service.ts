@@ -58,7 +58,7 @@ export class PartyService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
-        let createdParty;
+        let createdParty: Party;
 
         try {
             // Party 객체 인스턴스 맵핑
@@ -385,6 +385,19 @@ export class PartyService {
                 await this.partyRepository.save(party[i]);
             }
         }
-        console.log("변경완료")
     }
+
+    async getUserHost(id): Promise<PartyMember[]> {
+        return await this.partyMemberRepository.find({
+            where: { deletedAt: null, userId: id, status: "호스트" },
+            relations: ['party'],
+        });
+    }
+
+    // async getUserHistory(id): Promise<PartyMember[]> {
+    //     return await this.partyMemberRepository.find({
+    //         where: { deletedAt: null,},
+    //         relations: ['party'],
+    //     });
+    // }
 }

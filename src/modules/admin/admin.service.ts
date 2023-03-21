@@ -57,4 +57,10 @@ export class AdminService {
             withDeleted: true,
         });
     }
+
+    async deletedReviewAdmin(reviewId: number) {
+        return await this.reviewRepository.softDelete(reviewId);
+       
+    }
+
 }
