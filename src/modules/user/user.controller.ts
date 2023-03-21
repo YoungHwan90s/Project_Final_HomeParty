@@ -12,13 +12,16 @@ import {
     Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { PartyService } from '../party/party.service';
 import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
     constructor(
-        private readonly userService: UserService) {}
+        private readonly userService: UserService,
+        private readonly partyService: PartyService,
+        ) {}
 
     @UseGuards(JwtAuthGuard)
     @Get('/')
@@ -71,6 +74,14 @@ export class UserController {
         const user = req.user;
         const updateOrDelete = await this.userService.updateWishList(user, partyId);
         return res.json({ updateOrDelete });
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/user-host')
+    @HttpCode(200)
+    async getUserHost(@Req() req) {
+        const { id } = req.user;
+        return await this.partyService.getUserHost(id);
     }
 
     @UseGuards(JwtAuthGuard)

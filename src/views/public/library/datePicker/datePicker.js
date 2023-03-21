@@ -11,6 +11,7 @@ class DatePicker {
     });
 
     window.addEventListener("click", (e) => {
+      
       if (
         this.$datePicker.contains(e.target) ||
         this.$calendar.contains(e.target)
@@ -30,7 +31,7 @@ class DatePicker {
 
   async init() {
     // this.render();
-
+    
     this.$datePicker = this.$container.querySelector(".datePicker");
     this.$calendar = this.$container.querySelector(".calendar");
 
