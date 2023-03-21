@@ -377,9 +377,9 @@ export class PartyService {
     }
 
     async getUserHost(id): Promise<PartyMember[]> {
-        return await this.partyMemberRepository.find({
+        return await this.partyMemberRepository.find({ 
             where: { deletedAt: null, userId: id, status: "호스트" },
-            relations: ['party','party.thumbnail'],
+            relations: ['party','party.thumbnail','party.partyMember'],
         });
     }
 }
