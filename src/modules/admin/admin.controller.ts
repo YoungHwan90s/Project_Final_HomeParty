@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpCode, Param, Res, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, Param, Query, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminService } from './admin.service';
 
@@ -53,8 +53,8 @@ export class AdminController {
     // // 태그 조회
     @Get('tags')
     @HttpCode(200)
-    async readtag() {
-        return this.adminService.readtag();
+    async readtag(@Query() page: number) {
+        return this.adminService.readtag(page);
     }
 
     // 태그 삭제
