@@ -12,9 +12,8 @@ import {
     Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CheckPasswordDto } from './dto/check-password.dto';
 
 @Controller('user')
 export class UserController {
@@ -31,7 +30,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Patch('/')
     @HttpCode(201)
-    async updateUser(@Req() req, @Res() res, @Body() data: UpdateUserDto) {
+    async updateUser(@Req() req, @Res() res, @Body() data: PartialUserDto) {
         const user = req.user;
         await this.userService.updateUser(user, data);
         return res.json({});
@@ -49,7 +48,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Post('/check-password')
     @HttpCode(200)
-    async checkPw(@Req() req, @Body() data: CheckPasswordDto) {
+    async checkPw(@Req() req, @Body() data: PartialUserDto) {
         const user = req.user;
         return this.userService.validateUser(user.email, data.password);
     }
