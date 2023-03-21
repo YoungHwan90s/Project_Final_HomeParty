@@ -1,21 +1,57 @@
-<body>
-    <!-- Header-->
-    <header class="bg-white py-3">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-black">
-                <h1 class="display-4 fw-bolder">Parties</h1>
-                <p class="lead fw-normal text-black-50 mb-0">
-                    이 페이지는 파리를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가
+<!-- <div id="allUser"></div> -->
+<main class="admin-wrap-main">
+    <div class="responsive-wrapper">
+        <div class="admin-1-header">
+            <h1>Parties Page</h1>
+        </div>
+        <p class="mb-4">
+            이 페이지는 파티를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가
                     보이면 삭제해주세요.
-                </p>
+        </p>
+        <div class="horizontal-tabs">
+            <a href="/admin-user">User</a>
+            <a href="/admin-party">Party</a>
+            <a href="/admin-review">Review</a>
+            <a href="/admin-tag">Tags</a>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Parties DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Num</th>
+                            <th>Title(자세히보기)</th>
+                            <th>Status</th>
+                            <th>Address</th>
+                            <th>CurrMember</th>
+                            <th>MaxMember</th>
+                            <th>Create</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Num</th>
+                            <th>Title</th>
+                            <th>CurrMember</th>
+                            <th>MaxMember</th>
+                            <th>Create</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </tfoot>
+                    <tbody id="partyTable"></tbody>
+                </table>
             </div>
         </div>
-    </header>
-    <!-- Section-->
-    <div class="mainSection">
-        <ul class="partyList partyGrid"></ul>
     </div>
-</body>
+</main>
 <script>
     $(document).ready(() => {
         $.ajax({
@@ -27,75 +63,50 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
+                let count = 0
                 for (let i = 0; i < response.length; i++) {
                     const {
                         partyId,
                         id,
                         title,
+                        address,
                         currMember,
                         maxMember,
                         status,
-                        partyMember,
                         thumbnail,
                         createdAt,
+                        updatedAt,
+                        deletedAt,
                     } = response[i];
-                    let Id = response[i].id;
-                    let titles = response[i].title;
-                    let curr = response[i].currMember;
-                    let max = response[i].maxMember;
-                    let statuses = response[i].status;
-                    let partyMembers = response[i].partyMember;
-                    let thumbnails = response[i].thumbnail;
-                    let createDate = new Date(response[i].createdAt);
+                    console.log(thumbnail[0].partyId);
+                    const createDate = new Date
 
+                    if (deletedAt === null) {
                     const year = createDate.getFullYear();
                     const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
                     const day = ('0' + createDate.getDate()).slice(-2);
 
+                    const update = new Date();
+                    const updateYear = update.getFullYear();
+                    const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+                    const updateDay = ('0' + update.getDate()).slice(-2);
+
                     const partyItem = `
-                    <li class="partyItem">
-                        <div class="thumbnailWrapper carousel">
-                            <a href="party/${Id}" class="partyLink thumbnailLink">
-                                <ul class="thumbnailList carouselList">
-                                    <img class="card-img" src="${thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
-                                </ul>
-                            </a>
-
-                        <a href="party/${Id}" class="partyLink">
-                            <dl class="partyInfoList">
-                                <div class="partyInfoItem partyTitle">
-                                    <dt class="a11yHidden">제목</dt>
-                                    <dd>
-                                        ${title}
-                                    </dd>
-                                </div>
-                                <div class="partyInfoItem partyHeadcount">
-                                    <dt>현재</dt>
-                                    <dd class="currentCount">
-                                        ${currMember}명
-                                    </dd>
-                                    <dt>총</dt>
-                                    <dd class="totalCount">
-                                        ${maxMember}명
-                                    </dd>
-                                </div>
-                                <div class="partyInfoItem partyEtc">
-                                    <dt class="a11yHidden">지역</dt>
-                                    <dd class="partyPlace">
-                                    </dd>
-                                    <dt class="a11yHidden">날짜</dt>
-                                    <dd class="partyDate">
-                                        ${year}-${month}-${day}
-                                    </dd>
-                                    <button type="button" class="btn btn-danger" onclick="deleteParty(${Id})" style="margin-top : 5%">삭제</button>
-                                </div>
-                            </dl>
-                        </a>
-                        
-                    </li>
+                    <tr>
+                            <td>${count + 1}</td>
+                            <td><a href="/party/${thumbnail[0].partyId}">${title.substring(0, 8)}...</a></td>
+                            <td>${status}</td>
+                            <td>${address}</td>
+                            <td>${currMember}</td>
+                            <td>${maxMember}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td>${updateYear}-${updateMonth}-${updateDay}</td>
+                            <td><button type="button" onclick="deleteParty(${partyId})" class="btn btn-danger">Delete</button></td>
+                        </tr>
                 `;
-
-                    $('.partyList').append(partyItem);
+                    $('#partyTable').append(partyItem);
+                    count++
+                    }
                 }
             },
         });

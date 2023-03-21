@@ -1,12 +1,19 @@
-<!-- Begin Page Content -->
-<div class="container-fluid">
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 2%">Tags</h1>
-    <p class="mb-4">
-        이 페이지는 태그 관리하는 페이지이므로 부절한 단어 또는 위험적인 단어는 선택적으로
-        삭제해주세요.
-    </p>
-
+<main class="admin-wrap-main">
+    <div class="responsive-wrapper">
+        <div class="admin-1-header">
+            <h1>Tags Page</h1>
+        </div>
+        <p class="mb-4">
+            이 페이지는 태그 관리하는 페이지이므로 부절한 단어 또는 위험적인 단어는 선택적으로
+            삭제해주세요.
+        </p>
+        <div class="horizontal-tabs">
+            <a href="/admin-user">User</a>
+            <a href="/admin-party">Party</a>
+            <a href="/admin-review">Review</a>
+            <a href="/admin-tag">Tags</a>
+        </div>
+    </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -14,7 +21,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable">
                     <thead>
                         <tr>
                             <th>Number</th>
@@ -38,30 +45,29 @@
             </div>
         </div>
     </div>
-</div>
-<script>
-    $(document).ready(() => {
-        $.ajax({
-            type: 'GET',
-            url: `/admin/tags`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                for (let i = 0; i < response.length; i++) {
-                    const { tagId, id, tagName, freq, createdAt } = response[i];
-                    let tagid = i + 1;
-                    let Id = response[i].id;
-                    let tagNames = response[i].tagName;
-                    let Freq = response[i].freq;
-                    let createDate = new Date(response[i].createdAt);
+    <script>
+        $(document).ready(() => {
+            $.ajax({
+                type: 'GET',
+                url: `/admin/tags`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        const { tagId, id, tagName, freq, createdAt } = response[i];
+                        let tagid = i + 1;
+                        let Id = response[i].id;
+                        let tagNames = response[i].tagName;
+                        let Freq = response[i].freq;
+                        let createDate = new Date(response[i].createdAt);
 
-                    const year = createDate.getFullYear();
-                    const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
-                    const day = ('0' + createDate.getDate()).slice(-2);
-                    const tagTable = `
+                        const year = createDate.getFullYear();
+                        const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                        const day = ('0' + createDate.getDate()).slice(-2);
+                        const tagTable = `
                     <tr>
                             <td>${tagid}</td>
                             <td>${tagNames}</td>
@@ -71,31 +77,32 @@
                         </tr>
                     `;
 
-                    $('#tagTables').append(tagTable);
-                }
-            },
-        });
-    });
-
-    function deleteTag(tagId) {
-        const result = confirm('해당 태그를 삭제하시겠습니까?');
-        if (result) {
-            $.ajax({
-                type: 'DELETE',
-                url: `/admin/tag/${tagId}`,
-                data: {},
-                headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
-                success: function (response) {
-                    alert('태그 삭제 되었습니다.');
-                    $(`#id{tagId}`).remove();
-                    window.location.reload(true);
+                        $('#tagTables').append(tagTable);
+                    }
                 },
             });
-        } else {
-            alert('삭제 취소되었습니다.');
+        });
+
+        function deleteTag(tagId) {
+            const result = confirm('해당 태그를 삭제하시겠습니까?');
+            if (result) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/admin/tag/${tagId}`,
+                    data: {},
+                    headers: {
+                        authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                        refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                    },
+                    success: function (response) {
+                        alert('태그 삭제 되었습니다.');
+                        $(`#id{tagId}`).remove();
+                        window.location.reload(true);
+                    },
+                });
+            } else {
+                alert('삭제 취소되었습니다.');
+            }
         }
-    }
-</script>
+    </script>
+</main>

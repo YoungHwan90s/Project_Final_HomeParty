@@ -57,4 +57,12 @@ export class AdminService {
             withDeleted: true,
         });
     }
+
+    async deletedReviewAdmin(reviewId: number) {
+        const party = await this.reviewRepository.findOne({
+            where: { id: reviewId },
+        });
+        return await this.reviewRepository.softDelete(party);
+    }
+
 }
