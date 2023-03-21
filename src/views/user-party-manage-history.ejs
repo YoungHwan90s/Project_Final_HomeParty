@@ -19,7 +19,7 @@
     $(document).ready(() => {
         $.ajax({
             type: 'GET',
-            url: '/api/party/history',
+            url: '/history',
             data: {},
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -29,70 +29,19 @@
                 console.log(response);
                 for (let i = 0; i < response.length; i++) {
                     const {
-                        partyId,
-                        id,
-                        title,
-                        currMember,
-                        maxMember,
-                        status,
-                        partyMember,
-                        thumbnail,
-                        createdAt,
+                        partyMember
                     } = response[i];
-                    let Id = response[i].id;
-                    let titles = response[i].title;
-                    let curr = response[i].currMember;
-                    let max = response[i].maxMember;
-                    let statuses = response[i].status;
                     let partyMembers = response[i].partyMember;
-                    let thumbnails = response[i].thumbnail;
-                    let createDate = new Date(response[i].createdAt);
+                    let status
+                    for(let i = 0; i<partyMembers.length;i++){
+                        status = partyMembers[i].status; 
+                    }
+                    console.log(status);
 
-                    const year = createDate.getFullYear();
-                    const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
-                    const day = ('0' + createDate.getDate()).slice(-2);
+                
 
                     const partyItem = `
-                    <li class="partyItem">
-                        <div class="thumbnailWrapper carousel">
-                            <a href="party/${Id}" class="partyLink thumbnailLink">
-                                <ul class="thumbnailList carouselList">
-                                    <img class="card-img" src="${thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
-                                </ul>
-                            </a>
-
-                        <a href="party/${Id}" class="partyLink">
-                            <dl class="partyInfoList">
-                                <div class="partyInfoItem partyTitle">
-                                    <dt class="a11yHidden">제목</dt>
-                                    <dd>
-                                        ${title}
-                                    </dd>
-                                </div>
-                                <div class="partyInfoItem partyHeadcount">
-                                    <dt>현재</dt>
-                                    <dd class="currentCount">
-                                        ${currMember}명
-                                    </dd>
-                                    <dt>총</dt>
-                                    <dd class="totalCount">
-                                        ${maxMember}명
-                                    </dd>
-                                </div>
-                                <div class="partyInfoItem partyEtc">
-                                    <dt class="a11yHidden">지역</dt>
-                                    <dd class="partyPlace">
-                                    </dd>
-                                    <dt class="a11yHidden">날짜</dt>
-                                    <dd class="partyDate">
-                                        ${year}-${month}-${day}
-                                    </dd>
-                                    <button type="button" class="btn btn-danger" onclick="deleteParty(${Id})" style="margin-top : 5%">삭제</button>
-                                </div>
-                            </dl>
-                        </a>
-                        
-                    </li>
+                   
                 `;
 
                     $('.partyList').append(partyItem);

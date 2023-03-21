@@ -267,7 +267,6 @@ export class PartyService {
             }
 
             if (partyMember.party.status === '모집중') {
-
                 if (partyMember.status === '신청대기' && status === '신청승낙') {
                     partyMember.status = status;
                     partyMember.party.currMember += 1;
@@ -279,16 +278,15 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 1
+                    return 1;
                 }
 
                 if (partyMember.status === '신청대기' && status === '거절') {
-
                     partyMember.status = status;
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 3
+                    return 3;
                 }
 
                 if (partyMember.status === '신청승낙' && status === '신청승낙') {
@@ -301,7 +299,7 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 0
+                    return 0;
                 }
 
                 if (partyMember.status === '신청승낙' && status === '거절') {
@@ -315,7 +313,7 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 2
+                    return 2;
                 }
 
                 if (partyMember.status === '거절' && status === '거절') {
@@ -324,7 +322,7 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 0
+                    return 0;
                 }
 
                 if (partyMember.status === '거절' && status === '신청승낙') {
@@ -337,10 +335,10 @@ export class PartyService {
                     await queryRunner.manager.save(PartyMember, partyMember);
                     await queryRunner.commitTransaction();
 
-                    return 1
+                    return 1;
                 }
             } else {
-                throw new UnauthorizedException('현재 모집중인 파티가 아닙니다.')
+                throw new UnauthorizedException('현재 모집중인 파티가 아닙니다.');
             }
         } catch (error) {
             await queryRunner.rollbackTransaction();
@@ -361,14 +359,4 @@ export class PartyService {
 
         return this.partyRepository.softRemove(party);
     }
-
-    async userHistory() {
-        console.log(2);
-        const userInfo = await this.partyMemberRepository.find({
-            
-            relations: ['party']
-        })
-        return userInfo
-    }
-    
 }

@@ -97,16 +97,4 @@ export class PartyController {
         const { id: userId } = req.user;
         return await this.partyService.deleteParty(userId, partyId);
     }
-
-    // 과거이력
-    // @UseGuards(JwtAuthGuard)
-    @Get('/history')
-    @HttpCode(200)
-    async userHistory(@Req() req) {
-        // const { id } = req.user;      
-        console.log(1);
-          
-        return await this.partyService.userHistory();
-         
-    }
 }   

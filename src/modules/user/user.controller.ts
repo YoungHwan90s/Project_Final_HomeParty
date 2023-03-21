@@ -49,9 +49,9 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Post('/check-password')
     @HttpCode(200)
-    async checkPw(@Req() req, @Body() data:CheckPasswordDto) {
+    async checkPw(@Req() req, @Body() data: CheckPasswordDto) {
         const user = req.user;
-        return this.userService.validateUser(user.email, data.password)
+        return this.userService.validateUser(user.email, data.password);
     }
 
     @UseGuards(JwtAuthGuard)
