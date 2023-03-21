@@ -6,7 +6,7 @@ import { AdminService } from './admin.service';
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get('/users')
     @HttpCode(200)
     async getUserAdmin(@Res() res) {
@@ -14,7 +14,7 @@ export class AdminController {
         return res.json({ users });
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Delete('/users/:userId')
     @HttpCode(204)
     async deletedUserAdmin(@Res() res, @Param('userId') userId: number) {
@@ -28,6 +28,12 @@ export class AdminController {
     @HttpCode(200)
     async getReviewAdmin() {
         return await this.adminService.getReviewAdmin();
+    }
+    // 리뷰 삭제
+    @Delete('/review/:reviewId')
+    @HttpCode(204)
+    async deletedReviewAdmin(@Param('reviewId') reviewId: number) {
+        return await this.adminService.deletedReviewAdmin(reviewId);
     }
 
     // // 파티 조회

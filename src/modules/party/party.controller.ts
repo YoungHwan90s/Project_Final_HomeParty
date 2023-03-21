@@ -97,4 +97,4 @@ export class PartyController {
         const { id: userId } = req.user;
         return await this.partyService.deleteParty(userId, partyId);
     }
-}
+}   
