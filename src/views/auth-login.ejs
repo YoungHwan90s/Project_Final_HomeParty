@@ -80,9 +80,9 @@
                 </span>
             </section>
             <div class="login-box">
-                <a href="http://localhost:4000/auth/kakao">
+                <button onclick="location.href='http://localhost:4000/auth/kakao'">
                     <img src="/imgs/kakaologo.png" />카카오 로그인
-                </a>
+                </button>
             </div>
         </div>
     </form>
@@ -183,16 +183,5 @@
             },
         });
     }
-    function kakaoSignIn() {
-        $.ajax({
-            type: 'GET',
-            url: '/auth/kakao',
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (response) {
-                console.log(response);
-            },
-        });
-    }
+
 </script>

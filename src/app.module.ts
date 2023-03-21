@@ -19,10 +19,12 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { MailerConfigService } from './config/config.nodemailer';
 import { ImageUploadModule } from './util/s3/image-upload.module';
 import { ChatGateway } from './chat.gateway';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
+        ScheduleModule.forRoot(),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             useClass: TypeOrmConfigService,

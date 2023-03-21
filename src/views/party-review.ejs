@@ -31,7 +31,6 @@
         });
 
         function getReviews(name, profile) {
-            console.log(name, profile, id);
             $.ajax({
                 url: `/api/party/${partyId}`, // 리뷰 데이터 요청 URL
                 type: 'GET',
@@ -99,7 +98,6 @@
             review: $('#reviewTextArea').val(), //  리뷰 내용
             rating: $('#inputRating').val(), // 별점
         };
-        
 
         $.ajax({
             type: 'POST',
