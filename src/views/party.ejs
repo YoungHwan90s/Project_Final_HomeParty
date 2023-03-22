@@ -20,7 +20,7 @@
                 <input type="text" id="partyWhen" class="datePicker" placeholder="Select date" readonly />
                 <div class="calendar"></div>
               </div>
-              <button id="clearButton" style="display: none;">❌</button>
+              <button id="clearButton" style="display: none; background-color: white; border: none;">❌</button>
             </div>
 
             <div class="divider" aria-hidden="true"></div>
@@ -65,12 +65,20 @@ $("#partyWhen").click(function() {
     $("#clearButton").show();
   });
   
-  $("#clearButton").click(function() {
+$("#clearButton").click(function() {
     $("#partyWhen").val("");
     $(this).hide();
-  });
+});
+$(document).click(function(e) {
+    if ($(e.target).attr('id') === 'partyWhen') {
+        return
+    }
+    if ($('#partyWhen').hasClass('active')) {
+        $('#clearButton').hide();
+    }
+})
 
-function partySearch() {
+function partySearch(userId) {
     const address = $('#partyWhere').val()
     const date = $('#partyWhen').val()
     const title = $('#partyName').val()
@@ -93,7 +101,7 @@ function partySearch() {
         data: {},
         success: function(response) {
             history.pushState({ data: 'response.result' }, null, `${webUrl}`)
-            
+
             let partyList = response.result
 
             $('.partyList').empty()
@@ -104,15 +112,11 @@ function partySearch() {
                 const maxMember = partyList[i]['maxMember'];
                 const currMember = partyList[i]['currMember'];
                 const thumbnails = partyList[i]['thumbnail'];
-                const isoDate = partyList[i]['date'];
+                const date = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
                 const wishList = partyList[i]['wishList'];
 
-                const year = isoDate.substr(0, 4);
-                const month = isoDate.substr(5, 2);
-                const day = isoDate.substr(8, 2);
-                const date = `${year}-${month}-${day}`;
 
                 const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
                 

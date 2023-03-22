@@ -17,7 +17,7 @@ class DatePicker {
         this.$calendar.contains(e.target)
       )
         return;
-
+      
       this.$datePicker.classList.remove("active");
     });
 
