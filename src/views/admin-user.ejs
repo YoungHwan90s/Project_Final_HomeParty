@@ -1,49 +1,47 @@
 <main class="admin-wrap-main">
     <div class="responsive-wrapper">
-        <div class="admin-1-header">
-            <h1>Uers Page</h1>
+        <div>
+            <div class="admin-1-header">
+                <h1>Uers Page</h1>
+            </div>
+            <p class="mb-4">이 페이지는 유저 관리하는 페이지입니다</p>
+            <div class="horizontal-tabs">
+                <a href="/admin-user" class="active-tabs">User</a>
+                <a href="/admin-party">Party</a>
+                <a href="/admin-review">Review</a>
+                <a href="/admin-tag">Tags</a>
+            </div>
         </div>
-        <p class="mb-4">이 페이지는 유저 관리하는 페이지입니다</p>
-        <div class="horizontal-tabs">
-            <a href="/admin-user">User</a>
-            <a href="/admin-party">Party</a>
-            <a href="/admin-review">Review</a>
-            <a href="/admin-tag">Tags</a>
-        </div>
-    </div>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Users DataTables</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>Num</th>
-                            <th>Name(정보보기)</th>
-                            <th>Sex</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Create</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Num</th>
-                            <th>Name</th>
-                            <th>Sex</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Create</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </tfoot>
-                    <tbody id="userTables"></tbody>
-                </table>
+        <div class="card shadow mb-4" style="margin-top: 29px;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <span id="totalCount"></span>
+                </h6>
+                <body>
+                    <section>
+                        <input id="searchInput" type="text" placeholder="이름으로 검색하세요." />
+                        <button id="searchButton" type="button">검색</button>
+                    </section>
+                </body>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Num</th>
+                                <th>Name(정보보기)</th>
+                                <th>Sex</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Create</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTables"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -63,6 +61,7 @@
         success: function (response) {
             const { users, totalCount, firstPage, lastPage, totalPage } = response;
             const userList = users[0];
+            $('#totalCount').text(`총 유저: ${totalCount}명`);
             let count = 0;
             for (let i = 0; i < userList.length; i++) {
                 const {
@@ -96,7 +95,7 @@
                             <td>${address}</td>
                             <td>${year}-${month}-${day}</td>
                             <td>${updateYear}-${updateMonth}-${updateDay}</td>
-                            <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">탈퇴하기</button></td>
                         </tr>
                     `;
                     $('#userTables').append(tagTable);
@@ -133,6 +132,93 @@
 
             document.getElementById('pagination').innerHTML = pages.join('');
         },
+    });
+
+    $('#searchButton').click(function () {
+        var name = $('#searchInput').val();
+        $.ajax({
+            url: `/admin/users/search?page=${page}&name=${name}`,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                $('#userTables').empty();
+                const { searchUser, totalCount, firstPage, lastPage, totalPage } = response;
+                const userList = searchUser[0];
+                $('#totalCount').text(`검색된 유저: ${totalCount}명`);
+                let count = 0;
+                for (let i = 0; i < userList.length; i++) {
+                    const {
+                        id: userId,
+                        name,
+                        sex,
+                        phone,
+                        address,
+                        createdAt,
+                        updatedAt,
+                        deletedAt,
+                    } = userList[i];
+
+                    if (deletedAt === null) {
+                        const createdate = new Date();
+                        const year = createdate.getFullYear();
+                        const month = ('0' + (createdate.getMonth() + 1)).slice(-2);
+                        const day = ('0' + createdate.getDate()).slice(-2);
+
+                        const update = new Date();
+                        const updateYear = update.getFullYear();
+                        const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+                        const updateDay = ('0' + update.getDate()).slice(-2);
+
+                        const tagTable = `
+                    <tr>
+                            <td>${count + 1}</td>
+                            <td><a href="/user-detail/${userId}">${name}</a></td>
+                            <td>${sex}</td>
+                            <td>${phone}</td>
+                            <td>${address}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td>${updateYear}-${updateMonth}-${updateDay}</td>
+                            <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">탈퇴하기</button></td>
+                        </tr>
+                    `;
+                        $('#userTables').append(tagTable);
+                        count++;
+                    }
+                }
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `
+                    <a href='?page=${Number(page) - 1}'><div class="pagination-btn">이전</div></a>
+                        `;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < totalPage) {
+                    const next = `
+                    <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
+                        `;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+            error: function () {
+                alert('해당 단어를 찾을수 없습니다.');
+            },
+        });
     });
 
     function deleteUserByAdmin(userId) {

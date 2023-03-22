@@ -1,50 +1,62 @@
 <!-- <div id="allUser"></div> -->
 <main class="admin-wrap-main">
     <div class="responsive-wrapper">
-        <div class="admin-1-header">
-            <h1>Parties Page</h1>
+        <div>
+            <div class="admin-1-header">
+                <h1>Parties Page</h1>
+            </div>
+            <p class="mb-4">
+                이 페이지는 파티를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가 보이면
+                삭제해주세요.
+            </p>
+            <div class="horizontal-tabs">
+                <a href="/admin-user">User</a>
+                <a href="/admin-party" class="active-tabs">Party</a>
+                <a href="/admin-review">Review</a>
+                <a href="/admin-tag">Tags</a>
+            </div>
         </div>
-        <p class="mb-4">
-            이 페이지는 파티를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가 보이면
-            삭제해주세요.
-        </p>
-        <div class="horizontal-tabs">
-            <a href="/admin-user">User</a>
-            <a href="/admin-party">Party</a>
-            <a href="/admin-review">Review</a>
-            <a href="/admin-tag">Tags</a>
-        </div>
-    </div>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Parties DataTables</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>Num</th>
-                            <th>Title(자세히보기)</th>
-                            <th>Status</th>
-                            <th>Address</th>
-                            <th>CurrMember</th>
-                            <th>MaxMember</th>
-                            <th>Create</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="partyTable"></tbody>
-                </table>
+        <div class="card shadow mb-4" style="margin-top: 29px">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <span id="totalCount"></span>
+                </h6>
+                <body>
+                    <section>
+                        <input id="searchInput" type="text" placeholder="제목으로 검색하세요." />
+                        <button id="searchButton" type="button">검색</button>
+                    </section>
+                </body>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Num</th>
+                                <th>Title(자세히보기)</th>
+                                <th>Status</th>
+                                <th>Address</th>
+                                <th>CurrMember</th>
+                                <th>MaxMember</th>
+                                <th>Create</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partyTable"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
     <div id="pagination" class="pagination-btn-wrap"></div>
 </main>
 <script>
+    let page;
+    let total;
     $(document).ready(() => {
-        const page = new URLSearchParams(location.search).get('page') || 1;
+        page = new URLSearchParams(location.search).get('page') || 1;
         $.ajax({
             type: 'GET',
             url: `/admin/praties?page=${page}`,
@@ -55,6 +67,7 @@
             },
             success: function (response) {
                 const { parties, totalCount, firstPage, lastPage, totalPage } = response;
+                $('#totalCount').text(`총 파티: ${totalCount}`);
                 let count = 0;
                 for (let i = 0; i < parties[0].length; i++) {
                     const {
@@ -128,6 +141,97 @@
                 }
 
                 document.getElementById('pagination').innerHTML = pages.join('');
+            },
+        });
+    });
+
+    $('#searchButton').click(function () {
+        var title = $('#searchInput').val();
+        $.ajax({
+            url: `/admin/party/search?page=${page}&name=${title}`,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                $('#partyTable').empty();
+                const { searchParty, totalCount, firstPage, lastPage, totalPage } = response;
+                let count = 0;
+                $('#totalCount').text(`검색된 파티: ${totalCount}`);
+
+                for (let i = 0; i < searchParty[0].length; i++) {
+                    const {
+                        partyId,
+                        id,
+                        title,
+                        address,
+                        currMember,
+                        maxMember,
+                        status,
+                        thumbnail,
+                        createdAt,
+                        updatedAt,
+                        deletedAt,
+                    } = searchParty[0][i];
+                    const createDate = new Date();
+
+                    if (deletedAt === null) {
+                        const year = createDate.getFullYear();
+                        const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                        const day = ('0' + createDate.getDate()).slice(-2);
+
+                        const update = new Date();
+                        const updateYear = update.getFullYear();
+                        const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+                        const updateDay = ('0' + update.getDate()).slice(-2);
+
+                        const partyItem = `
+                    <tr>
+                            <td>${count + 1}</td>
+                            <td><a href="/party/${id}">${title.substring(0, 8)}...</a></td>
+                            <td>${status}</td>
+                            <td>${address}</td>
+                            <td>${currMember}</td>
+                            <td>${maxMember}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td>${updateYear}-${updateMonth}-${updateDay}</td>
+                            <td><button type="button" onclick="deleteParty(${id})" class="btn btn-danger">Delete</button></td>
+                        </tr>
+                `;
+                        $('#partyTable').append(partyItem);
+                        count++;
+                    }
+                }
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `
+                    <a href='?page=${Number(page) - 1}'><div class="pagination-btn">이전</div></a>
+                        `;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < totalPage) {
+                    const next = `
+                    <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
+                        `;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+            error: function () {
+                alert('해당 단어를 찾을수 없습니다.');
             },
         });
     });

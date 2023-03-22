@@ -22,6 +22,16 @@ export class AdminController {
     async getUserAdmin(@Query('page') page: number) {
         return await this.adminService.getUsersAdmin(page);
     }
+     // 유저 검색
+    @Get('/users/search')
+    @HttpCode(200)
+    async searchUserAdmin(
+        @Query('page') page: number,
+        @Query('name') name: string
+        ) {     
+        return await this.adminService.searchUserAdmin(page, name);
+    }
+
 
     // @UseGuards(JwtAuthGuard)
     @Delete('/users/:userId')
@@ -38,6 +48,17 @@ export class AdminController {
     async getReviewAdmin(@Query('page') page: number) {
         return await this.adminService.getReviewAdmin(page);
     }
+
+    // 리뷰 검색
+    @Get('/review/search')
+    @HttpCode(200)
+    async searchReviewAdmin(
+        @Query('page') page: number,
+        @Query('review') review: string
+        ) { 
+        return await this.adminService.searchReviewAdmin(page, review);
+    }
+
     // 리뷰 삭제
     @Delete('/review/:reviewId')
     @HttpCode(204)
@@ -52,6 +73,16 @@ export class AdminController {
         return await this.adminService.getPartyAdmin(page);
     }
 
+    // 파티 검색
+    @Get('/party/search')
+    @HttpCode(200)
+    async searchPartyAdmin(
+        @Query('page') page: number,
+        @Query('name') name: string
+        ) {     
+        return await this.adminService.searchPartyAdmin(page, name);
+    }
+
     // 파티 삭제
     @Delete('/parties/:partyId')
     @HttpCode(204)
@@ -64,6 +95,16 @@ export class AdminController {
     @HttpCode(200)
     async readtag(@Query('page') page: number) {
         return this.adminService.readtag(page);
+    }
+
+    // 태그 검색
+    @Get('/tag/search')
+    @HttpCode(200)
+    async searchTagAdmin(
+        @Query('page') page: number,
+        @Query('name') name: string
+        ) {     
+        return await this.adminService.searchTagAdmin(page, name);
     }
 
     // 태그 삭제
