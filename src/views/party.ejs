@@ -65,12 +65,12 @@ $("#partyWhen").click(function() {
     $("#clearButton").show();
   });
   
-  $("#clearButton").click(function() {
+$("#clearButton").click(function() {
     $("#partyWhen").val("");
     $(this).hide();
-  });
+});
 
-function partySearch() {
+function partySearch(userId) {
     const address = $('#partyWhere').val()
     const date = $('#partyWhen').val()
     const title = $('#partyName').val()
@@ -93,7 +93,7 @@ function partySearch() {
         data: {},
         success: function(response) {
             history.pushState({ data: 'response.result' }, null, `${webUrl}`)
-            
+
             let partyList = response.result
 
             $('.partyList').empty()
@@ -108,11 +108,6 @@ function partySearch() {
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
                 const wishList = partyList[i]['wishList'];
-
-                const year = isoDate.substr(0, 4);
-                const month = isoDate.substr(5, 2);
-                const day = isoDate.substr(8, 2);
-                const date = `${year}-${month}-${day}`;
 
                 const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
                 
@@ -232,10 +227,15 @@ function getParties(userId) {
                 const maxMember = partyList[i]['maxMember'];
                 const currMember = partyList[i]['currMember'];
                 const thumbnails = partyList[i]['thumbnail'];
-                const date = partyList[i]['date'];
+                const isoDate = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
                 const wishList = partyList[i]['wishList'];
+
+                const year = isoDate.substr(0, 4);
+                const month = isoDate.substr(5, 2);
+                const day = isoDate.substr(8, 2);
+                const date = `${year}-${month}-${day}`;
 
                 const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
                 
