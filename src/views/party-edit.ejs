@@ -1,0 +1,464 @@
+<main class="partyPage partyMake partyEdit main container">
+    <form action="" class="partyMakeForm">
+        <header class="mainHeader">
+            <h2 class="title">
+                <!-- Backend -->
+                <label for="partyTitle" class="a11yHidden">제목 입력</label>
+                <input
+                    type="text"
+                    placeholder="제목을 입력하세요"
+                    id="partyTitle"
+                    class="partyTitle"
+                />
+            </h2>
+
+            <div class="tagListWrapper">
+                <ul class="tagList">
+                    <li class="tagInputWrapper">
+                        <label for="partyTag" class="a11yHidden">태그 입력</label>
+                        <input
+                            type="text"
+                            id="partyTag"
+                            class="partyTag"
+                            placeholder="Enter키를 이용하여 태그를 입력하세요."
+                        />
+                    </li>
+                </ul>
+            </div>
+
+            <dl class="headcountList">
+                <div class="headcountItem">
+                    <dt>
+                        <label for="partyTotalMemeber">총 인원 : </label>
+                    </dt>
+                    <dd>
+                        <input
+                            type="number"
+                            id="partyTotalMemeber"
+                            class="partyTotalMemeber"
+                            pattern="[0-9]*"
+                            placeholder="0"
+                        />
+                        명
+                    </dd>
+                </div>
+            </dl>
+        </header>
+
+        <div class="mainSection">
+            <section class="partyImageSection">
+                <h3 class="title">파티 이미지 등록</h3>
+
+                <ul class="partyImageList">
+                    <li class="partyImageItem">
+                        <label for="partyImage1">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage1"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                    <li class="partyImageItem">
+                        <label for="partyImage2">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage2"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                    <li class="partyImageItem">
+                        <label for="partyImage3">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage3"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                    <li class="partyImageItem">
+                        <label for="partyImage4">
+                            이미지 등록
+                            <i class="bx bx-plus" aria-hidden="true"></i>
+                        </label>
+                        <input
+                            type="file"
+                            class="partyImage"
+                            id="partyImage4"
+                            accept=".png, .jpg, .jpeg, .svg"
+                        />
+                        <div class="uploadImageWrapper"></div>
+                        <button type="button" class="partyImageReset" aria-label="이미지 삭제">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <div class="partyInfoWrapper">
+                <section class="IntroduceSection">
+                    <h3 class="title">
+                        <label for="partyIntroduce">파티 소개</label>
+                    </h3>
+                    <p>
+                        <textarea
+                            id="partyIntroduce"
+                            class="partyIntroduce"
+                            placeholder="파티 소개글 입력"
+                        ></textarea>
+                    </p>
+                </section>
+
+                <section class="calendarSection">
+                    <h3 class="title" style="color: red">날짜 변경</h3>
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
+                </section>
+
+                <section class="regionSection">
+                    <h3 class="title">현재주소</h3>
+                    <div class="addressWrapper"></div>
+                    <h3 class="title" style="margin-top: 20px; color: red">주소 수정하기</h3>
+                    <div class="addressSearchWrapper">
+                        <label for="partyAddressSearch" class="a11yHidden">주소 검색</label>
+                        <input
+                            type="button"
+                            id="partyAddressSearch-1"
+                            class="partyAddressSearch"
+                            onclick="findAddress()"
+                            value="주소 검색"
+                            readonly
+                        />
+                        <input
+                            type="text"
+                            id="partyAddressSearch"
+                            class="partyAddressSearch"
+                            placeholder="도로명 주소"
+                            readonly
+                        />
+                    </div>
+                    <div class="addressDetailWrapper">
+                        <label for="partyAddressDetail" class="a11yHidden">상세 주소 입력</label>
+                        <input
+                            type="text"
+                            id="partyAddressDetail"
+                            class="partyAddressDetail"
+                            placeholder="상세 주소 입력"
+                        />
+                    </div>
+
+                    <!-- 지도 삽입 -->
+                </section>
+
+                <section class="hostSection">
+                    <h3 class="a11yHidden">호스트 정보</h3>
+                    <div class="hostInfoWrapper">
+                        <a href="" class="hostInfoLink">
+                            <figure class="hostFigure">
+                                <div class="hostImageWrapper">
+                                    <img
+                                        id="hostProfile"
+                                        src="http://placehold.it/320x100?text=sample"
+                                        alt=""
+                                    />
+                                </div>
+
+                                <figcaption>
+                                    <h3 class="hostTitle">호스트</h3>
+                                    <p class="hostName">
+                                        <!-- Backend -->
+                                    </p>
+                                    <p class="a11yHidden">호스트 정보 더보기</p>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <button type="submit" class="partyFormSubmit btn_primary btn_point">수정하기</button>
+    </form>
+</main>
+
+<script>
+    $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                $('.hostName').text(userInfo.name);
+                $('#hostProfile').attr('src', userInfo.profile);
+            }
+        });
+    });
+
+    const partyId = Number(window.location.pathname.split('/')[2]);
+
+    let hostId;
+    let title;
+    let content;
+    let maxMember;
+    let currMember;
+    let thumbnails;
+    let address;
+    let date;
+    let thumbnail;
+    let tag;
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/party/${partyId}`,
+        data: {},
+        headers: {
+            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+        },
+        success: function (response) {
+            hostId = response.hostId;
+            title = response.title;
+            content = response.content;
+            maxMember = response.maxMember;
+            currMember = response.currMember;
+            thumbnails = response.thumbnail;
+            address = response.address;
+            isoDate = response.date;
+            thumbnail = response.thumbnail;
+            tag = response.tag;
+
+            const year = isoDate.substr(0, 4);
+            const month = isoDate.substr(5, 2);
+            const day = isoDate.substr(8, 2);
+            date = `${year}-${month}-${day}`;
+
+            $('.addressWrapper').append(`<p>${address}</p>`);
+            $('#partyTitle').val(title);
+            $('#partyIntroduce').val(content);
+            $('#partyTotalMemeber').val(maxMember);
+            $('.datePicker').val(date);
+
+            if (tag.length > 0) {
+                tag.forEach((e) => {
+                    const tagItemHtml = `
+                <li class="tagItem">
+                #
+                <p class="tag">${e.tagName}</p>
+                <button type="button" class="tagResetButton" aria-label="해당 태그 삭제">
+                    <i class="bx bx-x" aria-hidden="true"></i>
+                </button>
+                </li>`;
+                    $('.tagList').prepend(tagItemHtml);
+                });
+            }
+
+            if (thumbnail.length > 0) {
+                thumbnail.forEach((e, i) => {
+                    const imageWrapper = document.querySelectorAll(
+                        '.partyImageItem > .uploadImageWrapper',
+                    )[i];
+
+                    imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
+                    imageWrapper.parentNode.classList.add('uploaded');
+                });
+            }
+        },
+    });
+
+    const formData = new FormData();
+
+    let removedThumbnails = [];
+
+    document.querySelectorAll('.partyImageItem').forEach(($imageItem, i) => {
+        // image 업로드 시
+        $imageItem.addEventListener('change', (e) => {
+            if (!e.target.matches('.partyImage') || e.target.closest('.uploaded')) return;
+
+            const file = e.target.files[0];
+
+            formData.append('files[]', file, encodeURIComponent(file.name));
+
+            $imageItem.classList.add('uploaded');
+            $imageItem.querySelector(
+                '.uploadImageWrapper',
+            ).innerHTML = `<img src="${URL.createObjectURL(file)}" class="uploadedImage" alt="">`;
+        });
+
+        // 이미지 삭제 버튼 클릭시
+        $imageItem.addEventListener('click', (e) => {
+            if (!e.target.matches('.partyImageReset')) return;
+
+            $imageItem.classList.remove('uploaded');
+            $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
+
+            if (thumbnail[i]) {
+                removedThumbnails.push(thumbnail[i]);
+            }
+        });
+    });
+
+    let addTags = [];
+    let removedTags = [];
+
+    document.querySelector('.tagList').addEventListener('click', (e) => {
+        // 태그 삭제 버튼 클릭시
+        if (e.target.closest('.tagResetButton')) {
+            removedTags.push(e.target.closest('.tagItem').querySelector('.tag').textContent);
+            e.target.closest('.tagItem').remove();
+        }
+    });
+
+    const partyMakeForm = document.querySelector('.partyMakeForm');
+
+    partyMakeForm.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
+
+        e.preventDefault(); // enter키 눌렸을 때 submit 이벤트 방지
+
+        // tag input에서 enter 입력했을 경우 태그 추가
+        if (e.target.matches('.partyTag')) {
+            addTags.push(e.target.value);
+            addTag(e.target.value);
+            e.target.value = '';
+        }
+    });
+
+    // 등록하기 버튼 눌렸을 때
+    partyMakeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '/file/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                let image = [];
+                for (let i = 0; i < response.length; i++) {
+                    image.push(response[i].filePath.location);
+                }
+                saveParty(image);
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+
+        function saveParty(image) {
+            let editedAddress;
+            if ($('#partyAddressSearch').val()) {
+                editedAddress =
+                    $('#partyAddressSearch').val() + ' ' + $('#partyAddressDetail').val();
+            } else {
+                editedAddress = $('.addressWrapper').text();
+            }
+            
+
+            let editedDate;
+            if ($('.datePicker').val()) {
+                editedDate = $('.datePicker').val();
+            } else {
+                editedDate = date;
+
+            }
+            const partyInfo = {
+                title: $('#partyTitle').val(),
+                content: $('#partyIntroduce').val(),
+                maxMember: $('#partyTotalMemeber').val(),
+                address: editedAddress,
+                date: new Date(editedDate),
+                addThumbnail: image,
+                removeThumbnail: removedThumbnails,
+                addTagName: addTags,
+                removeTagName: removedTags,
+            };
+
+            $.ajax({
+                type: 'PATCH',
+                url: `/api/party/${partyId}`,
+                data: partyInfo,
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    customAlert('파티가 성공적으로 등록되었습니다.', function () {
+                        window.location.replace('/party');
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
+    });
+
+    function addTag(value) {
+        if (value.trim() === '') return;
+
+        const newTagItem = document.createElement('li');
+        newTagItem.classList.add('tagItem');
+
+        newTagItem.innerHTML = `
+        #
+        <p class="tag">${value}</p>
+        <button
+            type="button"
+            class="tagResetButton"
+            aria-label="해당 태그 삭제"
+        >
+            <i class="bx bx-x" aria-hidden="true"></i>
+        </button>
+        `;
+
+        document.querySelector('.tagInputWrapper').insertAdjacentElement('beforebegin', newTagItem);
+    }
+
+    function findAddress() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 사용자 주소를 받아올 변수를 정의한다.
+                var addr = '';
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') {
+                    // 사용자가 도로명 주소를 선택했을 경우(R)
+                    addr = data.roadAddress;
+                } else {
+                    // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 부모창의 주소칸에 받아온 주소를 넣는다.
+                $('#partyAddressSearch').val(addr);
+            },
+        }).open();
+    }
+</script>

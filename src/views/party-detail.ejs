@@ -1,0 +1,482 @@
+<main class="partyPage partyDetail main container"></main>
+
+<script>
+    $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let userId = userInfo.id;
+                getParty(userId);
+            } else {
+                getParty(0);
+            }
+        });
+    });
+    let currMembers
+    let maxMembers
+    const partyId = window.location.pathname.split('/')[2];
+
+    function getParty(userId) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/party/${partyId}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                const {
+                    id: partyId,
+                    hostId,
+                    title,
+                    content,
+                    maxMember,
+                    currMember,
+                    address,
+                    date,
+                    status,
+                    thumbnail,
+                    partyMember,
+                    tag,
+                    user,
+                    wishList,
+                } = response;
+
+                const year = date.substr(0, 4);
+                const month = date.substr(5, 2);
+                const day = date.substr(8, 2);
+                const dateDetail = `${year}-${month}-${day}`;
+
+                currMembers = currMember
+                maxMembers = maxMember
+                const userWishListMatch = wishList.find((user) => 
+                user.userId == userId)
+
+                user.profile = user.profile ?? `/imgs/temporary.png`
+
+                const tagHtml =
+                    tag.length > 0
+                        ? tag.map((tag) => `<li class="tagItem">#${tag.tagName}</li>`).join('')
+                        : ``;
+
+                const partyImageHtml =
+                    thumbnail.length > 0
+                        ? thumbnail
+                              .map(
+                                  (thumbnail) => `
+                            <li class="partyImageItem">
+                                <img src="${thumbnail.thumbnail}" alt="" class="partyImage" />
+                            </li>
+                            `,
+                              )
+                              .join('')
+                        :   `
+                            <li class="partyImageItem">
+                                <img src="/imgs/temporary.png" alt="" class="partyImage" />
+                            </li>`;
+
+                const html = `
+                <header class="mainHeader">
+                    <h2 class="title" style="padding-top: 100px;">
+                        ${title}
+                    </h2>
+
+                    <ul class="tagList">
+                        ${tagHtml}
+                    </ul>
+
+                    <div class="column2">
+                        <dl class="headcountList">
+                            <div class="headcountItem">
+                                <dt>현재 참여 인원</dt>
+                                <dd id="currMem">
+                                ${currMembers}
+                                </dd>
+                            </div>
+                            <div class="headcountItem">
+                                <dt>총 인원</dt>
+                                <dd>
+                                    ${maxMember}
+                                </dd>
+                            </div>
+                            <div class="partyMemberBox">
+                                
+                            </div>
+                        </dl>
+                        ${
+                            userWishListMatch
+                                ? `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                            <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red;"></i>
+                        </button>`
+                                : `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                            <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
+                        </button>`
+                        }
+                    </div>
+                </header>
+
+                <div class="mainSection">
+                    <section class="partyImageSection">
+                        <h3 class="a11yHidden">파티 이미지</h3>
+
+                        <ul class="partyImageList">
+                            ${partyImageHtml}
+                        </ul>
+
+                        <div class="partyImageButtonWrapper">
+                            <button
+                                type="button"
+                                class="partyImageButton prev"
+                                aria-label="이전 파티 이미지 보기"
+                            >
+                                <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="partyImageButton next"
+                                aria-label="다음 파티 이미지 보기"
+                            >
+                                <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </section>
+
+                    <div class="partyInfoWrapper">
+                        <section class="IntroduceSection">
+                            <h3 class="a11yHidden">파티 소개</h3>
+                            <p>
+                                ${content}
+                            </p>
+                        </section>
+
+                        <section class="calendarSection">
+                            <h3 class="a11yHidden">달력</h3>
+                            <div class="calendar"></div>
+                            <div class="calendarButtonWrapper">
+                                ${hostId === userId ? "" : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${userId}, ${partyId})">파티신청</button
+                                ><button type="button" class="btn_primary" onclick="cancelParty(${userId}, ${partyId})">신청취소</button>` }
+                            </div>
+                        </section>
+
+                        <section class="regionSection">
+                            <h3 class="title">지역</h3>
+                            <p>
+                                ${address}
+                            </p>
+                            <!-- 지도 삽입 -->
+                            <div id="map" style="width: 400px; height: 400px"></div>
+                        </section>
+
+                        <section class="hostSection">
+                            <h3 class="a11yHidden">호스트 정보</h3>
+                            <div class="hostInfoWrapper">
+                                <a href="/user-detail/${hostId}" class="hostInfoLink">
+                                    <figure class="hostFigure">
+                                        <div class="hostImageWrapper">
+                                            <img src="${user.profile}" alt="" />
+                                        </div>
+
+                                        <figcaption>
+                                            <h3 class="hostTitle">호스트</h3>
+                                            <p class="hostName">
+                                                ${user.name}
+                                            </p>
+                                            <p class="a11yHidden">호스트 정보 더보기</p>
+                                        </figcaption>
+                                    </figure>
+                                </a>
+
+                                <a href="#" class="hostContactLink"><button onclick="location.href='/no-page'" 
+                                    style="border: none; background: white;">
+                                    호스트에게 연락하기</button></a>
+                            </div>
+                        </section>
+                    </div>
+                </div>`;
+                $('.partyPage').append(html);
+
+                var mapContainer = document.getElementById('map'),
+                    mapOption = {
+                        center: new kakao.maps.LatLng(33.450701, 126.570667),
+                        level: 4,
+                    };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+                var geocoder = new kakao.maps.services.Geocoder();
+                var mapTypeControl = new kakao.maps.MapTypeControl();
+                map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
+                var zoomControl = new kakao.maps.ZoomControl();
+                map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
+                var geocoder = new kakao.maps.services.Geocoder();
+
+                const addresses = [];
+                addresses.push(address);
+
+                var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
+                    markerImageSize = new kakao.maps.Size(51, 52),
+                    markerImageOptions = {
+                        offset: new kakao.maps.Point(25, 25),
+                    };
+
+                for (var i = 0; i < addresses.length; i++) {
+                    geocoder.addressSearch(addresses[i], function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            var marker = new kakao.maps.Marker({
+                                map: map,
+                                position: coords,
+                                image: new kakao.maps.MarkerImage(
+                                    markerImageUrl,
+                                    markerImageSize,
+                                    markerImageOptions,
+                                ),
+                            });
+                            map.setCenter(coords);
+                        }
+                    });
+                }
+
+                if (hostId === userId) {
+                    const buttonEdit = `${status === "마감" ? `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>` : `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`}`
+
+                    $('.partyPage').prepend(buttonEdit);
+
+                    const partyMemberDropDownHtml = `
+                        <button
+                            type="button"
+                            class="partyMemberDropDown"
+                            aria-label="파티 신청 인원 관리 열기"
+                        >
+                            <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <ul class="memberList"></ul>
+                    `;
+
+                    $('.partyMemberBox').append(partyMemberDropDownHtml);
+                    partyMember.shift();
+                    
+                    if(!partyMember.length){
+                        const partyMemberZeroHtml = `<li>파티 맴버가 아직 없습니다.</li>` 
+                        $('.memberList').append(partyMemberZeroHtml);
+                    }
+                    partyMember.forEach((item) => {
+                        item.user.profile = item.user.profile ?? '/imgs/temporary.png';
+
+                        let partyMemberHtml
+
+                        if(status === '모집중'){
+                            partyMemberHtml = `
+                            <li class="memberItem">
+                                <a href="/user-detail/${item.user.id}" class="memberLink">
+                                    <figure class="profileWrapper">
+                                        <img
+                                            src="${item.user.profile}"
+                                            alt=""
+                                            class="profile"
+                                        />
+                                    </figure>
+                                    <p class="memberName">${item.user.name}</p>
+                                </a>
+                                <div class="memberButtonWrapper">
+                                        <button type="button" id="AcceptBtn${item.user.id}" class="memberButton memberAcceptButton ${ item.status === '승낙' ? 'selected' : ''}"  onclick="acceptMember(${item.user.id}, '승낙')">승낙</button>
+                                        <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton ${ item.status === '거절' ? 'selected' : ''}"  onclick="acceptMember(${item.user.id}, '거절')">거절</button>
+                                </div>
+                            </li>
+                            `;
+                        } else if (status === '마감' && item.status === '승낙'){
+                            partyMemberHtml = `<li class="memberItem">
+                                <a href="/user-detail/${item.user.id}" class="memberLink">
+                                    <figure class="profileWrapper">
+                                        <img
+                                            src="${item.user.profile}"
+                                            alt=""
+                                            class="profile"
+                                        />
+                                    </figure>
+                                    <p class="memberName">${item.user.name}</p>
+                                </a>
+                            </li>
+                            `
+                        }
+                        
+                        $('.memberList').append(partyMemberHtml);
+                    });
+
+                    document
+                        .querySelector('.partyMemberDropDown')
+                        .addEventListener('click', (e) => {
+                            e.target.classList.toggle('opened');
+                        });
+
+                    document.querySelector('.memberList').addEventListener('click', (e) => {
+                        if (!e.target.matches('.memberButton')) return;
+
+                        [...e.target.parentNode.children].forEach((button) => {
+                            button.classList.toggle(
+                                'selected',
+                                !e.target.classList.contains('selected') && button === e.target,
+                            );
+                        });
+                    });
+                }
+
+                if (document.querySelector('.partyPage')) {
+                    new Calendar(document.querySelector('.partyPage .calendar'));
+
+                    document.querySelector(`time[datetime="${dateDetail}"]`).classList.add('selected');
+
+                    document.querySelector('.today').classList.remove('today');
+
+                    const partyDetailSlide = tns({
+                        container: '.partyDetail .partyImageList',
+                        slideBy: 'page',
+                        controlsContainer: '.partyImageButtonWrapper',
+                        autoplay: true,
+                        autoplayButtonOutput: false,
+                    });
+                }
+            },
+        });
+    }
+
+    function applyParty(userId, partyId) {
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.reload();
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: `/api/party/apply/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    customAlert('신청되었습니다!', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
+    }
+
+    function cancelParty(userId, partyId) {
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.reload();
+            });
+        } else {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/party/apply-cancel/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    customAlert('취소되었습니다.', function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
+    }
+    
+    function acceptMember(userId, status) {
+        $currMember = document.querySelector('#currMem');
+        let count = parseInt($currMember.textContent)
+        if(currMembers >= maxMembers  && status == '승낙' && !document.querySelector(`#AcceptBtn${userId}`).classList.contains("selected")){
+            return customAlert("클라이언트에서 정원이 초과하였습니다", function () {
+                    window.location.reload();
+            });   
+        }
+        $.ajax({
+            type: 'PATCH',
+            url: `/api/party/apply/${partyId}`,
+            data: { userId, status },
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                if(response == 0 && status == '승낙') {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                    count--;
+                    $currMember.textContent = count;
+                    currMembers = $currMember.textContent
+
+                } else if (response == 0 && status == '거절'){
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+
+                } else if(response == 1) {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.add("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                    count++;
+                    $currMember.textContent = count;
+                    currMembers = $currMember.textContent
+
+                } else if(response == 2) {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
+                    count--;
+                    $currMember.textContent = count;
+                    currMembers = $currMember.textContent
+
+                } else if(response == 3 && status == '거절') {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
+                    document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
+                }
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+
+    function updateWishList(partyId) {
+        $.ajax({
+            type: 'POST',
+            url: `/user/wish-list/${partyId}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                if (response.updateOrDelete == 0) {
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-regular', 'fa-solid');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
+                } else {
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-solid', 'fa-regular');
+                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                }
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+</script>

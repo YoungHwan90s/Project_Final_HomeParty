@@ -1,1 +1,296 @@
-<h2>회원가입 화면</h2>
+<div class="wrapper">
+    <form onsubmit="preventSubmit(event)" name="join" id="join">
+        <!-- 회원가입 타이틀부분 -->
+        <header>
+            <div id="header">
+                <h3 class="signup-logo">
+                    <span><img class="mainlogo" alt="모아바 메인로고" src="/imgs/logo.png" /></span>
+                    <!-- <p>지금 바로 가입하여 파티에 참여해보세요!</p> -->
+                </h3>
+            </div>
+        </header>
+        <div id="container-signup">
+            <div class="row-group">
+                <div class="user-input">
+                    <!-- 이메일 입력 -->
+                    <h3 class="list">이메일<span id="email-error"></span></h3>
+                    <span class="input-wrapper email-int box" id="emailBox">
+                        <input
+                            type="text"
+                            id="input-email"
+                            maxlength="20"
+                            class="check email-input"
+                        />
+                        <span>@</span>
+                        <!-- 이메일 택일 -->
+                        <select id="mail-select">
+                            <option>이메일 선택</option>
+                            <option>naver.com</option>
+                            <option>gmail.com</option>
+                            <option>daum.net</option>
+                            <option>hanmail.net</option>
+                            <option>hotmail.com</option>
+                            <option>nate.com</option>
+                            <option>yahoo.co.kr</option>
+                            <option>empas.com</option>
+                            <option>freechal.com</option>
+                            <option>lycos.co.kr</option>
+                            <option>korea.com</option>
+                            <option>hanmir.com</option>
+                            <option>dreamwiz.com</option>
+                            <option>paran.com</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="user-input">
+                    <!-- 비밀번호 입력 -->
+                    <h3 class="list">비밀번호<span id="pw-error"></span></h3>
+                    <span class="box int-id">
+                        <input
+                            type="password"
+                            id="input-password"
+                            class="int check"
+                            maxlength="20"
+                        />
+                    </span>
+                </div>
+                <!-- 비밀번호 재확인 입력 -->
+                <div class="user-input">
+                    <h3 class="list">비밀번호 재입력<span id="pw-check-error"></span></h3>
+                    <span class="box int-id"
+                        ><input
+                            type="password"
+                            id="input-confirmPassword"
+                            class="int check"
+                            maxlength="20"
+                    /></span>
+                </div>
+            </div>
+            <div class="row-group">
+                <!-- 성명 입력 -->
+                <div class="user-input">
+                    <h3 class="list">이름<span id="name-error"></span></h3>
+                    <span class="box int-id"
+                        ><input type="text" id="input-name" class="int check" maxlength="20"
+                    /></span>
+                </div>
+
+                <!-- 성별 선택 -->
+                <div class="user-input">
+                    <h3 class="list">성별<span id="sex-error"></span></h3>
+                    <select class="box int-id" name="gender" id="input-sex">
+                        <option value="선택"></option>
+                        <option value="남성">남성</option>
+                        <option value="여성">여성</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <!-- 휴대폰번호 입력 -->
+                <div class="user-input">
+                    <h3 class="list">휴대폰 번호( - 제외)<span id="phone-num-error"></span></h3>
+                    <span class="box int-id"
+                        ><input
+                            type="number"
+                            pattern="[0-9]*"
+                            id="input-phone"
+                            class="int check"
+                            maxlength="11"
+                    /></span>
+                </div>
+                <!-- 주소 입력 -->
+                <div class="user-input">
+                    <h3 class="list">자택 주소<span id="addressError"></span></h3>
+                    <div id="address" class="int-id">
+                        <span>
+                            <input
+                                type="text"
+                                id="input-address-1"
+                                class="d_form mini line addressCheck"
+                                placeholder="도로명 주소"
+                                readonly
+                            />
+                            <input
+                                type="button"
+                                id="addressButton"
+                                class="d_form mini"
+                                onclick="findAddr()"
+                                value="주소 검색"
+                                readonly
+                            />
+                        </span>
+
+                        <span id="guide" style="color: #999; display: none"></span>
+                        <input
+                            type="text"
+                            id="input-address-2"
+                            class="d_form mini line addressCheck"
+                            placeholder="상세주소"
+                        />
+                    </div>
+                </div>
+                <div class="btn_area">
+                    <button onclick="signUp()" class="btn_type btn_primary btn_point">
+                        가입하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let join = document.join;
+    let input = document.querySelectorAll('.check');
+
+    let errorId = ['email-error', 'pw-error', 'pw-check-error', 'name-error', 'phone-num-error', 'sex-error'];
+    let error = document.querySelectorAll('.list > span');
+
+    // 오류문구 초기화 메서드
+    // 오류 표시 후, 사용자가 올바르게 수정을 하면 텍스트가 사라지는 모습을 구현
+    function innerReset(error) {
+        for (let i = 0; i < error.length; i++) {
+            error[i].innerHTML = '';
+        }
+    }
+
+    // 초기화 메서드 호출
+    innerReset(error);
+
+    // 이메일 입력 유효성검사
+    join['input-email'].onblur = function () {
+        innerReset(error);
+        let emailLimit = /^[a-zA-Z0-9._-]+$/;
+        if (!emailLimit.test(input[0].value)) {
+            document.getElementById(errorId[0]).innerHTML =
+                ' 영문과 숫자 또는 (-)(_)(.)을 조합한 문자열만 입력 가능합니다.';
+        }
+    };
+    // PW 입력문자 유효성검사
+    join['input-password'].onblur = function () {
+        innerReset(error); // 초기화 메서드 호출
+        let pwLimit = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/;
+        if (!pwLimit.test(input[1].value)) {
+            document.getElementById(errorId[1]).innerHTML =
+                '10~20자의 문자와 숫자 조합으로 작성해주세요.'
+        }
+    };
+
+    // 휴대폰번호 입력문자 유효성검사
+    join['input-phone'].onblur = function () {
+        innerReset(error); // 초기화 메서드 호출
+        let pnumLimit = /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 정규식(^$--> 문자의미, 01, (6자리중 "1자리"), 0~9--> "8자리")
+        if (!pnumLimit.test(input[4].value)) {
+            document.getElementById(errorId[4]).innerHTML =
+                '휴대폰 번호의 올바른 형식이 아닙니다. 다시 확인해주세요.';
+        }
+    };
+
+    function signUp() {
+        let errorStr = [
+            ' 이메일을',
+            ' 비밀번호를',
+            ' 비밀번호 확인을',
+            ' 성함을',
+            ' 휴대폰번호를',
+            ' 도로명 주소를',
+            ' 상세 주소를',
+        ];
+
+        innerReset(error);
+
+        // input 공백확인
+        for (let i = 0; i < input.length; i++) {
+            if (!input[i].value.trim()) {
+                document.getElementById(errorId[i]).innerHTML = errorStr[i] + ' 입력해 주세요.';
+                input[i].focus();
+                return false;
+            }
+        }
+
+        // email 주소선택 확인
+        if (document.getElementById('mail-select').value == '이메일 선택') {
+            document.getElementById(errorId[0]).innerHTML = ' 이메일을 선택해주세요.';
+            return false;
+        }  
+
+        // 성별 공백 확인
+        if (document.getElementById('input-sex').value == '선택') {
+            document.getElementById(errorId[5]).innerHTML = '성별을 선택해주세요.';
+            return false;
+        }
+
+        // 주소 input 공백확인
+        {
+            let inputAddress = document.querySelectorAll('.addressCheck');
+            for (let i = 0; i < inputAddress.length; i++) {
+                if (!inputAddress[i].value) {
+                    document.getElementById('addressError').innerHTML =
+                        ' 도로명주소 혹은 상세주소를 입력해주세요.';
+                    return false;
+                }
+            }
+        }
+        // 비밀번호 재확인
+        if (join['input-password'].value != join['input-confirmPassword'].value) {
+            document.getElementById('pw-check-error').innerHTML = ' 비밀번호가 일치하지 않습니다.';
+            join['input-confirmPassword'].focus();
+            return false;
+        }
+
+        // 정규식 변수 모음
+        let emailLimit = /^[a-zA-Z0-9._-]+$/;
+        let pwLimit = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/;
+        let pnumLimit = /^01[0|1|6|7|8|9]{1}[0-9]{8}$/;
+
+        // email 아이디 유효성검사
+        if (!emailLimit.test(input[0].value)) {
+            document.getElementById(errorId[0]).innerHTML = '올바른 이메일 형식이 아닙니다.';
+            join.email.focus();
+            return false;
+        }
+
+        // PW 유효성검사
+        if (!pwLimit.test(input[1].value)) {
+            document.getElementById(errorId[1]).innerHTML =
+                '10~20자의 문자와 숫자를 조합하여야 합니다.';
+            join.pw.focus();
+            return false;
+        }
+
+        // 휴대폰번호 유효성검사
+        if (!pnumLimit.test(input[4].value)) {
+            document.getElementById(errorId[4]).innerHTML =
+                '휴대폰 번호의 올바른 형식이 아닙니다. 다시 확인해주세요.';
+            join.phone - num.focus();
+            return false;
+        }
+
+        const userInfo = {
+            email: $('#input-email').val() + '@' + $('#mail-select').val(),
+            password: $('#input-password').val(),
+            confirmPassword: $('#input-confirmPassword').val(),
+            name: $('#input-name').val(),
+            sex: $('#input-sex').val(),
+            phone: $('#input-phone').val(),
+            address: $('#input-address-1').val() + ' ' + $('#input-address-2').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/auth/sign-up',
+            data: userInfo,
+            success: function (response) {
+                sessionStorage.setItem('userId', response.user.id);
+                customAlert('회원가입을 축하드립니다!', function () {
+                    window.location.replace('/profile-upload');
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+</script>

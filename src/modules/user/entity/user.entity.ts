@@ -1,15 +1,18 @@
+import { Party } from 'src/modules/party/entity/party.entity';
 import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    Index,
+    JoinColumn,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { PartyMember } from '../../party/entity/party-member.entity';
-import { Review } from '../../review/entity/reveiw.entity';
+import { Review } from '../../review/entity/review.entity';
+import { Kakao } from './kakao.entitiy';
 import { WishList } from './wish-list.entity';
 
 @Entity({ schema: 'Sparta_Final_Project', name: 'users' })
@@ -17,38 +20,31 @@ export class User {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
-    @Index({ unique: true })
-    @Column('int')
-    kakaologinId: number | null;
-
-    @Column('varchar', { length: 20 })
+    @Column('varchar', { length: 50 })
     email: string;
 
-    @Column('varchar', { length: 20, select: false })
-    password: string;
+    @Column('varchar', { nullable: true, length: 100 })
+    password: string | null;
 
-    @Column('varchar', { length: 10 })
+    @Column('varchar', { nullable: true, length: 10 })
     name: string;
 
     @Column('varchar', { length: 2 })
-    sex: string;
+    sex: string | null;
 
-    @Column('int')
-    phone: number;
+    @Column('varchar', { length: 20 })
+    phone: string | null;
 
-    @Column('varchar', { length: 50 })
+    @Column('varchar', { nullable: true, length: 50 })
     birthday: string | null;
 
-    @Column('varchar', { length: 5 })
-    region: string | null;
-
-    @Column('varchar', { length: 100 })
+    @Column('varchar', { nullable: true, length: 100 })
     address: string | null;
 
-    @Column('varchar', { length: 100 })
+    @Column('text', { nullable: true} )
     profile: string | null;
 
-    @Column('varchar', { length: 1000 })
+    @Column('varchar', { nullable: true, length: 1000 })
     introduction: string | null;
 
     @CreateDateColumn()
@@ -60,15 +56,24 @@ export class User {
     @DeleteDateColumn()
     deletedAt: Date | null;
 
+    // 유저 <-> 파티: 일대다 관계
+    @OneToMany(() => Party, (party) => party.user)
+    party: Party[];
+
     // 유저 <-> 장바구니: 일대다 관계
-    @OneToMany(() => WishList, (wishList) => wishList.user)
+    @OneToMany(() => WishList, (wishList) => wishList.user, { cascade: true })
     wishList: WishList[];
 
     // 유저 <-> 파티멤버: 일대다 관계
-    @OneToMany(() => PartyMember, (partyMember) => partyMember.user)
+    @OneToMany(() => PartyMember, (partyMember) => partyMember.user, { cascade: true })
     partyMember: PartyMember[];
 
     // 유저 <-> 리뷰: 일대다 관계
-    @OneToMany(() => Review, (review) => review.user)
+    @OneToMany(() => Review, (review) => review.user, { cascade: true })
     review: Review[];
+
+    // 유저 <-> 카카오 일대일 관계
+    @OneToOne(() => Kakao, (kakao) => kakao.user, { cascade: true })
+    @JoinColumn()
+    kakao: Kakao;
 }

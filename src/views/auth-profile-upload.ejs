@@ -1,0 +1,97 @@
+<div class="profile-container">
+    <h1>
+        이미지 업로드
+        <small>미리보기</small>
+    </h1>
+    <div class="avatar-upload">
+        <div class="avatar-edit">
+            <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
+            <input type="hidden" id="imageUrl" />
+            <label for="imageUpload"></label>
+        </div>
+        <div class="avatar-preview">
+            <div
+                id="imagePreview"
+                style="background-image: url( /imgs/temporary.png )"
+            ></div>
+        </div>
+    </div>
+    <div class="btn_area">
+        <button
+            onclick="saveImage()"
+            type="button"
+            id="save-profile"
+            class="btn_type btn_primary btn_point"
+            style="margin-bottom: 10px"
+        >
+            저장하기
+        </button>
+        <button onclick="location.replace('/login')" type="button" class="btn_type btn_primary">
+            건너뛰기
+        </button>
+    </div>
+</div>
+
+<script>
+    $('#imageUpload').change(function () {
+        readURL(this);
+    });
+
+    function saveImage() {
+        const image = $('#imageUpload').get(0);
+        const file = image.files[0];
+
+        if (!file) {
+            customAlert('업로드된 이미지가 없습니다.', function () {
+                window.location.reload();
+            });
+        }
+        const formData = new FormData();
+        formData.append('files[]', file, encodeURIComponent(file.name));
+
+        $.ajax({
+            type: 'POST',
+            url: '/file/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                $('#imageUrl').val(response[0].filePath.location);
+                $('#imageUrl').trigger('change');
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+
+    $('#imageUrl').on('change', () => {
+        const userInfo = {
+            id: sessionStorage.getItem('userId'),
+            profile: $('#imageUrl').val(),
+        };
+
+        $.ajax({
+            type: 'PATCH',
+            url: `/auth/profile-update`,
+            data: userInfo,
+            success: function (response) {
+                sessionStorage.removeItem('userId');
+                customAlert(
+                    '이미지가 성공적으로 저장되었습니다. 로그인 페이지로 이동합니다.',
+                    function () {
+                        window.location.replace('/login');
+                    },
+                );
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    });
+</script>

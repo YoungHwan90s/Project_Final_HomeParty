@@ -1,0 +1,126 @@
+<header class="py-5 bg-image-full" style="background-color: white">
+    <div class="text-center my-3" id="userinfo"></div>
+</header>
+
+<div class="border width" data-width="0.5px" role="presentation"></div>
+<div id="reply"></div>
+
+<div class="mainSection">
+    <ul class="partyList"></ul>
+</div>
+
+<script>
+    $(document).ready(() => {
+        const param = window.location.pathname.split('/')[2];
+        const partyId = Number(param);
+        const username = sessionStorage.getItem('name');
+        let name;
+        let profile;
+        let id;
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                name = userInfo.name;
+                profile = userInfo.profile;
+                id = userInfo.id;
+                getReviews(name, profile, id);
+            } else {
+                customAlert('로그인 후 이용 가능합니다.', function () {
+                    window.location.replace('/login');
+                });
+            }
+        });
+
+        function getReviews(name, profile) {
+            $.ajax({
+                url: `/api/party/${partyId}`, // 리뷰 데이터 요청 URL
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (data) {
+                    const thumbnailList = data.thumbnail;
+                    const date = new Date(data.createdAt);
+
+                    const thumbnailHtml = ` ${thumbnailList.length === 0 
+                        ? `/imgs/temporary.png` 
+                        : `${thumbnailList[0].thumbnail}`}`;
+                    
+                    const profileHtml = ` ${!profile ? `/imgs/temporary.png` : `${profile}`}`;
+
+                    const Info = `
+                        <a href="/party/${data.id}">
+                            <img class="img-fluid rounded-circle mb-4" src="${
+                                thumbnailHtml
+                            }" alt="..." style="width: 15%; height: 15%;" />
+                        </a>
+                        <h1 class="text-black fs-3 fw-bolder">"${data.title}" 파티를 잘 즐기셨나요?</h1>
+                        <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
+                        <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
+                        <h1 class="text-black fs-3 fw-bolder" >소개</h1>
+                        <p class="text-black-50 mb-0" id="party-content" style="margin-right : 20%; margin-left: 20%; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;"> 내용 :  ${data.content}</p>
+                        `;
+
+                    $(`#userinfo`).append(Info);
+
+                    const replyform = `
+                        <div class="card mb-2" style="margin-top: 2%; margin-left: 20%; margin-right: 20%;">
+                            <div class="card-header bg-light">
+                                    <i class="fa fa-comment fa"></i> REPLY
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="form-inline mb-2">     
+                                            <a for="replyId" href="/user-detail/${id}">
+                                                <img src="${profileHtml}" class="rounded-circle" alt="profile image" style="width: 32px; height: 32px;">
+                                            </a>
+                                            <input type="text"  readonly class="form-control-plaintext" placeholder="${name}" id="replyId" style="width: 20%;">
+                                            <input type="range" id="inputRating" oninput="drawStar(this)" value="5" step="1" min="1" max="10">
+                                            <textarea class="form-control" id="reviewTextArea" rows="3" style = "resize: none"></textarea>
+                                            <button type="button" class="btn btn-dark mt-3" onClick="reviewcreate(${data.id});">리뷰 남기기</button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        `;
+
+                    $(`#reply`).append(replyform);
+                },
+            });
+        }
+    });
+
+    // 서버로 데이터 전송
+    const drawStar = (target) => {
+        document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
+    };
+
+    function reviewcreate(partyId) {
+        const reviewInfo = {
+            review: $('#reviewTextArea').val(), //  리뷰 내용
+            rating: $('#inputRating').val(), // 별점
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: `/review/${partyId}`,
+            data: reviewInfo,
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                // 서버로부터 응답 받은 후 처리할 코드 작성
+                alert('리뷰가 등록되었습니다.');
+                location.reload();
+            },
+            error: function (error) {
+                // 서버로부터 오류 응답 받은 후 처리할 코드 작성
+                alert('올바르지않은 값입니다.');
+            },
+        });
+    }
+</script>

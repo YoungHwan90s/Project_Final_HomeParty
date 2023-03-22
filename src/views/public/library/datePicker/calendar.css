@@ -1,0 +1,100 @@
+.calendar {
+  --calendar-size: 300px;
+  width: var(--calendar-size);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+  font-size: calc(var(--calendar-size) / 20);
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 99999;
+}
+
+.calendarNav {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: var(--pointColor);
+  justify-content: space-between;
+  color: white;
+}
+
+.calendarBtn {
+  background: transparent;
+  border: 0;
+  color: white;
+  cursor: pointer;
+}
+
+.calendarBtn.prev {
+  order: -1;
+}
+
+time {
+  display: block;
+  text-align: center;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  padding: 12px;
+}
+
+.day,
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc((var(--calendar-size) - 24px) / 7);
+}
+
+.day {
+  color: gray;
+}
+
+.date {
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+.date:nth-of-type(7n + 1) {
+  color: red;
+}
+
+.thisMonth {
+  color: black;
+}
+
+.date.anotherMonth {
+  color: gray;
+}
+
+.date:hover,
+.date.selected {
+  color: #fff;
+  background-color: var(--pointColor);
+}
+
+.today {
+  position: relative;
+}
+
+.today::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--pointColor);
+  border-radius: 50%;
+}
+
+.pastDay {
+  pointer-events: none !important;
+  color: gray !important;
+}

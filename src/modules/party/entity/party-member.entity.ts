@@ -21,6 +21,9 @@ export class PartyMember {
     @Column('int')
     partyId: number;
 
+    @Column('varchar', { default: '신청대기' })
+    status: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
@@ -31,11 +34,10 @@ export class PartyMember {
     deletedAt: Date | null;
 
     // 파티멤버 <-> 파티: 다대일 관계
-    @ManyToOne(() => Party, (partyMember) => partyMember.partyMember)
+    @ManyToOne(() => Party, (party) => party.partyMember, { onUpdate: 'CASCADE' })
     party: Party;
 
     // 파티멤버 <-> 유저: 다대일 관계
     @ManyToOne(() => User, (user) => user.partyMember)
     user: User;
-
 }

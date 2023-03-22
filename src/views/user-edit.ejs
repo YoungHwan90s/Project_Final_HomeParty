@@ -1,1 +1,213 @@
-<h2>마이페이지 유저정보 및 수정 화면</h2>
+<div class="mypage-container">
+    <div class="mypage-wrap">
+        <!-- 유저 정보 -->
+        <div class="info-wrap">
+            <div class="container-info">
+                <div class="newtainer">
+                    <div class="info-header">
+                        <h2 class="h2bold">기본정보</h2>
+                    </div>
+    <!------------------------ 프로필 사진 ----------------------->
+                    <div class="avatar-upload">
+                        <div class="avatar-edit">
+                            <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg," />
+                            <input type="hidden" id="imageUrl" />
+                            <label for="imageUpload"></label>
+                        </div>
+                        <div class="avatar-preview">
+                            <div
+                                id="imagePreview"
+                                style="background-image: url(http://i.pravatar.cc/500?img=7)"
+                            ></div>
+                        </div>
+                    </div>
+    <!------------------------ 프로필 사진 끝----------------------->
+                    <div class="my-info">
+                        <h3 class="h3bold">계정</h3>
+                        <span class="mypage-text" id="email"></span>
+                    </div>
+                    <div class="underlines" role="presentation">
+                        <div class="underline"></div>
+                    </div>
+                    <!-- <div class="my-info">
+                        <h3 class="h3bold">비밀번호<span id="pw-error"></span></h3>
+                        <span>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                maxlength="20"
+                                disabled="disabled"
+                            />
+                            <button id="activePw">수정</button>
+                        </span>
+                    </div> -->
+                    <div class="my-info">
+                        <h3 class="h3bold">이름<span id="name-error"></span></h3>
+                        <span>
+                            <input type="text" class="txt-input" id="name" value="" name="name" maxlength="20"/>
+                        </span>
+                    </div>
+                    <div class="underlines" role="presentation">
+                        <div class="underline"></div>
+                    </div>
+                    <div class="my-info">
+                        <h3 class="h3bold">성별<span id="sex-error"></span></h3>
+                        <select name="gender" class="user-gender" id="sex">
+                            <option value="남성">남성</option>
+                            <option value="여성">여성</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="underlines" role="presentation">
+                        <div class="underline"></div>
+                    </div>
+                    <div class="my-info">
+                        <h3 class="h3bold">핸드폰 번호( - 제외)<span id="phone-num-error"></span></h3>
+                        <span>
+                            <input type="number" pattern="[0-9]*" id="phone" value="" name="phone" maxlength="11"/>
+                        </span>
+                    </div>
+                    <div class="underlines" role="presentation">
+                        <div class="underline"></div>
+                    </div>
+                    <div class="my-info">
+                        <h3 class="h3bold">변경 전 주소</h3>
+                        <div id="past-addr"></div>
+                    </div>
+                    <div class="my-info">
+                        <h3 class="h3bold">변경할 주소<span id="addressError"></span></h3>
+                        <div id="address" class="int-id">
+                            <span>
+                                <input type="text" id="input-address-1" placeholder="도로명 주소" disabled/>
+                                <input type="button" id="addrButton" onclick="findAddr()" value="주소 검색"/>
+                            </span>
+                            <span id="guide" style="color: #999; display: none"></span>
+                        <br><input type="text" id="input-address-2" placeholder="상세주소"/>
+                        </div>
+                    </div>
+                    <div class="underlines" role="presentation">
+                        <div class="underline"></div>
+                    </div>
+                    <div class="my-info">
+                        <h3 class="h3bold">자기소개</h3>
+                        <span>
+                            <textarea  cols="50" rows="10" id="introduction"></textarea>
+                        </span>
+                    </div>
+                    <div class="mypage-btn">
+                        <button class="mypage-edit-btn" onclick="updateUser()">수정완료</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
+<script>
+    let originProfile;
+    let newProfile;
+    let originAddress;
+
+     $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if(userInfo) {
+                originProfile = userInfo.profile
+                originAddress = userInfo.address
+
+                $('#email').append(userInfo.email)
+                $('input[name=name]').attr('value', userInfo.name)
+                $('option[name=sex]').attr('value', userInfo.sex)
+                $('input[name=phone]').attr('value', userInfo.phone)
+                $('#sex').append(userInfo.sex)
+                $("sex option:selected").text()
+                $('#sex').val(userInfo.sex)
+                $('#phone').append(userInfo.phone)
+                $('#past-addr').append(userInfo.address)
+                $('#introduction').append(userInfo.introduction)
+                $('#imagePreview').css('background-image', 'url(' + userInfo.profile + ')');
+
+            } else {
+                customAlert("로그인 후 이용가능합니다.", function () {
+                    window.location.replace('/login');
+                });
+            }
+        });
+    });
+
+    $('#imageUpload').change(function () {
+    readURL(this);
+    });
+
+    function updateUser() {
+        const image = $('#imageUpload').get(0);
+        const file = image.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('files[]', file, encodeURIComponent(file.name));
+    
+            $.ajax({
+                type: 'POST',
+                url: '/file/upload',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    newProfile = response[0].filePath.location
+                    saveUpdatedInformation(newProfile)
+                },
+                error: function (response) {
+                    customAlert(response.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        } else {
+            saveUpdatedInformation(originProfile)
+        }
+    }
+    
+    function saveUpdatedInformation(profile) {
+        let address;
+        if($('#input-address-1').val()) {
+            address = $('#input-address-1').val() + ' ' + $('#input-address-2').val()
+        } else {
+            address = originAddress
+        }
+
+        const userData = {
+            name: $('#name').val(),
+            sex: $('#sex').val(),
+            phone: $('#phone').val(),
+            region: region = $('#region').val(),
+            address: address,
+            profile: profile,
+            introduction: $('#introduction').val()
+        };
+    
+        $.ajax({
+            type: 'PATCH',
+            url: `/user`,
+            data: userData,
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                customAlert('회원정보 수정이 완료되었습니다.', function () {
+                    window.location.replace('/user-mypage');
+                });
+            },
+            error: function (error) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+
+
+</script>

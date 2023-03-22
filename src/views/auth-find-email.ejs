@@ -1,1 +1,117 @@
-<h2>이메일 찾기</h2>
+<div class="wrapper-login">
+    <form onsubmit="preventSubmit(event)" name="join" id="join">
+        <header class="login-header">
+            <div id="header">
+                <h3 class="signup-logo">
+                    <span><img class="mainlogo" alt="모아바 메인로고" src="/imgs/logo.png" /></span>
+                    <p>회원님의 계정을 찾아드립니다</p>
+                </h3>
+            </div>
+        </header>
+        <div id="container-login">
+            <div class="row-group">
+                <!-- 이름 입력 -->
+                <div class="user-input">
+                    <h3 class="list">이름<span id="name-error"></span></h3>
+                    <span class="box int-id"
+                        ><input type="text" id="input-name" class="int check" maxlength="20"
+                    /></span>
+                </div>
+
+                <!-- 휴대폰 입력 -->
+                <div class="user-input">
+                    <h3 class="list">휴대폰<span id="phone-num-error"></span></h3>
+                    <span class="box int-id">
+                        <input
+                            type="number"
+                            pattern="[0-9]*"
+                            id="input-phone"
+                            class="int check"
+                            maxlength="20"
+                        />
+                    </span>
+                </div>
+                <div class="btn_area">
+                    <button
+                        onclick="findEmail()"
+                        type="button"
+                        class="btn_type btn_primary btn_point"
+                    >
+                        이메일 찾기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let join = document.join;
+    let input = document.querySelectorAll('.check');
+
+    let errorId = ['name-error', 'phone-num-error'];
+    let error = document.querySelectorAll('.list > span');
+
+    function innerReset(error) {
+        for (let i = 0; i < error.length; i++) {
+            error[i].innerHTML = '';
+        }
+    }
+
+    innerReset(error);
+
+    // 휴대폰번호 입력문자 유효성검사
+    join['input-phone'].onblur = function () {
+        innerReset(error); // 초기화 메서드 호출
+        let pnumLimit = /^01[0|1|6|7|8|9]{1}[0-9]{8}$/;
+        if (!pnumLimit.test(input[1].value)) {
+            document.getElementById(errorId[1]).innerHTML =
+                '휴대폰 번호의 올바른 형식이 아닙니다. 다시 확인해주세요.';
+        }
+    };
+
+    function findEmail() {
+        let errorStr = [' 이름을', ' 휴대폰번호를'];
+
+        innerReset(error);
+
+        // input 공백확인
+        for (let i = 0; i < input.length; i++) {
+            if (!input[i].value.trim()) {
+                document.getElementById(errorId[i]).innerHTML = errorStr[i] + ' 입력해 주세요.';
+                input[i].focus();
+                return false;
+            }
+        }
+
+        let emailLimit = /^[a-zA-Z0-9._-]+$/;
+
+        // email 아이디 유효성검사
+        if (!emailLimit.test(input[1].value)) {
+            document.getElementById(errorId[1]).innerHTML = '올바른 이메일 형식이 아닙니다.';
+            join.email.focus();
+            return false;
+        }
+
+        const userInfo = {
+            name: $('#input-name').val(),
+            phone: $('#input-phone').val(),
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/auth/find-email',
+            data: userInfo,
+            success: function (response) {
+                customAlert(`회원가입 계정: ${response.email}`, function () {
+                    window.location.replace('/login');
+                });
+            },
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+</script>

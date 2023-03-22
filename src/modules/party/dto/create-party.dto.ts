@@ -1,35 +1,31 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartyDto {
+    @IsString()
+    readonly title: string;
 
-  @IsNumber()
-  readonly hostId: number;
+    @IsOptional()
+    @IsString()
+    readonly content: string;
 
-  @IsString()
-  readonly title: string;
+    @Type(() => Number)
+    @IsNumber()
+    readonly maxMember: number;
 
-  @IsString()
-  readonly content: string;
+    @IsOptional()
+    @IsString()
+    readonly address: string;
 
-  @IsNumber()
-  readonly maxMember: number;
+    @Type(() => Date)
+    @IsDate()
+    readonly date: Date;
+    
+    @IsOptional()
+    @IsArray()
+    thumbnail: [];
 
-  @IsOptional()
-  @IsNumber()
-  readonly currMember: number;
-
-  @IsString()
-  readonly region: string;
-
-  @IsString()
-  readonly address: string;
-
-  @IsString()
-  readonly date: string;
-
-  @IsOptional()
-  @IsString()
-  readonly status: string;
-
+    @IsOptional()
+    @IsArray()
+    tagName: [];
 }
-

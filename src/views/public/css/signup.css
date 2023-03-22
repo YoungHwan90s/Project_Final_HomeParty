@@ -1,0 +1,165 @@
+@charset "UTF-8";
+@keyframes headerMove{
+      0% {transform: translate(0px); }
+      50% {transform: translate(400px); }
+      100% {transform: translate(0,0);}
+}
+.normal {
+    font-weight: 400
+}
+.bold {
+    font-weight: 700
+}
+.bolder {
+    font-weight: 800
+}
+.light {
+    font-weight: 300
+}
+
+#container-signup, #footer, #header {
+    margin: 0 15px;
+}
+
+#container-signup {
+   width: auto;
+   max-width: 768px;
+}
+
+
+header{
+   text-align : center;
+}
+
+.input-sex {
+   padding : 4px 12px;
+   border: 1px solid #dddddd;
+   height : 30px;
+   padding : 16px;
+   border-radius: 4px;
+}
+
+#idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, #addressError, #email-error, #sex-error {
+   width:0px auto;
+   display : inline-block;
+   color : red;
+   text-align : right;
+   font-size : 11px;
+   font-weight: normal;
+   margin-left : 10px;
+}
+#container-signup, #footer {
+   margin: 0 auto;
+}
+
+#header {
+   position: relative;
+   overflow: hidden;
+   padding: 60px 0 54px;
+}
+
+#header .h_logo {
+   display: block;
+   margin: 0 auto;
+   width: auto;
+   background-repeat: no-repeat;
+   background-position: 0 0;
+   background-size: 240px auto;
+   color: transparent;
+   font-size: 2em;
+}
+.ipin_box, .row-group {
+   overflow: hidden;
+   width: 100%;
+}
+.box{
+   margin : 0px auto;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   position: relative;
+   width: 100%;
+   height: 51px;
+   border: solid 1px #dadada;
+}
+.box.int-id, .box.int-id input {
+   background: #fff;
+}
+#emailBox{
+   display: flex;
+   gap: 4px;
+   border: 0;
+   background-color: transparent;
+}
+.list {
+   margin : 0px auto;
+   width: 100%;
+   font-size: 14px;
+   font-weight: 700;
+}
+.user-input{
+   margin : 3%;
+   
+}
+
+#addressButton{
+   width: 100%;
+   text-align : center; 
+   background-color: #b7b7b7;
+   font-weight : bold;
+   color: #222;
+}
+
+#input-address-1{
+   width : 100%;
+}
+
+#input-address-2{
+   width : 100%;
+   background-color : white;
+}
+
+.input {
+   display: inline;
+}
+
+.int {
+   display: block;
+   position: relative;
+   width: 100%;
+   height: 29px;
+   border: solid 1px #dadada;
+   padding-right: 25px;
+   line-height: 29px;
+   border: none;
+   background: #fff;
+   font-size: 15px;
+   box-sizing: border-box;
+   z-index: 10;
+}
+#email-int{
+   display: flex;
+   width: 50%;
+   height: 29px;
+   border: solid 1px #dadada;
+   line-height: 29px;
+   border: none;
+   background: #fff;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+.email-input {
+	height: 51px;
+	box-sizing: border-box;
+	border: solid 1px #dadada;
+}
+
+#btn {
+   width: 100%;
+   height: 50px;
+}
+
+hr {
+   width: 40%;
+   margin: 0 auto;
+ }

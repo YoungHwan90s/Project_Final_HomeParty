@@ -7,14 +7,32 @@ export class AppController {
 
     @Get('/')
     @Render('index')
-    index(@Req() req): { components: string } {
+    main(@Req() req): { components: string } {
         return { components: 'main' };
+    }
+
+    @Get('/party')
+    @Render('index')
+    party(@Req() req): { components: string } {
+        return { components: 'party' };
     }
 
     @Get('/sign-up')
     @Render('index')
     signup(@Req() req): { components: string } {
         return { components: 'sign-up' };
+    }
+
+    @Get('/profile-upload')
+    @Render('index')
+    profileImage(@Req() req): { components: string } {
+        return { components: 'profile-upload' };
+    }
+
+    @Get('/login')
+    @Render('index')
+    login(@Req() req): { components: string } {
+        return { components: 'login' };
     }
 
     @Get('/find-email')
@@ -27,6 +45,12 @@ export class AppController {
     @Render('index')
     findpassword(@Req() req): { components: string } {
         return { components: 'find-password' };
+    }
+
+    @Get('/authentication')
+    @Render('index')
+    authentication(@Req() req): { components: string } {
+        return { components: 'authentication' };
     }
 
     @Get('/reset-password')
@@ -46,35 +70,41 @@ export class AppController {
     useredit(@Req() req): { components: string } {
         return { components: 'user-edit' };
     }
+    
+    @Get('/user-check')
+    @Render('index')
+    usercheck(@Req() req): { components: string } {
+        return { components: 'user-check' };
+    }
 
-    @Get('/wish-list')
+    @Get('/user-mypage')
+    @Render('index')
+    usermypage(@Req() req): { components: string } {
+        return { components: 'user-mypage' };
+    }
+
+    @Get('/user-wish-list')
     @Render('index')
     wishlist(@Req() req): { components: string } {
         return { components: 'wish-list' };
     }
 
-    @Get('/manage')
-    @Render('index')
-    manage(@Req() req): { components: string } {
-        return { components: 'manage' };
-    }
-
-    @Get('/manage-host')
+    @Get('/user-host')
     @Render('index')
     managehost(@Req() req): { components: string } {
-        return { components: 'manage-host' };
+        return { components: 'user-host' };
     }
 
-    @Get('/manage-guest')
+    @Get('/user-party')
     @Render('index')
     manageguest(@Req() req): { components: string } {
-        return { components: 'manage-guest' };
+        return { components: 'user-party' };
     }
 
-    @Get('/manage-history')
+    @Get('/user-history')
     @Render('index')
     managehistory(@Req() req): { components: string } {
-        return { components: 'manage-history' };
+        return { components: 'user-history' };
     }
 
     @Get('/admin-user')
@@ -101,33 +131,47 @@ export class AppController {
         return { components: 'admin-tag' };
     }
 
-    @Get('/party')
+    @Get('/party/:partyId')
     @Render('index')
-    party(@Req() req): { components: string } {
-        return { components: 'party' };
+    partyById(@Req() req): { components: string } {
+        return { components: 'party-id' };
     }
 
-    @Get('/party-make')
+    @Get('/party-edit/:partyId')
+    @Render('index')
+    partyEdit(@Req() req): { components: string } {
+        return { components: 'party-edit' };
+    }
+
+    @Get('/party-new')
     @Render('index')
     partymake(@Req() req): { components: string } {
-        return { components: 'party-make' };
+        return { components: 'party-new' };
     }
 
-    @Get('/party-host')
-    @Render('index')
-    partyhost(@Req() req): { components: string } {
-        return { components: 'party-host' };
-    }
-
-    @Get('/party-host-detail')
+    @Get('/user-detail/:hostId')
     @Render('index')
     partyhostdetail(@Req() req): { components: string } {
-        return { components: 'party-host-detail' };
+        return { components: 'user-detail' };
     }
 
-    @Get('/party-host-massage')
+    @Get('/party-host-message')
     @Render('index')
     partyhostmassage(@Req() req): { components: string } {
-        return { components: 'party-host-massage' };
+        return { components: 'party-host-message' };
     }
+
+    @Get('/party-review/:partyId')
+    @Render('index')
+    partyreview(@Req() req): { components: string } {
+        return { components: 'party-review' };
+    }
+
+    @Get('/no-page')
+    @Render('index')
+    servicePending(@Req() req): { components: string } {
+        return { components: 'no-page' };
+    }
+
+
 }

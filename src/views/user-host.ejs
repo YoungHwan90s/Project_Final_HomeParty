@@ -1,0 +1,130 @@
+<main class="partySearch main container">
+    <div class="mainSection">
+        <ul class="partyList partyGrid"></ul>
+    </div>
+</main>
+
+<script>
+$(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let userId = userInfo.id
+                getParties(userId)
+            } else {
+                getParties(0)
+            }
+        });
+    });
+
+    function getParties(userId) {
+    $.ajax({
+            type: 'GET',
+            url: `user/user-host/`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+            success: function (response) {                
+                response.forEach( member => {
+                
+                const {
+                    id : partyId,
+                    title,
+                    maxMember,
+                    currMember,
+                    thumbnails,
+                    date,
+                    thumbnail : thumbnailList
+                } = member.party
+
+                const thumbnailHtml = `
+                    ${thumbnailList.length === 0 
+                        ?  `<li class="thumbnailItem">
+                                <div class="thumbnailRatio">
+                                    <img
+                                        src="/imgs/temporary.png"
+                                        alt=""
+                                        class="thumbnailImage"
+                                    />
+                                </div>
+                            </li>` 
+                        : thumbnailList.map(({ thumbnail }) => `
+                            <li class="thumbnailItem">
+                                <div class="thumbnailRatio">
+                                    <img
+                                        src="${thumbnail}"
+                                        alt=""
+                                        class="thumbnailImage"
+                                    />
+                                </div>
+                            </li>
+                        `).join('')
+                    }`;
+                
+                    const partyItem = `
+                    <li class="partyItem">
+                        <div class="thumbnailWrapper carousel">
+                            <a href="party/${partyId}" class="partyLink thumbnailLink">
+                                <ul class="thumbnailList carouselList">
+                                    ${thumbnailHtml}
+                                </ul>
+                            </a>
+
+                            <div class="thumbnailButtonWrapper carouselButtonWrapper">
+                                <button
+                                    type="button"
+                                    class="thumbnailButton carouselButton prev"
+                                    aria-label="이전 썸네일 보기"
+                                >
+                                    <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="thumbnailButton carouselButton next"
+                                    aria-label="다음 썸네일 보기"
+                                >
+                                    <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <a href="" class="partyLink">
+                            <dl class="partyInfoList">
+                                <div class="partyInfoItem partyTitle">
+                                    <dt class="a11yHidden">제목</dt>
+                                    <dd>
+                                        ${title}
+                                    </dd>
+                                </div>
+                                <div class="partyInfoItem partyHeadcount">
+                                    <dt>현재</dt>
+                                    <dd class="currentCount">
+                                        ${currMember}명
+                                    </dd>
+                                    <dt>총</dt>
+                                    <dd class="totalCount">
+                                        ${maxMember}명
+                                    </dd>
+                                </div>
+                                <div class="partyInfoItem partyEtc">
+                                    <dt class="a11yHidden">지역</dt>
+                                    <dd class="partyPlace">
+                                    </dd>
+                                    <dt class="a11yHidden">날짜</dt>
+                                    <dd class="partyDate">
+                                        ${date}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </a>
+                    </li>
+                `;
+
+                $('.partyList').append(partyItem);
+                });
+            }
+        })
+    }
+
+</script>

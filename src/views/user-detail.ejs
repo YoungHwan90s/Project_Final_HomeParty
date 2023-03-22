@@ -1,0 +1,200 @@
+<header class="py-5 bg-image-full" style="background-color: white">
+    <div class="text-center my-3" id="userInfo"></div>
+</header>
+<div
+    class="border width"
+    data-width="0.5px"
+    role="presentation"
+    style="margin-left: 10%; margin-right: 10%"
+></div>
+
+<!-- Content section-->
+<section class="py-5">
+    <div class="container my-5">
+        <div class="row justify-content-start">
+            <div class="col-lg-6">
+                <h1 class="text-black fs-3 fw-bolder">⭐리뷰</h1>
+                <div id="reviews-container"></div>
+                <div style="margin-top: 8%" id="reviews-container"></div>
+            </div>
+            <div class="col-lg-6">
+                <h1 class="text-black fs-3 fw-bolder">파티 리스트</h1>
+                <div class="card" id="thumbNail" style="width: 18rem; margin-top: 10%"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<script></script>
+
+<div class="mainSection">
+    <ul class="partyList"></ul>
+</div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+
+<!-- 카카오맵  -->
+<script>
+    $(document).ready(() => {
+        const param = window.location.pathname.split('/')[2];
+        const hostId = Number(param);
+
+        $.ajax({
+            url: `/review/${hostId}`, // 리뷰 데이터 요청 URL
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (data) {
+                const date = new Date(data.createdAt);
+                const Info = `
+                    <img class="img-fluid rounded-circle mb-4" src="${
+                        data.profile
+                    }" alt="..." style="width: 15%; height: 15%;" />
+                        <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${data.name} 입니다.</h1>
+                        <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
+                        <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
+                        <h1 class="text-black fs-3 fw-bolder" >소개</h1>
+                        <p class="text-black-50 mb-0" id="host-email">📧 : ${data.email}</p>
+                        <p class="text-black-50 mb-0" id="host-email">♀︎♂ : ${data.sex}</p>
+                        <p class="text-black-50 mb-0" id="host-email" style="margin-right : 20%; margin-left: 20%; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;"> ${
+                            data.introduction ? data.introduction : '자기소개를 입력해주세요.'
+                        }</p>
+                    `;
+                $(`#userInfo`).append(Info);
+
+                let parties = data.party;
+                for (let i = 0; i < parties.length; i++) {
+                    let party = parties[i];
+                    thumbnails = party.thumbnail;
+                    const thumbNail = `
+                    <a href="/party/${party.id}">
+                        <img class="card-img" src="${thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
+                        <div class="card-body">
+                            <h5 class="card-title" style="font-weight: bold; font-family: Arial, sans-serif;">파티 제목: ${party.title}</h5>
+                        <p class="card-text" style="color: #009900;">${party.status}</p>
+                        <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 10%;margin-right: 10%; margin-top: 10%" ></div>
+                        </div>
+                    </div>
+                    `;
+                    $(`#thumbNail`).append(thumbNail);
+
+                    let reviewArr = parties[i].review;
+
+                    for (let j = 0; j < reviewArr.length; j++) {
+                        let reviewInfo = reviewArr[j];
+
+                        const createdAt = new Date(reviewInfo.createdAt);
+                        const signUpYear = createdAt.getFullYear();
+                        const signUpMonth = `${signUpYear}년${createdAt.getMonth() + 1}월`;
+                        const html = `
+                        <div style="margin-top: 20%; width: 120%" >
+                            <a href="/user-detail/${reviewInfo.user.id}">
+                                <img class="img-fluid rounded-circle me-4" src="${reviewInfo.user.profile}" alt="..." style="width: 35%;  float: left;"/>
+                            </a>
+                            <div>
+                                <h1 class="text-black fs-5 fw-bolder text-start" style="margin-bottom: 15px;">${reviewInfo.user.name}</h1>
+                                <p class="text-black-50 mb-0" style="margin-bottom: 5px; ">작성일:${signUpMonth}</p>
+                                <p class="text-black-50 mb-0" style="margin-bottom: 0px;">평점: ${reviewInfo.rating}점</p>
+                                <p class="lead" style="margin-top: 15px;">리뷰: ${reviewInfo.review}</p>
+                                    <div class="edit-review-form" id="editform${reviewInfo.id}" style="display: none ;">
+                                        <input type="text" id="editreview${reviewInfo.id}" value="${reviewInfo.review}" style = "margin-top : 5%" align="left">
+                                            <div align="left" style = "margin-top : 5%">
+                                                <button type="button" class="btn btn-success" id="updatereview${reviewInfo.id}" onclick="updatereview(${reviewInfo.id})" >수정 완료</button>
+                                                <button type="button" class="btn btn-secondary"id="cancel${reviewInfo.id}" onclick="cancel(${reviewInfo.id})" >취소</button>
+                                            </div>
+                                    </div>
+                                <button type="button" class="btn btn-success" onclick="editreviewbtn(${reviewInfo.id})" id="oneditform${reviewInfo.id}" style="margin-top : 5%">수정</button>
+                                <button type="button" class="btn btn-danger" id="delreviewbtn${reviewInfo.id}" onclick="delreviewbtn(${reviewInfo.id})" style="margin-top : 5%">삭제</button>
+                            </div>
+                        </div
+                    `;
+                        $('#reviews-container').append(html);
+                    }
+                }
+            },
+        });
+    });
+
+    // 서버로 데이터 전송
+    function reviewcreate(hostid) {
+        const reviewInfo = {
+            review: $('#reviewtextarea').val(), //  리뷰 내용
+
+            rating: $('.input-star input[type="range"]').val(), // 별점
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: `/review/${hostid}`,
+            data: reviewInfo,
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                // 서버로부터 응답 받은 후 처리할 코드 작성
+                alert('리뷰가 등록되었습니다.');
+                location.reload();
+            },
+            error: function (error) {
+                // 서버로부터 오류 응답 받은 후 처리할 코드 작성
+                alert('올바르지않은 값입니다.');
+            },
+        });
+    }
+
+    function editreviewbtn(reviewid) {
+        $(`#editform${reviewid}`).show();
+        $(`#oneditform${reviewid}`).hide();
+    }
+    function cancel(reviewid) {
+        $(`#editform${reviewid}`).hide();
+        $(`#oneditform${reviewid}`).show();
+    }
+
+    function updatereview(reviewid) {
+        const updatedReview = $('#editreview').val();
+        $.ajax({
+            type: 'PATCH',
+            url: `/review/${reviewid}`,
+            data: {
+                review: updatedReview,
+            },
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                // 서버로부터 응답 받은 후 처리할 코드 작성
+                alert('리뷰가 수정되었습니다.');
+                location.reload();
+            },
+            error: function (error) {
+                // 서버로부터 오류 응답 받은 후 처리할 코드 작성
+                alert('올바르지 않은 값입니다.');
+            },
+        });
+    }
+
+    function delreviewbtn(reviewid) {
+        $.ajax({
+            type: 'DELETE',
+            url: `/review/${reviewid}`,
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                alert('리뷰가 삭제되었습니다.');
+                location.reload();
+            },
+            error: function (error) {
+                alert('올바르지 않은 값입니다.');
+            },
+        });
+    }
+</script>

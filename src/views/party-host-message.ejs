@@ -1,0 +1,57 @@
+<main id="v-app">
+    <section class="alerts">
+        <alerts-component :items="alerts"></alerts-component>
+    </section>
+    <section class="chat">
+        <h1>Websockets Tester</h1>
+        <form>
+            <input v-model="text" type="text"/>
+            <button type="submit" @click.prevent="sendChatMessage()">Send</button>
+        </form>
+        <p>
+            <ul>
+                <li v-for="msg of messages">
+                    <strong>{{ msg.sender }}:</strong> {{ msg.message }}
+                </li>
+            </ul>
+        </p>
+    </section>
+</main>
+<script>
+    Vue.component('alerts-component', VueSimpleNotify.VueSimpleNotify);
+    var app = new Vue({
+        el: '#v-app',
+        data: {
+            username: '',
+            text: '',
+            messages: [],
+            socket: { chat: null, alerts: null },
+            alerts: [],
+        },
+        methods: {
+            sendChatMessage() {
+                this.socket.chat.emit('chatToServer', { sender: this.username, message: this.text });
+                this.text = "";
+            },
+            receiveChatMessage(msg) {
+                this.messages.push(msg);
+            },
+            receiveAlertMessage(msg) {
+                this.alerts.push(msg);
+            }
+        },
+        created() {
+            this.username = prompt('Enter your username:');
+
+            this.socket.chat = io('http://localhost:4000/chat');
+            this.socket.chat.on('chatToClient', (msg) => {
+                this.receiveChatMessage(msg);
+            });
+
+            this.socket.alerts = io('http://localhost:4000/alert');
+            this.socket.alerts.on('alertToClient', (msg) => {
+                this.receiveAlertMessage(msg);
+            });
+        }
+    });
+</script>

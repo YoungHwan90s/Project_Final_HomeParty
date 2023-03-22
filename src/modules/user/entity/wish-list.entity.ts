@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Party } from '../../party/entity/party.entity';
 import { User } from './user.entity';
 
@@ -16,11 +23,14 @@ export class WishList {
     @CreateDateColumn()
     createdAt: Date;
 
+    @DeleteDateColumn()
+    deletedAt: Date | null;
+
     // 장바구니 <-> 유저: 다대일 관계
     @ManyToOne(() => User, (user) => user.wishList)
     user: User;
 
     // 장바구니 <-> 파티: 일대일 관계
-    @OneToOne(() => Party, party => party.wishList)
+    @ManyToOne(() => Party, (party) => party.wishList)
     party: Party;
 }
