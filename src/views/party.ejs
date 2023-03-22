@@ -55,8 +55,9 @@
 </main>
 
 <script>
+    let page = 1
+    let totalCount
     $(document).ready(function () {
-        let page = 1;
         getMyInfo(function (userInfo) {
             if (userInfo) {
                 let userId = userInfo.id;
@@ -230,13 +231,16 @@ function partySearch(userId) {
         });
     }
     
-    function getParties(userId,page) {
+    function getParties(userId, page) {
+        console.log(page)
         $.ajax({
             type: 'GET',
             url: `/api/party/list?page=${page}`,
             data: {},
             success: function (response) {
-                let partyList = response;
+                const partyList = response.parties;
+                totalCount = response.itemCount;
+                
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['id'];
                     const title = partyList[i]['title'];
@@ -368,7 +372,9 @@ function partySearch(userId) {
         if (scrollDistance + windowHeight >= totalHeight) {
             // 페이지 번호 증가
             page++;
-            getParties(page);
+            if(Math.ceil(page % totalCount) >= page){
+                getParties(userId = 0, page);
+            }
         }
     });
 

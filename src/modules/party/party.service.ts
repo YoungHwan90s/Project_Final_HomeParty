@@ -16,6 +16,7 @@ import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { Cron } from '@nestjs/schedule';
 import { string } from 'joi';
+import { AnyArn } from 'aws-sdk/clients/groundstation';
 
 @Injectable()
 export class PartyService {
@@ -53,13 +54,17 @@ export class PartyService {
         return result
       }
 
-    async getParties(page): Promise<Party[]> {
-        return await this.partyRepository.find({
+    async getParties(page: number): Promise<any> {
+        const parties = await this.partyRepository.find({
             where: { deletedAt: null, status: '모집중' },
             relations: ['thumbnail', 'wishList'],
             take: 12,
             skip: (page - 1) * 12,
         });
+
+        const itemCount = await this.partyRepository.count({ where : {deletedAt : null, status : '모집중'}})
+
+        return { parties, itemCount }
     }
 
     async getPartyById(partyId: number): Promise<Party> {
