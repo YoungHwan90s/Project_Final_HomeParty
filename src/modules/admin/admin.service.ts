@@ -45,10 +45,31 @@ export class AdminService {
         return { users, totalCount, firstPage, lastPage, totalPage };
     }
 
-    async searchUserAdmin(name: string){
-        return await this.userRepository.find({
-            where: { name: ILike(`%${name}%`) }
+    async searchUserAdmin(page: number, name: string){
+        const searchUser = await this.userRepository.findAndCount({
+            where: { name: ILike(`%${name}%`) },
+            skip: (page - 1) * 5,
+            take: 5,
         })  
+        const totalCount = searchUser[1];
+        // 총 페이지 수 : 한 페이지당 5개씩
+        let totalPage = Math.ceil(totalCount / 5);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { searchUser, totalCount, firstPage, lastPage, totalPage };
     }
 
     async deletedUserAdmin(userId: number) {
@@ -82,6 +103,34 @@ export class AdminService {
         return { tags, totalCount, firstPage, lastPage, totalPage };
     }
 
+    async searchTagAdmin(page: number, name: string){
+        const searchTag= await this.tagRepository.findAndCount({
+            where: { tagName: ILike(`%${name}%`) },
+            skip: (page - 1) * 5,
+            take: 5,
+        })  
+        const totalCount = searchTag[1];
+        // 총 페이지 수 : 한 페이지당 5개씩
+        let totalPage = Math.ceil(totalCount / 5);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { searchTag, totalCount, firstPage, lastPage, totalPage };
+    }
+
+
     async deletetag(tagid: number) {
         return await this.tagRepository.softDelete(tagid);
     }
@@ -106,6 +155,34 @@ export class AdminService {
 
         return { parties, totalCount, firstPage, lastPage, totalPage };
     }
+
+    async searchPartyAdmin(page: number, title: string){
+        const searchParty= await this.partyRepository.findAndCount({
+            where: { title: ILike(`%${title}%`) },
+            skip: (page - 1) * 5,
+            take: 5,
+        })  
+        const totalCount = searchParty[1];
+        // 총 페이지 수 : 한 페이지당 5개씩
+        let totalPage = Math.ceil(totalCount / 5);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { searchParty, totalCount, firstPage, lastPage, totalPage };
+    }
+
 
     async deletedPartyAdmin(partyId: number) {
         const party = await this.partyRepository.findOne({
@@ -136,6 +213,34 @@ export class AdminService {
         }
 
         return { reviews, totalCount, firstPage, lastPage, totalPage };
+    }
+
+    async searchReviewAdmin(page: number, review: string){
+        const searchReview= await this.reviewRepository.findAndCount({
+            where: { review: ILike(`%${review}%`) },
+            relations: ['party', 'user'],
+            skip: (page - 1) * 5,
+            take: 5,
+        })  
+        const totalCount = searchReview[1];
+        // 총 페이지 수 : 한 페이지당 5개씩
+        let totalPage = Math.ceil(totalCount / 5);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { searchReview, totalCount, firstPage, lastPage, totalPage };
     }
 
     async deletedReviewAdmin(reviewId: number) {

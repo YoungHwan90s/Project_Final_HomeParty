@@ -1,170 +1,216 @@
 <main class="admin-wrap-main">
     <div class="responsive-wrapper">
-        <div class="admin-1-header">
-            <h1>Tags Page</h1>
+        <div>
+            <div class="admin-1-header">
+                <h1>Tags Page</h1>
+            </div>
+            <p class="mb-4">
+                이 페이지는 태그 관리하는 페이지이므로 부절한 단어 또는 위험적인 단어는 선택적으로
+                삭제해주세요.
+            </p>
+            <div class="horizontal-tabs">
+                <a href="/admin-user">User</a>
+                <a href="/admin-party">Party</a>
+                <a href="/admin-review">Review</a>
+                <a href="/admin-tag" class="active-tabs">Tags</a>
+            </div>
         </div>
-        <p class="mb-4">
-            이 페이지는 태그 관리하는 페이지이므로 부절한 단어 또는 위험적인 단어는 선택적으로
-            삭제해주세요.
-        </p>
-        <div class="horizontal-tabs">
-            <a href="/admin-user">User</a>
-            <a href="/admin-party">Party</a>
-            <a href="/admin-review">Review</a>
-            <a href="/admin-tag">Tags</a>
-        </div>
-    </div>
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Tags DataTables</h6>
-            <body>
-                <section>
-                    <input id="searchInput" type="text" placeholder="이름으로 검색" />
-                    <button id="searchButton" type="button">검색</button>
-                </section>
-            </body>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>Number</th>
-                            <th>Tag</th>
-                            <th>Frequency</th>
-                            <th>Create Date</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tagTables"></tbody>
-                </table>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4" style="margin-top: 29px">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <span id="totalCount"></span>
+                </h6>
+                <body>
+                    <section>
+                        <input id="searchInput" type="text" placeholder="태그로 검색하세요." />
+                        <button id="searchButton" type="button">검색</button>
+                    </section>
+                </body>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Tag</th>
+                                <th>Frequency</th>
+                                <th>Create Date</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tagTables"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
     <div id="pagination" class="pagination-btn-wrap"></div>
-    </main>
-    <script>
-        let tagList
-        $(document).ready(() => {
-            const page = new URLSearchParams(location.search).get('page') || 1;
+</main>
+<script>
+    let page;
+    $(document).ready(() => {
+        page = new URLSearchParams(location.search).get('page') || 1;
+        $.ajax({
+            type: 'GET',
+            url: `/admin/tags?page=${page}`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                const { tags, totalCount, firstPage, lastPage, totalPage } = response;
+                $('#totalCount').text(`총 태그: ${totalCount}개`);
+                for (let i = 0; i < tags[0].length; i++) {
+                    const { tagId, id, tagName, freq, createdAt } = tags[0][i];
+                    let tagid = i + 1;
+                    let Id = tags[0][i].id;
+                    let tagNames = tags[0][i].tagName;
+                    let Freq = tags[0][i].freq;
+                    let createDate = new Date(tags[0][i].createdAt);
+
+                    const year = createDate.getFullYear();
+                    const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                    const day = ('0' + createDate.getDate()).slice(-2);
+                    const tagTable = `
+                    <tr>
+                            <td>${tagid}</td>
+                            <td>${tagNames}</td>
+                            <td>${Freq}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td><button type="button" id = "deleteTag(${Id})" onclick="deleteTag(${Id})" class="btn btn-danger">Delete</button></td>s
+                        </tr>
+                    `;
+
+                    $('#tagTables').append(tagTable);
+                }
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `
+                        <a href='?page=${
+                            Number(page) - 1
+                        }'><div class="pagination-btn">이전</div></a>
+                        `;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < totalPage) {
+                    const next = `
+                        <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
+                        `;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+        });
+    });
+
+    $('#searchButton').click(function () {
+        var name = $('#searchInput').val();
+        $.ajax({
+            url: `/admin/tag/search?page=${page}&name=${name}`,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                $('#tagTables').empty();
+                const { searchTag, totalCount, firstPage, lastPage, totalPage } = response;
+                $('#totalCount').text(`검색된 태그: ${totalCount}개`);
+                for (let i = 0; i < searchTag[0].length; i++) {
+                    const { tagId, id, tagName, freq, createdAt } = searchTag[0][i];
+                    let tagid = i + 1;
+                    let Id = searchTag[0][i].id;
+                    let tagNames = searchTag[0][i].tagName;
+                    let Freq = searchTag[0][i].freq;
+                    let createDate = new Date(searchTag[0][i].createdAt);
+
+                    const year = createDate.getFullYear();
+                    const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                    const day = ('0' + createDate.getDate()).slice(-2);
+                    const tagTable = `
+                    <tr>
+                            <td>${tagid}</td>
+                            <td>${tagNames}</td>
+                            <td>${Freq}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td><button type="button" id = "deleteTag(${Id})" onclick="deleteTag(${Id})" class="btn btn-danger">Delete</button></td>s
+                        </tr>
+                    `;
+
+                    $('#tagTables').append(tagTable);
+                }
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `
+                        <a href='?page=${
+                            Number(page) - 1
+                        }'><div class="pagination-btn">이전</div></a>
+                        `;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < totalPage) {
+                    const next = `
+                        <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
+                        `;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+            error: function () {
+                alert('해당 단어를 찾을수 없습니다.');
+            },
+        });
+    });
+
+    function deleteTag(tagId) {
+        const result = confirm('해당 태그를 삭제하시겠습니까?');
+        if (result) {
             $.ajax({
-                type: 'GET',
-                url: `/admin/tags?page=${page}`,
+                type: 'DELETE',
+                url: `/admin/tag/${tagId}`,
                 data: {},
                 headers: {
                     authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
                 success: function (response) {
-                    const { tags, totalCount, firstPage, lastPage, totalPage } = response;
-                    for (let i = 0; i < tags[0].length; i++) {
-                        const { tagId, id, tagName, freq, createdAt } = tags[0][i];
-                        let tagid = i + 1;
-                        let Id = tags[0][i].id;
-                        let tagNames = tags[0][i].tagName;
-                        let Freq = tags[0][i].freq;
-                        let createDate = new Date(tags[0][i].createdAt);
-
-                        const year = createDate.getFullYear();
-                        const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
-                        const day = ('0' + createDate.getDate()).slice(-2);
-                        const tagTable = `
-                    <tr>
-                            <td>${tagid}</td>
-                            <td>${tagNames}</td>
-                            <td>${Freq}</td>
-                            <td>${year}-${month}-${day}</td>
-                            <td><button type="button" id = "deleteTag(${Id})" onclick="deleteTag(${Id})" class="btn btn-danger">Delete</button></td>s
-                        </tr>
-                    `;
-
-                        $('#tagTables').append(tagTable);
-                    }
-                    const pages = [];
-
-                    // prev 버튼
-                    if (page > 1) {
-                        const prev = `
-                        <a href='?page=${
-                            Number(page) - 1
-                        }'><div class="pagination-btn">이전</div></a>
-                        `;
-                        pages.push(prev);
-                    }
-
-                    // pages 버튼
-                    for (let i = firstPage; i <= lastPage; i++) {
-                        const pageList =
-                            Number(page) === i
-                                ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
-                                : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
-
-                        pages.push(pageList);
-                    }
-
-                    // next 버튼
-                    if (page < totalPage) {
-                        const next = `
-                        <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
-                        `;
-                        pages.push(next);
-                    }
-
-                    document.getElementById('pagination').innerHTML = pages.join('');
+                    alert('태그 삭제 되었습니다.');
+                    $(`#id${tagId}`).remove();
+                    window.location.reload();
                 },
             });
-        });
-
-    $('#searchButton').on('click', function () {
-    $('#tagTables').empty();
-    const searchValue = $('#searchInput').val();
-    tagList = tagList.filter((tag) => tag.tagName === searchValue)
-    for (let i = 0; i < tagList.length; i++) {
-                        const { tagId, id, tagName, freq, createdAt } = tagList[i];
-                        let tagid = i + 1;
-                        let Id = tagList[i].id;
-                        let tagNames = tagList[i].tagName;
-                        let Freq = tagList[i].freq;
-                        let createDate = new Date(tagList[i].createdAt);
-
-                        const year = createDate.getFullYear();
-                        const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
-                        const day = ('0' + createDate.getDate()).slice(-2);
-                        const tagTable = `
-                    <tr>
-                            <td>${tagid}</td>
-                            <td>${tagNames}</td>
-                            <td>${Freq}</td>
-                            <td>${year}-${month}-${day}</td>
-                            <td><button type="button" id = "deleteTag(${Id})" onclick="deleteTag(${Id})" class="btn btn-danger">Delete</button></td>s
-                        </tr>
-                    `;
-
-                        $('#tagTables').append(tagTable);
-                    }
-        })
-
-        function deleteTag(tagId) {
-            const result = confirm('해당 태그를 삭제하시겠습니까?');
-            if (result) {
-                $.ajax({
-                    type: 'DELETE',
-                    url: `/admin/tag/${tagId}`,
-                    data: {},
-                    headers: {
-                        authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                        refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                    },
-                    success: function (response) {
-                        alert('태그 삭제 되었습니다.');
-                        $(`#id${tagId}`).remove();
-                        window.location.reload();
-                    },
-                });
-            } else {
-                alert('삭제 취소되었습니다.');
-            }
+        } else {
+            alert('삭제 취소되었습니다.');
         }
-    </script>
-</main>
+    }
+</script>
