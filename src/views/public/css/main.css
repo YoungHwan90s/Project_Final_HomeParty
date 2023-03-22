@@ -370,7 +370,7 @@ img {
 
 /* Change background header */
 .scroll-header {
-  background-color: var(--body-color);
+  background-color: #fff;
   box-shadow: 0 1px 4px hsla(0,4%,15%,.1);
 }
 .scroll-header .nav__logo,
