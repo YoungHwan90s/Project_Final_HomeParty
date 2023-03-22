@@ -123,3 +123,13 @@ button > i::before {
 .fa-heart {
   border: none;
 }
+
+.pagination-btn-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-bottom: 4rem;
+}
