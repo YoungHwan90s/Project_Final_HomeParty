@@ -48,6 +48,9 @@ a {
   white-space: nowrap;
 }
 
+.mainlogo {
+  width: 120px;
+}
 .mainSection {
   margin-top: 60px;
 }
