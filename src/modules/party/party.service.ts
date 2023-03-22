@@ -26,10 +26,13 @@ export class PartyService {
     ) {}
 
     async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
-        let query = this.partyRepository.createQueryBuilder("party");
+        let query = this.partyRepository.createQueryBuilder("party")
 
-        query = query.leftJoinAndSelect("party.thumbnail", "thumbnail")
-        query = query.leftJoinAndSelect("party.wishList", "wishList")
+        console.log(query)
+        query = query.leftJoinAndSelect('party.thumbnail', 'thumbnail')
+                    .leftJoinAndSelect('party.wishList', 'wishList')
+                    .where('party.deletedAt IS NULL')
+                    .andWhere('party.status = :status', { status: '모집중' });
 
         if (!isNaN(date.getTime())) {
             let month = date.getMonth() + 1 < 10 ? `0${(date.getMonth()+1).toString()}` : (date.getMonth()+1).toString()
@@ -45,7 +48,7 @@ export class PartyService {
         if (title) {
           query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
         }
-      
+
         const result = await query.getMany();
         return result
       }

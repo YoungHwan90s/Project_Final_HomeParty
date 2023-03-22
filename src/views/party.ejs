@@ -67,19 +67,27 @@
         });
     });
 
-    $('#partyWhen').click(function () {
-        $('#clearButton').show();
-    });
+$("#partyWhen").click(function() {
+    $("#clearButton").show();
+  });
+  
+$("#clearButton").click(function() {
+    $("#partyWhen").val("");
+    $(this).hide();
+});
+$(document).click(function(e) {
+    if ($(e.target).attr('id') === 'partyWhen') {
+        return
+    }
+    if ($('#partyWhen').hasClass('active')) {
+        $('#clearButton').hide();
+    }
+})
 
-    $('#clearButton').click(function () {
-        $('#partyWhen').val('');
-        $(this).hide();
-    });
-
-    function partySearch() {
-        const address = $('#partyWhere').val();
-        const date = $('#partyWhen').val();
-        const title = $('#partyName').val();
+function partySearch(userId) {
+    const address = $('#partyWhere').val()
+    const date = $('#partyWhen').val()
+    const title = $('#partyName').val()
 
         let webUrl = '/party?';
         if (address) {
@@ -104,21 +112,17 @@
 
                 $('.partyList').empty();
 
-                for (let i = 0; i < partyList.length; i++) {
-                    const partyId = partyList[i]['id'];
-                    const title = partyList[i]['title'];
-                    const maxMember = partyList[i]['maxMember'];
-                    const currMember = partyList[i]['currMember'];
-                    const thumbnails = partyList[i]['thumbnail'];
-                    const isoDate = partyList[i]['date'];
-                    const status = partyList[i]['status'];
-                    const thumbnailList = partyList[i]['thumbnail'];
-                    const wishList = partyList[i]['wishList'];
+            for (let i = 0; i < partyList.length; i++) {
+                const partyId = partyList[i]['id'];
+                const title = partyList[i]['title'];
+                const maxMember = partyList[i]['maxMember'];
+                const currMember = partyList[i]['currMember'];
+                const thumbnails = partyList[i]['thumbnail'];
+                const date = partyList[i]['date'];
+                const status = partyList[i]['status'];
+                const thumbnailList = partyList[i]['thumbnail'];
+                const wishList = partyList[i]['wishList'];
 
-                    const year = isoDate.substr(0, 4);
-                    const month = isoDate.substr(5, 2);
-                    const day = isoDate.substr(8, 2);
-                    const date = `${year}-${month}-${day}`;
 
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,

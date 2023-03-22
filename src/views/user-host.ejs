@@ -25,8 +25,7 @@ $(document).ready(function () {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
-            success: function (response) {
-                
+            success: function (response) {                
                 response.forEach( member => {
                 
                 const {
