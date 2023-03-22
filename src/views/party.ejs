@@ -112,10 +112,11 @@ function partySearch(userId) {
                 const maxMember = partyList[i]['maxMember'];
                 const currMember = partyList[i]['currMember'];
                 const thumbnails = partyList[i]['thumbnail'];
-                const isoDate = partyList[i]['date'];
+                const date = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
                 const wishList = partyList[i]['wishList'];
+
 
                 const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
                 
@@ -235,15 +236,10 @@ function getParties(userId) {
                 const maxMember = partyList[i]['maxMember'];
                 const currMember = partyList[i]['currMember'];
                 const thumbnails = partyList[i]['thumbnail'];
-                const isoDate = partyList[i]['date'];
+                const date = partyList[i]['date'];
                 const status = partyList[i]['status'];
                 const thumbnailList = partyList[i]['thumbnail'];
                 const wishList = partyList[i]['wishList'];
-
-                const year = isoDate.substr(0, 4);
-                const month = isoDate.substr(5, 2);
-                const day = isoDate.substr(8, 2);
-                const date = `${year}-${month}-${day}`;
 
                 const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
                 
