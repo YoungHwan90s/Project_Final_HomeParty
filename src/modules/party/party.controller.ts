@@ -39,8 +39,8 @@ export class PartyController {
 
     // 파티 목록 조회
     @Get('/list')
-    async getParties() {
-        return await this.partyService.getParties();
+    async getParties(@Query('page') page: number): Promise<Party[]>  {
+        return await this.partyService.getParties(page);
     }
 
     //파티 상세 조회

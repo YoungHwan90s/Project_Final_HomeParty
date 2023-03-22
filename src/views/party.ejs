@@ -3,63 +3,69 @@
         <h2 class="a11yHidden">파티 검색</h2>
 
         <form class="partySearchForm" onsubmit="preventSubmit(event)">
-          <fieldset>
-            <legend class="a11yHidden">파티 검색 폼</legend>
-            <input
-              type="text"
-              name="partyWhere"
-              placeholder="어디에서"
-              class="partyWhere"
-              id="partyWhere"
-            />
+            <fieldset>
+                <legend class="a11yHidden">파티 검색 폼</legend>
+                <input
+                    type="text"
+                    name="partyWhere"
+                    placeholder="어디에서"
+                    class="partyWhere"
+                    id="partyWhere"
+                />
 
-            <div class="divider" aria-hidden="true"></div>
+                <div class="divider" aria-hidden="true"></div>
 
-            <div class="partyWhen">
-              <div class="datePickerWrapper">
-                <input type="text" id="partyWhen" class="datePicker" placeholder="Select date" readonly />
-                <div class="calendar"></div>
-              </div>
-              <button id="clearButton" style="display: none; background-color: white; border: none;">❌</button>
-            </div>
+                <div class="partyWhen">
+                    <div class="datePickerWrapper">
+                        <input
+                            type="text"
+                            id="partyWhen"
+                            class="datePicker"
+                            placeholder="Select date"
+                            readonly
+                        />
+                        <div class="calendar"></div>
+                    </div>
+                    <button id="clearButton" style="display: none">❌</button>
+                </div>
 
-            <div class="divider" aria-hidden="true"></div>
+                <div class="divider" aria-hidden="true"></div>
 
-            <input
-              type="text"
-              name="partyName"
-              placeholder="파티명"
-              class="partyName"
-              id="partyName"
-            />
+                <input
+                    type="text"
+                    name="partyName"
+                    placeholder="파티명"
+                    class="partyName"
+                    id="partyName"
+                />
 
-            <button
-              onclick="partySearch()"
-              class="partySubmitButton"
-              aria-label="파티 검색하기 버튼"
-            >
-              <i class="bx bx-search" aria-hidden="true"></i>
-            </button>
-          </fieldset>
+                <button
+                    onclick="partySearch()"
+                    class="partySubmitButton"
+                    aria-label="파티 검색하기 버튼"
+                >
+                    <i class="bx bx-search" aria-hidden="true"></i>
+                </button>
+            </fieldset>
         </form>
-      </header>
+    </header>
     <div class="mainSection">
         <ul class="partyList partyGrid"></ul>
     </div>
 </main>
 
 <script>
-
-$(document).ready(function () {
-    getMyInfo(function (userInfo) {
-        if (userInfo) {
-            let userId = userInfo.id
-            getParties(userId)
-        } else {
-            getParties(0)
-        }
+    $(document).ready(function () {
+        let page = 1;
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                let userId = userInfo.id;
+                getParties(userId, page);
+            } else {
+                getParties(0 , page);
+            }
+        });
     });
-});
 
 $("#partyWhen").click(function() {
     $("#clearButton").show();
@@ -83,28 +89,28 @@ function partySearch(userId) {
     const date = $('#partyWhen').val()
     const title = $('#partyName').val()
 
-    let webUrl = '/party?';
-    if (address) {
-        webUrl += `address=${address}&`
-    }
-    if (date) {
-        webUrl += `date=${date}&`
-    }
-    if (title) {
-        webUrl += `title=${title}&`
-    }
-    webUrl = webUrl.slice(0, -1)
+        let webUrl = '/party?';
+        if (address) {
+            webUrl += `address=${address}&`;
+        }
+        if (date) {
+            webUrl += `date=${date}&`;
+        }
+        if (title) {
+            webUrl += `title=${title}&`;
+        }
+        webUrl = webUrl.slice(0, -1);
 
-    $.ajax({
-        type: 'GET',
-        url: `/api${webUrl}`,
-        data: {},
-        success: function(response) {
-            history.pushState({ data: 'response.result' }, null, `${webUrl}`)
+        $.ajax({
+            type: 'GET',
+            url: `/api${webUrl}`,
+            data: {},
+            success: function (response) {
+                history.pushState({ data: 'response.result' }, null, `${webUrl}`);
 
-            let partyList = response.result
+                let partyList = response.result;
 
-            $('.partyList').empty()
+                $('.partyList').empty();
 
             for (let i = 0; i < partyList.length; i++) {
                 const partyId = partyList[i]['id'];
@@ -118,10 +124,12 @@ function partySearch(userId) {
                 const wishList = partyList[i]['wishList'];
 
 
-                const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
-                
-                //prettier-ignore
-                const thumbnailHtml = `
+                    const isWishListMatchWithParty = wishList.find(
+                        (party) => party.userId === userId,
+                    );
+
+                    //prettier-ignore
+                    const thumbnailHtml = `
                     ${thumbnailList.length === 0 
                         ?  `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
@@ -145,7 +153,7 @@ function partySearch(userId) {
                         `).join('')
                     }`;
 
-                const partyItem = `
+                    const partyItem = `
                     <li class="partyItem">
                         <div class="thumbnailWrapper carousel">
                             <a href="party/${partyId}" class="partyLink thumbnailLink">
@@ -201,50 +209,51 @@ function partySearch(userId) {
                                 </div>
                             </dl>
                         </a>
-                        ${isWishListMatchWithParty ? 
-                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                        ${
+                            isWishListMatchWithParty
+                                ? `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red";></i>
-                        </button>` :
-                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                        </button>`
+                                : `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
                         </button>`
                         }
                     </li>
                 `;
 
-                $('.partyList').append(partyItem);
-            }
-            [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
-                new Carousel($carousel);
-            });
-            
-        }
-    })
-}
+                    $('.partyList').append(partyItem);
+                }
+                [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
+                    new Carousel($carousel);
+                });
+            },
+        });
+    }
+    
+    function getParties(userId,page) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/party/list?page=${page}`,
+            data: {},
+            success: function (response) {
+                let partyList = response;
+                for (let i = 0; i < partyList.length; i++) {
+                    const partyId = partyList[i]['id'];
+                    const title = partyList[i]['title'];
+                    const maxMember = partyList[i]['maxMember'];
+                    const currMember = partyList[i]['currMember'];
+                    const thumbnails = partyList[i]['thumbnail'];
+                    const date = partyList[i]['date'];
+                    const status = partyList[i]['status'];
+                    const thumbnailList = partyList[i]['thumbnail'];
+                    const wishList = partyList[i]['wishList'];
 
-function getParties(userId) {
-    $.ajax({
-        type: 'GET',
-        url: `/api/party/list/`,
-        data: {},
-        success: function (response) {
-            let partyList = response;
-            
-            for (let i = 0; i < partyList.length; i++) {
-                const partyId = partyList[i]['id'];
-                const title = partyList[i]['title'];
-                const maxMember = partyList[i]['maxMember'];
-                const currMember = partyList[i]['currMember'];
-                const thumbnails = partyList[i]['thumbnail'];
-                const date = partyList[i]['date'];
-                const status = partyList[i]['status'];
-                const thumbnailList = partyList[i]['thumbnail'];
-                const wishList = partyList[i]['wishList'];
+                    const isWishListMatchWithParty = wishList.find(
+                        (party) => party.userId === userId,
+                    );
 
-                const isWishListMatchWithParty = wishList.find((party) => party.userId === userId)
-                
-                //prettier-ignore
-                const thumbnailHtml = `
+                    //prettier-ignore
+                    const thumbnailHtml = `
                     ${thumbnailList.length === 0 
                         ?  `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
@@ -268,7 +277,7 @@ function getParties(userId) {
                         `).join('')
                     }`;
 
-                const partyItem = `
+                    const partyItem = `
                     <li class="partyItem">
                         <div class="thumbnailWrapper carousel">
                             <a href="party/${partyId}" class="partyLink thumbnailLink">
@@ -324,25 +333,45 @@ function getParties(userId) {
                                 </div>
                             </dl>
                         </a>
-                        ${isWishListMatchWithParty ? 
-                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                        ${
+                            isWishListMatchWithParty
+                                ? `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red";></i>
-                        </button>` :
-                        `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
+                        </button>`
+                                : `<button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 목록에 추가 버튼">
                             <i id="likeOrNot${partyId}" class="fa-regular fa-heart"></i>
                         </button>`
                         }
                     </li>
                 `;
 
-                $('.partyList').append(partyItem);
-            }
-            [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
-                new Carousel($carousel);
-            });
-        },
+                    $('.partyList').append(partyItem);
+                }
+                [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
+                    new Carousel($carousel);
+                });
+            },
+        });
+    }
+    
+    window.addEventListener('scroll', () => {
+        // 문서의 총 높이
+        const totalHeight = document.documentElement.scrollHeight;
+
+        // 브라우저 창의 높이
+        const windowHeight = window.innerHeight;
+
+        // 스크롤된 거리
+        const scrollDistance = window.scrollY;
+
+        // 스크롤이 문서의 하단에 도달했는지 확인
+        if (scrollDistance + windowHeight >= totalHeight) {
+            // 페이지 번호 증가
+            page++;
+            getParties(page);
+        }
     });
-}
+
     function updateWishList(partyId) {
         $.ajax({
             type: 'POST',
@@ -354,20 +383,21 @@ function getParties(userId) {
             },
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-regular', 'fa-solid');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
                 } else {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-solid', 'fa-regular');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = '';
                 }
             },
             error: function (error) {
-                customAlert(
-                    error.responseJSON.message,
-                    function () {
-                        window.location.reload();
-                    },
-                );
+                customAlert(error.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     }
