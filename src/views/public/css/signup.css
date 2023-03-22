@@ -16,9 +16,6 @@
 .light {
     font-weight: 300
 }
-#header img{
-   width : auto
-}
 
 #container-signup, #footer, #header {
     margin: 0 15px;
