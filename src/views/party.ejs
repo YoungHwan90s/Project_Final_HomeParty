@@ -20,7 +20,7 @@
                 <input type="text" id="partyWhen" class="datePicker" placeholder="Select date" readonly />
                 <div class="calendar"></div>
               </div>
-              <button id="clearButton" style="display: none;">❌</button>
+              <button id="clearButton" style="display: none; background-color: white; border: none;">❌</button>
             </div>
 
             <div class="divider" aria-hidden="true"></div>
@@ -69,6 +69,14 @@ $("#clearButton").click(function() {
     $("#partyWhen").val("");
     $(this).hide();
 });
+$(document).click(function(e) {
+    if ($(e.target).attr('id') === 'partyWhen') {
+        return
+    }
+    if ($('#partyWhen').hasClass('active')) {
+        $('#clearButton').hide();
+    }
+})
 
 function partySearch(userId) {
     const address = $('#partyWhere').val()
