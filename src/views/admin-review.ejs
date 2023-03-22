@@ -18,6 +18,12 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Reviews DataTables</h6>
+            <body>
+                <section>
+                    <input id="searchInput" type="text" placeholder="이름으로 검색" />
+                    <button id="searchButton" type="button">검색</button>
+                </section>
+            </body>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -53,6 +59,8 @@
     </div>
 </main>
 <script>
+    let reviewList
+    
     $.ajax({
         type: 'GET',
         url: `/admin/review`,
@@ -62,6 +70,8 @@
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
+            reviewList = name
+            
             let count = 0;
             for (let i = 0; i < response.length; i++) {
                 const {
@@ -76,8 +86,8 @@
                     updatedAt,
                     deletedAt,
                 } = response[i];
-                let name = response[i].user.name;
-
+                name = response[i].user.name;
+                
                 if (deletedAt === null) {
                     const createdate = new Date();
                     const year = createdate.getFullYear();
@@ -106,6 +116,56 @@
             }
         },
     });
+
+
+    $('#searchButton').on('click', function () {
+    $('#reviewTable').empty();
+    const searchValue = $('#searchInput').val();
+    console.log(reviewList);
+    reviewList = reviewList.filter((review) => review === searchValue)
+    let count = 0;
+    for (let i = 0; i < reviewList.length; i++) {
+                const {
+                    id: reviewId,
+                    userId,
+                    partyId,
+                    party,
+                    user,
+                    rating,
+                    review,
+                    createdAt,
+                    updatedAt,
+                    deletedAt,
+                } = reviewList[i];
+                let name = reviewList[i].user.name;
+
+                if (deletedAt === null) {
+                    const createdate = new Date();
+                    const year = createdate.getFullYear();
+                    const month = ('0' + (createdate.getMonth() + 1)).slice(-2);
+                    const day = ('0' + createdate.getDate()).slice(-2);
+
+                    const update = new Date();
+                    const updateYear = update.getFullYear();
+                    const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+                    const updateDay = ('0' + update.getDate()).slice(-2);
+
+                    const reviewTable = `<tr>
+                            <td>${count + 1}</td>
+                            <td><a href="/user-detail/${userId}">${name}</a></td>
+                            <td>${rating}</td>
+                            <td>${review}</td>
+                            <td><a href="/party/${partyId}">파티확인하기</a></td>
+                            <td>${year}-${month}-${day}</td>
+                            <td>${updateYear}-${updateMonth}-${updateDay}</td>
+                            <td><button type="button" onclick="deleteReviewByAdmin(${reviewId})" class="btn btn-danger">Delete</button></td>
+                        </tr>`;
+
+                    $('#reviewTable').append(reviewTable);
+                    count++;
+                }
+            }
+    })
 
     function deleteReviewByAdmin(reviewId) {
         const result = confirm('해당 리뷰를 삭제하시겠습니까?');

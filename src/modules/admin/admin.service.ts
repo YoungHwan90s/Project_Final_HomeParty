@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { async } from 'rxjs';
-import { Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { Party } from '../party/entity/party.entity';
 import { Tag } from '../party/entity/tag.entity';
 import { Thumbnail } from '../party/entity/thumbnail.entity';
@@ -19,6 +19,12 @@ export class AdminService {
 
     async getUsersAdmin() {
         return await this.userRepository.find({ withDeleted: true });
+    }
+
+    async searchUserAdmin(name: string){
+        return await this.userRepository.find({
+            where: { name: ILike(`%${name}%`) }
+        })  
     }
 
     async deletedUserAdmin(userId: number) {

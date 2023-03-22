@@ -16,7 +16,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Users DataTables</h6>
             <body>
                 <section>
-                    <input id="searchInput" type="text" placeholder="이름으로 검색">
+                    <input id="searchInput" type="text" placeholder="이름으로 검색" />
                     <button id="searchButton" type="button">검색</button>
                 </section>
             </body>
@@ -55,20 +55,19 @@
     </div>
 </main>
 <script>
-    function searchUsers() {
-  const searchInput = $('#searchInput').val();
+    let userList;
     $.ajax({
         type: 'GET',
-        url: `/admin/users?search=${searchInput}`,
+        url: `/admin/users`,
         data: {},
         headers: {
             authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
         },
         success: function (response) {
-            const userList = response.users;
+            userList = response.users;
+            console.log(response);
             let count = 0;
-            $('#userTables').empty(); // 기존 테이블을 지우고
             for (let i = 0; i < userList.length; i++) {
                 const {
                     id: userId,
@@ -110,8 +109,75 @@
             }
         },
     });
-    }
-    $('#searchButton').click(searchUsers);
+
+
+   
+    $('#searchButton').click(function() {
+        var name = $('#searchInput').val();
+        userList = userList.filter((user) => user.name === name);
+        console.log(name);
+        $.ajax({
+            url: '/users/search',
+            type: 'GET',
+            data: { name: name },
+            success: function(data) {
+                // 검색 결과를 처리하는 코드 작성
+            },
+            error: function() {
+                alert('해당 단어를 찾을수 없습니다.')
+            }
+        });
+    });
+
+
+
+
+
+    // $('#searchButton').on('click', function () {
+    //     $('#userTables').empty();
+    //     const searchValue = $('#searchInput').val();
+    //     userList = userList.filter((user) => user.name === searchValue);
+    //     let count = 0;
+    //     for (let i = 0; i < userList.length; i++) {
+    //         const {
+    //             id: userId,
+    //             name,
+    //             sex,
+    //             phone,
+    //             address,
+    //             createdAt,
+    //             updatedAt,
+    //             deletedAt,
+    //         } = userList[i];
+
+    //         if (deletedAt === null) {
+    //             const createdate = new Date();
+    //             const year = createdate.getFullYear();
+    //             const month = ('0' + (createdate.getMonth() + 1)).slice(-2);
+    //             const day = ('0' + createdate.getDate()).slice(-2);
+
+    //             const update = new Date();
+    //             const updateYear = update.getFullYear();
+    //             const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+    //             const updateDay = ('0' + update.getDate()).slice(-2);
+
+    //             const tagTable = `
+    //                 <tr>
+    //                         <td>${count + 1}</td>
+    //                         <td><a href="/user-detail/${userId}">${name}</a></td>
+    //                         <td>${sex}</td>
+    //                         <td>${phone}</td>
+    //                         <td>${address}</td>
+    //                         <td>${year}-${month}-${day}</td>
+    //                         <td>${updateYear}-${updateMonth}-${updateDay}</td>
+    //                         <td><button type="button" onclick="deleteUserByAdmin(${userId})" class="btn btn-danger">탈퇴하기</button></td>
+    //                     </tr>
+    //                 `;
+    //             $('#userTables').append(tagTable);
+    //             count++;
+    //         }
+    //     }
+    // });
     function deleteUserByAdmin(userId) {
         const result = confirm('회원삭제 하시겠습니까?');
         if (result) {

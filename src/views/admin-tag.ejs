@@ -18,6 +18,12 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Tags DataTables</h6>
+            <body>
+                <section>
+                    <input id="searchInput" type="text" placeholder="이름으로 검색" />
+                    <button id="searchButton" type="button">검색</button>
+                </section>
+            </body>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -46,6 +52,7 @@
         </div>
     </div>
     <script>
+        let tagList
         $(document).ready(() => {
             $.ajax({
                 type: 'GET',
@@ -56,6 +63,7 @@
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
                 success: function (response) {
+                    tagList = response
                     for (let i = 0; i < response.length; i++) {
                         const { tagId, id, tagName, freq, createdAt } = response[i];
                         let tagid = i + 1;
@@ -82,6 +90,35 @@
                 },
             });
         });
+
+    $('#searchButton').on('click', function () {
+    $('#tagTables').empty();
+    const searchValue = $('#searchInput').val();
+    tagList = tagList.filter((tag) => tag.tagName === searchValue)
+    for (let i = 0; i < tagList.length; i++) {
+                        const { tagId, id, tagName, freq, createdAt } = tagList[i];
+                        let tagid = i + 1;
+                        let Id = tagList[i].id;
+                        let tagNames = tagList[i].tagName;
+                        let Freq = tagList[i].freq;
+                        let createDate = new Date(tagList[i].createdAt);
+
+                        const year = createDate.getFullYear();
+                        const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                        const day = ('0' + createDate.getDate()).slice(-2);
+                        const tagTable = `
+                    <tr>
+                            <td>${tagid}</td>
+                            <td>${tagNames}</td>
+                            <td>${Freq}</td>
+                            <td>${year}-${month}-${day}</td>
+                            <td><button type="button" id = "deleteTag(${Id})" onclick="deleteTag(${Id})" class="btn btn-danger">Delete</button></td>s
+                        </tr>
+                    `;
+
+                        $('#tagTables').append(tagTable);
+                    }
+        })
 
         function deleteTag(tagId) {
             const result = confirm('해당 태그를 삭제하시겠습니까?');

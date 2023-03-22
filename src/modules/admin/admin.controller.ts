@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpCode, Param, Res, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, Param, Query, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminService } from './admin.service';
 
@@ -12,6 +12,12 @@ export class AdminController {
     async getUserAdmin(@Res() res) {
         const users = await this.adminService.getUsersAdmin();
         return res.json({ users });
+    }
+
+    @Get('/users/search')
+    @HttpCode(200)
+    async searchUserAdmin(@Query('name') name: string) {
+        return await this.adminService.searchUserAdmin(name);
     }
 
     // @UseGuards(JwtAuthGuard)
