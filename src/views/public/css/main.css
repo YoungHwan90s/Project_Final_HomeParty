@@ -365,6 +365,7 @@ img {
 /* Show menu */
 .show-menu {
   right: 0;
+  background-color: #000;
 }
 
 /* Change background header */
