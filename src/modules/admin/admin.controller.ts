@@ -19,8 +19,7 @@ export class AdminController {
     // @UseGuards(JwtAuthGuard)
     @Get('/users')
     @HttpCode(200)
-    async getUserAdmin(@Query() query) {
-        const { page } = query;
+    async getUserAdmin(@Query('page') page: number) {
         return await this.adminService.getUsersAdmin(page);
     }
      // 유저 검색
@@ -46,8 +45,7 @@ export class AdminController {
     // @UseGuards(JwtAuthGuard)
     @Get('/review')
     @HttpCode(200)
-    async getReviewAdmin(@Query() query) {
-        const { page } = query;
+    async getReviewAdmin(@Query('page') page: number) {
         return await this.adminService.getReviewAdmin(page);
     }
 
@@ -71,8 +69,7 @@ export class AdminController {
     // // 파티 조회
     @Get('/praties')
     @HttpCode(200)
-    async getPartyAdmin(@Query() query) {
-        const { page } = query;
+    async getPartyAdmin(@Query('page') page: number) {
         return await this.adminService.getPartyAdmin(page);
     }
 
@@ -96,8 +93,7 @@ export class AdminController {
     // // 태그 조회
     @Get('tags')
     @HttpCode(200)
-    async readtag(@Query() query) {
-        const { page } = query;
+    async readtag(@Query('page') page: number) {
         return this.adminService.readtag(page);
     }
 
