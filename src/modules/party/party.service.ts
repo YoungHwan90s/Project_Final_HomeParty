@@ -50,10 +50,12 @@ export class PartyService {
         return result
       }
 
-    async getParties(): Promise<Party[]> {
+    async getParties(page): Promise<Party[]> {
         return await this.partyRepository.find({
             where: { deletedAt: null, status: '모집중' },
             relations: ['thumbnail', 'wishList'],
+            take: 12,
+            skip: (page - 1) * 12,
         });
     }
 
