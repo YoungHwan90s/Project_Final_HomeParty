@@ -17,28 +17,88 @@ export class AdminService {
         @InjectRepository(Party) private partyRepository: Repository<Party>,
     ) {}
 
-    async getUsersAdmin() {
-        return await this.userRepository.find({ withDeleted: true });
+    async getUsersAdmin(page: number) {
+        const users = await this.userRepository.findAndCount({
+            withDeleted: true,
+            skip: (page - 1) * 5,
+            take: 5,
+        });
+
+        const totalCount = users[1];
+        // 총 페이지 수 : 한 페이지당 5개씩
+        let totalPage = Math.ceil(totalCount / 5);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { users, totalCount, firstPage, lastPage, totalPage };
     }
 
     async deletedUserAdmin(userId: number) {
         return await this.userRepository.softDelete(userId);
     }
 
-    async readtag(): Promise<Tag[]> {
-        const tags = await this.tagRepository.find();
-        return tags;
+    async readtag(page: number) {
+        const tags = await this.tagRepository.findAndCount({
+            skip: (page - 1) * 5,
+            take: 5,
+        });
+
+        const totalCount = tags[1];
+        // 총 페이지 수 : 한 페이지당 5개씩
+        let totalPage = Math.ceil(totalCount / 5);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { tags, totalCount, firstPage, lastPage, totalPage };
     }
 
     async deletetag(tagid: number) {
         return await this.tagRepository.softDelete(tagid);
     }
 
-    async getPartyAdmin(): Promise<Party[]> {
-        return await this.partyRepository.find({
+    async getPartyAdmin(page: number) {
+        const parties = await this.partyRepository.findAndCount({
             relations: ['thumbnail'],
             order: { date: 'DESC' },
+            skip: (page - 1) * 5,
+            take: 5,
         });
+
+        const totalCount = parties[1];
+        let totalPage = Math.ceil(totalCount / 5);
+        let pageGroup = Math.ceil(page / 5);
+        let lastPage = pageGroup * 5;
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { parties, totalCount, firstPage, lastPage, totalPage };
     }
 
     async deletedPartyAdmin(partyId: number) {
@@ -50,17 +110,29 @@ export class AdminService {
         return await this.partyRepository.softRemove(party);
     }
 
-    async getReviewAdmin(): Promise<Review[]> {
-        return await this.reviewRepository.find({
+    async getReviewAdmin(page: number) {
+        const reviews = await this.reviewRepository.findAndCount({
             relations: ['party', 'user'],
             order: { partyId: 'DESC' },
             withDeleted: true,
+            skip: (page - 1) * 5,
+            take: 5,
         });
+
+        const totalCount = reviews[1];
+        let totalPage = Math.ceil(totalCount / 5);
+        let pageGroup = Math.ceil(page / 5);
+        let lastPage = pageGroup * 5;
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        return { reviews, totalCount, firstPage, lastPage, totalPage };
     }
 
     async deletedReviewAdmin(reviewId: number) {
         return await this.reviewRepository.softDelete(reviewId);
-       
     }
-
 }
