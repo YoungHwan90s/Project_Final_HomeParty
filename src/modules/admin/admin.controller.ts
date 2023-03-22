@@ -1,4 +1,14 @@
-import { Controller, Delete, Get, HttpCode, Param, Query, Res, UseGuards } from '@nestjs/common';
+import {
+    ConsoleLogger,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Param,
+    Query,
+    Res,
+    UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminService } from './admin.service';
 
@@ -9,9 +19,9 @@ export class AdminController {
     // @UseGuards(JwtAuthGuard)
     @Get('/users')
     @HttpCode(200)
-    async getUserAdmin(@Res() res) {
-        const users = await this.adminService.getUsersAdmin();
-        return res.json({ users });
+    async getUserAdmin(@Query() query) {
+        const { page } = query;
+        return await this.adminService.getUsersAdmin(page);
     }
 
     @Get('/users/search')
@@ -19,6 +29,7 @@ export class AdminController {
     async searchUserAdmin(@Query('name') name: string) {
         return await this.adminService.searchUserAdmin(name);
     }
+
 
     // @UseGuards(JwtAuthGuard)
     @Delete('/users/:userId')
@@ -32,8 +43,9 @@ export class AdminController {
     // @UseGuards(JwtAuthGuard)
     @Get('/review')
     @HttpCode(200)
-    async getReviewAdmin() {
-        return await this.adminService.getReviewAdmin();
+    async getReviewAdmin(@Query() query) {
+        const { page } = query;
+        return await this.adminService.getReviewAdmin(page);
     }
     // 리뷰 삭제
     @Delete('/review/:reviewId')
@@ -45,8 +57,9 @@ export class AdminController {
     // // 파티 조회
     @Get('/praties')
     @HttpCode(200)
-    async getPartyAdmin() {
-        return await this.adminService.getPartyAdmin();
+    async getPartyAdmin(@Query() query) {
+        const { page } = query;
+        return await this.adminService.getPartyAdmin(page);
     }
 
     // 파티 삭제
@@ -59,8 +72,9 @@ export class AdminController {
     // // 태그 조회
     @Get('tags')
     @HttpCode(200)
-    async readtag() {
-        return this.adminService.readtag();
+    async readtag(@Query() query) {
+        const { page } = query;
+        return this.adminService.readtag(page);
     }
 
     // 태그 삭제

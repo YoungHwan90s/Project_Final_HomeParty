@@ -153,8 +153,8 @@
                             <h3 class="a11yHidden">달력</h3>
                             <div class="calendar"></div>
                             <div class="calendarButtonWrapper">
-                                <button type="button" class="btn_primary btn_point" onclick="applyParty(${userId}, ${partyId})">파티신청</button
-                                ><button type="button" class="btn_primary" onclick="cancelParty(${userId}, ${partyId})">신청취소</button>
+                                ${hostId === userId ? "" : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${userId}, ${partyId})">파티신청</button
+                                ><button type="button" class="btn_primary" onclick="cancelParty(${userId}, ${partyId})">신청취소</button>` }
                             </div>
                         </section>
 

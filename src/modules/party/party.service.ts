@@ -6,7 +6,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { Between, DataSource, DeleteResult, Like, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -15,6 +15,7 @@ import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { Cron } from '@nestjs/schedule';
+import { string } from 'joi';
 
 @Injectable()
 export class PartyService {
@@ -23,6 +24,31 @@ export class PartyService {
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
         private readonly dataSource: DataSource,
     ) {}
+
+    async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
+        let query = this.partyRepository.createQueryBuilder("party");
+
+        query = query.leftJoinAndSelect("party.thumbnail", "thumbnail")
+        query = query.leftJoinAndSelect("party.wishList", "wishList")
+
+        if (!isNaN(date.getTime())) {
+            let month = date.getMonth() + 1 < 10 ? `0${(date.getMonth()+1).toString()}` : (date.getMonth()+1).toString()
+            let day = date.getDate() < 10 ? `0${date.getDate().toString()}` : date.getDate().toString()
+            const year = date.getFullYear().toString()
+            
+            const dateStr = `${year}-${month}-${day}`
+          query = query.andWhere(`party.date= :date`, { date: dateStr });
+        }
+        if (address) {
+          query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
+        }
+        if (title) {
+          query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
+        }
+      
+        const result = await query.getMany();
+        return result
+      }
 
     async getParties(): Promise<Party[]> {
         return await this.partyRepository.find({
@@ -374,5 +400,12 @@ export class PartyService {
                 await this.partyRepository.save(party[i]);
             }
         }
+    }
+
+    async getUserHost(id): Promise<PartyMember[]> {
+        return await this.partyMemberRepository.find({ 
+            where: { deletedAt: null, userId: id, status: "호스트" },
+            relations: ['party','party.thumbnail','party.partyMember'],
+        });
     }
 }

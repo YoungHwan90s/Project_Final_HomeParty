@@ -142,6 +142,7 @@ class Calendar {
           ${isCurrent ? "thisMonth" : "anotherMonth"}
           ${datetime === this.today ? "today" : ""}
           ${datetime === this.selectedDate ? "selected" : ""}
+          ${new Date(datetime) < new Date(this.today) ? 'pastDay' : '' }
         ">${date}</time>
     `;
   }

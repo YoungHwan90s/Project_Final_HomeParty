@@ -5,8 +5,8 @@
             <h1>Parties Page</h1>
         </div>
         <p class="mb-4">
-            이 페이지는 파티를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가
-                    보이면 삭제해주세요.
+            이 페이지는 파티를 관리하는 페이지이므로 부적절한 파티 또는 위험적인 요소가 보이면
+            삭제해주세요.
         </p>
         <div class="horizontal-tabs">
             <a href="/admin-user">User</a>
@@ -41,36 +41,28 @@
                             <th>Delete</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Num</th>
-                            <th>Title</th>
-                            <th>CurrMember</th>
-                            <th>MaxMember</th>
-                            <th>Create</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </tfoot>
                     <tbody id="partyTable"></tbody>
                 </table>
             </div>
         </div>
     </div>
+    <div id="pagination" class="pagination-btn-wrap"></div>
 </main>
 <script>
     $(document).ready(() => {
+        const page = new URLSearchParams(location.search).get('page') || 1;
         $.ajax({
             type: 'GET',
-            url: '/admin/praties',
+            url: `/admin/praties?page=${page}`,
             data: {},
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                let count = 0
-                for (let i = 0; i < response.length; i++) {
+                const { parties, totalCount, firstPage, lastPage, totalPage } = response;
+                let count = 0;
+                for (let i = 0; i < parties[0].length; i++) {
                     const {
                         partyId,
                         id,
@@ -83,21 +75,20 @@
                         createdAt,
                         updatedAt,
                         deletedAt,
-                    } = response[i];
-                    console.log(id);
-                    const createDate = new Date
+                    } = parties[0][i];
+                    const createDate = new Date();
 
                     if (deletedAt === null) {
-                    const year = createDate.getFullYear();
-                    const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
-                    const day = ('0' + createDate.getDate()).slice(-2);
+                        const year = createDate.getFullYear();
+                        const month = ('0' + (createDate.getMonth() + 1)).slice(-2);
+                        const day = ('0' + createDate.getDate()).slice(-2);
 
-                    const update = new Date();
-                    const updateYear = update.getFullYear();
-                    const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
-                    const updateDay = ('0' + update.getDate()).slice(-2);
+                        const update = new Date();
+                        const updateYear = update.getFullYear();
+                        const updateMonth = ('0' + (update.getMonth() + 1)).slice(-2);
+                        const updateDay = ('0' + update.getDate()).slice(-2);
 
-                    const partyItem = `
+                        const partyItem = `
                     <tr>
                             <td>${count + 1}</td>
                             <td><a href="/party/${id}">${title.substring(0, 8)}...</a></td>
@@ -110,10 +101,39 @@
                             <td><button type="button" onclick="deleteParty(${id})" class="btn btn-danger">Delete</button></td>
                         </tr>
                 `;
-                    $('#partyTable').append(partyItem);
-                    count++
+                        $('#partyTable').append(partyItem);
+                        count++;
                     }
                 }
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `
+                    <a href='?page=${Number(page) - 1}'><div class="pagination-btn">이전</div></a>
+                        `;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < totalPage) {
+                    const next = `
+                    <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
+                        `;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
             },
         });
     });

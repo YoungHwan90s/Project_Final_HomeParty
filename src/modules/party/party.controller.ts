@@ -7,10 +7,12 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     Res,
     UseGuards,
 } from '@nestjs/common';
+
 import { DeleteResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -22,6 +24,18 @@ import { PartyService } from './party.service';
 @Controller('/api/party')
 export class PartyController {
     constructor(private readonly partyService: PartyService) {}
+
+    // 파티 검색
+    @Get('/')
+    async searchParties(
+        @Query('date') date: Date,
+        @Query('address') address: string,
+        @Query('title') title: string,
+        @Res() res,
+    ):Promise<Party[]> {
+        const result = await this.partyService.searchParties( date, address, title )
+        return res.send({result});
+    }
 
     // 파티 목록 조회
     @Get('/list')
@@ -97,4 +111,4 @@ export class PartyController {
         const { id: userId } = req.user;
         return await this.partyService.deleteParty(userId, partyId);
     }
-}   
+}
