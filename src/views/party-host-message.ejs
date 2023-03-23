@@ -43,12 +43,12 @@
         created() {
             this.username = prompt('Enter your username:');
 
-            this.socket.chat = io('http://localhost:4000/chat');
+            this.socket.chat = io('/chat');
             this.socket.chat.on('chatToClient', (msg) => {
                 this.receiveChatMessage(msg);
             });
 
-            this.socket.alerts = io('http://localhost:4000/alert');
+            this.socket.alerts = io('/alert');
             this.socket.alerts.on('alertToClient', (msg) => {
                 this.receiveAlertMessage(msg);
             });
