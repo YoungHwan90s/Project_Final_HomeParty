@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MailService {
@@ -16,9 +16,9 @@ export class MailService {
             })
             .then((result) => {
             })
-            // .catch((error) => {
-            //     new ConflictException(error);
-            // });
+            .catch((error) => {
+                new ConflictException(error.message);
+            });
         return true;
     }
 }
