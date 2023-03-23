@@ -2,10 +2,13 @@ name: main branch auto ci process script
 on:
   pull_request:
     branches: [ main ]
+    types: [closed]
+
 jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: excuting remote ssh commands
         uses: appleboy/ssh-action@v0.1.6
