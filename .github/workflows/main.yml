@@ -1,14 +1,11 @@
 name: main branch auto ci process script
-
 on:
-  push:
+  pull_request:
     branches: [ main ]
-
 jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: excuting remote ssh commands
         uses: appleboy/ssh-action@v0.1.6
@@ -24,7 +21,6 @@ jobs:
             npm i --force
             npm run build
             pm2 start dist/main.js
-          
       - name: set up environment variables
         run: |
           echo ${{ secrets.AWS_ACCESS_KEY_ID }} >> $GITHUB_ENV
@@ -70,5 +66,3 @@ jobs:
       S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
       S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
       USEREMAIL: ${{ secrets.USEREMAIL }}
-      
-          
