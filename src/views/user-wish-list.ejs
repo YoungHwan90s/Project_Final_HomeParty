@@ -34,16 +34,11 @@
                 let maxMember = wishList[i]['party']['maxMember'];
                 let currMember = wishList[i]['party']['currMember'];
                 let thumbnails = wishList[i]['party']['thumbnail'];
-                let isoDate = wishList[i]['party']['date'];
+                let date = wishList[i]['party']['date'];
                 let status = wishList[i]['party']['status'];
                 let thumbnail = thumbnails[0];
                 let address = wishList[i]['party']['address'];
                 addresses.push(address);
-
-                const year = isoDate.substr(0, 4);
-                const month = isoDate.substr(5, 2);
-                const day = isoDate.substr(8, 2);
-                const date = `${year}-${month}-${day}`;
 
                 const partyImageHtml =
                   thumbnails.length > 0 
@@ -125,7 +120,6 @@
                       <dt class="a11yHidden">지역</dt>
                       <dd class="partyPlace">
                         <!-- Backend -->
-                        서울
                       </dd>
                       <dt class="a11yHidden">날짜</dt>
                       <dd class="partyDate">
