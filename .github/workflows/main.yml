@@ -41,6 +41,7 @@ jobs:
             export S3_SECRETKEY=$S3_SECRETKEY
             export USEREMAIL=$USEREMAIL
             cd Project_Final_HomeParty/
+            sudo -s
             chmod 644 .git/FETCH_HEAD
             git pull origin main
             pm2 kill
