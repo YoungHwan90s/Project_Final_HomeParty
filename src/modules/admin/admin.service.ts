@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { async } from 'rxjs';
-import { ILike, Like, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Party } from '../party/entity/party.entity';
 import { Tag } from '../party/entity/tag.entity';
-import { Thumbnail } from '../party/entity/thumbnail.entity';
 import { Review } from '../review/entity/review.entity';
 import { User } from '../user/entity/user.entity';
 

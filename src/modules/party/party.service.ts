@@ -6,7 +6,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, DataSource, DeleteResult, Like, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -15,8 +15,6 @@ import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { Cron } from '@nestjs/schedule';
-import { string } from 'joi';
-import { AnyArn } from 'aws-sdk/clients/groundstation';
 
 @Injectable()
 export class PartyService {
