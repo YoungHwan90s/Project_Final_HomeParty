@@ -159,7 +159,6 @@ export class PartyService {
             party.address = data.address;
             party.date = data.date;
 
-            // 썸네일 추가
             if (addThumbnail?.length) {
                 let thumbnailArray = [];
                 for (let i = 0; i < addThumbnail.length; i++) {
@@ -171,7 +170,6 @@ export class PartyService {
                 party.thumbnail = [...party.thumbnail, ...thumbnailArray];
             }
 
-            // 태그 추가
             if (addTagName?.length) {
                 let tagArray = [];
                 for (let i = 0; i < addTagName.length; i++) {
@@ -196,7 +194,6 @@ export class PartyService {
                 party.tag = [...party.tag, ...tagArray];
             }
 
-            // 썸네일 삭제
             if (removeThumbnail?.length) {
                 for (let i = 0; i < removeThumbnail.length; i++) {
                     let removeThumbnailId = removeThumbnail[i]['id'];
@@ -207,7 +204,6 @@ export class PartyService {
                 }
             }
 
-            // 태그 삭제
             if (removeTagName?.length) {
                 for (let i = 0; i < removeTagName.length; i++) {
                     const tag = await queryRunner.manager.findOne(Tag, {
