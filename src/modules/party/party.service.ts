@@ -118,11 +118,9 @@ export class PartyService {
                     thumbnail.thumbnail = partyInfo.thumbnail[i];
                     newThumbnails.push(thumbnail);
                 }
-                // Thumbnail 객체 인스턴스 맵핑
                 party.thumbnail = newThumbnails;
             }
 
-            // PartyMember 객체 인스턴스 맵핑
             const partyMember = new PartyMember();
             partyMember.user = user;
             partyMember.status = '호스트';
