@@ -16,7 +16,7 @@ import { AdminService } from './admin.service';
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('/users')
     @HttpCode(200)
     async getUserAdmin(@Query('page') page: number) {
@@ -33,7 +33,7 @@ export class AdminController {
     }
 
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Delete('/users/:userId')
     @HttpCode(204)
     async deletedUserAdmin(@Res() res, @Param('userId') userId: number) {
@@ -42,7 +42,7 @@ export class AdminController {
     }
 
     // 리뷰 조회
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('/review')
     @HttpCode(200)
     async getReviewAdmin(@Query('page') page: number) {
@@ -50,6 +50,7 @@ export class AdminController {
     }
 
     // 리뷰 검색
+    @UseGuards(JwtAuthGuard)
     @Get('/review/search')
     @HttpCode(200)
     async searchReviewAdmin(
@@ -60,6 +61,7 @@ export class AdminController {
     }
 
     // 리뷰 삭제
+    @UseGuards(JwtAuthGuard)
     @Delete('/review/:reviewId')
     @HttpCode(204)
     async deletedReviewAdmin(@Param('reviewId') reviewId: number) {
@@ -67,6 +69,7 @@ export class AdminController {
     }
 
     // // 파티 조회
+    @UseGuards(JwtAuthGuard)
     @Get('/praties')
     @HttpCode(200)
     async getPartyAdmin(@Query('page') page: number) {
@@ -74,6 +77,7 @@ export class AdminController {
     }
 
     // 파티 검색
+    @UseGuards(JwtAuthGuard)
     @Get('/party/search')
     @HttpCode(200)
     async searchPartyAdmin(
@@ -84,6 +88,7 @@ export class AdminController {
     }
 
     // 파티 삭제
+    @UseGuards(JwtAuthGuard)
     @Delete('/parties/:partyId')
     @HttpCode(204)
     async deletedPartyAdmin(@Param('partyId') partyId: number) {
@@ -91,6 +96,7 @@ export class AdminController {
     }
 
     // // 태그 조회
+    @UseGuards(JwtAuthGuard)
     @Get('tags')
     @HttpCode(200)
     async readtag(@Query('page') page: number) {
@@ -98,6 +104,7 @@ export class AdminController {
     }
 
     // 태그 검색
+    @UseGuards(JwtAuthGuard)
     @Get('/tag/search')
     @HttpCode(200)
     async searchTagAdmin(
@@ -108,6 +115,7 @@ export class AdminController {
     }
 
     // 태그 삭제
+    @UseGuards(JwtAuthGuard)
     @Delete('/tag/:tagId')
     @HttpCode(204)
     async deletetag(@Param('tagId') tagId: number) {
