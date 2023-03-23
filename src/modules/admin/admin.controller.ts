@@ -21,7 +21,7 @@ export class AdminController {
     async getUserAdmin(@Query('page') page: number) {
         return await this.adminService.getUsersAdmin(page);
     }
-     // 유저 검색
+
     @Get('/users/search')
     @HttpCode(200)
     async searchUserAdmin(
@@ -31,7 +31,6 @@ export class AdminController {
         return await this.adminService.searchUserAdmin(page, name);
     }
 
-
     @UseGuards(JwtAuthGuard)
     @Delete('/users/:userId')
     @HttpCode(204)
@@ -40,7 +39,6 @@ export class AdminController {
         return res.json({ removedId: deleteUser });
     }
 
-    // 리뷰 조회
     @UseGuards(JwtAuthGuard)
     @Get('/review')
     @HttpCode(200)
@@ -48,7 +46,6 @@ export class AdminController {
         return await this.adminService.getReviewAdmin(page);
     }
 
-    // 리뷰 검색
     @UseGuards(JwtAuthGuard)
     @Get('/review/search')
     @HttpCode(200)
@@ -59,7 +56,6 @@ export class AdminController {
         return await this.adminService.searchReviewAdmin(page, review);
     }
 
-    // 리뷰 삭제
     @UseGuards(JwtAuthGuard)
     @Delete('/review/:reviewId')
     @HttpCode(204)
@@ -67,7 +63,6 @@ export class AdminController {
         return await this.adminService.deletedReviewAdmin(reviewId);
     }
 
-    // // 파티 조회
     @UseGuards(JwtAuthGuard)
     @Get('/praties')
     @HttpCode(200)
@@ -75,7 +70,6 @@ export class AdminController {
         return await this.adminService.getPartyAdmin(page);
     }
 
-    // 파티 검색
     @UseGuards(JwtAuthGuard)
     @Get('/party/search')
     @HttpCode(200)
@@ -86,7 +80,6 @@ export class AdminController {
         return await this.adminService.searchPartyAdmin(page, name);
     }
 
-    // 파티 삭제
     @UseGuards(JwtAuthGuard)
     @Delete('/parties/:partyId')
     @HttpCode(204)
@@ -94,7 +87,6 @@ export class AdminController {
         return await this.adminService.deletedPartyAdmin(partyId);
     }
 
-    // // 태그 조회
     @UseGuards(JwtAuthGuard)
     @Get('tags')
     @HttpCode(200)
@@ -102,7 +94,6 @@ export class AdminController {
         return this.adminService.readtag(page);
     }
 
-    // 태그 검색
     @UseGuards(JwtAuthGuard)
     @Get('/tag/search')
     @HttpCode(200)
@@ -113,7 +104,6 @@ export class AdminController {
         return await this.adminService.searchTagAdmin(page, name);
     }
 
-    // 태그 삭제
     @UseGuards(JwtAuthGuard)
     @Delete('/tag/:tagId')
     @HttpCode(204)
