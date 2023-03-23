@@ -22,13 +22,7 @@ import { CacheService } from '../../util/cache/cache.service';
 import { AuthenticateCodeDto } from './dto/authenticate-code.dto';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
-import {
-    createUserSchema,
-    findEmailSchema,
-    findPasswordSchema,
-    loginSchema,
-    updatePasswordSchema,
-} from 'src/util/joi/joi-validation';
+import { createUserSchema, findEmailSchema, findPasswordSchema, loginSchema, updatePasswordSchema } from 'src/util/joi/joi-validation';
 import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
 import { UpdateResult } from 'typeorm';
 import { User } from 'aws-sdk/clients/budgets';
@@ -50,9 +44,11 @@ export class AuthController {
     @Post('/login')
     @UsePipes(new JoiValidationPipe(loginSchema))
     @HttpCode(200)
-    async login(@Req() req): Promise<Token> {
-        const user = req.user;
-        return await this.authService.login(user);
+    async login(@Req() req, @Res() res): Promise<Token> {
+        const user = req.user
+        const { accessToken, refreshToken } = await this.authService.login(user);
+        
+        return res.json({ accessToken, refreshToken });
     }
 
     @UseGuards(KakaoAuthGuard)
@@ -61,36 +57,32 @@ export class AuthController {
 
     @UseGuards(KakaoAuthGuard)
     @Get('/kakao/callback')
-    kakaoLoginCallback(@Req() req, @Res() res) {
-        const { user, accessToken, refreshToken } = req.user;
-        const email = user.email;
-        const password = user.password;
-        return res.render('index.ejs', {
-            components: 'kakao',
-            email,
-            password,
-            accessToken,
-            refreshToken,
-        });
+    kakaoLoginCallback(@Req() req,  @Res() res) {
+        
+        const { user, accessToken, refreshToken } = req.user
+        const email = user.email
+        const password = user.password
+        return res.render('index.ejs', { components: 'kakao', email, password, accessToken, refreshToken })
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/logout')
     @HttpCode(200)
-    async logout(@Req() req) {
-        const user = req.user;
+    async logout(@Req() req, @Res() res) {
+        const user = req.user
 
-        await this.cacheService.del(user.id);
-        await this.cacheService.del(user.email);
+        await this.cacheService.del(user.id)
+        await this.cacheService.del(user.email)
 
-        return
+        return res.json({})
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/my-info')
     @HttpCode(200)
-    async getMyInfo(@Req() req): Promise<User> {
-        return req.user;
+    async getMyInfo(@Req() req, @Res() res): Promise<User> {
+        const user = req.user
+        return res.json({ user });
     }
 
     @Post('/sign-up')
@@ -104,21 +96,24 @@ export class AuthController {
 
     @Patch('/profile-update')
     @HttpCode(201)
-    async updateUserProfile(@Body() data: CreateUserProfileDto): Promise<UpdateResult> {
-        return await this.userService.updateUserProfile(data);
+    async updateUserProfile(@Res() res, @Body() data: CreateUserProfileDto): Promise<UpdateResult> {
+        await this.userService.updateUserProfile(data);
+        return res.json({});
     }
 
     @Post('/find-email')
     @UsePipes(new JoiValidationPipe(findEmailSchema))
     @HttpCode(200)
-    async findEmail(@Body() data: FindEmailDto): Promise<Email> {
-        return await this.userService.findEmail(data);
+    async findEmail(@Res() res, @Body() data: FindEmailDto): Promise<Email> {
+        const email = await this.userService.findEmail(data);
+
+        return res.send({ email });
     }
 
     @Post('/email-authenticate')
     @UsePipes(new JoiValidationPipe(findPasswordSchema))
     @HttpCode(200)
-    async findPassword(@Body() data: AuthenticateEmailDto): Promise<void> {
+    async findPassword(@Res() res, @Body() data: AuthenticateEmailDto): Promise<void> {
         const user = await this.userService.getUser(data.email);
         if (user) {
             const randomNum = Math.floor(Math.random() * 1000010);
@@ -127,12 +122,13 @@ export class AuthController {
 
             this.mailService.sendMail(data.email, randomNum);
         }
-        return;
+
+        return res.send({});
     }
 
     @Post('/code-authentication')
     @HttpCode(200)
-    async authenticateCode(@Body() data: AuthenticateCodeDto): Promise<number> {
+    async authenticateCode(@Res() res, @Body() data: AuthenticateCodeDto): Promise<void> {
         const authenticationCode = await this.cacheService.get(data.email);
 
         if (authenticationCode !== data.userAuthenticationCode) {
@@ -140,14 +136,18 @@ export class AuthController {
         }
 
         if (authenticationCode == data.userAuthenticationCode) {
-            return await this.cacheService.del(data.email);
+            await this.cacheService.del(data.email);
+
+            return res.send({});
         }
     }
 
     @Patch('/reset-password')
     @UsePipes(new JoiValidationPipe(updatePasswordSchema))
     @HttpCode(200)
-    async authenticateNumber(@Body() data: ResetPasswordDTO): Promise<UpdateResult> {
-        return await this.userService.resetPassword(data);
+    async authenticateNumber(@Res() res, @Body() data: ResetPasswordDTO): Promise<UpdateResult> {
+        await this.userService.resetPassword(data);
+
+        return res.send({});
     }
 }

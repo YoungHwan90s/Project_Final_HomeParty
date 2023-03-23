@@ -7,10 +7,11 @@ import { User } from '../user/entity/user.entity';
 import { WishList } from '../user/entity/wish-list.entity';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User, Review, WishList, Party,Tag])],
+    imports: [TypeOrmModule.forFeature([User, Review, WishList, Party, Tag]), AuthModule],
     controllers: [AdminController],
-    providers: [AdminService]
+    providers: [AdminService],
 })
 export class AdminModule {}

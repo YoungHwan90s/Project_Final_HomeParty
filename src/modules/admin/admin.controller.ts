@@ -1,5 +1,4 @@
 import {
-    ConsoleLogger,
     Controller,
     Delete,
     Get,
