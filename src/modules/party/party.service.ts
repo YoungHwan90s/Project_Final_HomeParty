@@ -29,7 +29,6 @@ export class PartyService {
     async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
         let query = this.partyRepository.createQueryBuilder("party")
 
-        console.log(query)
         query = query.leftJoinAndSelect('party.thumbnail', 'thumbnail')
                     .leftJoinAndSelect('party.wishList', 'wishList')
                     .where('party.deletedAt IS NULL')
