@@ -41,7 +41,6 @@ jobs:
             export S3_SECRETKEY=$S3_SECRETKEY
             export USEREMAIL=$USEREMAIL
             cd Project_Final_HomeParty/
-            chmod 644 .git/FETCH_HEAD
             git pull origin main
             sudo pm2 kill
             npm i --force
