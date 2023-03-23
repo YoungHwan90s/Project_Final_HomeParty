@@ -41,10 +41,11 @@ jobs:
             export S3_SECRETKEY=$S3_SECRETKEY
             export USEREMAIL=$USEREMAIL
             cd Project_Final_HomeParty/
+            sudo -s
             git pull origin main
-            sudo pm2 kill
+            pm2 kill
             npm i --force
             npm run build
-            sudo pm2 start dist/main.js
+            pm2 start dist/main.js
 
         
