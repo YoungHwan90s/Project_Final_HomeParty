@@ -15,7 +15,6 @@ export class MailService {
                 html: `<b>인증번호 ${authenticationCdoe}</b>`,
             })
             .then((result) => {
-                console.log(result);
             })
             // .catch((error) => {
             //     new ConflictException(error);

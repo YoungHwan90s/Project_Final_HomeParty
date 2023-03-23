@@ -232,7 +232,6 @@ function partySearch(userId) {
     }
     
     function getParties(userId, page) {
-        console.log(page)
         $.ajax({
             type: 'GET',
             url: `/api/party/list?page=${page}`,
