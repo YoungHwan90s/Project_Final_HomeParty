@@ -70,7 +70,8 @@ header{
 }
 .ipin_box, .row-group {
    overflow: hidden;
-   width: 100%;
+   width: 60%;
+   margin: 0 auto;
 }
 .box{
    margin : 0px auto;

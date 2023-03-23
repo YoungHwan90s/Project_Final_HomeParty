@@ -237,8 +237,7 @@ function partySearch(userId) {
             url: `/api/party/list?page=${page}`,
             data: {},
             success: function (response) {
-                const partyList = response.parties;
-                totalCount = response.itemCount;
+                const partyList = response;
                 
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['id'];
@@ -371,9 +370,7 @@ function partySearch(userId) {
         if (scrollDistance + windowHeight >= totalHeight) {
             // 페이지 번호 증가
             page++;
-            if(Math.ceil(page % totalCount) >= page){
-                getParties(userId = 0, page);
-            }
+            getParties(userId = 0, page);
         }
     });
 
