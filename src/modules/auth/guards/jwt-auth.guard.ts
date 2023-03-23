@@ -15,13 +15,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         const authorization = req.headers['authorization'];
         const refreshToken = req.headers['refreshtoken'];
 
-        // header 토큰 확인
         if (!authorization || !authorization.startsWith('Bearer ')) {
             return false;
         }
         const token = authorization.split(' ')[1];
 
-        // access token 유효성 확인
         try {
             const decodedAccessToken = await this.authService.verifyAccessToken(token);
             if (decodedAccessToken.type === true) {
@@ -34,11 +32,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
                     decodedAccessToken.id,
                 );
 
-                // refresh token 유효 X
                 if (verifyRefreshToken === false) {
                     return false;
                 }
-                // refresh token 유효 O
                 if (verifyRefreshToken === true) {
                     const newAccessToken = await this.authService.generateAccessToken(
                         decodedAccessToken.id, decodedAccessToken.email
