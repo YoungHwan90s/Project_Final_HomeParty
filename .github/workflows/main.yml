@@ -42,10 +42,11 @@ jobs:
             export USEREMAIL=$USEREMAIL
             cd Project_Final_HomeParty/
             sudo -s
+            chmod 644 .git/FETCH_HEAD
             git pull origin main
-            pm2 kill
+            sudo pm2 kill
             npm i --force
             npm run build
-            pm2 start dist/main.js
+            sudo pm2 start dist/main.js
 
         
