@@ -14,7 +14,12 @@
 
 </br>
 
-*** 
+## 📢 **프로젝트 소개**
+> 💡 모아바(MOAVA)- 홈파티 주최 및 참가
+>
+>증가하는 1인 세대!  파티를 열어 새로운 친구를 사귀세요!     
+>모아바는 파티를 즐기고 싶지만 1인 가구이거나 동네 친구가 없어 즐길 수 없을 때,     
+>내가 호스트 또는 게스트가 되어 취향에 맞게 참여할 수 있는 소셜 네트워크 서비스입니다!
 
 </br>
 
@@ -27,13 +32,6 @@
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FYoungHwan90s%2FProject_Final_HomeParty%2Fhit-counter&count_bg=%2379C83D&title_bg=%23555555&icon=myspace.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/>
   </a>
 </p>
-
-## 📢 **프로젝트 소개**
-> 💡 모아바(MOAVA)- 홈파티 주최 및 참가
->
->증가하는 1인 세대!  파티를 열어 새로운 친구를 사귀세요!     
->모아바는 파티를 즐기고 싶지만 1인 가구이거나 동네 친구가 없어 즐길 수 없을 때,     
->내가 호스트 또는 게스트가 되어 취향에 맞게 참여할 수 있는 소셜 네트워크 서비스입니다!
 
 </br>
 
@@ -227,8 +225,7 @@
   ```
 </details>
 </br></br>
-
-*** 
+ 
 ## 🧑‍🤝‍🧑 **웹 개발팀 소개**
 <table border="3">
   <tr align="center">
@@ -324,10 +321,6 @@
 </table></br>
 </br></br>
 
-***
-
-
-
 ## 📚 **개발환경**
 
 ### Envrionment
@@ -353,15 +346,12 @@
 
 </br></br>
 
-***
-
 ## 🚀 **아키텍처**
 <p>
   <img src="https://user-images.githubusercontent.com/118159813/227509158-bf6b0df6-a081-4165-8d0d-623be234da95.png" width="800"/>
 </p>
 </br></br>
 
-***
 ## 🔧 **기술적 의사결정**
 <table border="3">
   <th align="center">사용 기술</th>
@@ -406,7 +396,6 @@
 
 </br></br>
 
-***
 ## 🍀 **주요 기술 및 기능**
 #### 🍃 PassportStrategy
 - 사용자 인증을 위한 Jwt tokend 인증 전략 구현
@@ -440,14 +429,11 @@
 
 </br></br>
 
-***
 ## **ERD**
 <p>
   <img src="https://user-images.githubusercontent.com/118159813/227559354-03c81e1e-4184-42e3-9f87-569b0dc00a2e.png" width="600">
 </p>
 </br></br>
-
-
 
 ## 📺 **화면 구성**
 <table border="3" width="">
@@ -486,7 +472,6 @@
 </table>
 <br><br>
 
-***
 ## **트러블 슈팅**
   ### ❗️ <span style="color: #2D3748; background-color:#fff5b1">**관계 테이블 저장 / 업데이트 이슈**</span>
   #### 🖊️ 사실 수집
@@ -510,10 +495,8 @@
   - @UseGuards(JWTAuthGuard)를 사용하여, 권한이 필요한 API에 해당 데코레이터를 사용
   - 발급한 토큰이 유효하다면 로그인 한 유저의 정보를 반환하기 위해 매번 DB에서 해당된 유저의 정보를 찾고 반환
 
-
   #### 🤔 문제 추론
   - 매번 DB에서 유저 정보를 찾아 반환하는 것은 서버에 부하를 줄 수 있으며 비효율적임
-
 
   #### 💬 조치 및 결과
   - @UseGuards(LocalAuthGuard)를 통해 반환되는 유저 정보의 id(PK)와 이메일을 키 값으로 사용하여 각각 RefreshToken과 유저 정보를 redis-cloud에 캐싱처리
@@ -527,12 +510,10 @@
   - main branch에 PR merged & closed 되었을 때 workflow에 설정한 ssh action이 실행되도록 설정
   - 액션이 실행되고, 업데이트 된 main branch를 새로 pull 할때 발생하는 권한 문제(git pull origin main)
 
-
   #### 🤔 문제 추론
   - 기존에 sudo -s로 접속하여 권한이 필요한 명령어를 순서대로 실행
   - 터미널에서 ubuntu에 접속하여 테스트했을 당시에는 문제가 없었으나, workflow의 script에서 실행하는 sudo에서 발생하는 문제
   - 프로젝트 깃헙 설정에 외부 접근을 허용하지 않아서 발생하는 문제
-
 
   #### 💬 조치 및 결과
   - 원격에 있는 git pull 및 pm2를 kill 및 restart 하기 위해서는 root 권한이 필요
