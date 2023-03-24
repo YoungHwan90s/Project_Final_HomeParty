@@ -1,4 +1,4 @@
-<main class="partySearch main container-fluid ">
+<main class="partySearch main container-fluid">
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
 
@@ -374,28 +374,38 @@
     });
 
     function updateWishList(partyId) {
-        $.ajax({
-            type: 'POST',
-            url: `/user/wish-list/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                if (response.updateOrDelete == 0) {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
-                    document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
-                } else {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
-                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
-                }
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+        if (!userId) {
+            customAlert('로그인 후 이용 가능합니다.', function () {
+                window.location.reload();
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: `/user/wish-list/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    if (response.updateOrDelete == 0) {
+                        document
+                            .querySelector(`#likeOrNot${partyId}`)
+                            .classList.replace('fa-regular', 'fa-solid');
+                        document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
+                    } else {
+                        document
+                            .querySelector(`#likeOrNot${partyId}`)
+                            .classList.replace('fa-solid', 'fa-regular');
+                        document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                    }
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
     }
 </script>
