@@ -251,3 +251,174 @@ $ npm run test:cov
 </p>
 
 ### 디렉토리 구조
+```
+Project_Final_HomeParty
+├─ package-lock.json
+├─ package.json
+├─ src
+│  ├─ app.controller.ts
+│  ├─ app.module.ts
+│  ├─ app.service.ts
+│  ├─ chat.gateway.ts
+│  ├─ config
+│  │  ├─ config.jwt.ts
+│  │  ├─ config.nodemailer.ts
+│  │  ├─ config.redis.ts
+│  │  ├─ config.s3.ts
+│  │  └─ config.typeorm.ts
+│  ├─ main.ts
+│  ├─ modules
+│  │  ├─ admin
+│  │  │  ├─ admin.controller.ts
+│  │  │  ├─ admin.module.ts
+│  │  │  └─ admin.service.ts
+│  │  ├─ auth
+│  │  │  ├─ auth.controller.ts
+│  │  │  ├─ auth.module.ts
+│  │  │  ├─ auth.service.ts
+│  │  │  ├─ dto
+│  │  │  │  ├─ authenticate-code.dto.ts
+│  │  │  │  ├─ authenticate-email.dto.ts
+│  │  │  │  ├─ find-email.dto.ts
+│  │  │  │  ├─ kakao-login.dto.ts
+│  │  │  │  ├─ login.dto.ts
+│  │  │  │  └─ reset-password.dto.ts
+│  │  │  ├─ guards
+│  │  │  │  ├─ auth.guard.ts
+│  │  │  │  ├─ jwt-auth.guard.ts
+│  │  │  │  └─ kakao-auth.guard.ts
+│  │  │  └─ strategies
+│  │  │     ├─ jwt.strategy.ts
+│  │  │     ├─ kakao.strategy.ts
+│  │  │     └─ local.strategy.ts
+│  │  ├─ party
+│  │  │  ├─ dto
+│  │  │  │  ├─ create-party.dto.ts
+│  │  │  │  ├─ create-thumbnail.dto.ts
+│  │  │  │  └─ update-party.dto.ts
+│  │  │  ├─ entity
+│  │  │  │  ├─ party-member.entity.ts
+│  │  │  │  ├─ party.entity.ts
+│  │  │  │  ├─ tag.entity.ts
+│  │  │  │  └─ thumbnail.entity.ts
+│  │  │  ├─ party.controller.ts
+│  │  │  ├─ party.module.ts
+│  │  │  └─ party.service.ts
+│  │  ├─ review
+│  │  │  ├─ dto
+│  │  │  │  ├─ create-review.dto.ts
+│  │  │  │  └─ update-review.dto.ts
+│  │  │  ├─ entity
+│  │  │  │  └─ review.entity.ts
+│  │  │  ├─ review.controller.ts
+│  │  │  ├─ review.module.ts
+│  │  │  └─ review.service.ts
+│  │  └─ user
+│  │     ├─ dto
+│  │     │  ├─ create-user-profile.dto.ts
+│  │     │  ├─ create-user.dto.ts
+│  │     │  └─ update-user.dto.ts
+│  │     ├─ entity
+│  │     │  ├─ kakao.entitiy.ts
+│  │     │  ├─ user.entity.ts
+│  │     │  └─ wish-list.entity.ts
+│  │     ├─ user.controller.ts
+│  │     ├─ user.module.ts
+│  │     └─ user.service.ts
+│  ├─ util
+│  │  ├─ cache
+│  │  │  ├─ cache.module.ts
+│  │  │  └─ cache.service.ts
+│  │  ├─ joi
+│  │  │  ├─ joi-validation.pipe.ts
+│  │  │  └─ joi-validation.ts
+│  │  ├─ node-mailer
+│  │  │  ├─ mail.service.ts
+│  │  │  └─ node-mailer.module.ts
+│  │  └─ s3
+│  │     ├─ image-upload.controller.ts
+│  │     ├─ image-upload.module.ts
+│  │     └─ image-upload.service.ts
+│  └─ views
+│     ├─ 404-page.ejs
+│     ├─ admin-page.ejs
+│     ├─ admin-party.ejs
+│     ├─ admin-review.ejs
+│     ├─ admin-tag.ejs
+│     ├─ admin-user.ejs
+│     ├─ alert-modal.ejs
+│     ├─ auth-authentication.ejs
+│     ├─ auth-find-email.ejs
+│     ├─ auth-find-password.ejs
+│     ├─ auth-login.ejs
+│     ├─ auth-profile-upload.ejs
+│     ├─ auth-reset-password.ejs
+│     ├─ auth-sign-up.ejs
+│     ├─ index.ejs
+│     ├─ main.ejs
+│     ├─ party-detail.ejs
+│     ├─ party-edit.ejs
+│     ├─ party-host-message.ejs
+│     ├─ party-new.ejs
+│     ├─ party-review.ejs
+│     ├─ party.ejs
+│     ├─ public
+│     │  ├─ css
+│     │  │  ├─ admin-page.css
+│     │  │  ├─ common.css
+│     │  │  ├─ login.css
+│     │  │  ├─ main.css
+│     │  │  ├─ modal.css
+│     │  │  ├─ party-host-detail.css
+│     │  │  ├─ party-new.css
+│     │  │  ├─ partyGrid.css
+│     │  │  ├─ partyPage.css
+│     │  │  ├─ profile-upload.css
+│     │  │  ├─ reset.css
+│     │  │  ├─ signup.css
+│     │  │  ├─ user-edit.css
+│     │  │  ├─ user-menu.css
+│     │  │  └─ user-mypage.css
+│     │  ├─ imgs
+│     │  │  ├─ calendar.jpg
+│     │  │  ├─ error-404.png
+│     │  │  ├─ house.jpg
+│     │  │  ├─ inbox.jpg
+│     │  │  ├─ jjim.png
+│     │  │  ├─ kakao.png
+│     │  │  ├─ kakaologo.png
+│     │  │  ├─ logo.png
+│     │  │  ├─ map.jpg
+│     │  │  ├─ party.ico
+│     │  │  ├─ party.jpg
+│     │  │  ├─ party.png
+│     │  │  ├─ partymain.jpg
+│     │  │  ├─ phone.jpg
+│     │  │  ├─ review.jpg
+│     │  │  ├─ select.jpg
+│     │  │  ├─ temporary.png
+│     │  │  └─ welcome.jpg
+│     │  ├─ js
+│     │  │  └─ common.js
+│     │  └─ library
+│     │     ├─ carousel
+│     │     │  └─ carousel.js
+│     │     └─ datePicker
+│     │        ├─ base.css
+│     │        ├─ calendar.css
+│     │        ├─ calendar.js
+│     │        ├─ datePicker.css
+│     │        └─ datePicker.js
+│     ├─ user-check.ejs
+│     ├─ user-detail.ejs
+│     ├─ user-edit.ejs
+│     ├─ user-history.ejs
+│     ├─ user-host.ejs
+│     ├─ user-menu.ejs
+│     ├─ user-mypage.ejs
+│     ├─ user-party.ejs
+│     └─ user-wish-list.ejs
+├─ tsconfig.build.json
+└─ tsconfig.json
+
+```
