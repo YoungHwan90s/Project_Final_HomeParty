@@ -27,7 +27,6 @@ export class Kakao {
     @DeleteDateColumn()
     deletedAt: Date | null;
 
-    // 유저 <-> 카카오 일대일 관계
     @OneToOne(() => User, (user) => user.kakao)
     @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
     user: User;
