@@ -64,7 +64,7 @@ export class UserService {
 
             let userKakaoInfo = new Kakao();
             userKakaoInfo.kakaoId = data.kakaoId;
-            userKakaoInfo.user = newUserWithKakao
+            userKakaoInfo.user = newUserWithKakao;
 
             newUserWithKakao.kakao = userKakaoInfo;
 
@@ -113,7 +113,10 @@ export class UserService {
             where = { email: data, deletedAt: null };
         }
 
-        return await this.userRepository.findOne({ where });
+        return await this.userRepository.findOne({
+            where: where,
+            relations: ['kakao'],
+        });
     }
 
     async resetPassword(data: ResetPasswordDTO): Promise<UpdateResult> {
