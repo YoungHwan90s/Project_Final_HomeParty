@@ -404,7 +404,7 @@ img {
 }
 /* Active link */
 .active-link {
-  color: #fff;
+  /* color: #fff; */
 }
 
 /*=============== SPECIALTY ===============*/
@@ -544,17 +544,9 @@ img {
   background-color: var(--black-color);
   padding: 4rem 0 2.5rem;
 }
-.footer__title {
-  color: #fff;
-  font-size: var(--h1-font-size);
-  margin-bottom: 2rem;
-}
-.footer__description {
-  margin-bottom: .75rem;
-}
 .footer__content {
-  row-gap: 2.5rem;
-  padding-bottom: 2.5rem;
+  row-gap: 1.5rem;
+  padding-bottom: 25px;
 }
 .footer__subtitle {
   color: #fff;
@@ -590,18 +582,21 @@ img {
   max-width: 1024px;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-  text-align: center;
+  text-align: left;
   padding: 20px 0;
+  height: 270px;
 }
 .footer__title {
   color: #787878;
   font-size: 13px;
   margin-bottom: 1rem;
+  margin-top: 23px;
 }
 .footer__description {
   margin-bottom: 5px;
   font-size: 11px;
   color: #787878;
+  line-height: 21px;
 }
 .footer__copy {
   font-size: 13px;
@@ -978,17 +973,19 @@ img {
     margin: 0 auto;
     box-sizing: border-box;
     width: 100%;
-    max-width: 1240px;
+    /* max-width: 1240px;
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 20px; */
     font-size: 0;
     letter-spacing: 0;
+    text-align: left;
     }
   
   .footer__content {
     grid-template-columns: repeat(2, max-content);
-    column-gap: 4rem;
+    column-gap: 14rem;
     padding-bottom: 3.5rem;
+    padding-top: 20px;
   }
   .footer__group {
     margin-top: 3rem;
@@ -996,10 +993,14 @@ img {
     justify-content: space-between;
   }
   .footer__title {
-    font-size: 13px;
+    font-size: 20px;
+    margin-top: -7px;
   }
   .footer__social {
     column-gap: 2rem;
+  }
+  .footer__description {
+    font-size: 12px;
   }
   
   .scrollup {
@@ -1015,7 +1016,7 @@ img {
   }
   #wrap-home .content .cont-bx {
     top: 9%;
-    left: 46%;
+    left: 45%;
   }
   #wrap-home .content .cont-bx p {
     font-size: 120px;
@@ -1031,7 +1032,7 @@ img {
     padding:30px;
     line-height: 140%;
     font-size: 18px;
-    left: 48%;
+    left: 50%;
     width: 803px;
     bottom: 20%;
   }
