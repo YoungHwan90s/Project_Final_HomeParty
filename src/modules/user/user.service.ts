@@ -51,6 +51,7 @@ export class UserService {
     }
 
     async createKakaoUser(data): Promise<User> {
+        console.log(data)
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -66,13 +67,14 @@ export class UserService {
             userKakaoInfo.kakaoId = data.kakaoId;
 
             newUserWithKakao.kakao = userKakaoInfo;
-            userKakaoInfo.user = newUserWithKakao;
-            
             user = await queryRunner.manager.save(User, newUserWithKakao);
+            
+            userKakaoInfo.userId = user.id
+            await queryRunner.manager.save(Kakao, userKakaoInfo);
 
             await queryRunner.commitTransaction();
         } catch (error) {
-            console.log(error.message)
+            console.log(error)
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
                 '로그인에 실패하였습니다. 로그인에 필요한 정보가 제공되지 않았습니다.',

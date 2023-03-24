@@ -100,5 +100,10 @@ export class UserController {
         return await this.userService.userApplyPartyList(id);
     }
 
+    @Post('/test')
+    @HttpCode(200)
+    async createKakaoUser(@Req() req, @Body() data) {
+        return await this.userService.createKakaoUser(data);
+    }
 
 }
