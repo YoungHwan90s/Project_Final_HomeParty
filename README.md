@@ -2,22 +2,25 @@
 
 <p align="center">
   <a href="http://moava-homeparty.site/" target="blank">
-    <img src="https://user-images.githubusercontent.com/118159813/227415742-c122e2ff-22f9-48d9-bbb2-a3e3ac127b5a.png" width="250" alt="Moava Logo" />   </a>
+    <img src="https://user-images.githubusercontent.com/118159813/227510559-96bfc959-2f5f-4710-80a5-a39cf1792bcd.png" alt="Moava Logo" />   </a>
 </p>
 <p align="center">
   <a href="https://hits.seeyoufarm.com">
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FYoungHwan90s%2FProject_Final_HomeParty%2Fhit-counter&count_bg=%2379C83D&title_bg=%23555555&icon=myspace.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/>
   </a>
-</p></br>
+</p></br></br>
 
-## Moava Wev Page v1.0
+## 🏛️ Moava Wev Page v1.0
 > 스파르타코딩클럽 백엔드 개발자 부트캠프 node.js 4기</br>
-> 개발기간: 2023.02.27 ~ 2023.04.02</br>
+> 개발기간: 2023.02.27 ~ 2023.04.02
 
-## 배포 주소
+</br></br>
+## 🏡 배포 주소
 > http://moava-homeparty.site
 
-## 웹 개발팀 소개
+</br></br>
+
+## 🧑‍🤝‍🧑 웹 개발팀 소개
 <table border="1">
   <th>오영환(팀장)</th>
   <th>이정기(부팀장)</th>
@@ -53,7 +56,7 @@
   </tr>
   <tr align="center">
     <td>
-      <a href="https://github.com/YoungHwan90s">
+      <a href="https://github.com/YoungHwan90s" style="color: black">
         @Young-hwan
       </a>
     </td>
@@ -79,24 +82,33 @@
     </td>
   </tr>
   <tr align="center">
+    <td colspan="5">
+      <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533">
+        @오영환팀 팀 노션
+      </a>
+    </td>
+  </tr>
+  <tr align="center">
     <td>오영환 맡은 기능</td>
     <td>이정기 맡은 기능</td>
     <td>이설인 맡은 기능</td>
     <td>이지영 맡은 기능</td>
     <td>육준호 맡은 기능</td>
   </tr>
-</table>
+</table></br></br>
 
-## 프로젝트 소개
+## 📢 프로젝트 소개
 > 💡 모아바(MOAVA)- 홈파티 주최 및 참가
+>
 > 내가 파티를 개최하기도 하고 다른 사람들이 개최한 파티를 참여하면서 무료한 하루를 바꿔보세요!
 >
-> 증가하는 1인 세대! 파티를 열어 새로운 친구를 만나자!
-> 타지에서 혼자 지낸다면? 모아바!
-> 취업하며 친구들이 멀어졌다면? 모아바!!
-> 새로운 친구들을 만나고 싶다면? 모아바!!!
-> 
+> 증가하는 1인 세대! 파티를 열어 새로운 친구를 만나자!    
+> 타지에서 혼자 지낸다면? 모아바!     
+> 취업하며 친구들이 멀어졌다면? 모아바!!     
+> 새로운 친구들을 만나고 싶다면? 모아바!!!     
+>
 > 일단! 모아바🥳🎉
+
 </br>
 안녕하세요!</br>
 모아바는 심심한 사람들을 위해 파티 주최 및 참가를 할 수 있는 페이지입니다.</br>
@@ -110,86 +122,258 @@
 </br>
 ## 으야가거가 모르겠다~!!
 </br>
+</br></br>
 
-## 시작 가이드
-### Requirements
-For building and running the application you need
-- 
+***
 
+</br></br>
 
+## 📚 기술 스택
 
+### Envrionment
+<img src="https://img.shields.io/badge/VISUAL STUDIO CODE-007ACC?style=for-the-badge&logo=VISUAL STUDIO CODE&logoColor=white"> <img src="https://img.shields.io/badge/GIT-F05032?style=for-the-badge&logo=GIT&logoColor=white"> <img src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=GITHUB&logoColor=white">
 
--------
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+### Config
+<img src="https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=NPM&logoColor=white">
+
+### Development
+#### Front-end
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"> <img src="https://img.shields.io/badge/JAVASCRIPT-F7DF1E?style=for-the-badge&logo=JAVASCRIPT&logoColor=white"> <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=AJAX&logoColor=white"> <img src="https://img.shields.io/badge/JQUERY-0769AD?style=for-the-badge&logo=JQUERY&logoColor=white"> <img src="https://img.shields.io/badge/BOOTSTRAP-7952B3?style=for-the-badge&logo=BOOTSTRAP&logoColor=white"> <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=EJS&logoColor=white">
+
+#### Back-end
+<img src="https://img.shields.io/badge/NODE.JS-339933?style=for-the-badge&logo=NODE.JS&logoColor=white"> <img src="https://img.shields.io/badge/NEST.JS-E0234E?style=for-the-badge&logo=NEST.JS&logoColor=white"> <img src="https://img.shields.io/badge/TYPESCRIPT-3178C6?style=for-the-badge&logo=TYPESCRIPT&logoColor=white"> <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=TYPEORM&logoColor=white"> <img src="https://img.shields.io/badge/MYSQL-4479A1?style=for-the-badge&logo=MYSQL&logoColor=white">
+
+#### DevOps
+<img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=REDIS CLOUD&logoColor=white"> <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=AWS&logoColor=white"> <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=RDS&logoColor=white"> <img src="https://img.shields.io/badge/GITHUB ACTION-2088FF?style=for-the-badge&logo=GITHUB ACTION&logoColor=white">
+
+### Communication
+<img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=SLACK&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-000000?style=for-the-badge&logo=NOTION&logoColor=white">
+</br></br>
+
+## 📺 화면 구성
+<table>
+  <tr align="center">
+    <td>메인 페이지</td>
+    <td>위시리스트</td>
+  </tr>
+  <tr>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>파티 탐색 페이지</td>
+    <td>파티 개최 페이지</td>
+  </tr>
+  <tr>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+  </tr>
+</table>
+</br></br>
+
+## 🛠️ 주요 기능
+#### 😎 머시기저시기
+- 어쩌구
+- 저쩌구
+
+#### 😎 머시기저시기2
+- 어쩌구
+- 저쩌구
+
+#### 😎 머시기저시기3
+- 어쩌구
+- 저쩌구
+
+## 🚀 아키텍처
+<p>
+  <img src="https://user-images.githubusercontent.com/118159813/227509158-bf6b0df6-a081-4165-8d0d-623be234da95.png" width="800"/>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+### 디렉토리 구조
 ```
+Project_Final_HomeParty
+├─ package-lock.json
+├─ package.json
+├─ src
+│  ├─ app.controller.ts
+│  ├─ app.module.ts
+│  ├─ app.service.ts
+│  ├─ chat.gateway.ts
+│  ├─ config
+│  │  ├─ config.jwt.ts
+│  │  ├─ config.nodemailer.ts
+│  │  ├─ config.redis.ts
+│  │  ├─ config.s3.ts
+│  │  └─ config.typeorm.ts
+│  ├─ main.ts
+│  ├─ modules
+│  │  ├─ admin
+│  │  │  ├─ admin.controller.ts
+│  │  │  ├─ admin.module.ts
+│  │  │  └─ admin.service.ts
+│  │  ├─ auth
+│  │  │  ├─ auth.controller.ts
+│  │  │  ├─ auth.module.ts
+│  │  │  ├─ auth.service.ts
+│  │  │  ├─ dto
+│  │  │  │  ├─ authenticate-code.dto.ts
+│  │  │  │  ├─ authenticate-email.dto.ts
+│  │  │  │  ├─ find-email.dto.ts
+│  │  │  │  ├─ kakao-login.dto.ts
+│  │  │  │  ├─ login.dto.ts
+│  │  │  │  └─ reset-password.dto.ts
+│  │  │  ├─ guards
+│  │  │  │  ├─ auth.guard.ts
+│  │  │  │  ├─ jwt-auth.guard.ts
+│  │  │  │  └─ kakao-auth.guard.ts
+│  │  │  └─ strategies
+│  │  │     ├─ jwt.strategy.ts
+│  │  │     ├─ kakao.strategy.ts
+│  │  │     └─ local.strategy.ts
+│  │  ├─ party
+│  │  │  ├─ dto
+│  │  │  │  ├─ create-party.dto.ts
+│  │  │  │  ├─ create-thumbnail.dto.ts
+│  │  │  │  └─ update-party.dto.ts
+│  │  │  ├─ entity
+│  │  │  │  ├─ party-member.entity.ts
+│  │  │  │  ├─ party.entity.ts
+│  │  │  │  ├─ tag.entity.ts
+│  │  │  │  └─ thumbnail.entity.ts
+│  │  │  ├─ party.controller.ts
+│  │  │  ├─ party.module.ts
+│  │  │  └─ party.service.ts
+│  │  ├─ review
+│  │  │  ├─ dto
+│  │  │  │  ├─ create-review.dto.ts
+│  │  │  │  └─ update-review.dto.ts
+│  │  │  ├─ entity
+│  │  │  │  └─ review.entity.ts
+│  │  │  ├─ review.controller.ts
+│  │  │  ├─ review.module.ts
+│  │  │  └─ review.service.ts
+│  │  └─ user
+│  │     ├─ dto
+│  │     │  ├─ create-user-profile.dto.ts
+│  │     │  ├─ create-user.dto.ts
+│  │     │  └─ update-user.dto.ts
+│  │     ├─ entity
+│  │     │  ├─ kakao.entitiy.ts
+│  │     │  ├─ user.entity.ts
+│  │     │  └─ wish-list.entity.ts
+│  │     ├─ user.controller.ts
+│  │     ├─ user.module.ts
+│  │     └─ user.service.ts
+│  ├─ util
+│  │  ├─ cache
+│  │  │  ├─ cache.module.ts
+│  │  │  └─ cache.service.ts
+│  │  ├─ joi
+│  │  │  ├─ joi-validation.pipe.ts
+│  │  │  └─ joi-validation.ts
+│  │  ├─ node-mailer
+│  │  │  ├─ mail.service.ts
+│  │  │  └─ node-mailer.module.ts
+│  │  └─ s3
+│  │     ├─ image-upload.controller.ts
+│  │     ├─ image-upload.module.ts
+│  │     └─ image-upload.service.ts
+│  └─ views
+│     ├─ 404-page.ejs
+│     ├─ admin-page.ejs
+│     ├─ admin-party.ejs
+│     ├─ admin-review.ejs
+│     ├─ admin-tag.ejs
+│     ├─ admin-user.ejs
+│     ├─ alert-modal.ejs
+│     ├─ auth-authentication.ejs
+│     ├─ auth-find-email.ejs
+│     ├─ auth-find-password.ejs
+│     ├─ auth-login.ejs
+│     ├─ auth-profile-upload.ejs
+│     ├─ auth-reset-password.ejs
+│     ├─ auth-sign-up.ejs
+│     ├─ index.ejs
+│     ├─ main.ejs
+│     ├─ party-detail.ejs
+│     ├─ party-edit.ejs
+│     ├─ party-host-message.ejs
+│     ├─ party-new.ejs
+│     ├─ party-review.ejs
+│     ├─ party.ejs
+│     ├─ public
+│     │  ├─ css
+│     │  │  ├─ admin-page.css
+│     │  │  ├─ common.css
+│     │  │  ├─ login.css
+│     │  │  ├─ main.css
+│     │  │  ├─ modal.css
+│     │  │  ├─ party-host-detail.css
+│     │  │  ├─ party-new.css
+│     │  │  ├─ partyGrid.css
+│     │  │  ├─ partyPage.css
+│     │  │  ├─ profile-upload.css
+│     │  │  ├─ reset.css
+│     │  │  ├─ signup.css
+│     │  │  ├─ user-edit.css
+│     │  │  ├─ user-menu.css
+│     │  │  └─ user-mypage.css
+│     │  ├─ imgs
+│     │  │  ├─ calendar.jpg
+│     │  │  ├─ error-404.png
+│     │  │  ├─ house.jpg
+│     │  │  ├─ inbox.jpg
+│     │  │  ├─ jjim.png
+│     │  │  ├─ kakao.png
+│     │  │  ├─ kakaologo.png
+│     │  │  ├─ logo.png
+│     │  │  ├─ map.jpg
+│     │  │  ├─ party.ico
+│     │  │  ├─ party.jpg
+│     │  │  ├─ party.png
+│     │  │  ├─ partymain.jpg
+│     │  │  ├─ phone.jpg
+│     │  │  ├─ review.jpg
+│     │  │  ├─ select.jpg
+│     │  │  ├─ temporary.png
+│     │  │  └─ welcome.jpg
+│     │  ├─ js
+│     │  │  └─ common.js
+│     │  └─ library
+│     │     ├─ carousel
+│     │     │  └─ carousel.js
+│     │     └─ datePicker
+│     │        ├─ base.css
+│     │        ├─ calendar.css
+│     │        ├─ calendar.js
+│     │        ├─ datePicker.css
+│     │        └─ datePicker.js
+│     ├─ user-check.ejs
+│     ├─ user-detail.ejs
+│     ├─ user-edit.ejs
+│     ├─ user-history.ejs
+│     ├─ user-host.ejs
+│     ├─ user-menu.ejs
+│     ├─ user-mypage.ejs
+│     ├─ user-party.ejs
+│     └─ user-wish-list.ejs
+├─ tsconfig.build.json
+└─ tsconfig.json
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
