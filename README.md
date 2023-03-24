@@ -88,8 +88,8 @@
     <td>이지영 맡은 기능</td>
     <td>육준호 맡은 기능</td>
   </tr>
-  <tr>
-    <td>
+  <tr align="center">
+    <td colspan="5">
       <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533">
         @오영환팀 팀 노션
       </a>
