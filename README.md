@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="http://moava-homeparty.site/" target="blank">
-    <img src="https://user-images.githubusercontent.com/118159813/227510559-96bfc959-2f5f-4710-80a5-a39cf1792bcd.png" width="250" alt="Moava Logo" />   </a>
+    <img src="https://user-images.githubusercontent.com/118159813/227510559-96bfc959-2f5f-4710-80a5-a39cf1792bcd.png" alt="Moava Logo" />   </a>
 </p>
 <p align="center">
   <a href="https://hits.seeyoufarm.com">
