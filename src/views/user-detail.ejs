@@ -136,13 +136,14 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                // 서버로부터 응답 받은 후 처리할 코드 작성
-                alert('리뷰가 등록되었습니다.');
-                location.reload();
+                customAlert('리뷰가 등록되었습니다.', function () {
+                    window.location.reload();
+                });
             },
             error: function (error) {
-                // 서버로부터 오류 응답 받은 후 처리할 코드 작성
-                alert('올바르지않은 값입니다.');
+                customAlert('올바르지 않은 값입니다.', function () {
+                    window.location.reload();
+                });
             },
         });
     }
@@ -169,13 +170,14 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                // 서버로부터 응답 받은 후 처리할 코드 작성
-                alert('리뷰가 수정되었습니다.');
-                location.reload();
+                customAlert('리뷰가 수정되었습니다.', function () {
+                    window.location.reload();
+                });
             },
             error: function (error) {
-                // 서버로부터 오류 응답 받은 후 처리할 코드 작성
-                alert('올바르지 않은 값입니다.');
+                customAlert('올바르지 않은 값입니다.', function () {
+                    window.location.reload();
+                });
             },
         });
     }
@@ -189,11 +191,14 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                alert('리뷰가 삭제되었습니다.');
-                location.reload();
+                customAlert('리뷰가 삭제되었습니다.', function () {
+                    window.location.reload();
+                });
             },
             error: function (error) {
-                alert('올바르지 않은 값입니다.');
+                customAlert('올바르지 않은 값입니다.', function () {
+                    window.location.reload();
+                });
             },
         });
     }
