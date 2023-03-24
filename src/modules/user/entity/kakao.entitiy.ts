@@ -29,6 +29,6 @@ export class Kakao {
 
     // 유저 <-> 카카오 일대일 관계
     @OneToOne(() => User, (user) => user.kakao)
-    @JoinColumn()
+    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
     user: User;
 }
