@@ -61,8 +61,12 @@ export class UserService {
             newUserWithKakao.email = data.email;
             newUserWithKakao.name = data.nickname;
             newUserWithKakao.profile = data.profileImage;
-            newUserWithKakao.kakao.kakaoId = data.kakaoId
 
+            let userKakaoInfo = new Kakao();
+            userKakaoInfo.kakaoId = data.kakaoId;
+
+            newUserWithKakao.kakao = userKakaoInfo;
+            
             await queryRunner.manager.save(User, newUserWithKakao);
 
             await queryRunner.commitTransaction();
@@ -238,5 +242,4 @@ export class UserService {
 
         return user;
     }
-
 }
