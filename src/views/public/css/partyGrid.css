@@ -204,7 +204,7 @@
   border-radius: 50%;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1800px) {
   /* partyGrid */
   .partyGrid.partyList {
     --partyListColumn: 3;

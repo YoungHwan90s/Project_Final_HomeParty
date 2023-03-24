@@ -22,7 +22,13 @@ import { CacheService } from '../../util/cache/cache.service';
 import { AuthenticateCodeDto } from './dto/authenticate-code.dto';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { JoiValidationPipe } from 'src/util/joi/joi-validation.pipe';
-import { createUserSchema, findEmailSchema, findPasswordSchema, loginSchema, updatePasswordSchema } from 'src/util/joi/joi-validation';
+import {
+    createUserSchema,
+    findEmailSchema,
+    findPasswordSchema,
+    loginSchema,
+    updatePasswordSchema,
+} from 'src/util/joi/joi-validation';
 import { CreateUserProfileDto } from '../user/dto/create-user-profile.dto';
 import { UpdateResult } from 'typeorm';
 import { User } from 'aws-sdk/clients/budgets';
@@ -45,9 +51,9 @@ export class AuthController {
     @UsePipes(new JoiValidationPipe(loginSchema))
     @HttpCode(200)
     async login(@Req() req, @Res() res): Promise<Token> {
-        const user = req.user
+        const user = req.user;
         const { accessToken, refreshToken } = await this.authService.login(user);
-        
+
         return res.json({ accessToken, refreshToken });
     }
 
@@ -57,30 +63,32 @@ export class AuthController {
 
     @UseGuards(KakaoAuthGuard)
     @Get('/kakao/callback')
-    kakaoLoginCallback(@Req() req,  @Res() res) {
-        
-        const { user, accessToken, refreshToken } = req.user
+    async kakaoLoginCallback(@Req() req, @Res() res) {
+        const { user, accessToken, refreshToken } = req.user;
 
-        return res.render('index.ejs', { components: 'kakao', user, accessToken, refreshToken })
+        const userInfo = JSON.stringify(user);
+        await this.cacheService.set(user.email, userInfo);
+
+        return res.render('index.ejs', { components: 'kakao', user, accessToken, refreshToken });
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/logout')
     @HttpCode(200)
     async logout(@Req() req, @Res() res) {
-        const user = req.user
+        const user = req.user;
 
-        await this.cacheService.del(user.id)
-        await this.cacheService.del(user.email)
+        await this.cacheService.del(user.id);
+        await this.cacheService.del(user.email);
 
-        return res.json({})
+        return res.json({});
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/my-info')
     @HttpCode(200)
     async getMyInfo(@Req() req, @Res() res): Promise<User> {
-        const user = req.user
+        const user = req.user;
         return res.json({ user });
     }
 

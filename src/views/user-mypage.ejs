@@ -126,8 +126,15 @@
                         refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                     },
                     success: function (response) {
-                        alert('회원 탈퇴');
-                        window.location.href = '/';
+                        customAlert('회원 탈퇴되었습니다.', function () {
+                            window.location.replace('/');
+                            sessionStorage.clear();
+                        });
+                    },
+                    error: function (response) {
+                        customAlert(response.responseJSON.message, function () {
+                            window.location.reload();
+                        });
                     },
                 });
             } else {

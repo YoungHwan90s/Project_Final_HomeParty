@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ConflictException,
     Injectable,
     NotAcceptableException,
@@ -16,6 +17,7 @@ import { WishList } from './entity/wish-list.entity';
 import { PartyService } from '../party/party.service';
 import { Kakao } from './entity/kakao.entitiy';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
+import { CacheService } from 'src/util/cache/cache.service';
 
 @Injectable()
 export class UserService {
@@ -25,6 +27,7 @@ export class UserService {
 
         private readonly partyService: PartyService,
         private readonly dataSource: DataSource,
+        private readonly cacheService: CacheService,
     ) {}
 
     async createUser(data: CreateUserDto): Promise<User> {
@@ -51,7 +54,7 @@ export class UserService {
     }
 
     async createKakaoUser(data): Promise<User> {
-        console.log(data)
+        console.log(data);
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -69,11 +72,10 @@ export class UserService {
             newUserWithKakao.kakao = userKakaoInfo;
             user = await queryRunner.manager.save(User, newUserWithKakao);
 
-            userKakaoInfo.userId = user.id
+            userKakaoInfo.userId = user.id;
             await queryRunner.manager.save(Kakao, userKakaoInfo);
 
             await queryRunner.commitTransaction();
-            
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
@@ -154,8 +156,16 @@ export class UserService {
         }
     }
 
-    async deleteUser(id: number): Promise<DeleteResult> {
-        return this.userRepository.softDelete(id);
+    async deleteUser(user: User): Promise<DeleteResult> {
+        try {
+            const IdkeyForRefreshToken = String(user.id);
+            await this.cacheService.del(IdkeyForRefreshToken);
+            await this.cacheService.del(user.email);
+
+            return this.userRepository.softDelete(user.id);
+        } catch (error) {
+            throw new BadRequestException('잘못된 요청입니다. 다시 시도하여 주시기 바랍니다.');
+        }
     }
 
     async updateWishList(user: User, partyId: number) {
