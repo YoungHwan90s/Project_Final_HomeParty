@@ -31,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         } 
         else {
             user = await this.userService.getUser(id);
+            console.log(user)
             if (!user) {
                 throw new UnauthorizedException('로그인 후 이용 가능합니다.');
             }
