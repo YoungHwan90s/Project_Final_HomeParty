@@ -64,7 +64,6 @@ export class UserService {
 
             let userKakaoInfo = new Kakao();
             userKakaoInfo.kakaoId = data.kakaoId;
-            userKakaoInfo.user = newUserWithKakao;
 
             newUserWithKakao.kakao = userKakaoInfo;
 
