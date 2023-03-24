@@ -88,6 +88,13 @@
     <td>이지영 맡은 기능</td>
     <td>육준호 맡은 기능</td>
   </tr>
+  <tr>
+    <td>
+      <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533">
+        @오영환팀 팀 노션
+      </a>
+    </td>
+  </tr>
 </table></br></br>
 
 ## 📢 프로젝트 소개
@@ -102,7 +109,7 @@
 >
 > 일단! 모아바🥳🎉
 
-</br></br>
+</br>
 안녕하세요!</br>
 모아바는 심심한 사람들을 위해 파티 주최 및 참가를 할 수 있는 페이지입니다.</br>
 어떤 파티가 있는지 궁금하다면 가입 없이 찾아볼 수 있지만, 주최와 참가를 하기 위해서는 회원가입이 필요합니다.</br>
@@ -115,9 +122,11 @@
 </br>
 ## 으야가거가 모르겠다~!!
 </br>
-</br></br></br></br></br>
+</br></br>
 
 ***
+
+</br></br>
 
 ## 🚅 시작 가이드
 => respository를 clone하고, 패키지 설치, 환경변수 설정, 실행하는 과정에 대한 내용 적기
@@ -160,9 +169,7 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-</br></br></br>
-
-***
+</br></br>
 
 ## 📚 기술 스택
 
@@ -184,7 +191,7 @@ $ npm run test:cov
 
 ### Communication
 <img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=SLACK&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-000000?style=for-the-badge&logo=NOTION&logoColor=white">
-</br></br></br>
+</br></br>
 
 ## 📺 화면 구성
 <table>
@@ -221,26 +228,26 @@ $ npm run test:cov
     </td>
   </tr>
 </table>
-</br></br></br>
+</br></br>
 
 ## 🛠️ 주요 기능
 #### 😎 머시기저시기
 - 어쩌구
 - 저쩌구
 </br>
+
 #### 😎 머시기저시기2
 - 어쩌구
 - 저쩌구
 </br>
+
 #### 😎 머시기저시기3
 - 어쩌구
 - 저쩌구
 
 ## 🚀 아키텍처
 <p>
-  <img src="https://user-images.githubusercontent.com/118159813/227453731-a79cbed8-fd53-4fe2-99ad-895c272294d5.png" width="800"/>
+  <img src="https://user-images.githubusercontent.com/118159813/227456495-ede5c5b0-66b1-4563-b2e7-948ce3ca8489.png" width="800"/>
 </p>
 
-#### 디렉토리 구조
-
-
+### 디렉토리 구조
