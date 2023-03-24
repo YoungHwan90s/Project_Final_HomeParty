@@ -430,7 +430,7 @@
 - 카카오톡 계정으로 로그인 가능
 - 카카오톡 정보들도 회원 정보에 표시
 <p>
-  <img src="" width="600">
+  <img src="https://user-images.githubusercontent.com/118159813/227559177-d48630ef-c5e6-43fa-bf7e-8f0316bed9f4.png" width="600">
 </p>
 
 #### 🍃 카카오 맵
@@ -443,7 +443,7 @@
 ***
 ## **ERD**
 <p>
-  <img src="image.png" width="600">
+  <img src="https://user-images.githubusercontent.com/118159813/227559354-03c81e1e-4184-42e3-9f87-569b0dc00a2e.png" width="600">
 </p>
 </br></br>
 
@@ -458,12 +458,12 @@
   <tr>
     <td>
       <p align="center">
-        <img src="" width="400" />
+        <img src="https://user-images.githubusercontent.com/118159813/227561599-afadd03b-7192-4c24-8791-b718f82f8681.png" width="400" />
       </p>
     </td>
     <td>
       <p align="center">
-        <img src="" width="400" />
+        <img src="https://user-images.githubusercontent.com/118159813/227561696-81574a56-e421-4fcb-bb90-5b4f5c1d5a03.png" width="400" />
       </p>
     </td>
   </tr>
@@ -474,12 +474,12 @@
   <tr>
     <td>
       <p align="center">
-        <img src="" width="400" />
+        <img src="https://user-images.githubusercontent.com/118159813/227561803-58bfc4c6-f3c8-404c-8056-19a9f603e878.png" width="400" />
       </p>
     </td>
     <td>
       <p align="center">
-        <img src="" width="400" />
+        <img src="https://user-images.githubusercontent.com/118159813/227561893-1a40727c-56d7-4940-a811-3925c9a5a10e.png" width="400" />
       </p>
     </td>
   </tr>
@@ -488,7 +488,7 @@
 
 ***
 ## **트러블 슈팅**
-  ### ⚠️ <span style="color: #2D3748; background-color:#fff5b1">**관계 테이블 저장 / 업데이트 이슈**</span>
+  ### ❗️ <span style="color: #2D3748; background-color:#fff5b1">**관계 테이블 저장 / 업데이트 이슈**</span>
   #### 🖊️ 사실 수집
   - 데이터를 불러올 때 관계 테이블이 조회되지 않는 문제
   - 일부 새로운 데이터를 받아 생성되어 있는 객체에 update 메서드를 사용하였을 때 기존 데이터는 삭제되는 문제
@@ -505,7 +505,7 @@
 
 </br>
 
-  ### ⚠️  <span style="color: #2D3748; background-color:#fff5b1">**사용자 검증 로직의 DB 접근 횟수 이슈**</span>
+  ### ❗️ <span style="color: #2D3748; background-color:#fff5b1">**사용자 검증 로직의 DB 접근 횟수 이슈**</span>
   #### 🖊️ 사실 수집
   - @UseGuards(JWTAuthGuard)를 사용하여, 권한이 필요한 API에 해당 데코레이터를 사용
   - 발급한 토큰이 유효하다면 로그인 한 유저의 정보를 반환하기 위해 매번 DB에서 해당된 유저의 정보를 찾고 반환
@@ -522,7 +522,7 @@
 
 </br>
 
-  ### ⚠️ <span style="color: #2D3748; background-color:#fff5b1">**Github actions 자동배포 Pull request permission denied 이슈** </span>
+  ### ❗️ <span style="color: #2D3748; background-color:#fff5b1">**Github actions 자동배포 Pull request permission denied 이슈** </span>
   #### 🖊️ 사실 수집
   - main branch에 PR merged & closed 되었을 때 workflow에 설정한 ssh action이 실행되도록 설정
   - 액션이 실행되고, 업데이트 된 main branch를 새로 pull 할때 발생하는 권한 문제(git pull origin main)
