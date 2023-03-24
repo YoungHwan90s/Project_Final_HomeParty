@@ -42,11 +42,6 @@
                     wishList,
                 } = response;
 
-                const year = date.substr(0, 4);
-                const month = date.substr(5, 2);
-                const day = date.substr(8, 2);
-                const dateDetail = `${year}-${month}-${day}`;
-
                 currMembers = currMember
                 maxMembers = maxMember
                 const userWishListMatch = wishList.find((user) => 
@@ -99,9 +94,12 @@
                                     ${maxMember}
                                 </dd>
                             </div>
-                            <div class="headcountItem">
-                                <p style="font-weight: 700">파티 신청 인원</p>
-                            </div>
+                            ${hostId === userId 
+                                ?`<div class="headcountItem">
+                                    <p style="font-weight: 700">파티 신청 인원</p>
+                                </div>`
+                                :""
+                            }
                             <div class="partyMemberBox">
                                 
                             </div>
@@ -326,7 +324,7 @@
                 if (document.querySelector('.partyPage')) {
                     new Calendar(document.querySelector('.partyPage .calendar'));
 
-                    document.querySelector(`time[datetime="${dateDetail}"]`).classList.add('selected');
+                    document.querySelector(`time[datetime="${date}"]`).classList.add('selected');
 
                     document.querySelector('.today').classList.remove('today');
 
