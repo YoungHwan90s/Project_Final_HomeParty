@@ -1,8 +1,4 @@
 # MOAVA-HOMEPARTY (모아바)
-<h1>
-  <img src="https://user-images.githubusercontent.com/118159813/227446614-9e4d477c-9549-4898-a571-5cee847fe3a5.png" width="15"/>
-  MOAVA-HOMEPARTY (모아바)
-</h1>
 
 <p align="center">
   <a href="http://moava-homeparty.site/" target="blank">
