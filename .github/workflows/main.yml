@@ -1,0 +1,51 @@
+name: main branch auto ci process script
+on:
+  pull_request:
+    branches: [ main ]
+    types: [closed]
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
+          username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
+          password: ${{ secrets.EC2_PASSWORD }}
+          port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
+          envs: AWS_ACCESS_KEY_ID, AWS_BUCKET_NAME, AWS_BUCKET_REGION, AWS_SECRET_ACCESS_KEY, CALLBACK_URL, DATABASE_HOST, DATABASE_NAME, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_USERNAME, JAVASCRIPT_KEY, PASSWORD, PORT, REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USERNAME, RESTAPI_KEY, S3_ACCESSKEY, S3_SECRETKEY, USEREMAIL
+          script: |
+            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+            export AWS_BUCKET_NAME=$AWS_BUCKET_NAME
+            export AWS_BUCKET_REGION=$AWS_BUCKET_REGION
+            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+            export CALLBACK_URL=$CALLBACK_URL
+            export DATABASE_HOST=$DATABASE_HOST
+            export DATABASE_NAME=$DATABASE_NAME
+            export DATABASE_PASSWORD=$DATABASE_PASSWORD
+            export DATABASE_PORT=$DATABASE_PORT
+            export DATABASE_USERNAME=$DATABASE_USERNAME
+            export JAVASCRIPT_KEY=$JAVASCRIPT_KEY
+            export PASSWORD=$PASSWORD
+            export PORT=$PORT
+            export REDIS_HOST=$REDIS_HOST
+            export REDIS_PASSWORD=$REDIS_PASSWORD
+            export REDIS_PORT=$REDIS_PORT
+            export REDIS_USERNAME=$REDIS_USERNAME
+            export RESTAPI_KEY=$RESTAPI_KEY
+            export S3_ACCESSKEY=$S3_ACCESSKEY
+            export S3_SECRETKEY=$S3_SECRETKEY
+            export USEREMAIL=$USEREMAIL
+            cd Project_Final_HomeParty/
+            sudo chmod 644 .git/FETCH_HEAD
+            sudo git pull origin main
+            sudo pm2 kill
+            sudo npm i --force
+            sudo npm run build
+            sudo pm2 start dist/main.js
+
+        
