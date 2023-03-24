@@ -8,14 +8,15 @@
   <a href="https://hits.seeyoufarm.com">
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FYoungHwan90s%2FProject_Final_HomeParty%2Fhit-counter&count_bg=%2379C83D&title_bg=%23555555&icon=myspace.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/>
   </a>
-</p></br>
+</p></br></br></br>
 
 ## 🏛️ Moava Wev Page v1.0
 > 스파르타코딩클럽 백엔드 개발자 부트캠프 node.js 4기</br>
-> 개발기간: 2023.02.27 ~ 2023.04.02</br>
+> 개발기간: 2023.02.27 ~ 2023.04.02</br></br></br>
 
 ## 🏡 배포 주소
 > http://moava-homeparty.site
+</br></br></br>
 
 ## 🧑‍🤝‍🧑 웹 개발팀 소개
 <table border="1">
@@ -85,7 +86,7 @@
     <td>이지영 맡은 기능</td>
     <td>육준호 맡은 기능</td>
   </tr>
-</table>
+</table></br></br></br>
 
 ## 📢 프로젝트 소개
 > 💡 모아바(MOAVA)- 홈파티 주최 및 참가
@@ -97,7 +98,7 @@
 > 새로운 친구들을 만나고 싶다면? 모아바!!!
 > 
 > 일단! 모아바🥳🎉
-</br>
+</br></br>
 안녕하세요!</br>
 모아바는 심심한 사람들을 위해 파티 주최 및 참가를 할 수 있는 페이지입니다.</br>
 어떤 파티가 있는지 궁금하다면 가입 없이 찾아볼 수 있지만, 주최와 참가를 하기 위해서는 회원가입이 필요합니다.</br>
@@ -110,6 +111,7 @@
 </br>
 ## 으야가거가 모르겠다~!!
 </br>
+</br></br></br></br></br>
 
 ***
 
@@ -154,6 +156,7 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+</br></br></br>
 
 ***
 
@@ -177,8 +180,63 @@ $ npm run test:cov
 
 ### Communication
 <img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=SLACK&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-000000?style=for-the-badge&logo=NOTION&logoColor=white">
+</br></br></br>
 
+📺 ## 화면 구성
+<table>
+  <tr align="center">
+    <td>메인 페이지</td>
+    <td>위시리스트</td>
+  </tr>
+  <tr>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>파티 탐색 페이지</td>
+    <td>파티 개최 페이지</td>
+  </tr>
+  <tr>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+    <td>
+      <p align="center">
+        <img src="" width="400" />
+      </p>
+    </td>
+  </tr>
+</table>
+</br></br></br>
 
+## 🛠️ 주요 기능
+#### 😎 머시기저시기
+- 어쩌구
+- 저쩌구
+</br>
+#### 😎 머시기저시기2
+- 어쩌구
+- 저쩌구
+</br>
+#### 😎 머시기저시기3
+- 어쩌구
+- 저쩌구
 
+## 🚀 아키텍처
+<p>
+  <img src="https://user-images.githubusercontent.com/118159813/227453731-a79cbed8-fd53-4fe2-99ad-895c272294d5.png" width="500"/>
+</p>
+
+#### 디렉토리 구조
 
 
