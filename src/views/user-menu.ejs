@@ -1,7 +1,7 @@
 <div class="container-menu">
     <h1>마이페이지</h1>
     <div class="row">
-        <div onclick="location.href='/user-check'" class="service">
+        <div id ="mypage" class="service">
             <i class="fa-solid fa-lock"></i>
             <h2>개인정보 및 보안</h2>
             <p>비밀번호를 변경하고 계정을 안전하게 보호하세요</p>
@@ -28,10 +28,33 @@
             <h2>진행중 파티</h2>
             <p>내가 신청한 파티 상태를 확인하세요</p>
         </div>
-        <div onclick="location.href='/user-history'"class="service">
+        <div onclick="location.href='/user-history'" class="service">
             <i class="fa-regular fa-clock"></i>
             <h2>과거이력</h2>
             <p>참여했던 파티 목록 확인</p>
         </div>
     </div>
 </div>
+<script>
+    let user;
+     $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if(userInfo) {
+               user = userInfo
+            } else {
+                customAlert("로그인 후 이용가능합니다.", function () {
+                    window.location.replace('/login');
+                });
+            }
+        });
+    });
+    
+    document.getElementById('mypage').addEventListener('click', () => {
+        if (user.kakaoId) {
+            window.location.href='/user-mypage';
+        } else {
+            window.location.href='/user-check'
+        }
+       
+    });
+</script>

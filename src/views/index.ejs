@@ -97,18 +97,11 @@
             <script>
               const accessToken = '<%= accessToken %>';
               const refreshToken = '<%= refreshToken %>';
-              const email = '<%= email %>';
-              const password = '<%= password %>';
 
               sessionStorage.setItem('accessToken', accessToken);
               sessionStorage.setItem('refreshToken', refreshToken);
-
-              if (password) {
-                window.location.replace('/')
-              } else {
-                sessionStorage.setItem('email', email);
-                window.location.href = '/reset-password'
-            }
+              window.location.replace('/')
+              
             </script>
             <% } %>
 
