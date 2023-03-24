@@ -44,8 +44,8 @@ export class UserController {
     @Delete('/')
     @HttpCode(204)
     async deleteUser(@Req() req, @Res() res) {
-        const { id } = req.user;
-        await this.userService.deleteUser(id);
+        const user = req.user;
+        await this.userService.deleteUser(user);
         return await res.json({});
     }
 
