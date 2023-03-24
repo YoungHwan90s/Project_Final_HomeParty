@@ -419,7 +419,7 @@
 - 카카오톡 계정으로 로그인 가능
 - 카카오톡 정보들도 회원 정보에 표시
 <p>
-  <img src="https://user-images.githubusercontent.com/118159813/227559177-d48630ef-c5e6-43fa-bf7e-8f0316bed9f4.png" width="600">
+  <img src="https://user-images.githubusercontent.com/118159813/227559177-d48630ef-c5e6-43fa-bf7e-8f0316bed9f4.png" width="800">
 </p>
 
 #### 🍃 카카오 맵
@@ -431,7 +431,7 @@
 
 ## **ERD**
 <p>
-  <img src="https://user-images.githubusercontent.com/118159813/227559354-03c81e1e-4184-42e3-9f87-569b0dc00a2e.png" width="600">
+  <img src="https://user-images.githubusercontent.com/118159813/227559354-03c81e1e-4184-42e3-9f87-569b0dc00a2e.png" width="800">
 </p>
 </br></br>
 
