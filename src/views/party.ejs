@@ -232,7 +232,6 @@
     }
 
     function getParties(userId, page) {
-        console.log(userId)
         $.ajax({
             type: 'GET',
             url: `/api/party/list?page=${page}`,
@@ -250,7 +249,6 @@
                     const status = partyList[i]['status'];
                     const thumbnailList = partyList[i]['thumbnail'];
                     const wishList = partyList[i]['wishList'];
-                    console.log(userId)
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
                     );
@@ -360,7 +358,6 @@
     window.addEventListener('scroll', () => {
         // 문서의 총 높이
         const totalHeight = document.documentElement.scrollHeight;
-        console.log(totalHeight)
 
         // 브라우저 창의 높이
         const windowHeight = window.innerHeight;

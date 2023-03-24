@@ -51,7 +51,6 @@ export class UserService {
     }
 
     async createKakaoUser(data): Promise<User> {
-        console.log(data)
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
