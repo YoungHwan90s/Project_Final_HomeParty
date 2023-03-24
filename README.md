@@ -56,34 +56,34 @@
   </tr>
   <tr align="center">
     <td>
-      <a href="https://github.com/YoungHwan90s">
+      <a href="https://github.com/YoungHwan90s" style="color: black">
         @Young-hwan
       </a>
     </td>
     <td>
-      <a href="https://github.com/wjdrl3122">
+      <a href="https://github.com/wjdrl3122" style="color: black">
         @Jeong-gi
       </a>
     </td>
     <td>
-      <a href="https://github.com/iffy-yeti">
+      <a href="https://github.com/iffy-yeti" style="color: black">
         @Seol-in
       </a>
     </td>
     <td>
-      <a href="https://github.com/easy2jiyoung">
+      <a href="https://github.com/easy2jiyoung" style="color: black">
         @Ji-young
       </a>
     </td>
     <td>
-      <a href="https://github.com/six-ju">
+      <a href="https://github.com/six-ju" style="color: black">
         @Jun-ho
       </a>
     </td>
   </tr>
   <tr align="center">
     <td colspan="5">
-      <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533">
+      <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533" style="color: black">
         @오영환팀 팀 노션
       </a>
     </td>
