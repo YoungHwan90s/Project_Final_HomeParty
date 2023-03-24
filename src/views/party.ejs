@@ -250,7 +250,7 @@ function partySearch(userId) {
                     const status = partyList[i]['status'];
                     const thumbnailList = partyList[i]['thumbnail'];
                     const wishList = partyList[i]['wishList'];
-
+                    console.log(userId)
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
                     );
@@ -372,7 +372,7 @@ function partySearch(userId) {
         if (scrollDistance + windowHeight >= totalHeight) {
             // 페이지 번호 증가
             page++;
-            getParties(userId = 0, page);
+            getParties(userId, page);
         }
     });
 
