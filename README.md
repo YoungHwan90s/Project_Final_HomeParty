@@ -82,18 +82,18 @@
     </td>
   </tr>
   <tr align="center">
-    <td>오영환 맡은 기능</td>
-    <td>이정기 맡은 기능</td>
-    <td>이설인 맡은 기능</td>
-    <td>이지영 맡은 기능</td>
-    <td>육준호 맡은 기능</td>
-  </tr>
-  <tr align="center">
     <td colspan="5">
       <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533">
         @오영환팀 팀 노션
       </a>
     </td>
+  </tr>
+  <tr align="center">
+    <td>오영환 맡은 기능</td>
+    <td>이정기 맡은 기능</td>
+    <td>이설인 맡은 기능</td>
+    <td>이지영 맡은 기능</td>
+    <td>육준호 맡은 기능</td>
   </tr>
 </table></br></br>
 
@@ -102,10 +102,10 @@
 >
 > 내가 파티를 개최하기도 하고 다른 사람들이 개최한 파티를 참여하면서 무료한 하루를 바꿔보세요!
 >
-> 증가하는 1인 세대! 파티를 열어 새로운 친구를 만나자!
-> 타지에서 혼자 지낸다면? 모아바!
-> 취업하며 친구들이 멀어졌다면? 모아바!!
-> 새로운 친구들을 만나고 싶다면? 모아바!!!
+> 증가하는 1인 세대! 파티를 열어 새로운 친구를 만나자!    
+> 타지에서 혼자 지낸다면? 모아바!     
+> 취업하며 친구들이 멀어졌다면? 모아바!!     
+> 새로운 친구들을 만나고 싶다면? 모아바!!!     
 >
 > 일단! 모아바🥳🎉
 
@@ -245,7 +245,7 @@ $ npm run test:cov
 
 ## 🚀 아키텍처
 <p>
-  <img src="https://user-images.githubusercontent.com/118159813/227456495-ede5c5b0-66b1-4563-b2e7-948ce3ca8489.png" width="800"/>
+  <img src="https://user-images.githubusercontent.com/118159813/227509158-bf6b0df6-a081-4165-8d0d-623be234da95.png" width="800"/>
 </p>
 
 ### 디렉토리 구조
