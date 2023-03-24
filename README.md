@@ -260,7 +260,7 @@
     </td>
     <td>
       <p align="center">
-        <img src="https://user-images.githubusercontent.com/118159813/227430935-3f1a35d9-c284-4eef-857d-69f90e1aea30.png" width="150" />
+        <img src="https://user-images.githubusercontent.com/118159813/227578592-5852c3d0-7f64-450c-ac37-b43759e812c4.jpeg" width="150" />
       </p>
     </td>
     <td>
