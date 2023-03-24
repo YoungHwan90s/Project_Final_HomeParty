@@ -55,40 +55,41 @@
 </main>
 
 <script>
-    let page = 1
-    let totalCount
+    let page = 1;
+    let totalCount;
+    let userId;
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id;
+                userId = userInfo.id;
                 getParties(userId, page);
             } else {
-                getParties(0 , page);
+                getParties(0, page);
             }
         });
     });
 
-$("#partyWhen").click(function() {
-    $("#clearButton").show();
-  });
-  
-$("#clearButton").click(function() {
-    $("#partyWhen").val("");
-    $(this).hide();
-});
-$(document).click(function(e) {
-    if ($(e.target).attr('id') === 'partyWhen') {
-        return
-    }
-    if ($('#partyWhen').hasClass('active')) {
-        $('#clearButton').hide();
-    }
-})
+    $('#partyWhen').click(function () {
+        $('#clearButton').show();
+    });
 
-function partySearch(userId) {
-    const address = $('#partyWhere').val()
-    const date = $('#partyWhen').val()
-    const title = $('#partyName').val()
+    $('#clearButton').click(function () {
+        $('#partyWhen').val('');
+        $(this).hide();
+    });
+    $(document).click(function (e) {
+        if ($(e.target).attr('id') === 'partyWhen') {
+            return;
+        }
+        if ($('#partyWhen').hasClass('active')) {
+            $('#clearButton').hide();
+        }
+    });
+
+    function partySearch(userId) {
+        const address = $('#partyWhere').val();
+        const date = $('#partyWhen').val();
+        const title = $('#partyName').val();
 
         let webUrl = '/party?';
         if (address) {
@@ -113,17 +114,16 @@ function partySearch(userId) {
 
                 $('.partyList').empty();
 
-            for (let i = 0; i < partyList.length; i++) {
-                const partyId = partyList[i]['id'];
-                const title = partyList[i]['title'];
-                const maxMember = partyList[i]['maxMember'];
-                const currMember = partyList[i]['currMember'];
-                const thumbnails = partyList[i]['thumbnail'];
-                const date = partyList[i]['date'];
-                const status = partyList[i]['status'];
-                const thumbnailList = partyList[i]['thumbnail'];
-                const wishList = partyList[i]['wishList'];
-
+                for (let i = 0; i < partyList.length; i++) {
+                    const partyId = partyList[i]['id'];
+                    const title = partyList[i]['title'];
+                    const maxMember = partyList[i]['maxMember'];
+                    const currMember = partyList[i]['currMember'];
+                    const thumbnails = partyList[i]['thumbnail'];
+                    const date = partyList[i]['date'];
+                    const status = partyList[i]['status'];
+                    const thumbnailList = partyList[i]['thumbnail'];
+                    const wishList = partyList[i]['wishList'];
 
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
@@ -230,15 +230,16 @@ function partySearch(userId) {
             },
         });
     }
-    
+
     function getParties(userId, page) {
+        console.log(userId)
         $.ajax({
             type: 'GET',
             url: `/api/party/list?page=${page}`,
             data: {},
             success: function (response) {
                 const partyList = response;
-                
+
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['id'];
                     const title = partyList[i]['title'];
@@ -355,7 +356,7 @@ function partySearch(userId) {
             },
         });
     }
-    
+
     window.addEventListener('scroll', () => {
         // 문서의 총 높이
         const totalHeight = document.documentElement.scrollHeight;
@@ -370,7 +371,7 @@ function partySearch(userId) {
         if (scrollDistance + windowHeight >= totalHeight) {
             // 페이지 번호 증가
             page++;
-            getParties(userId = 0, page);
+            getParties(userId, page);
         }
     });
 
@@ -385,14 +386,10 @@ function partySearch(userId) {
             },
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    document
-                        .querySelector(`#likeOrNot${partyId}`)
-                        .classList.replace('fa-regular', 'fa-solid');
+                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
                 } else {
-                    document
-                        .querySelector(`#likeOrNot${partyId}`)
-                        .classList.replace('fa-solid', 'fa-regular');
+                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = '';
                 }
             },

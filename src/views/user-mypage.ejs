@@ -7,7 +7,7 @@
                     <div class="info-header">
                         <h2 class="h2bold">기본정보</h2>
                     </div>
-<!------------------------ 프로필 사진 ----------------------->
+                    <!------------------------ 프로필 사진 ----------------------->
                     <div class="img-cont">
                         <div class="a11yHidden my-info">
                             <h3 class="h3bold">이미지</h3>
@@ -15,12 +15,17 @@
                         <div class="img-wrap">
                             <div class="prof-wrap">
                                 <div class="prof-image">
-                                    <img class="prof-img" id="maypage-profile-image" src="" accept=".png, .jpg, .jpeg," >
+                                    <img
+                                        class="prof-img"
+                                        id="maypage-profile-image"
+                                        src=""
+                                        accept=".png, .jpg, .jpeg,"
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
- <!------------------------ 프로필 사진 끝----------------------->
+                    <!------------------------ 프로필 사진 끝----------------------->
                     <div class="my-info">
                         <h3 class="h3bold">계정</h3>
                         <p class="mypage-text" id="email"></p>
@@ -60,61 +65,75 @@
                         <h3 class="h3bold">자기소개</h3>
                         <p class="mypage-text" id="introduction"></p>
                     </div>
-<!------------------------ 정보 끝----------------------->
+                    <!------------------------ 정보 끝----------------------->
 
-                <div class="mypage-btn">
-                    <button class="mypage-edit-btn" type="button" onclick="location.href='user-edit'">회원 정보 수정하기</button>
-                    <button class="password-edit-btn" type="button" onclick="location.href='reset-password'">비밀번호 수정하기</button>
-                    <button class="mypage-delete-btn" type="button" onclick="deleteUser()">탈퇴하기</button>
+                    <div class="mypage-btn">
+                        <button
+                            class="mypage-edit-btn"
+                            type="button"
+                            onclick="location.href='user-edit'"
+                        >
+                            회원 정보 수정하기
+                        </button>
+                        <button
+                            class="password-edit-btn"
+                            type="button"
+                            onclick="location.href='reset-password'"
+                        >
+                            비밀번호 수정하기
+                        </button>
+                        <button class="mypage-delete-btn" type="button" onclick="deleteUser()">
+                            탈퇴하기
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        $.ajax({
+            type: 'GET',
+            url: `/user`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                const userInfo = response.user;
+
+                $('#email').append(userInfo.email);
+                $('#name').append(userInfo.name);
+                $('#sex').append(userInfo.sex);
+                $('#birthday').append(userInfo.birthday);
+                $('#phone').append(userInfo.phone);
+                $('#address').append(userInfo.address);
+                $('#introduction').append(userInfo.introduction);
+                $('img[id=maypage-profile-image]').attr('src', userInfo.profile);
+            },
+        });
+
+        function deleteUser() {
+            let result = confirm('탈퇴하시겠습니까?');
+            if (result) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/user`,
+                    data: {},
+                    headers: {
+                        authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                        refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                    },
+                    success: function (response) {
+                        alert('회원 탈퇴');
+                        window.location.href = '/';
+                    },
+                });
+            } else {
+                alert('탈퇴 취소');
+            }
+        }
+        // 시험용 주석
+    </script>
 </div>
-
-<script>
-    $.ajax({
-        type: 'GET',
-        url: `/user`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            const userInfo = response.user
-
-            $('#email').append(userInfo.email)
-            $('#name').append(userInfo.name)
-            $('#sex').append(userInfo.sex)
-            $('#birthday').append(userInfo.birthday)
-            $('#phone').append(userInfo.phone)
-            $('#address').append(userInfo.address)
-            $('#introduction').append(userInfo.introduction)
-            $('img[id=maypage-profile-image]').attr('src', userInfo.profile)
-
-        }
-    });
-
-    function deleteUser() {
-        let result = confirm('탈퇴하시겠습니까?');
-        if (result) {
-            $.ajax({
-                type: 'DELETE',
-                url: `/user`,
-                data: {},
-                headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
-                success: function (response) {
-                    alert('회원 탈퇴');
-                    window.location.href="/"
-                }
-            })
-        } else {
-            alert('탈퇴 취소')
-        }
-    }
-    // 시험용 주석
-</script>
