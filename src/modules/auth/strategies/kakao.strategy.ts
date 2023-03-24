@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { access } from 'fs';
@@ -30,7 +30,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         if (!user) {
             const userProfile = {
                 kakaoId: id,
-                email,
+                email: email,
                 nickname,
                 profileImage,
             };

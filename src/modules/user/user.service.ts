@@ -64,10 +64,11 @@ export class UserService {
 
             let userKakaoInfo = new Kakao();
             userKakaoInfo.kakaoId = data.kakaoId;
+            userKakaoInfo.user = newUserWithKakao
 
             newUserWithKakao.kakao = userKakaoInfo;
-            
-            await queryRunner.manager.save(User, newUserWithKakao);
+
+            user = await queryRunner.manager.save(User, newUserWithKakao);
 
             await queryRunner.commitTransaction();
         } catch (error) {
