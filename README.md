@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="http://moava-homeparty.site/" target="blank">
-    <img src="https://user-images.githubusercontent.com/118159813/227415742-c122e2ff-22f9-48d9-bbb2-a3e3ac127b5a.png" width="250" alt="Moava Logo" />   </a>
+    <img src="https://user-images.githubusercontent.com/118159813/227510559-96bfc959-2f5f-4710-80a5-a39cf1792bcd.png" width="250" alt="Moava Logo" />   </a>
 </p>
 <p align="center">
   <a href="https://hits.seeyoufarm.com">
@@ -61,29 +61,29 @@
       </a>
     </td>
     <td>
-      <a href="https://github.com/wjdrl3122" style="color: black">
+      <a href="https://github.com/wjdrl3122">
         @Jeong-gi
       </a>
     </td>
     <td>
-      <a href="https://github.com/iffy-yeti" style="color: black">
+      <a href="https://github.com/iffy-yeti">
         @Seol-in
       </a>
     </td>
     <td>
-      <a href="https://github.com/easy2jiyoung" style="color: black">
+      <a href="https://github.com/easy2jiyoung">
         @Ji-young
       </a>
     </td>
     <td>
-      <a href="https://github.com/six-ju" style="color: black">
+      <a href="https://github.com/six-ju">
         @Jun-ho
       </a>
     </td>
   </tr>
   <tr align="center">
     <td colspan="5">
-      <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533" style="color: black">
+      <a href="https://www.notion.so/Sparta_Final_Project-11d2d3562bbd48b9b8776495036ea533">
         @오영환팀 팀 노션
       </a>
     </td>
@@ -126,49 +126,6 @@
 
 ***
 
-</br></br>
-
-## 🚅 시작 가이드
-=> respository를 clone하고, 패키지 설치, 환경변수 설정, 실행하는 과정에 대한 내용 적기
-
-### Requirements
-For building and running the application you need:
-- node.js 18.?
-- Npm 9.2.0 ?
-- Strapi 3.6.6 ?
-- (수정 필요)
-
-### Installation
-
-```bash
-$ npm install
-```
-
-### Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-### Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 </br></br>
 
 ## 📚 기술 스택
