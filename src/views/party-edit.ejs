@@ -142,16 +142,16 @@
                 <section class="regionSection">
                     <h3 class="title">현재주소</h3>
                     <div class="addressWrapper"></div>
-                    <h3 class="title" style="margin-top: 20px; color: red">주소 수정하기</h3>
                     <div class="addressSearchWrapper">
-                        <label for="partyAddressSearch" class="a11yHidden">주소 검색</label>
+                        <label for="partyAddressSearch" class="a11yHidden">현재 주소</label>
                         <input
                             type="button"
                             id="partyAddressSearch-1"
                             class="partyAddressSearch"
                             onclick="findAddress()"
-                            value="주소 검색"
+                            value="주소 변경"
                             readonly
+                            style = "margin-top: 20px; color: red;"
                         />
                         <input
                             type="text"
@@ -172,31 +172,6 @@
                     </div>
 
                     <!-- 지도 삽입 -->
-                </section>
-
-                <section class="hostSection">
-                    <h3 class="a11yHidden">호스트 정보</h3>
-                    <div class="hostInfoWrapper">
-                        <a href="" class="hostInfoLink">
-                            <figure class="hostFigure">
-                                <div class="hostImageWrapper">
-                                    <img
-                                        id="hostProfile"
-                                        src="http://placehold.it/320x100?text=sample"
-                                        alt=""
-                                    />
-                                </div>
-
-                                <figcaption>
-                                    <h3 class="hostTitle">호스트</h3>
-                                    <p class="hostName">
-                                        <!-- Backend -->
-                                    </p>
-                                    <p class="a11yHidden">호스트 정보 더보기</p>
-                                </figcaption>
-                            </figure>
-                        </a>
-                    </div>
                 </section>
             </div>
         </div>
@@ -244,14 +219,8 @@
             currMember = response.currMember;
             thumbnails = response.thumbnail;
             address = response.address;
-            isoDate = response.date;
-            thumbnail = response.thumbnail;
+            date = response.date;
             tag = response.tag;
-
-            const year = isoDate.substr(0, 4);
-            const month = isoDate.substr(5, 2);
-            const day = isoDate.substr(8, 2);
-            date = `${year}-${month}-${day}`;
 
             $('.addressWrapper').append(`<p>${address}</p>`);
             $('#partyTitle').val(title);
@@ -273,13 +242,13 @@
                 });
             }
 
-            if (thumbnail.length > 0) {
-                thumbnail.forEach((e, i) => {
+            if (thumbnails.length > 0) {
+                thumbnails.forEach((item , i) => {
                     const imageWrapper = document.querySelectorAll(
                         '.partyImageItem > .uploadImageWrapper',
                     )[i];
 
-                    imageWrapper.innerHTML = `<img src="${e.thumbnail}" class="uploadedImage" alt="">`;
+                    imageWrapper.innerHTML = `<img src="${item.thumbnail}" class="uploadedImage" alt="">`;
                     imageWrapper.parentNode.classList.add('uploaded');
                 });
             }
