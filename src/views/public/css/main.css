@@ -88,7 +88,7 @@ img {
   left: 50%;
   content: '';
   position: absolute;
-  background: url(/imgs/party.png)no-repeat center center/cover;
+  background: url(/imgs/partymain.jpg)no-repeat center center/cover;
   transform: translate(-50%, -50%);
   margin: -14.3vh 0px -4vh;
   width: 97%;
