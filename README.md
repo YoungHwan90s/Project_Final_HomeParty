@@ -160,39 +160,39 @@ $ npm run test:cov
 ## 기술 스택
 
 ### Envrionment
-<img src="https://img.shields.io/badge/#007ACC?style=for-the-badge&logo=VISUAL STUDIO CODE&logoColor=white">
-<img src="https://img.shields.io/badge/#F05032?style=for-the-badge&logo=GIT&logoColor=white">
-<img src="https://img.shields.io/badge/#181717?style=for-the-badge&logo=GITHUB&logoColor=white">
+<img src="https://img.shields.io/badge/VISUAL STUDIO CODE-007ACC?style=for-the-badge&logo=VISUAL STUDIO CODE&logoColor=white">
+<img src="https://img.shields.io/badge/GIT-F05032?style=for-the-badge&logo=GIT&logoColor=white">
+<img src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=GITHUB&logoColor=white">
 
 ### Config
-<img src="https://img.shields.io/badge/#CB3837?style=for-the-badge&logo=NPM&logoColor=white">
+<img src="https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=NPM&logoColor=white">
 
 ### Development
 #### Front-end
-<img src="https://img.shields.io/badge/#E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
-<img src="https://img.shields.io/badge/#1572B6?style=for-the-badge&logo=CSS3&logoColor=white">
-<img src="https://img.shields.io/badge/#F7DF1E?style=for-the-badge&logo=JAVASCRIPT&logoColor=white">
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white">
+<img src="https://img.shields.io/badge/JAVASCRIPTF7DF1E?style=for-the-badge&logo=JAVASCRIPT&logoColor=white">
 <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=AJAX&logoColor=white">
-<img src="https://img.shields.io/badge/#0769AD?style=for-the-badge&logo=JQUERY&logoColor=white">
-<img src="https://img.shields.io/badge/#7952B3?style=for-the-badge&logo=BOOTSTRAP&logoColor=white">
+<img src="https://img.shields.io/badge/JQUERY-0769AD?style=for-the-badge&logo=JQUERY&logoColor=white">
+<img src="https://img.shields.io/badge/BOOTSTRAP-7952B3?style=for-the-badge&logo=BOOTSTRAP&logoColor=white">
 <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=EJS&logoColor=white">
 
 #### Back-end
-<img src="https://img.shields.io/badge/#339933?style=for-the-badge&logo=NODE.JS&logoColor=white">
-<img src="https://img.shields.io/badge/#E0234E?style=for-the-badge&logo=NEST.JS&logoColor=white">
-<img src="https://img.shields.io/badge/#3178C6?style=for-the-badge&logo=TYPESCRIPT&logoColor=white">
+<img src="https://img.shields.io/badge/NODE.JS-339933?style=for-the-badge&logo=NODE.JS&logoColor=white">
+<img src="https://img.shields.io/badge/NEST.JS-E0234E?style=for-the-badge&logo=NEST.JS&logoColor=white">
+<img src="https://img.shields.io/badge/TYPESCRIPT-3178C6?style=for-the-badge&logo=TYPESCRIPT&logoColor=white">
 <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=TYPEORM&logoColor=white">
-<img src="https://img.shields.io/badge/#4479A1?style=for-the-badge&logo=MYSQL&logoColor=white">
+<img src="https://img.shields.io/badge/MYSQL-4479A1?style=for-the-badge&logo=MYSQL&logoColor=white">
 
 #### DevOps
 <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=REDIS CLOUD&logoColor=white">
 <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=AWS&logoColor=white">
 <img src="https://img.shields.io/badge/표시할이름-색상?style=for-the-badge&logo=RDS&logoColor=white">
-<img src="https://img.shields.io/badge/#2088FF?style=for-the-badge&logo=GITHUB ACTION&logoColor=white">
+<img src="https://img.shields.io/badge/GITHUB ACTION-2088FF?style=for-the-badge&logo=GITHUB ACTION&logoColor=white">
 
 ### Communication
-<img src="https://img.shields.io/badge/#4A154B?style=for-the-badge&logo=SLACK&logoColor=white">
-<img src="https://img.shields.io/badge/#000000?style=for-the-badge&logo=NOTION&logoColor=white">
+<img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=SLACK&logoColor=white">
+<img src="https://img.shields.io/badge/NOTION-000000?style=for-the-badge&logo=NOTION&logoColor=white">
 
 
 
