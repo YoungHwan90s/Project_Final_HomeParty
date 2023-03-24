@@ -68,6 +68,8 @@ export class UserService {
             newUserWithKakao.kakao = userKakaoInfo;
 
             user = await queryRunner.manager.save(User, newUserWithKakao);
+            userKakaoInfo.user = user;
+            await queryRunner.manager.save(Kakao, userKakaoInfo);
 
             await queryRunner.commitTransaction();
         } catch (error) {
