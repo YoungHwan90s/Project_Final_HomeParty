@@ -3,7 +3,6 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    JoinColumn,
     OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
@@ -18,6 +17,9 @@ export class Kakao {
     @Column('int')
     kakaoId: number;
 
+    @Column('int')
+    userId: number;
+
     @CreateDateColumn()
     createdAt: Date;
 
@@ -29,6 +31,5 @@ export class Kakao {
 
     // 유저 <-> 카카오 일대일 관계
     @OneToOne(() => User, (user) => user.kakao)
-    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
     user: User;
 }
