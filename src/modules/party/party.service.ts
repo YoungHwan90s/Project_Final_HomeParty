@@ -25,39 +25,44 @@ export class PartyService {
     ) {}
 
     async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
-        let query = this.partyRepository.createQueryBuilder("party")
+        let query = this.partyRepository.createQueryBuilder('party');
 
-        query = query.leftJoinAndSelect('party.thumbnail', 'thumbnail')
-                    .leftJoinAndSelect('party.wishList', 'wishList')
-                    .where('party.deletedAt IS NULL')
-                    .andWhere('party.status = :status', { status: '모집중' });
+        query = query
+            .leftJoinAndSelect('party.thumbnail', 'thumbnail')
+            .leftJoinAndSelect('party.wishList', 'wishList')
+            .where('party.deletedAt IS NULL')
+            .andWhere('party.status = :status', { status: '모집중' });
 
         if (!isNaN(date.getTime())) {
-            let month = date.getMonth() + 1 < 10 ? `0${(date.getMonth()+1).toString()}` : (date.getMonth()+1).toString()
-            let day = date.getDate() < 10 ? `0${date.getDate().toString()}` : date.getDate().toString()
-            const year = date.getFullYear().toString()
-            
-            const dateStr = `${year}-${month}-${day}`
-          query = query.andWhere(`party.date= :date`, { date: dateStr });
+            let month =
+                date.getMonth() + 1 < 10
+                    ? `0${(date.getMonth() + 1).toString()}`
+                    : (date.getMonth() + 1).toString();
+            let day =
+                date.getDate() < 10 ? `0${date.getDate().toString()}` : date.getDate().toString();
+            const year = date.getFullYear().toString();
+
+            const dateStr = `${year}-${month}-${day}`;
+            query = query.andWhere(`party.date= :date`, { date: dateStr });
         }
         if (address) {
-          query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
+            query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
         }
         if (title) {
-          query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
+            query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
         }
 
         const result = await query.getMany();
-        return result
-      }
+        return result;
+    }
 
     async getParties(page: number): Promise<Party[]> {
-            return await this.partyRepository.find({
+        return await this.partyRepository.find({
             where: { deletedAt: null, status: '모집중' },
             relations: ['thumbnail', 'wishList'],
             take: 12,
             skip: (page - 1) * 12,
-        })
+        });
     }
 
     async getPartyById(partyId: number): Promise<Party> {
@@ -79,7 +84,6 @@ export class PartyService {
         let createdParty: Party;
 
         try {
-            // Party 객체 인스턴스 맵핑
             const party = new Party();
             party.user = user;
             party.hostId = user.id;
@@ -107,7 +111,6 @@ export class PartyService {
                     newTags.push(tag);
                 }
 
-                // Tag 객체 인스턴스 맵핑
                 party.tag = newTags;
             }
 
@@ -386,23 +389,23 @@ export class PartyService {
     @Cron('0 0 0 * * *')
     async updateCompletionStatus() {
         const currentDate = new Date();
-    
+
         const party = await this.partyRepository.find({
             where: { status: '모집중', deletedAt: null },
         });
-    
+
         for (let i = 0; i < party.length; i++) {
             if (party[i].date <= currentDate) {
-                party[i].status = "마감";
+                party[i].status = '마감';
                 await this.partyRepository.save(party[i]);
             }
         }
     }
 
     async getUserHost(id): Promise<PartyMember[]> {
-        return await this.partyMemberRepository.find({ 
-            where: { deletedAt: null, userId: id, status: "호스트" },
-            relations: ['party','party.thumbnail','party.partyMember'],
+        return await this.partyMemberRepository.find({
+            where: { deletedAt: null, userId: id, status: '호스트' },
+            relations: ['party', 'party.thumbnail', 'party.partyMember'],
         });
     }
 }
