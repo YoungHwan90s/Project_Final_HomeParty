@@ -61,14 +61,9 @@ export class UserService {
             newUserWithKakao.email = data.email;
             newUserWithKakao.name = data.nickname;
             newUserWithKakao.profile = data.profileImage;
+            newUserWithKakao.kakao.kakaoId = data.kakaoId
 
-            user = await queryRunner.manager.save(User, newUserWithKakao);
-
-            let userKakaoInfo = new Kakao();
-            userKakaoInfo.userId = user.id;
-            userKakaoInfo.kakaoId = data.kakaoId;
-
-            await queryRunner.manager.save(Kakao, userKakaoInfo);
+            await queryRunner.manager.save(User, newUserWithKakao);
 
             await queryRunner.commitTransaction();
         } catch (error) {
