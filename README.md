@@ -8,15 +8,15 @@
   <a href="https://hits.seeyoufarm.com">
     <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FYoungHwan90s%2FProject_Final_HomeParty%2Fhit-counter&count_bg=%2379C83D&title_bg=%23555555&icon=myspace.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/>
   </a>
-</p></br></br></br>
+</p></br></br>
 
 ## 🏛️ Moava Wev Page v1.0
 > 스파르타코딩클럽 백엔드 개발자 부트캠프 node.js 4기</br>
-> 개발기간: 2023.02.27 ~ 2023.04.02</br></br></br>
+> 개발기간: 2023.02.27 ~ 2023.04.02</br></br>
 
 ## 🏡 배포 주소
 > http://moava-homeparty.site
-</br></br></br>
+</br></br>
 
 ## 🧑‍🤝‍🧑 웹 개발팀 소개
 <table border="1">
@@ -86,18 +86,20 @@
     <td>이지영 맡은 기능</td>
     <td>육준호 맡은 기능</td>
   </tr>
-</table></br></br></br>
+</table></br></br>
 
 ## 📢 프로젝트 소개
-> 💡 모아바(MOAVA)- 홈파티 주최 및 참가
+>
+💡 모아바(MOAVA)- 홈파티 주최 및 참가
 내가 파티를 개최하기도 하고 다른 사람들이 개최한 파티를 참여하면서 무료한 하루를 바꿔보세요!
-
+>
 증가하는 1인 세대! 파티를 열어 새로운 친구를 만나자!
 타지에서 혼자 지낸다면? 모아바!
 취업하며 친구들이 멀어졌다면? 모아바!!
 새로운 친구들을 만나고 싶다면? 모아바!!!
+>
+일단! 모아바🥳🎉
 
-> 일단! 모아바🥳🎉
 </br></br>
 안녕하세요!</br>
 모아바는 심심한 사람들을 위해 파티 주최 및 참가를 할 수 있는 페이지입니다.</br>
@@ -182,7 +184,7 @@ $ npm run test:cov
 <img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=SLACK&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-000000?style=for-the-badge&logo=NOTION&logoColor=white">
 </br></br></br>
 
-📺 ## 화면 구성
+## 📺 화면 구성
 <table>
   <tr align="center">
     <td>메인 페이지</td>
