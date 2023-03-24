@@ -60,9 +60,8 @@ export class AuthController {
     kakaoLoginCallback(@Req() req,  @Res() res) {
         
         const { user, accessToken, refreshToken } = req.user
-        const email = user.email
-        const password = user.password
-        return res.render('index.ejs', { components: 'kakao', email, password, accessToken, refreshToken })
+
+        return res.render('index.ejs', { components: 'kakao', user, accessToken, refreshToken })
     }
 
     @UseGuards(JwtAuthGuard)
