@@ -1,4 +1,4 @@
-<main class="partySearch main container-fluid ">
+<main class="partySearch main container-fluid">
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
 
@@ -374,6 +374,11 @@
     });
 
     function updateWishList(partyId) {
+        if (!userId) {
+            customAlert('로그인 후 이용 가능합니다.', function () {
+                window.location.reload();
+            });
+        }
         $.ajax({
             type: 'POST',
             url: `/user/wish-list/${partyId}`,
@@ -384,10 +389,14 @@
             },
             success: function (response) {
                 if (response.updateOrDelete == 0) {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-regular', 'fa-solid');
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-regular', 'fa-solid');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
                 } else {
-                    document.querySelector(`#likeOrNot${partyId}`).classList.replace('fa-solid', 'fa-regular');
+                    document
+                        .querySelector(`#likeOrNot${partyId}`)
+                        .classList.replace('fa-solid', 'fa-regular');
                     document.querySelector(`#likeOrNot${partyId}`).style.color = '';
                 }
             },
