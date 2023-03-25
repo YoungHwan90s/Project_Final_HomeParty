@@ -200,7 +200,6 @@
     let thumbnails;
     let address;
     let date;
-    let thumbnail;
     let tag;
 
     $.ajax({
@@ -281,8 +280,8 @@
             $imageItem.classList.remove('uploaded');
             $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
 
-            if (thumbnail[i]) {
-                removedThumbnails.push(thumbnail[i]);
+            if (thumbnails[i]) {
+                removedThumbnails.push(thumbnails[i]);
             }
         });
     });
