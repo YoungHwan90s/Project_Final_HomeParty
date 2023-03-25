@@ -196,46 +196,47 @@
                 </div>`;
                 $('.partyPage').append(html);
 
-                var mapContainer = document.getElementById('map'),
-                    mapOption = {
-                        center: new kakao.maps.LatLng(33.450701, 126.570667),
-                        level: 4,
-                    };
+                // var mapContainer = document.getElementById('map'),
+                //     mapOption = {
+                //         center: new kakao.maps.LatLng(33.450701, 126.570667),
+                //         level: 4,
+                //     };
 
-                var map = new kakao.maps.Map(mapContainer, mapOption);
-                var geocoder = new kakao.maps.services.Geocoder();
-                var mapTypeControl = new kakao.maps.MapTypeControl();
-                map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
-                var zoomControl = new kakao.maps.ZoomControl();
-                map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
-                var geocoder = new kakao.maps.services.Geocoder();
+                // var map = new kakao.maps.Map(mapContainer, mapOption);
+                // var geocoder = new kakao.maps.services.Geocoder();
+                // var mapTypeControl = new kakao.maps.MapTypeControl();
+                // map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
+                // var zoomControl = new kakao.maps.ZoomControl();
+                // map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
+                // var geocoder = new kakao.maps.services.Geocoder();
 
-                const addresses = [];
-                addresses.push(address);
+                // const addresses = [];
+                // addresses.push(address);
 
-                var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
-                    markerImageSize = new kakao.maps.Size(51, 52),
-                    markerImageOptions = {
-                        offset: new kakao.maps.Point(25, 25),
-                    };
+                // var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
+                //     markerImageSize = new kakao.maps.Size(51, 52),
+                //     markerImageOptions = {
+                //         offset: new kakao.maps.Point(25, 25),
+                //     };
 
-                for (var i = 0; i < addresses.length; i++) {
-                    geocoder.addressSearch(addresses[i], function (result, status) {
-                        if (status === kakao.maps.services.Status.OK) {
-                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                            var marker = new kakao.maps.Marker({
-                                map: map,
-                                position: coords,
-                                image: new kakao.maps.MarkerImage(
-                                    markerImageUrl,
-                                    markerImageSize,
-                                    markerImageOptions,
-                                ),
-                            });
-                            map.setCenter(coords);
-                        }
-                    });
-                }
+                // for (var i = 0; i < addresses.length; i++) {
+                //     geocoder.addressSearch(addresses[i], function (result, status) {
+                //         if (status === kakao.maps.services.Status.OK) {
+                //             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                //             var marker = new kakao.maps.Marker({
+                //                 map: map,
+                //                 position: coords,
+                //                 image: new kakao.maps.MarkerImage(
+                //                     markerImageUrl,
+                //                     markerImageSize,
+                //                     markerImageOptions,
+                //                 ),
+                //             });
+                //             map.setCenter(coords);
+                //         }
+                //     });
+                // }
+                console.log(hostId, userId)
 
                 if (hostId === userId) {
                     const buttonEdit = `${status === "마감" ? `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>` : `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`}`
