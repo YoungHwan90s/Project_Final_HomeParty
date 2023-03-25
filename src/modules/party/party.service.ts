@@ -380,7 +380,7 @@ export class PartyService {
         });
 
         if (party.hostId !== userId) {
-            throw new ForbiddenException(`해당 호스트만 삭제가 가능합니다.`);
+            throw new ForbiddenException(`파티 호스트만 삭제가 가능합니다.`);
         }
 
         return this.partyRepository.softRemove(party);
