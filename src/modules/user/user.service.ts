@@ -67,7 +67,7 @@ export class UserService {
 
             let userKakaoInfo = new Kakao();
             userKakaoInfo.kakaoPrimaryId = data.kakaoPrimaryId;
-            
+
             newUserWithKakao.kakao = userKakaoInfo;
 
             user = await queryRunner.manager.save(User, newUserWithKakao);
@@ -155,10 +155,10 @@ export class UserService {
             await this.cacheService.del(IdkeyForRefreshToken);
             await this.cacheService.del(user.email);
 
-            const userWithRelations = await this.userRepository.find({ 
+            const userWithRelations = await this.userRepository.find({
                 where: { id: user.id },
-                relations: ['party', 'wishList', 'partyMember', 'review', 'kakao' ]
-            })
+                relations: ['party', 'wishList', 'partyMember', 'review', 'kakao'],
+            });
 
             return this.userRepository.softRemove(userWithRelations);
         } catch (error) {
@@ -234,29 +234,34 @@ export class UserService {
 
     async userPartyHistory(id: number): Promise<any> {
         let user = await this.userRepository.findOne({
-            where: { id, deletedAt: null },
+            where: {
+                id,
+                deletedAt: null,
+                partyMember: {
+                    status: '승낙',
+                    party: {
+                        status: '마감',
+                    },
+                },
+            },
             relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
-
-        user.partyMember = user.partyMember.filter(
-            (partyMember) => partyMember.status === '승낙' && partyMember.party.status === '마감',
-        );
 
         return user;
     }
 
     async userApplyPartyList(id: number): Promise<any> {
         let user = await this.userRepository.findOne({
-            where: { 
-                id, 
+            where: {
+                id,
                 deletedAt: null,
                 partyMember: {
-                    status: Not("호스트")
+                    status: Not('호스트'),
+                    party: {
+                        status: '모집중',
+                    },
                 },
-                party: {
-                    status: "모집중"
-                }
-             },
+            },
             relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
 

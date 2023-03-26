@@ -1,5 +1,50 @@
-<main class="partySearch main container-fluid">
+<main class="partySearch main container">
+    <header class="partySearchBar mainHeader">
+        <h2 class="a11yHidden">파티 검색</h2>
+
+        <form class="partySearchForm" onsubmit="preventSubmit(event)">
+            <fieldset>
+                <legend class="a11yHidden">파티 검색 폼</legend>
+
+                <input
+                    type="text"
+                    name="partyWhere"
+                    placeholder="어디에서"
+                    class="partyWhere"
+                    id="partyWhere"
+                />
+
+                <div class="divider" aria-hidden="true"></div>
+
+                <div class="partyWhen">
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
+                </div>
+
+                <div class="divider" aria-hidden="true"></div>
+
+                <input
+                    type="text"
+                    name="partyName"
+                    placeholder="파티 명"
+                    class="partyName"
+                    id="partyName"
+                />
+
+                <button type="submit" class="partySubmitButton" aria-label="파티 검색하기 버튼">
+                    <i class="bx bx-search" aria-hidden="true"></i>
+                </button>
+            </fieldset>
+        </form>
+    </header>
     <div class="mainSection">
+        <div class="user-menu-title">
+            <i class="fa-solid fa-list-check"></i>
+            <a >내 파티 관리</a>
+            <hr/>
+        </div>
         <ul class="partyList partyGrid"></ul>
     </div>
 </main>
