@@ -154,7 +154,7 @@
                             <div class="calendar"></div>
                             <div class="calendarButtonWrapper">
                                 ${
-                                    hostId === userId
+                                    hostId === userId || status == '마감'
                                         ? ''
                                         : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
                                 ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>`
@@ -240,13 +240,14 @@
                     });
                 }
 
+                if (status === '마감' && hostId !== userId) {
+                    const buttonEdit = `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>`;
+                    $('.partyPage').prepend(buttonEdit);
+                }
+
                 if (hostId === userId) {
-                    const buttonEdit = `${
-                        status === '마감'
-                            ? `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>`
-                            : `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>
-                            <a onclick ="deleteParty(${partyId})" class="goToPartyDelete">파티 삭제하기</a>`
-                    }`;
+                    const buttonEdit = `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>
+                            <a onclick ="deleteParty(${partyId})" class="goToPartyDelete">파티 삭제하기</a>`;
 
                     $('.partyPage').prepend(buttonEdit);
 

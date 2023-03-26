@@ -221,7 +221,6 @@
             // 파일이 있다면
             if (index > -1) {
                 uploadedFiles.splice(index, 1);
-                    console.log(formData.getAll('files[]').length)
 
                 const formDataFiles = formData.getAll('files[]');
                 formData.delete('files[]');
@@ -230,8 +229,6 @@
                         formData.append('files[]', file);
                     }
                 });
-                console.log(formData.getAll('files[]').length)
-
             }
         });
     });

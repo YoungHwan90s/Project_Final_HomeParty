@@ -66,13 +66,11 @@ export class UserService {
             newUserWithKakao.profile = data.profileImage;
 
             let userKakaoInfo = new Kakao();
-            userKakaoInfo.kakaoId = data.kakaoId;
+            userKakaoInfo.kakaoPrimaryId = data.kakaoPrimaryId;
 
             newUserWithKakao.kakao = userKakaoInfo;
-            user = await queryRunner.manager.save(User, newUserWithKakao);
 
-            userKakaoInfo.userId = user.id;
-            await queryRunner.manager.save(Kakao, userKakaoInfo);
+            user = await queryRunner.manager.save(User, newUserWithKakao);
 
             await queryRunner.commitTransaction();
         } catch (error) {
@@ -107,7 +105,7 @@ export class UserService {
     }
 
     async getUser(data: number | string): Promise<User> {
-        let where = {};
+        let where;
         // 인자 값 id 일 때
         if (typeof data === 'number') {
             where = { id: data, deletedAt: null };
@@ -116,10 +114,8 @@ export class UserService {
         else {
             where = { email: data, deletedAt: null };
         }
-
         return await this.userRepository.findOne({
             where: where,
-            relations: ['kakao'],
         });
     }
 
@@ -153,13 +149,18 @@ export class UserService {
         });
     }
 
-    async deleteUser(user: User): Promise<DeleteResult> {
+    async deleteUser(user: User) {
         try {
             const IdkeyForRefreshToken = String(user.id);
             await this.cacheService.del(IdkeyForRefreshToken);
             await this.cacheService.del(user.email);
 
-            return this.userRepository.softDelete(user.id);
+            const userWithRelations = await this.userRepository.find({
+                where: { id: user.id },
+                relations: ['party', 'wishList', 'partyMember', 'review', 'kakao'],
+            });
+
+            return this.userRepository.softRemove(userWithRelations);
         } catch (error) {
             throw new BadRequestException('잘못된 요청입니다. 다시 시도하여 주시기 바랍니다.');
         }
@@ -171,7 +172,7 @@ export class UserService {
         });
 
         if (checkWishList) {
-            await this.wishListRepository.delete(checkWishList.id);
+            await this.wishListRepository.softRemove(checkWishList);
 
             return 1;
         } else {
@@ -233,29 +234,34 @@ export class UserService {
 
     async userPartyHistory(id: number): Promise<any> {
         let user = await this.userRepository.findOne({
-            where: { id, deletedAt: null },
+            where: {
+                id,
+                deletedAt: null,
+                partyMember: {
+                    status: '승낙',
+                    party: {
+                        status: '마감',
+                    },
+                },
+            },
             relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
-
-        user.partyMember = user.partyMember.filter(
-            (partyMember) => partyMember.status === '승낙' && partyMember.party.status === '마감',
-        );
 
         return user;
     }
 
     async userApplyPartyList(id: number): Promise<any> {
         let user = await this.userRepository.findOne({
-            where: { 
-                id, 
+            where: {
+                id,
                 deletedAt: null,
                 partyMember: {
-                    status: Not("호스트")
+                    status: Not('호스트'),
+                    party: {
+                        status: '모집중',
+                    },
                 },
-                party: {
-                    status: "모집중"
-                }
-             },
+            },
             relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
 
