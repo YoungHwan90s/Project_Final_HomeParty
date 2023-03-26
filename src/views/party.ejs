@@ -7,6 +7,7 @@
                 <legend class="a11yHidden">파티 검색 폼</legend>
                 <input
                     type="text"
+                    tabindex="1"
                     name="partyWhere"
                     placeholder="어디에서"
                     class="partyWhere"
@@ -19,6 +20,7 @@
                     <div class="datePickerWrapper">
                         <input
                             type="text"
+                            tabindex="2"
                             id="partyWhen"
                             class="datePicker"
                             placeholder="Select date"
@@ -26,21 +28,25 @@
                         />
                         <div class="calendar"></div>
                     </div>
-                    <button id="clearButton" style="display: none">❌</button>
+                    <button id="clearButton" style="display: none; border:none; background-color:white">❌</button>
                 </div>
 
                 <div class="divider" aria-hidden="true"></div>
 
                 <input
                     type="text"
+                    tabindex="3"
                     name="partyName"
                     placeholder="파티명"
                     class="partyName"
                     id="partyName"
+                    onkeyup="enter()"
                 />
 
                 <button
+                    tabindex="4"
                     onclick="partySearch()"
+                    id="partySubmitButton"
                     class="partySubmitButton"
                     aria-label="파티 검색하기 버튼"
                 >
@@ -84,6 +90,22 @@
         if ($('#partyWhen').hasClass('active')) {
             $('#clearButton').hide();
         }
+    });
+
+    function enter() {
+        if (window.enter.keyCode === 13) {
+        }
+    }
+
+    const placeInput = document.getElementById("partyWhere");
+    const nameInput = document.getElementById("partyName");
+    const input = (placeInput, nameInput)
+
+    input.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("partySubmitButton").click();
+      }
     });
 
     function partySearch(userId) {
