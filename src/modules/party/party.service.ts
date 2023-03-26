@@ -96,8 +96,8 @@ export class PartyService {
 
             if (partyInfo.tagName?.length) {
                 let set = new Set(partyInfo.tagName);
-                let saveTag = [...set]
-                
+                let saveTag = [...set];
+
                 let newTags = [];
 
                 for (let i = 0; i < saveTag.length; i++) {
@@ -384,6 +384,8 @@ export class PartyService {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
+
+        let removedParty: Party;
         try {
             let party = await queryRunner.manager.findOne(Party, {
                 where: { id: partyId },
@@ -403,10 +405,10 @@ export class PartyService {
                     }
 
                     await queryRunner.manager.save(party.tag[i]);
-                    return this.partyRepository.softRemove(party);
                 }
             }
 
+            removedParty = await queryRunner.manager.softRemove(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
@@ -416,6 +418,7 @@ export class PartyService {
         } finally {
             await queryRunner.release();
         }
+        return removedParty;
     }
 
     @Cron('0 0 0 * * *')
