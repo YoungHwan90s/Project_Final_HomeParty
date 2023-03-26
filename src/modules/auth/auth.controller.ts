@@ -84,14 +84,6 @@ export class AuthController {
         return res.json({});
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('/my-info')
-    @HttpCode(200)
-    async getMyInfo(@Req() req, @Res() res): Promise<User> {
-        const user = req.user;
-        return res.json({ user });
-    }
-
     @Post('/sign-up')
     @UsePipes(new JoiValidationPipe(createUserSchema))
     @HttpCode(201)

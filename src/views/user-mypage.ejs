@@ -92,26 +92,23 @@
     </div>
 
     <script>
-        $.ajax({
-            type: 'GET',
-            url: `/user`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                const userInfo = response.user;
-
-                $('#email').append(userInfo.email);
-                $('#name').append(userInfo.name);
-                $('#sex').append(userInfo.sex);
-                $('#birthday').append(userInfo.birthday);
-                $('#phone').append(userInfo.phone);
-                $('#address').append(userInfo.address);
-                $('#introduction').append(userInfo.introduction);
-                $('img[id=maypage-profile-image]').attr('src', userInfo.profile);
-            },
+        $(document).ready(function () {
+            getMyInfo(function (userInfo) {
+                if (userInfo) {
+                    $('#email').append(userInfo.email);
+                    $('#name').append(userInfo.name);
+                    $('#sex').append(userInfo.sex);
+                    $('#birthday').append(userInfo.birthday);
+                    $('#phone').append(userInfo.phone);
+                    $('#address').append(userInfo.address);
+                    $('#introduction').append(userInfo.introduction);
+                    $('img[id=maypage-profile-image]').attr('src', userInfo.profile);
+                } else {
+                    customAlert('로그인 후 이용가능합니다.', function () {
+                        window.location.replace('/login');
+                    });
+                }
+            });
         });
 
         function deleteUser() {
@@ -141,6 +138,5 @@
                 alert('탈퇴 취소');
             }
         }
-        // 시험용 주석
     </script>
 </div>

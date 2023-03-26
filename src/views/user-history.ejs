@@ -3,88 +3,85 @@
         <h2 class="a11yHidden">파티 검색</h2>
 
         <form class="partySearchForm" onsubmit="preventSubmit(event)">
-          <fieldset>
-            <legend class="a11yHidden">파티 검색 폼</legend>
+            <fieldset>
+                <legend class="a11yHidden">파티 검색 폼</legend>
 
-            <input
-              type="text"
-              name="partyWhere"
-              placeholder="어디에서"
-              class="partyWhere"
-              id="partyWhere"
-            />
+                <input
+                    type="text"
+                    name="partyWhere"
+                    placeholder="어디에서"
+                    class="partyWhere"
+                    id="partyWhere"
+                />
 
-            <div class="divider" aria-hidden="true"></div>
+                <div class="divider" aria-hidden="true"></div>
 
-            <div class="partyWhen">
-              <div class="datePickerWrapper">
-                <input type="text" class="datePicker" placeholder="Select date" readonly />
-                <div class="calendar"></div>
-              </div>
-            </div>
+                <div class="partyWhen">
+                    <div class="datePickerWrapper">
+                        <input type="text" class="datePicker" placeholder="Select date" readonly />
+                        <div class="calendar"></div>
+                    </div>
+                </div>
 
-            <div class="divider" aria-hidden="true"></div>
+                <div class="divider" aria-hidden="true"></div>
 
-            <input
-              type="text"
-              name="partyName"
-              placeholder="파티 명"
-              class="partyName"
-              id="partyName"
-            />
+                <input
+                    type="text"
+                    name="partyName"
+                    placeholder="파티 명"
+                    class="partyName"
+                    id="partyName"
+                />
 
-            <button
-              type="submit"
-              class="partySubmitButton"
-              aria-label="파티 검색하기 버튼"
-            >
-              <i class="bx bx-search" aria-hidden="true"></i>
-            </button>
-          </fieldset>
+                <button type="submit" class="partySubmitButton" aria-label="파티 검색하기 버튼">
+                    <i class="bx bx-search" aria-hidden="true"></i>
+                </button>
+            </fieldset>
         </form>
-      </header>
+    </header>
     <div class="mainSection">
         <ul class="partyList partyGrid"></ul>
     </div>
 </main>
 
 <script>
-
-$(document).ready(function () {
+    $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id
-                getParties(userId)
+                getParties();
             } else {
-                getParties(0)
+                customAlert('로그인 후 이용가능합니다.', function () {
+                    window.location.replace('/login');
+                });
             }
         });
     });
 
-function getParties(userId) {
-    $.ajax({
-        type: 'GET',
-        url: `/user/party-history`,
-        data: {},
-        headers: {
+    function getParties() {
+        $.ajax({
+            type: 'GET',
+            url: `/user/party-history`,
+            data: {},
+            headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
-        success: function (response) {
-            let partyList = response.partyMember
-            for (let i = 0; i < partyList.length; i++) {
-                const partyId = partyList[i]['party']['id'];
-                const title = partyList[i]['party']['title'];
-                const maxMember = partyList[i]['party']['maxMember'];
-                const currMember = partyList[i]['party']['currMember'];
-                const thumbnails = partyList[i]['party']['thumbnail'];
-                const date = partyList[i]['party']['date'];
-                const status = partyList[i]['party']['status'];
-                const thumbnailList = partyList[i]['party']['thumbnail'];
-                
-                const thumbnailHtml = `
-                    ${thumbnailList.length === 0 
-                        ?  `<li class="thumbnailItem">
+            success: function (response) {
+                let partyList = response.partyMember;
+                for (let i = 0; i < partyList.length; i++) {
+                    const partyId = partyList[i]['party']['id'];
+                    const title = partyList[i]['party']['title'];
+                    const maxMember = partyList[i]['party']['maxMember'];
+                    const currMember = partyList[i]['party']['currMember'];
+                    const thumbnails = partyList[i]['party']['thumbnail'];
+                    const date = partyList[i]['party']['date'];
+                    const status = partyList[i]['party']['status'];
+                    const thumbnailList = partyList[i]['party']['thumbnail'];
+
+                    const thumbnailHtml = `
+                    ${
+                        thumbnailList.length === 0
+                            ? `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
                                         src="/imgs/temporary.png"
@@ -92,8 +89,10 @@ function getParties(userId) {
                                         class="thumbnailImage"
                                     />
                                 </div>
-                            </li>` 
-                        : thumbnailList.map(({ thumbnail }) => `
+                            </li>`
+                            : thumbnailList
+                                  .map(
+                                      ({ thumbnail }) => `
                             <li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
@@ -103,10 +102,12 @@ function getParties(userId) {
                                     />
                                 </div>
                             </li>
-                        `).join('')
+                        `,
+                                  )
+                                  .join('')
                     }`;
 
-                const partyItem = `
+                    const partyItem = `
                     <li class="partyItem">
                         <div class="thumbnailWrapper carousel">
                             <a href="party/${partyId}" class="partyLink thumbnailLink">
@@ -165,12 +166,12 @@ function getParties(userId) {
                     </li>
                 `;
 
-                $('.partyList').append(partyItem);
-            }
-            [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
-                new Carousel($carousel);
-            });
-        },
-    });
-}
+                    $('.partyList').append(partyItem);
+                }
+                [...document.querySelectorAll('.carousel')].forEach(($carousel) => {
+                    new Carousel($carousel);
+                });
+            },
+        });
+    }
 </script>

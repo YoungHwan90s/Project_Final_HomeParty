@@ -27,7 +27,7 @@ function readURL(input) {
 function getMyInfo(callback) {
     $.ajax({
         type: 'GET',
-        url: '/auth/my-info',
+        url: `/user`,
         headers: {
             authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
             refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
