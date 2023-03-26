@@ -87,7 +87,6 @@ export class PartyService {
         try {
             const party = new Party();
             party.user = user;
-            party.hostId = user.id;
             party.title = partyInfo.title;
             party.content = partyInfo.content;
             party.maxMember = partyInfo.maxMember;
@@ -401,7 +400,7 @@ export class PartyService {
                 for (let i = 0; i <= party.tag.length; i++) {
                     party.tag[i].freq -= 1;
                     if (party.tag[i].freq <= 0) {
-                        await queryRunner.manager.softDelete(Tag, party.tag[i].id);
+                        await queryRunner.manager.softRemove(Tag, party.tag[i]);
                     }
 
                     await queryRunner.manager.save(party.tag[i]);

@@ -29,7 +29,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         const user = await this.userService.getUser(email);
         if (!user) {
             const userProfile = {
-                kakaoId: id,
+                kakaoPrimaryId: id,
                 email: email,
                 nickname,
                 profileImage,

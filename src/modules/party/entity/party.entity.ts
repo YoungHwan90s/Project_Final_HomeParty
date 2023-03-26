@@ -5,6 +5,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
     JoinTable,
     ManyToMany,
     ManyToOne,
@@ -58,8 +59,9 @@ export class Party {
 
     // 파티 <-> 유저: 다대일 관계
     @ManyToOne(() => User, (user) => user.party)
+    @JoinColumn({ name: 'hostId' })
     user: User;
-    
+
     // 파티 <-> 장바구니: 일대다 관계
     @OneToMany(() => WishList, (wishList) => wishList.party, { cascade: true })
     wishList: WishList[];
@@ -71,7 +73,7 @@ export class Party {
     // 파티 <-> 리뷰: 일대다 관계
     @OneToMany(() => Review, (review) => review.party, { cascade: true })
     review: Review[];
-    
+
     // 파티 <-> 태그: 다대다 관계
     @ManyToMany(() => Tag, { cascade: true })
     @JoinTable({
@@ -90,5 +92,4 @@ export class Party {
     // 파티 <-> 썸네일: 일대다 관계
     @OneToMany(() => Thumbnail, (thumbnail) => thumbnail.party, { cascade: true })
     thumbnail: Thumbnail[];
-    party: Set<any>;
 }
