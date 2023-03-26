@@ -64,6 +64,7 @@
     let page = 1;
     let totalCount;
     let userId;
+
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
@@ -92,20 +93,15 @@
         }
     });
 
-    function enter() {
-        if (window.enter.keyCode === 13) {
-        }
-    }
+    const placeInput = $("#partyWhere");
+    const nameInput = $("#partyName");
+    const input = $.merge(placeInput, nameInput);
 
-    const placeInput = document.getElementById("partyWhere");
-    const nameInput = document.getElementById("partyName");
-    const input = (placeInput, nameInput)
-
-    input.addEventListener("keyup", function (event) {
-      if (event.keyCode === 13) {
+    input.on("keyup", function(event) {
+    if (event.keyCode === 13) {
         event.preventDefault();
-        document.getElementById("partySubmitButton").click();
-      }
+        $("#partySubmitButton").click();
+        }
     });
 
     function partySearch(userId) {
