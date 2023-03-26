@@ -9,7 +9,7 @@
             </div>
         </header>
         <div id="container-login">
-            <div class="row-group">
+            <div class="row-group-login">
                 <!-- 이름 입력 -->
                 <div class="user-input">
                     <h3 class="list">이름<span id="name-error"></span></h3>
@@ -20,7 +20,7 @@
 
                 <!-- 휴대폰 입력 -->
                 <div class="user-input">
-                    <h3 class="list">휴대폰<span id="phone-num-error"></span></h3>
+                    <h3 class="list">휴대폰 번호( - 제외)<span id="phone-num-error"></span></h3>
                     <span class="box int-id">
                         <input
                             type="number"
@@ -41,6 +41,19 @@
                     </button>
                 </div>
             </div>
+            <section class="find-signup-wrap">
+                <span class="find-id">
+                    <a style="cursor: pointer" onclick="location.href='/login'">로그인</a>
+                </span>
+                <span class="find-pw">
+                    <a style="cursor: pointer" onclick="location.href='/find-password'"
+                        >비밀번호 찾기</a
+                    >
+                </span>
+                <span class="sign-up">
+                    <a style="cursor: pointer" onclick="location.href='/sign-up'">회원가입</a>
+                </span>
+            </section>
         </div>
     </form>
 </div>

@@ -359,6 +359,11 @@
     function applyParty(partyId) {
         if (!userId) {
             customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.replace('/login');
+            });
+        }
+        if (currMembers === maxMembers) {
+            customAlert('파티 정원이 초과하였습니다.', function () {
                 window.location.reload();
             });
         } else {
@@ -420,7 +425,7 @@
             status == '승낙' &&
             !document.querySelector(`#AcceptBtn${userId}`).classList.contains('selected')
         ) {
-            return customAlert('클라이언트에서 정원이 초과하였습니다', function () {
+            return customAlert('파티 정원이 초과하였습니다', function () {
                 window.location.reload();
             });
         }
@@ -468,33 +473,39 @@
     }
 
     function updateWishList(partyId) {
-        $.ajax({
-            type: 'POST',
-            url: `/user/wish-list/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                if (response.updateOrDelete == 0) {
-                    document
-                        .querySelector(`#likeOrNot${partyId}`)
-                        .classList.replace('fa-regular', 'fa-solid');
-                    document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
-                } else {
-                    document
-                        .querySelector(`#likeOrNot${partyId}`)
-                        .classList.replace('fa-solid', 'fa-regular');
-                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
-                }
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.replace('/login');
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: `/user/wish-list/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    if (response.updateOrDelete == 0) {
+                        document
+                            .querySelector(`#likeOrNot${partyId}`)
+                            .classList.replace('fa-regular', 'fa-solid');
+                        document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
+                    } else {
+                        document
+                            .querySelector(`#likeOrNot${partyId}`)
+                            .classList.replace('fa-solid', 'fa-regular');
+                        document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                    }
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
     }
 
     function deleteParty(partyiD) {

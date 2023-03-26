@@ -60,6 +60,7 @@ export class PartyService {
         return await this.partyRepository.find({
             where: { deletedAt: null, status: '모집중' },
             relations: ['thumbnail', 'wishList'],
+            order: { createdAt: 'DESC' },
             take: 12,
             skip: (page - 1) * 12,
         });
@@ -94,12 +95,17 @@ export class PartyService {
             party.date = partyInfo.date;
 
             if (partyInfo.tagName?.length) {
+                let set = new Set(partyInfo.tagName);
+                let saveTag = [...set]
+                
                 let newTags = [];
-                for (let i = 0; i < partyInfo.tagName.length; i++) {
+
+                for (let i = 0; i < saveTag.length; i++) {
                     let tag = await queryRunner.manager.findOne(Tag, {
                         where: {
-                            tagName: partyInfo.tagName[i],
+                            tagName: saveTag[i],
                         },
+                        lock: { mode: 'pessimistic_write' },
                     });
                     if (tag) {
                         tag.freq += 1;
@@ -108,6 +114,7 @@ export class PartyService {
                         tag = new Tag();
                         tag.tagName = partyInfo.tagName[i];
                     }
+
                     newTags.push(tag);
                 }
 
@@ -374,16 +381,41 @@ export class PartyService {
     }
 
     async deleteParty(userId: number, partyId: number): Promise<Party> {
-        const party = await this.partyRepository.findOne({
-            where: { id: partyId },
-            relations: ['wishList', 'partyMember', 'review', 'thumbnail'],
-        });
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            let party = await queryRunner.manager.findOne(Party, {
+                where: { id: partyId },
+                relations: ['wishList', 'partyMember', 'review', 'thumbnail', 'tag'],
+                lock: { mode: 'pessimistic_write' },
+            });
 
-        if (party.hostId !== userId) {
-            throw new ForbiddenException(`파티 호스트만 삭제가 가능합니다.`);
+            if (party.hostId !== userId) {
+                throw new ForbiddenException(`파티 호스트만 삭제가 가능합니다.`);
+            }
+
+            if (party.tag?.length) {
+                for (let i = 0; i <= party.tag.length; i++) {
+                    party.tag[i].freq -= 1;
+                    if (party.tag[i].freq <= 0) {
+                        await queryRunner.manager.softDelete(Tag, party.tag[i].id);
+                    }
+
+                    await queryRunner.manager.save(party.tag[i]);
+                    return this.partyRepository.softRemove(party);
+                }
+            }
+
+            await queryRunner.commitTransaction();
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw new NotAcceptableException(
+                '파티삭제에 실패하였습니다.잠시 후 다시 시도하여 주시기 바랍니다.',
+            );
+        } finally {
+            await queryRunner.release();
         }
-
-        return this.partyRepository.softRemove(party);
     }
 
     @Cron('0 0 0 * * *')
@@ -402,7 +434,7 @@ export class PartyService {
         }
     }
 
-    async getUserHost(id): Promise<PartyMember[]> {
+    async getUserHost(id: number): Promise<PartyMember[]> {
         return await this.partyMemberRepository.find({
             where: { deletedAt: null, userId: id, status: '호스트' },
             relations: ['party', 'party.thumbnail', 'party.partyMember'],

@@ -49,8 +49,8 @@
             success: function (response) {
                 window.location.replace('/user-mypage');
             },
-            error: function (response) {
-                customAlert('정확한 비밀번호를 입력해주세요.', function () {
+            error: function (error) {
+                customAlert(error.responseJSON.message, function () {
                     window.location.reload();
                 });
             },

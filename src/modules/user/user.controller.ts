@@ -15,6 +15,7 @@ import { UserService } from './user.service';
 import { PartyService } from '../party/party.service';
 import { PartialUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { User } from './entity/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -26,7 +27,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Get('/')
     @HttpCode(200)
-    async getUserInfo(@Req() req, @Res() res) {
+    async getUserInfo(@Req() req, @Res() res): Promise<User>  {
         const user = req.user;
         return res.json({ user });
     }
