@@ -134,8 +134,8 @@
 
 .partyWishList .mapBox {
   position: fixed;
-  width: 100%;
-  height: 100vh;
+  width: 50%;
+  height: 50vh;
 }
 
 .partyWishList .partyListWrapper {
