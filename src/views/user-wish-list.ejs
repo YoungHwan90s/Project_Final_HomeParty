@@ -196,6 +196,10 @@
                         }
                     });
                 }
+
+                // ㅇㅕㄱㅣㅅㅓ ㅎㅏㄴㅂㅓㄴ ㅎㅗㅊㅜㄹ + resizeㅇㅔㅅㅓ once
+                getMapWidth();
+                
             },
         });
     }
@@ -227,4 +231,16 @@
             },
         });
     }
+
+  function getMapWidth() {
+    const GAP = 60;
+    const CONTAINER_PADDING = 30;
+    const partyWishListWidth = document.querySelector('.partyWishList').offsetWidth;
+    const partyListWrapperWidth = document.querySelector('.partyListWrapper').offsetWidth;
+    const map = document.querySelector('.partyWishList #map');
+    
+    map.style.width = `${partyWishListWidth - partyListWrapperWidth - GAP - CONTAINER_PADDING}px`;
+  }
+
+  window.addEventListener('resize', getMapWidth);
 </script>

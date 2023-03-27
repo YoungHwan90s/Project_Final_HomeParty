@@ -184,6 +184,14 @@ button > i::before {
   margin-bottom: 20px;
 }
 
+.regionSections {
+  grid-area: region;
+  padding-top: 24px;
+  border-top: 1px solid var(--borderColor);
+  height: 500px;
+  margin-bottom: 0px;
+}
+
 .partyPage .hostSection {
   grid-area: host;
   padding-top: 24px;
@@ -395,7 +403,7 @@ button > i::before {
 
 #map {
   width: 100%; 
-  height: 80%;
+  height: 90%;
 }
 
 /* partyEdit */
