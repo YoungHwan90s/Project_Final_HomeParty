@@ -76,6 +76,7 @@
                             회원 정보 수정하기
                         </button>
                         <button
+                            id="password-edit-btn"
                             class="password-edit-btn"
                             type="button"
                             onclick="location.href='reset-password'"
@@ -92,9 +93,11 @@
     </div>
 
     <script>
+        let user;
         $(document).ready(function () {
             getMyInfo(function (userInfo) {
                 if (userInfo) {
+                    user = userInfo;
                     $('#email').append(userInfo.email);
                     $('#name').append(userInfo.name);
                     $('#sex').append(userInfo.sex);
@@ -103,6 +106,12 @@
                     $('#address').append(userInfo.address);
                     $('#introduction').append(userInfo.introduction);
                     $('img[id=maypage-profile-image]').attr('src', userInfo.profile);
+                }
+                if (userInfo.kakao) {
+                    let passwordEditButton = document.querySelector('#password-edit-btn');
+                    passwordEditButton.style.color = '#ccc';
+                    passwordEditButton.style.cursor = 'not-allowed';
+                    passwordEditButton.removeAttribute('onclick');
                 } else {
                     customAlert('로그인 후 이용가능합니다.', function () {
                         window.location.replace('/login');

@@ -67,7 +67,7 @@ export class PartyService {
     }
 
     async getPartyById(partyId: number): Promise<Party> {
-        return await this.partyRepository.findOne({ where: { id: partyId } });
+        return await this.partyRepository.findOne({ where: { id: partyId, deletedAt: null } });
     }
 
     async getPartyByIdWithRelations(partyId: number): Promise<Party> {
@@ -240,7 +240,7 @@ export class PartyService {
 
     async applyParty(user: User, partyId: number): Promise<PartyMember> {
         const existingPartyMember = await this.partyMemberRepository.findOne({
-            where: { partyId, userId: user.id },
+            where: { partyId, userId: user.id, deletedAt: null },
         });
 
         if (existingPartyMember) {
@@ -264,13 +264,13 @@ export class PartyService {
 
     async getPartyMembers(partyId: number): Promise<PartyMember[]> {
         return await this.partyMemberRepository.find({
-            where: { partyId },
+            where: { partyId, deletedAt: null },
         });
     }
 
     async cancelParty(userId: number, partyId: number): Promise<DeleteResult> {
         const partyMember = await this.partyMemberRepository.findOne({
-            where: { userId, partyId },
+            where: { userId, partyId, deletedAt: null },
         });
 
         if (!partyMember) {
@@ -290,7 +290,7 @@ export class PartyService {
 
         try {
             let partyMember = await queryRunner.manager.findOne(PartyMember, {
-                where: { userId, partyId },
+                where: { userId, partyId, deletedAt: null },
                 relations: ['party'],
             });
 
