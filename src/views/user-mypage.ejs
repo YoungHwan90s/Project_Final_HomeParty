@@ -106,16 +106,17 @@
                     $('#address').append(userInfo.address);
                     $('#introduction').append(userInfo.introduction);
                     $('img[id=maypage-profile-image]').attr('src', userInfo.profile);
+                } else {
+                    customAlert('로그인 후 이용가능합니다.', function () {
+                        window.location.replace('/login');
+                    });
                 }
+
                 if (userInfo.kakao) {
                     let passwordEditButton = document.querySelector('#password-edit-btn');
                     passwordEditButton.style.color = '#ccc';
                     passwordEditButton.style.cursor = 'not-allowed';
                     passwordEditButton.removeAttribute('onclick');
-                } else {
-                    customAlert('로그인 후 이용가능합니다.', function () {
-                        window.location.replace('/login');
-                    });
                 }
             });
         });

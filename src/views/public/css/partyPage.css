@@ -401,6 +401,7 @@ button > i::before {
 /* partyEdit */
 .partyEdit {
   padding: 40px;
+  margin: 50px auto;
   border: 1px solid var(--borderColor);
 }
 
@@ -429,7 +430,7 @@ button > i::before {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 17px;
 }
 
 .partyEdit .tagList {
