@@ -88,10 +88,7 @@ class Calendar {
 
   // prettier-ignore
   setDate() {
-    const date = 
-      this.currentYear && this.currentMonth 
-        ? new Date(this.currentYear, this.currentMonth) 
-        : new Date();
+    const date = new Date(this.currentYear, this.currentMonth);
 
     this.currentMonth = date.getMonth();
     this.currentYear = date.getFullYear();
