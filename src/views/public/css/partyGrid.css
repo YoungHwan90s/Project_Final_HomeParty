@@ -178,13 +178,8 @@
 
 @media screen and (max-width: 1800px) {
   /* partyGrid */
-  .partyGrid.partyList {
+  .partyGrid .partyList {
     --partyListColumn: 3;
-  }
-
-  /* wishListPage */
-  .partyWishList .mapWrapper {
-    display: none;
   }
 
   /* partySearch */
@@ -201,5 +196,10 @@
   /* partyGrid */
   .partyGrid .partyList .partyParty {
     --partyListColumn: 1;
+  }
+  
+  /* wishListPage */
+  .partyWishList .mapWrapper {
+    display: none;
   }
 }

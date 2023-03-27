@@ -1,56 +1,49 @@
 <main class="partyPage partyMake partyEdit main container">
-    <form action="" class="partyMakeForm">
-        <header class="mainHeader">
-            <h2 class="title">
-                <!-- Backend -->
-                <label for="partyTitle" class="a11yHidden">제목 입력</label>
-                <input
-                    type="text"
-                    placeholder="제목을 입력하세요"
-                    id="partyTitle"
-                    class="partyTitle"
-                />
-            </h2>
+    <form class="partyMakeForm">
+        <h2 class="title list">
+            <!-- Backend -->
+            <label for="partyTitle" class="a11yHidden">제목 입력</label>
+            <input type="text" placeholder="제목을 입력하세요" id="partyTitle" class="partyTitle" />
+            <span id="title-error"></span>
+        </h2>
 
-            <div class="tagListWrapper">
-                <ul class="tagList">
-                    <li class="tagInputWrapper">
-                        <label for="partyTag" class="a11yHidden">태그 입력</label>
-                        <input
-                            type="text"
-                            id="partyTag"
-                            class="partyTag"
-                            placeholder="Enter키로 태그 입력"
-                        />
-                    </li>
-                </ul>
+        <div class="tagListWrapper">
+            <ul class="tagList">
+                <li class="tagInputWrapper">
+                    <label for="partyTag" class="a11yHidden">태그 입력</label>
+                    <input
+                        type="text"
+                        id="partyTag"
+                        class="partyTag"
+                        placeholder="Enter키로 태그 입력"
+                    />
+                </li>
+            </ul>
+        </div>
+
+        <dl class="headcountList">
+            <div class="headcountItem">
+                <dt>
+                    <label class="list" for="partyTotalMemeber">모집 총 인원: </label>
+                </dt>
+                <dd>
+                    <input
+                        id="partyTotalMemeber"
+                        class="partyTotalMemeber"
+                        pattern="[0-9]*"
+                        placeholder="0"
+                        min="2"
+                        max="300"
+                    />
+                    명
+                    <span id="maxNumber-error"></span>
+                </dd>
             </div>
-
-            <dl class="headcountList">
-                <div class="headcountItem">
-                    <dt>
-                        <label for="partyTotalMemeber">총 인원 : </label>
-                    </dt>
-                    <dd>
-                        <input
-                            type="number"
-                            id="partyTotalMemeber"
-                            class="partyTotalMemeber"
-                            pattern="[0-9]*"
-                            placeholder="0"
-                            min="2"
-                            max="300"
-                        />
-                        명
-                    </dd>
-                </div>
-            </dl>
-        </header>
+        </dl>
 
         <div class="mainSection">
             <section class="partyImageSection">
-                <h3 class="title">파티 이미지 등록</h3>
-
+                <h3 class="title list">파티 이미지 등록<span id="image-error"></span></h3>
                 <ul class="partyImageList">
                     <li class="partyImageItem">
                         <label for="partyImage1">
@@ -122,8 +115,9 @@
             <div class="partyInfoWrapper">
                 <section class="IntroduceSection">
                     <h3 class="title">
-                        <label for="partyIntroduce">파티 소개</label>
-                        <span style="font-size: small; color:lightgrey"><xmp>(Enter 입력 시 나오는 </br>은 줄바꿈 기능이니 무시하시면 됩니다.)</xmp></span>
+                        <label class="list" for="partyIntroduce"
+                            >파티 소개<span id="intro-error"></span
+                        ></label>
                     </h3>
                     <p>
                         <textarea
@@ -135,7 +129,7 @@
                 </section>
 
                 <section class="calendarSection">
-                    <h3 class="title" style="color: red">날짜 변경</h3>
+                    <h3 class="title list" style="color: red">날짜 변경</h3>
                     <div class="datePickerWrapper">
                         <input type="text" class="datePicker" placeholder="Select date" readonly />
                         <div class="calendar"></div>
@@ -143,7 +137,7 @@
                 </section>
 
                 <section class="regionSection">
-                    <h3 class="title">현재주소</h3>
+                    <h3 class="title list">현재주소<span id="address-error"></span></h3>
                     <div class="addressWrapper"></div>
                     <div class="addressSearchWrapper">
                         <label for="partyAddressSearch" class="a11yHidden">현재 주소</label>
@@ -154,7 +148,7 @@
                             onclick="findAddress()"
                             value="주소 변경"
                             readonly
-                            style = "margin-top: 20px; color: red;"
+                            style="margin-top: 8px; color: red"
                         />
                         <input
                             type="text"
@@ -244,7 +238,7 @@
             }
 
             if (thumbnails.length > 0) {
-                thumbnails.forEach((item , i) => {
+                thumbnails.forEach((item, i) => {
                     const imageWrapper = document.querySelectorAll(
                         '.partyImageItem > .uploadImageWrapper',
                     )[i];
@@ -257,6 +251,7 @@
     });
 
     const formData = new FormData();
+    const uploadedFiles = [];
 
     let removedThumbnails = [];
 
@@ -266,13 +261,22 @@
             if (!e.target.matches('.partyImage') || e.target.closest('.uploaded')) return;
 
             const file = e.target.files[0];
+            const fileName = encodeURIComponent(file.name);
 
-            formData.append('files[]', file, encodeURIComponent(file.name));
+            if (uploadedFiles.includes(fileName)) {
+                // 이미 추가된 파일 중 하나와 같은 이름을 가진 파일이면 추가하지 않음
+                return;
+            }
+
+            formData.append('files[]', file, fileName);
+            uploadedFiles.push(fileName);
 
             $imageItem.classList.add('uploaded');
             $imageItem.querySelector(
                 '.uploadImageWrapper',
-            ).innerHTML = `<img src="${URL.createObjectURL(file)}" class="uploadedImage" alt="">`;
+            ).innerHTML = `<img src="${URL.createObjectURL(
+                file,
+            )}" class="uploadedImage" alt="${fileName}">`;
         });
 
         // 이미지 삭제 버튼 클릭시
@@ -304,8 +308,8 @@
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
         if (e.target.matches('.partyIntroduce')) {
-            e.target.value += '</br>'
-            return
+            e.target.value += '\n';
+            return;
         }
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
 
@@ -319,9 +323,70 @@
         }
     });
 
+    let errorId = ['title-error', 'maxNumber-error', 'image-error', 'intro-error', 'address-error'];
+    let error = document.querySelectorAll('.list > span');
+
+    function innerReset(error) {
+        for (let i = 0; i < error.length; i++) {
+            error[i].innerHTML = '';
+        }
+    }
+
+    innerReset(error);
+
     // 등록하기 버튼 눌렸을 때
     partyMakeForm.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        let errorStr = [
+            ' 파티 제목을',
+            ' 모집 인원을',
+            ' 새로운 이미지를',
+            ' 파티 소개를',
+            ' 상세 주소를',
+        ];
+
+        innerReset(error);
+
+        if (!$('#partyTitle').val().trim()) {
+            document.getElementById(errorId[0]).innerHTML = errorStr[0] + ' 입력해 주세요.';
+            $('#partyTitle').focus();
+            return false;
+        }
+
+        if (!$('#partyTotalMemeber').val().trim()) {
+            document.getElementById(errorId[1]).innerHTML = errorStr[1] + ' 입력해 주세요.';
+            $('#partyTotalMemeber').focus();
+            return false;
+        }
+
+        if ($('#partyTotalMemeber').val().trim() < 2) {
+            document.getElementById(errorId[1]).innerHTML =
+                errorStr[1] + ' 2명 이상 입력해 주세요.';
+            $('#partyTotalMemeber').focus();
+            return false;
+        }
+
+        if (!$('.uploadedImage').attr('src')) {
+            document.getElementById(errorId[2]).innerHTML = errorStr[2] + ' 등록 해주세요.';
+            $('#partyTotalMemeber').focus();
+            return false;
+        }
+
+        if (!$('#partyIntroduce').val().trim()) {
+            console.log($('#partyTotalMemeber').val());
+
+            document.getElementById(errorId[3]).innerHTML = errorStr[3] + ' 입력해 주세요.';
+            $('#partyImage1').focus();
+            return false;
+        }
+
+        if ($('#partyAddressDetail').val() && !$('#partyAddressDetails').val().trim()) {
+            document.getElementById(errorId[4]).innerHTML = errorStr[4] + ' 입력해 주세요.';
+            $('#partyImage1').focus();
+            return false;
+        }
+
         $.ajax({
             type: 'POST',
             url: '/file/upload',
@@ -351,14 +416,12 @@
             } else {
                 editedAddress = $('.addressWrapper').text();
             }
-            
 
             let editedDate;
             if ($('.datePicker').val()) {
                 editedDate = $('.datePicker').val();
             } else {
                 editedDate = date;
-
             }
             const partyInfo = {
                 title: $('#partyTitle').val(),

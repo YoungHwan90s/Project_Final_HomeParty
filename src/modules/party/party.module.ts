@@ -5,6 +5,7 @@ import { PartyController } from './party.controller';
 import { Party } from './entity/party.entity';
 import { PartyService } from './party.service';
 import { AuthModule } from '../auth/auth.module';
+import { CacheService } from 'src/util/cache/cache.service';
 
 @Module({
     imports: [
@@ -12,7 +13,7 @@ import { AuthModule } from '../auth/auth.module';
         AuthModule,
     ],
     controllers: [PartyController],
-    providers: [PartyService],
+    providers: [PartyService, CacheService],
     exports: [PartyService],
 })
 export class PartyModule {}

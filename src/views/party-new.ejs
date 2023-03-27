@@ -1,13 +1,11 @@
 <main class="partyPage partyMake partyEdit main container">
     <h1 class="party-make-head">파티 만들기</h1>
-    <form class="partyMakeForm" name="newParty" id="newParty">
-        <header class="mainHeader">
+    <form class="partyMakeForm">
             <h2 class="title list">
                 <!-- Backend -->
                 <label for="partyTitle" class="a11yHidden">제목 입력</label>
                 <input type="text" placeholder="파티 제목" id="partyTitle" class="partyTitle" />
                 <span id="title-error"></span>
-
             </h2>
 
             <div class="tagListWrapper">
@@ -31,7 +29,6 @@
                     </dt>
                     <dd>
                         <input
-                            type="number"
                             id="partyTotalMemeber"
                             class="partyTotalMemeber"
                             pattern="[0-9]*"
@@ -41,15 +38,13 @@
                         />
                         명
                     </dd>
-                    <span id="maxNumber-error">모집인원을 입력해주세요</span>
+                    <span id="maxNumber-error"></span>
                 </div>
             </dl>
-        </header>
 
         <div class="mainSection">
             <section class="partyImageSection">
-                <h3 class="title list">파티 이미지 등록<span id="image-error">이미지를 등록해주세요</span>
-                </h3>
+                <h3 class="title list">파티 이미지 등록<span id="image-error"></span></h3>
                 <ul class="partyImageList">
                     <li class="partyImageItem">
                         <label for="partyImage1">
@@ -121,9 +116,7 @@
             <div class="partyInfoWrapper">
                 <section class="IntroduceSection">
                     <h3 class="title">
-                        <label class="list" for="partyIntroduce">파티 소개<span id="intro-error">파티 소개글을 입력해주세요</span>
-                        </label>
-                        <span style="font-size: small; color:lightgrey"><xmp>(Enter 입력 시 나오는 </br>은 줄바꿈 기능이니 무시하시면 됩니다.)</xmp></span>
+                        <label class="list" for="partyIntroduce">파티 소개<span id="intro-error"></span></label>
                     </h3>
                     <p>
                         <textarea
@@ -144,8 +137,7 @@
                 </section>
 
                 <section class="regionSection">
-                    <h3 class="title list">지역<span id="address-error">주소를 입력해주세요</span>
-                    </h3>
+                    <h3 class="title list">지역<span id="address-error"></span></h3>
                     <div class="addressSearchWrapper">
                         <input
                             type="button"
@@ -179,7 +171,6 @@
             </div>
         </div>
 
-        <!-- <button onclick="saveImage()" class="partyFormSubmit btn_primary btn_point">등록하기</button> -->
         <button type="submit" id="enterBtn" class="partyFormSubmit btn_primary btn_point">등록하기</button>
         <div class="button-padding" style="padding-bottom: 50px"></div>
     </form>
@@ -255,7 +246,7 @@
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
         if (e.target.matches('.partyIntroduce')) {
-            e.target.value += '</br>'
+            e.target.value += '\n'
             return
         }
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
@@ -269,7 +260,6 @@
         }
     });
 
-    let newParty = document.newParty;
     let errorId = [
         'title-error',
         'maxNumber-error',
@@ -285,9 +275,8 @@
             error[i].innerHTML = '';
         }
     }
-
+    
     innerReset(error);
-
 
     // 등록하기 버튼 눌렸을 때
     partyMakeForm.addEventListener('submit', (e) => {
@@ -311,10 +300,45 @@
             return false;
         }
 
+        if(!$("#partyTotalMemeber").val() || $("#partyTotalMemeber").val() < 1) {
+            document.getElementById(errorId[1]).innerHTML = errorStr[1] + ' 입력해 주세요.';
+            $("#partyTotalMemeber").focus();
+            return false;
+        }
+
+        if($("#partyTotalMemeber").val().trim() < 2) {
+            document.getElementById(errorId[1]).innerHTML = errorStr[1] + ' 2명 이상 입력해 주세요.';
+            $("#partyTotalMemeber").focus();
+            return false;
+        }
 
         if(!uploadedFiles.length) {
             document.getElementById(errorId[2]).innerHTML = errorStr[2] + ' 등록 해주세요.';
+            $("#partyTotalMemeber").focus();
+            return false;
+        }
+
+        if(!$("#partyIntroduce").val().trim()) {
+            document.getElementById(errorId[3]).innerHTML = errorStr[3] + ' 입력해 주세요.';
             $("#partyImage1").focus();
+            return false;
+        }
+
+        if(!$('.datePicker').val().trim()) {
+            document.getElementById(errorId[4]).innerHTML = errorStr[4] + ' 입력해 주세요.';
+            $("#partyImage1").focus();
+            return false;
+        }
+
+        if(!$("#partyAddressDetail").val().trim()) {
+            document.getElementById(errorId[5]).innerHTML = errorStr[5] + ' 입력해 주세요.';
+            $("#partyAddressDetail").focus();
+            return false;
+        }
+
+        if(!$("#partyAddressDetails").val().trim()) {
+            document.getElementById(errorId[5]).innerHTML = errorStr[6] + ' 입력해 주세요.';
+            $("#partyAddressDetail").focus();
             return false;
         }
 

@@ -265,7 +265,7 @@
     </td>
     <td>
       <p align="center">
-        <img src="https://user-images.githubusercontent.com/118159813/227431014-d8d403ed-667b-4d0f-8989-ae2e41ec13c0.png" width="150" />
+        <img src="https://user-images.githubusercontent.com/118159813/227882768-df4a0c2a-dd2b-43d0-a623-cf8ea05b6e7b.png" width="150" />
       </p>
     </td>
   </tr>
