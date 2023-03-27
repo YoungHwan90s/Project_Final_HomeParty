@@ -236,11 +236,11 @@
     </td>
   </tr>
   <tr align="center">
-  <td  width="400">오영환(팀장)</td>
-  <td width="400">이정기(부팀장)</td>
-  <td width="400">이설인(팀원)</td>
-  <td width="400">이지영(팀원)</td>
-  <td width="400">육준호(팀원)</td>
+  <td width="300">오영환(팀장)</td>
+  <td width="300">이정기(부팀장)</td>
+  <td width="300">이설인(팀원)</td>
+  <td width="300">이지영(팀원)</td>
+  <td width="300">육준호(팀원)</td>
   </tr>
   <tr>
     <td>
