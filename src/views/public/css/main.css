@@ -402,10 +402,10 @@ img {
     transform: translateY(0);
   }
 }
-/* Active link */
-.active-link {
-  /* color: #fff; */
-}
+
+/*.active-link {
+   color: #fff; 
+} */
 
 /*=============== SPECIALTY ===============*/
 .specialty__box {
