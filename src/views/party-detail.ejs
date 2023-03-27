@@ -12,8 +12,8 @@
     });
     let currMembers;
     let maxMembers;
+    let statuses;
     const partyId = window.location.pathname.split('/')[2];
-
     function getParty() {
         $.ajax({
             type: 'GET',
@@ -43,7 +43,7 @@
                     user,
                     wishList,
                 } = response;
-
+                statuses = status;
                 currMembers = currMember;
                 maxMembers = maxMember;
                 const userWishListMatch = wishList.find((user) => user.userId == userId);
@@ -161,10 +161,14 @@
                             <div class="calendar"></div>
                             <div class="calendarButtonWrapper">
                                 ${
-                                    hostId === userId || status == '마감'
-                                        ? ''
-                                        : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
-                                ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>`
+                                    hostId === userId
+                                    ? (status === '마감'
+                                        ? `<button type="button" class="btn_primary status-btn" onclick="statusParty(${partyId})">마감 취소</button>`
+                                        : `<button type="button" class="btn_primary status-btn" onclick="statusParty(${partyId})">마감하기</button>`)
+                                    : (status === '마감'
+                                        ? '<span class="party_closed">신청 마감</span>'
+                                        : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button>
+                                        <button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>`)
                                 }
                             </div>
                         </section>
@@ -547,4 +551,31 @@
             window.location.reload();
         }
     }
+
+    function statusParty(partyId) {
+            $.ajax({
+                type: 'PATCH',
+                url: `/api/party/status/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    const message = statuses !== '마감'
+                        ? '파티가 마감되었습니다.'
+                        : '파티 마감이 취소되었습니다.';
+                    customAlert(message, function () {
+                        window.location.reload();
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
+    
+
 </script>
