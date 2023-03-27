@@ -226,11 +226,29 @@ button > i::before {
   justify-content: center;
   width: 200px;
   height: 40px;
-  margin: 10px 0 40px auto;
+  margin: 10px 0 10px auto;
   color: var(--whiteColor);
   background: var(--pointColor);
   border: 0;
   border-radius: 4px;
+}
+
+.goToPartyDelete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 40px;
+  margin: 10px 0 40px auto;
+  color: var(--whiteColor);
+  background: var(--warningColor);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.goToPartyDelete:hover {
+  color: red;
 }
 
 .partyDetail .calendar time {

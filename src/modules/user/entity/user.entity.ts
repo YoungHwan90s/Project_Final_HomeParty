@@ -57,7 +57,7 @@ export class User {
     deletedAt: Date | null;
 
     // 유저 <-> 파티: 일대다 관계
-    @OneToMany(() => Party, (party) => party.user)
+    @OneToMany(() => Party, (party) => party.user, { cascade: true })
     party: Party[];
 
     // 유저 <-> 장바구니: 일대다 관계
@@ -73,7 +73,6 @@ export class User {
     review: Review[];
 
     // 유저 <-> 카카오 일대일 관계
-    @OneToOne(() => Kakao, (kakao) => kakao.user, { cascade: true })
-    @JoinColumn()
+    @OneToOne(() => Kakao, (kakao) => kakao.user,  { cascade: true })
     kakao: Kakao;
 }

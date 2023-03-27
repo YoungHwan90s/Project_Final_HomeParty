@@ -38,6 +38,8 @@
                             class="partyTotalMemeber"
                             pattern="[0-9]*"
                             placeholder="0"
+                            min="2"
+                            max="300"
                         />
                         명
                     </dd>
@@ -121,6 +123,7 @@
                 <section class="IntroduceSection">
                     <h3 class="title">
                         <label for="partyIntroduce">파티 소개</label>
+                        <span style="font-size: small; color:lightgrey"><xmp>(Enter 입력 시 나오는 </br>은 줄바꿈 기능이니 무시하시면 됩니다.)</xmp></span>
                     </h3>
                     <p>
                         <textarea
@@ -175,7 +178,6 @@
                 </section>
             </div>
         </div>
-
         <button type="submit" class="partyFormSubmit btn_primary btn_point">수정하기</button>
     </form>
 </main>
@@ -200,7 +202,6 @@
     let thumbnails;
     let address;
     let date;
-    let thumbnail;
     let tag;
 
     $.ajax({
@@ -281,8 +282,8 @@
             $imageItem.classList.remove('uploaded');
             $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
 
-            if (thumbnail[i]) {
-                removedThumbnails.push(thumbnail[i]);
+            if (thumbnails[i]) {
+                removedThumbnails.push(thumbnails[i]);
             }
         });
     });
@@ -302,6 +303,10 @@
 
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
+        if (e.target.matches('.partyIntroduce')) {
+            e.target.value += '</br>'
+            return
+        }
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
 
         e.preventDefault(); // enter키 눌렸을 때 submit 이벤트 방지

@@ -1,5 +1,5 @@
 /* partyWish */
-.partyWish.partyParty {
+.partyWish .partyParty {
     --partyListColumn: 6;
     display: grid;
     grid-template-columns: repeat(var(--partyListColumn, 1), minmax(0, 1fr));
@@ -134,8 +134,8 @@
 
 .partyWishList .mapBox {
   position: fixed;
-  width: 100%;
-  height: 100vh;
+  width: 70%;
+  height: 70vh;
 }
 
 .partyWishList .partyListWrapper {
@@ -204,35 +204,10 @@
   border-radius: 50%;
 }
 
-@media screen and (max-width: 768px) {
-  /* partyWish */
-  .partyWish.partyParty {
-    --partyListColumn: 3;
-  }
-
-  /* wishListPage */
-  .partyWishList .mapWrapper {
-    display: none;
-  }
-
-  /* partySearch */
-  .partySearchForm fieldset {
-    gap: 4px;
-  }
-
-  .partySearchForm .partyWhen {
-    min-width: 90px;
-  }
-}
 
 @media screen and (max-width: 576px) {
   /* partyWish */
-  .partyWish.partyParty {
-    --partyListColumn: 1;
-  }
-
-  /* wishListPage */
-  .partyWishList .partyWish.partyParty {
+  .partyWish .partyWishList .partyParty {
     --partyListColumn: 1;
   }
 }

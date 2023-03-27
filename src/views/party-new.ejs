@@ -34,6 +34,8 @@
                             class="partyTotalMemeber"
                             pattern="[0-9]*"
                             placeholder="0"
+                            min="2"
+                            max="300"
                         />
                         명
                     </dd>
@@ -117,6 +119,7 @@
                 <section class="IntroduceSection">
                     <h3 class="title">
                         <label for="partyIntroduce">파티 소개</label>
+                        <span style="font-size: small; color:lightgrey"><xmp>(Enter 입력 시 나오는 </br>은 줄바꿈 기능이니 무시하시면 됩니다.)</xmp></span>
                     </h3>
                     <p>
                         <textarea
@@ -171,22 +174,24 @@
         </div>
 
         <!-- <button onclick="saveImage()" class="partyFormSubmit btn_primary btn_point">등록하기</button> -->
-        <button type="submit" class="partyFormSubmit btn_primary btn_point">등록하기</button>
-        <div class="button-padding" style="padding-bottom: 50px;"></div>
+        <button type="submit" id="enterBtn" class="partyFormSubmit btn_primary btn_point">등록하기</button>
+        <div class="button-padding" style="padding-bottom: 50px"></div>
     </form>
 </main>
 
 <script>
     $(document).ready(function () {
-            getMyInfo(function (userInfo) {
-                userInfo ?? customAlert('로그인 후 이용 가능합니다.', function () {
-                        window.location.replace('/login');
-                    });
-            });
+        getMyInfo(function (userInfo) {
+            userInfo ??
+                customAlert('로그인 후 이용 가능합니다.', function () {
+                    window.location.replace('/login');
+                });
         });
+    });
 
     const partyMakeForm = document.querySelector('.partyMakeForm');
     const formData = new FormData();
+    const uploadedFiles = [];
 
     document.querySelectorAll('.partyImageItem').forEach(($imageItem) => {
         // image 업로드 시
@@ -194,20 +199,45 @@
             if (!e.target.matches('.partyImage') || e.target.closest('.uploaded')) return;
 
             const file = e.target.files[0];
-            formData.append('files[]', file, encodeURIComponent(file.name));
+            const fileName = encodeURIComponent(file.name);
+
+            if (uploadedFiles.includes(fileName)) {
+                // 이미 추가된 파일 중 하나와 같은 이름을 가진 파일이면 추가하지 않음
+                return;
+            }
+
+            formData.append('files[]', file, fileName);
+            uploadedFiles.push(fileName);
 
             $imageItem.classList.add('uploaded');
             $imageItem.querySelector(
                 '.uploadImageWrapper',
-            ).innerHTML = `<img src="${URL.createObjectURL(file)}" class="uploadedImage" alt="">`;
+            ).innerHTML = `<img src="${URL.createObjectURL(
+                file,
+            )}" class="uploadedImage" alt="${fileName}">`;
         });
 
         // 이미지 삭제 버튼 클릭시
         $imageItem.addEventListener('click', (e) => {
             if (!e.target.matches('.partyImageReset')) return;
 
+            const fileName = $imageItem.querySelector('.uploadedImage').alt;
             $imageItem.classList.remove('uploaded');
             $imageItem.querySelector('.uploadImageWrapper').innerHTML = '';
+
+            const index = uploadedFiles.indexOf(fileName);
+            // 파일이 있다면
+            if (index > -1) {
+                uploadedFiles.splice(index, 1);
+
+                const formDataFiles = formData.getAll('files[]');
+                formData.delete('files[]');
+                formDataFiles.forEach((file) => {
+                    if (file.name !== fileName) {
+                        formData.append('files[]', file);
+                    }
+                });
+            }
         });
     });
 
@@ -218,7 +248,10 @@
 
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
-        if (e.target.matches('.partyIntroduce')) return;
+        if (e.target.matches('.partyIntroduce')) {
+            e.target.value += '</br>'
+            return
+        }
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
 
         e.preventDefault(); // enter키 눌렸을 때 submit 이벤트 방지
@@ -256,6 +289,7 @@
         });
 
         function saveParty(image) {
+            
             // tag 배열로 뽑아오기
             const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
             // 파티 만들기 ajax
@@ -289,6 +323,7 @@
             });
         }
     });
+
 
     function addTag(value) {
         if (value.trim() === '') return;

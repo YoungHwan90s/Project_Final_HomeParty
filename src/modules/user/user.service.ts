@@ -7,7 +7,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DataSource, DeleteResult, Not, Repository, UpdateResult } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
 import { PartialUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
@@ -66,13 +66,11 @@ export class UserService {
             newUserWithKakao.profile = data.profileImage;
 
             let userKakaoInfo = new Kakao();
-            userKakaoInfo.kakaoId = data.kakaoId;
-
+            userKakaoInfo.kakaoPrimaryId = data.kakaoPrimaryId;
+            
             newUserWithKakao.kakao = userKakaoInfo;
-            user = await queryRunner.manager.save(User, newUserWithKakao);
 
-            userKakaoInfo.userId = user.id;
-            await queryRunner.manager.save(Kakao, userKakaoInfo);
+            user = await queryRunner.manager.save(User, newUserWithKakao);
 
             await queryRunner.commitTransaction();
         } catch (error) {
@@ -101,13 +99,13 @@ export class UserService {
         }
         const comparePassword = await bcrypt.compare(password, user.password);
         if (!comparePassword) {
-            throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+            throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
         }
         return user;
     }
 
     async getUser(data: number | string): Promise<User> {
-        let where = {};
+        let where;
         // 인자 값 id 일 때
         if (typeof data === 'number') {
             where = { id: data, deletedAt: null };
@@ -116,10 +114,8 @@ export class UserService {
         else {
             where = { email: data, deletedAt: null };
         }
-
         return await this.userRepository.findOne({
             where: where,
-            relations: ['kakao'],
         });
     }
 
@@ -140,28 +136,31 @@ export class UserService {
         );
     }
     async updateUser(user: User, data: PartialUserDto): Promise<UpdateResult> {
-        if (data.password !== data.confirmPassword) {
-            throw new UnauthorizedException('입력하신 비밀번호가 일치하지 않습니다.');
-        } else {
-            return this.userRepository.update(user.id, {
-                name: data.name,
-                sex: data.sex,
-                phone: data.phone,
-                birthday: data.birthday,
-                address: data.address,
-                profile: data.profile,
-                introduction: data.introduction,
-            });
-        }
+        await this.cacheService.del(user.email);
+
+        return this.userRepository.update(user.id, {
+            name: data.name,
+            sex: data.sex,
+            phone: data.phone,
+            birthday: data.birthday,
+            address: data.address,
+            profile: data.profile,
+            introduction: data.introduction,
+        });
     }
 
-    async deleteUser(user: User): Promise<DeleteResult> {
+    async deleteUser(user: User) {
         try {
             const IdkeyForRefreshToken = String(user.id);
             await this.cacheService.del(IdkeyForRefreshToken);
             await this.cacheService.del(user.email);
 
-            return this.userRepository.softDelete(user.id);
+            const userWithRelations = await this.userRepository.find({ 
+                where: { id: user.id },
+                relations: ['party', 'wishList', 'partyMember', 'review', 'kakao' ]
+            })
+
+            return this.userRepository.softRemove(userWithRelations);
         } catch (error) {
             throw new BadRequestException('잘못된 요청입니다. 다시 시도하여 주시기 바랍니다.');
         }
@@ -173,7 +172,7 @@ export class UserService {
         });
 
         if (checkWishList) {
-            await this.wishListRepository.delete(checkWishList.id);
+            await this.wishListRepository.softRemove(checkWishList);
 
             return 1;
         } else {
@@ -248,13 +247,18 @@ export class UserService {
 
     async userApplyPartyList(id: number): Promise<any> {
         let user = await this.userRepository.findOne({
-            where: { id, deletedAt: null },
+            where: { 
+                id, 
+                deletedAt: null,
+                partyMember: {
+                    status: Not("호스트")
+                },
+                party: {
+                    status: "모집중"
+                }
+             },
             relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
-
-        user.partyMember = user.partyMember.filter(
-            (partyMember) => partyMember.party.status === '모집중',
-        );
 
         return user;
     }

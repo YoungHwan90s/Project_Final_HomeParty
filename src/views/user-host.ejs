@@ -5,42 +5,43 @@
 </main>
 
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id
-                getParties(userId)
+                getParties();
             } else {
-                getParties(0)
+                customAlert('로그인 후 이용가능합니다.', function () {
+                    window.location.replace('/login');
+                });
             }
         });
     });
 
-    function getParties(userId) {
-    $.ajax({
+    function getParties() {
+        $.ajax({
             type: 'GET',
             url: `user/user-host/`,
             data: {},
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
-            success: function (response) {                
-                response.forEach( member => {
-                
-                const {
-                    id : partyId,
-                    title,
-                    maxMember,
-                    currMember,
-                    thumbnails,
-                    date,
-                    thumbnail : thumbnailList
-                } = member.party
+            },
+            success: function (response) {
+                response.forEach((member) => {
+                    const {
+                        id: partyId,
+                        title,
+                        maxMember,
+                        currMember,
+                        thumbnails,
+                        date,
+                        thumbnail: thumbnailList,
+                    } = member.party;
 
-                const thumbnailHtml = `
-                    ${thumbnailList.length === 0 
-                        ?  `<li class="thumbnailItem">
+                    const thumbnailHtml = `
+                    ${
+                        thumbnailList.length === 0
+                            ? `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
                                         src="/imgs/temporary.png"
@@ -48,8 +49,10 @@ $(document).ready(function () {
                                         class="thumbnailImage"
                                     />
                                 </div>
-                            </li>` 
-                        : thumbnailList.map(({ thumbnail }) => `
+                            </li>`
+                            : thumbnailList
+                                  .map(
+                                      ({ thumbnail }) => `
                             <li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
@@ -59,9 +62,11 @@ $(document).ready(function () {
                                     />
                                 </div>
                             </li>
-                        `).join('')
+                        `,
+                                  )
+                                  .join('')
                     }`;
-                
+
                     const partyItem = `
                     <li class="partyItem">
                         <div class="thumbnailWrapper carousel">
@@ -121,10 +126,9 @@ $(document).ready(function () {
                     </li>
                 `;
 
-                $('.partyList').append(partyItem);
+                    $('.partyList').append(partyItem);
                 });
-            }
-        })
+            },
+        });
     }
-
 </script>

@@ -1,21 +1,20 @@
 <main class="partyPage partyDetail main container"></main>
 
 <script>
+    let userId;
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id;
-                getParty(userId);
-            } else {
-                getParty(0);
+                userId = userInfo.id;
             }
+            getParty();
         });
     });
-    let currMembers
-    let maxMembers
+    let currMembers;
+    let maxMembers;
     const partyId = window.location.pathname.split('/')[2];
 
-    function getParty(userId) {
+    function getParty() {
         $.ajax({
             type: 'GET',
             url: `/api/party/${partyId}`,
@@ -42,12 +41,11 @@
                     wishList,
                 } = response;
 
-                currMembers = currMember
-                maxMembers = maxMember
-                const userWishListMatch = wishList.find((user) => 
-                user.userId == userId)
+                currMembers = currMember;
+                maxMembers = maxMember;
+                const userWishListMatch = wishList.find((user) => user.userId == userId);
 
-                user.profile = user.profile ?? `/imgs/temporary.png`
+                user.profile = user.profile ?? `/imgs/temporary.png`;
 
                 const tagHtml =
                     tag.length > 0
@@ -65,7 +63,7 @@
                             `,
                               )
                               .join('')
-                        :   `
+                        : `
                             <li class="partyImageItem">
                                 <img src="/imgs/temporary.png" alt="" class="partyImage" />
                             </li>`;
@@ -94,11 +92,12 @@
                                     ${maxMember}
                                 </dd>
                             </div>
-                            ${hostId === userId 
-                                ?`<div class="headcountItem">
+                            ${
+                                hostId === userId
+                                    ? `<div class="headcountItem">
                                     <p style="font-weight: 700">파티 신청 인원</p>
                                 </div>`
-                                :""
+                                    : ''
                             }
                             <div class="partyMemberBox">
                                 
@@ -154,8 +153,12 @@
                             <h3 class="a11yHidden">달력</h3>
                             <div class="calendar"></div>
                             <div class="calendarButtonWrapper">
-                                ${hostId === userId ? "" : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${userId}, ${partyId})">파티신청</button
-                                ><button type="button" class="btn_primary" onclick="cancelParty(${userId}, ${partyId})">신청취소</button>` }
+                                ${
+                                    hostId === userId
+                                        ? ''
+                                        : `<button type="button" class="btn_primary btn_point" onclick="applyParty(${partyId})">파티신청</button
+                                ><button type="button" class="btn_primary" onclick="cancelParty(${partyId})">신청취소</button>`
+                                }
                             </div>
                         </section>
 
@@ -238,7 +241,12 @@
                 }
 
                 if (hostId === userId) {
-                    const buttonEdit = `${status === "마감" ? `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>` : `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>`}`
+                    const buttonEdit = `${
+                        status === '마감'
+                            ? `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>`
+                            : `<a href="/party-edit/${partyId}" class="goToPartyEdit">파티 수정하기</a>
+                            <a onclick ="deleteParty(${partyId})" class="goToPartyDelete">파티 삭제하기</a>`
+                    }`;
 
                     $('.partyPage').prepend(buttonEdit);
 
@@ -255,17 +263,17 @@
 
                     $('.partyMemberBox').append(partyMemberDropDownHtml);
                     partyMember.shift();
-                    
-                    if(!partyMember.length){
-                        const partyMemberZeroHtml = `<li>파티 맴버가 아직 없습니다.</li>` 
+
+                    if (!partyMember.length) {
+                        const partyMemberZeroHtml = `<li>파티 맴버가 아직 없습니다.</li>`;
                         $('.memberList').append(partyMemberZeroHtml);
                     }
                     partyMember.forEach((item) => {
                         item.user.profile = item.user.profile ?? '/imgs/temporary.png';
 
-                        let partyMemberHtml
+                        let partyMemberHtml;
 
-                        if(status === '모집중'){
+                        if (status === '모집중') {
                             partyMemberHtml = `
                             <li class="memberItem">
                                 <a href="/user-detail/${item.user.id}" class="memberLink">
@@ -279,12 +287,20 @@
                                     <p class="memberName">${item.user.name}</p>
                                 </a>
                                 <div class="memberButtonWrapper">
-                                        <button type="button" id="AcceptBtn${item.user.id}" class="memberButton memberAcceptButton ${ item.status === '승낙' ? 'selected' : ''}"  onclick="acceptMember(${item.user.id}, '승낙')">승낙</button>
-                                        <button type="button" id="DeclineBtn${item.user.id}" class="memberButton memberDeclineButton ${ item.status === '거절' ? 'selected' : ''}"  onclick="acceptMember(${item.user.id}, '거절')">거절</button>
+                                        <button type="button" id="AcceptBtn${
+                                            item.user.id
+                                        }" class="memberButton memberAcceptButton ${
+                                item.status === '승낙' ? 'selected' : ''
+                            }"  onclick="acceptMember(${item.user.id}, '승낙')">승낙</button>
+                                        <button type="button" id="DeclineBtn${
+                                            item.user.id
+                                        }" class="memberButton memberDeclineButton ${
+                                item.status === '거절' ? 'selected' : ''
+                            }"  onclick="acceptMember(${item.user.id}, '거절')">거절</button>
                                 </div>
                             </li>
                             `;
-                        } else if (status === '마감' && item.status === '승낙'){
+                        } else if (status === '마감' && item.status === '승낙') {
                             partyMemberHtml = `<li class="memberItem">
                                 <a href="/user-detail/${item.user.id}" class="memberLink">
                                     <figure class="profileWrapper">
@@ -297,9 +313,9 @@
                                     <p class="memberName">${item.user.name}</p>
                                 </a>
                             </li>
-                            `
+                            `;
                         }
-                        
+
                         $('.memberList').append(partyMemberHtml);
                     });
 
@@ -340,9 +356,14 @@
         });
     }
 
-    function applyParty(userId, partyId) {
+    function applyParty(partyId) {
         if (!userId) {
             customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.replace('/login');
+            });
+        }
+        if (currMembers === maxMembers) {
+            customAlert('파티 정원이 초과하였습니다.', function () {
                 window.location.reload();
             });
         } else {
@@ -368,7 +389,7 @@
         }
     }
 
-    function cancelParty(userId, partyId) {
+    function cancelParty(partyId) {
         if (!userId) {
             customAlert('로그인 후 이용가능합니다.', function () {
                 window.location.reload();
@@ -395,14 +416,18 @@
             });
         }
     }
-    
+
     function acceptMember(userId, status) {
         $currMember = document.querySelector('#currMem');
-        let count = parseInt($currMember.textContent)
-        if(currMembers >= maxMembers  && status == '승낙' && !document.querySelector(`#AcceptBtn${userId}`).classList.contains("selected")){
-            return customAlert("클라이언트에서 정원이 초과하였습니다", function () {
-                    window.location.reload();
-            });   
+        let count = parseInt($currMember.textContent);
+        if (
+            currMembers >= maxMembers &&
+            status == '승낙' &&
+            !document.querySelector(`#AcceptBtn${userId}`).classList.contains('selected')
+        ) {
+            return customAlert('파티 정원이 초과하였습니다', function () {
+                window.location.reload();
+            });
         }
         $.ajax({
             type: 'PATCH',
@@ -413,34 +438,30 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                if(response == 0 && status == '승낙') {
-                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
-                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                if (response == 0 && status == '승낙') {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove('selected');
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove('selected');
                     count--;
                     $currMember.textContent = count;
-                    currMembers = $currMember.textContent
-
-                } else if (response == 0 && status == '거절'){
-                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
-                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
-
-                } else if(response == 1) {
-                    document.querySelector(`#AcceptBtn${userId}`).classList.add("selected")
-                    document.querySelector(`#DeclineBtn${userId}`).classList.remove("selected")
+                    currMembers = $currMember.textContent;
+                } else if (response == 0 && status == '거절') {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove('selected');
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove('selected');
+                } else if (response == 1) {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.add('selected');
+                    document.querySelector(`#DeclineBtn${userId}`).classList.remove('selected');
                     count++;
                     $currMember.textContent = count;
-                    currMembers = $currMember.textContent
-
-                } else if(response == 2) {
-                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
-                    document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
+                    currMembers = $currMember.textContent;
+                } else if (response == 2) {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove('selected');
+                    document.querySelector(`#DeclineBtn${userId}`).classList.add('selected');
                     count--;
                     $currMember.textContent = count;
-                    currMembers = $currMember.textContent
-
-                } else if(response == 3 && status == '거절') {
-                    document.querySelector(`#AcceptBtn${userId}`).classList.remove("selected")
-                    document.querySelector(`#DeclineBtn${userId}`).classList.add("selected")
+                    currMembers = $currMember.textContent;
+                } else if (response == 3 && status == '거절') {
+                    document.querySelector(`#AcceptBtn${userId}`).classList.remove('selected');
+                    document.querySelector(`#DeclineBtn${userId}`).classList.add('selected');
                 }
             },
             error: function (error) {
@@ -452,32 +473,70 @@
     }
 
     function updateWishList(partyId) {
-        $.ajax({
-            type: 'POST',
-            url: `/user/wish-list/${partyId}`,
-            data: {},
-            headers: {
-                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-            },
-            success: function (response) {
-                if (response.updateOrDelete == 0) {
-                    document
-                        .querySelector(`#likeOrNot${partyId}`)
-                        .classList.replace('fa-regular', 'fa-solid');
-                    document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
-                } else {
-                    document
-                        .querySelector(`#likeOrNot${partyId}`)
-                        .classList.replace('fa-solid', 'fa-regular');
-                    document.querySelector(`#likeOrNot${partyId}`).style.color = '';
-                }
-            },
-            error: function (error) {
-                customAlert(error.responseJSON.message, function () {
-                    window.location.reload();
-                });
-            },
-        });
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.replace('/login');
+            });
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: `/user/wish-list/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    if (response.updateOrDelete == 0) {
+                        document
+                            .querySelector(`#likeOrNot${partyId}`)
+                            .classList.replace('fa-regular', 'fa-solid');
+                        document.querySelector(`#likeOrNot${partyId}`).style.color = 'red';
+                    } else {
+                        document
+                            .querySelector(`#likeOrNot${partyId}`)
+                            .classList.replace('fa-solid', 'fa-regular');
+                        document.querySelector(`#likeOrNot${partyId}`).style.color = '';
+                    }
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        }
+    }
+
+    function deleteParty(partyiD) {
+        if (!userId) {
+            customAlert('로그인 후 이용가능합니다.', function () {
+                window.location.replace('/login');
+            });
+        }
+        let askPartyDeleteAgain = confirm('파티를 삭제하시겠습니까?');
+        if (askPartyDeleteAgain) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/party/${partyId}`,
+                data: {},
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+                },
+                success: function (response) {
+                    customAlert('파티가 삭제 되었습니다.', function () {
+                        window.location.replace('/party');
+                    });
+                },
+                error: function (error) {
+                    customAlert(error.responseJSON.message, function () {
+                        window.location.reload();
+                    });
+                },
+            });
+        } else {
+            window.location.reload();
+        }
     }
 </script>

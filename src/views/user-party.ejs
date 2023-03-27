@@ -12,8 +12,10 @@
                     placeholder="어디에서"
                     class="partyWhere"
                     id="partyWhere"
+                    onkeyup="enter()"
                 />
 
+                <div class="divider" aria-hidden="true"></div>
                 <div class="divider" aria-hidden="true"></div>
 
                 <div class="partyWhen">
@@ -31,6 +33,7 @@
                     <button id="clearButton" style="display: none; border:none; background-color:white">❌</button>
                 </div>
 
+                <div class="divider" aria-hidden="true"></div>
                 <div class="divider" aria-hidden="true"></div>
 
                 <input
@@ -55,6 +58,7 @@
             </fieldset>
         </form>
     </header>
+    </header>
     <div class="mainSection">
         <ul class="partyList partyGrid partyparty"></ul>
     </div>
@@ -68,10 +72,11 @@
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id
-                getParties(userId)
+                getParties();
             } else {
-                getParties(0)
+                customAlert('로그인 후 이용가능합니다.', function () {
+                    window.location.replace('/login');
+                });
             }
         });
     });

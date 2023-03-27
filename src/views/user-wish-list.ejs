@@ -3,7 +3,7 @@
         <div class="mapWrapper">
             <div class="mapBox">
                 <!-- Backend 지도 넣어주세요 -->
-                <div id="map" style="width: 70%; height: 80%"></div>
+                <div id="map" style="width: 70%; height: 70%"></div>
             </div>
         </div>
 
@@ -14,168 +14,186 @@
 </main>
 
 <script>
-    let addresses = [];
-
-    $.ajax({
-        type: 'GET',
-        url: `/user/wish-list`,
-        data: {},
-        headers: {
-            authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-            refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-        },
-        success: function (response) {
-            let wishList = response['wishList'];
-            sessionStorage.setItem('wishList', JSON.stringify(wishList));
-
-            for (let i = 0; i < wishList.length; i++) {
-                let partyId = wishList[i]['party']['id'];
-                let title = wishList[i]['party']['title'];
-                let maxMember = wishList[i]['party']['maxMember'];
-                let currMember = wishList[i]['party']['currMember'];
-                let thumbnails = wishList[i]['party']['thumbnail'];
-                let date = wishList[i]['party']['date'];
-                let status = wishList[i]['party']['status'];
-                let thumbnail = thumbnails[0];
-                let address = wishList[i]['party']['address'];
-                addresses.push(address);
-
-                const partyImageHtml =
-                  thumbnails.length > 0 
-                        ? thumbnails.map((thumbnail) => `
-                                <li class="thumbnailItem carouselItem">
-                                  <div class="thumbnailRatio">
-                                    <a href="/party/${partyId}">
-                                    <img
-                                      src="${thumbnail.thumbnail}"
-                                      alt=""
-                                      class="thumbnailImage"
-                                    />
-                                    </a>
-                                  </div>
-                                </li>
-                            `,).join('')
-                        :   `
-                                <li class="thumbnailItem carouselItem">
-                                    <div class="thumbnailRatio">
-                                        <a href="/party/${partyId}">
-                                        <img
-                                          src="/imgs/temporary.png"
-                                          alt=""
-                                          class="thumbnailImage"
-                                        />
-                                        </a>
-                                    </div>
-                                </li>`;
-
-                let partyItem = `
-                      <li class="partyItem">
-                <div class="thumbnailWrapper carousel">
-                  <a href="" class="partyLink thumbnailLink">
-                    <ul class="thumbnailList carouselList">
-                      ${partyImageHtml}
-                    </ul>
-                  </a>
-
-                  <div class="thumbnailButtonWrapper carouselButtonWrapper">
-                    <button
-                      type="button"
-                      class="thumbnailButton carouselButton prev"
-                      aria-label="이전 썸네일 보기"
-                    >
-                      <i class="bx bx-chevron-left" aria-hidden="true"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="thumbnailButton carouselButton next"
-                      aria-label="다음 썸네일 보기"
-                    >
-                      <i class="bx bx-chevron-right" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                </div>
-
-                <a href="" class="partyLink">
-                  <dl class="partyInfoList">
-                    <div class="partyInfoItem partyTitle">
-                      <dt class="a11yHidden">제목</dt>
-                      <dd>
-                        <!-- Backend -->
-                        ${title}
-                      </dd>
-                    </div>
-                    <div class="partyInfoItem partyHeadcount">
-                      <dt>현재</dt>
-                      <dd class="currentCount">
-                        <!-- Backend -->
-                        ${currMember}명
-                      </dd>
-                      <dt>총</dt>
-                      <dd class="totalCount">
-                        <!-- Backend -->
-                        ${maxMember}명
-                      </dd>
-                    </div>
-                    <div class="partyInfoItem partyEtc">
-                      <dt class="a11yHidden">지역</dt>
-                      <dd class="partyPlace">
-                        <!-- Backend -->
-                      </dd>
-                      <dt class="a11yHidden">날짜</dt>
-                      <dd class="partyDate">
-                        <!-- Backend -->
-                        ${date}
-                      </dd>
-                    </div>
-                  </dl>
-                </a>
-                <button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
-                    <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red;"></i>
-                </button>
-              </li>
-                `;
-
-                $(`#partyItem`).append(partyItem);
-            }
-            var mapContainer = document.getElementById('map'),
-                mapOption = {
-                    center: new kakao.maps.LatLng(33.450701, 126.570667),
-                    level: 9,
-                };
-
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-            var geocoder = new kakao.maps.services.Geocoder();
-            var mapTypeControl = new kakao.maps.MapTypeControl();
-            map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
-            var zoomControl = new kakao.maps.ZoomControl();
-            map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
-                markerImageSize = new kakao.maps.Size(30, 30),
-                markerImageOptions = {
-                    offset: new kakao.maps.Point(25, 25),
-                };
-
-            for (var i = 0; i < addresses.length; i++) {
-                geocoder.addressSearch(addresses[i], function (result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                        var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords,
-                            image: new kakao.maps.MarkerImage(
-                                markerImageUrl,
-                                markerImageSize,
-                                markerImageOptions,
-                            ),
-                        });
-                        map.setCenter(coords);
-                    }
+    $(document).ready(function () {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                myWishList();
+            } else {
+                customAlert('로그인 후 이용가능합니다.', function () {
+                    window.location.replace('/login');
                 });
             }
-        },
+        });
     });
+
+    let addresses = [];
+
+    function myWishList() {
+        $.ajax({
+            type: 'GET',
+            url: `/user/wish-list`,
+            data: {},
+            headers: {
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
+            success: function (response) {
+                let wishList = response['wishList'];
+                sessionStorage.setItem('wishList', JSON.stringify(wishList));
+
+                for (let i = 0; i < wishList.length; i++) {
+                    let partyId = wishList[i]['party']['id'];
+                    let title = wishList[i]['party']['title'];
+                    let maxMember = wishList[i]['party']['maxMember'];
+                    let currMember = wishList[i]['party']['currMember'];
+                    let thumbnails = wishList[i]['party']['thumbnail'];
+                    let date = wishList[i]['party']['date'];
+                    let status = wishList[i]['party']['status'];
+                    let thumbnail = thumbnails[0];
+                    let address = wishList[i]['party']['address'];
+                    addresses.push(address);
+
+                    const partyImageHtml =
+                        thumbnails.length > 0
+                            ? thumbnails
+                                  .map(
+                                      (thumbnail) => `
+                                  <li class="thumbnailItem carouselItem">
+                                    <div class="thumbnailRatio">
+                                      <a href="/party/${partyId}">
+                                      <img
+                                        src="${thumbnail.thumbnail}"
+                                        alt=""
+                                        class="thumbnailImage"
+                                      />
+                                      </a>
+                                    </div>
+                                  </li>
+                              `,
+                                  )
+                                  .join('')
+                            : `
+                                  <li class="thumbnailItem carouselItem">
+                                      <div class="thumbnailRatio">
+                                          <a href="/party/${partyId}">
+                                          <img
+                                            src="/imgs/temporary.png"
+                                            alt=""
+                                            class="thumbnailImage"
+                                          />
+                                          </a>
+                                      </div>
+                                  </li>`;
+
+                    let partyItem = `
+                        <li class="partyItem">
+                  <div class="thumbnailWrapper carousel">
+                    <a href="" class="partyLink thumbnailLink">
+                      <ul class="thumbnailList carouselList">
+                        ${partyImageHtml}
+                      </ul>
+                    </a>
+  
+                    <div class="thumbnailButtonWrapper carouselButtonWrapper">
+                      <button
+                        type="button"
+                        class="thumbnailButton carouselButton prev"
+                        aria-label="이전 썸네일 보기"
+                      >
+                        <i class="bx bx-chevron-left" aria-hidden="true"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="thumbnailButton carouselButton next"
+                        aria-label="다음 썸네일 보기"
+                      >
+                        <i class="bx bx-chevron-right" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+  
+                  <a href="" class="partyLink">
+                    <dl class="partyInfoList">
+                      <div class="partyInfoItem partyTitle">
+                        <dt class="a11yHidden">제목</dt>
+                        <dd>
+                          <!-- Backend -->
+                          ${title}
+                        </dd>
+                      </div>
+                      <div class="partyInfoItem partyHeadcount">
+                        <dt>현재</dt>
+                        <dd class="currentCount">
+                          <!-- Backend -->
+                          ${currMember}명
+                        </dd>
+                        <dt>총</dt>
+                        <dd class="totalCount">
+                          <!-- Backend -->
+                          ${maxMember}명
+                        </dd>
+                      </div>
+                      <div class="partyInfoItem partyEtc">
+                        <dt class="a11yHidden">지역</dt>
+                        <dd class="partyPlace">
+                          <!-- Backend -->
+                        </dd>
+                        <dt class="a11yHidden">날짜</dt>
+                        <dd class="partyDate">
+                          <!-- Backend -->
+                          ${date}
+                        </dd>
+                      </div>
+                    </dl>
+                  </a>
+                  <button onclick="updateWishList(${partyId})"type="button" class="partyLikeButton" aria-label="좋아요 업데이트">
+                      <i id="likeOrNot${partyId}" class="fa-solid fa-heart" style="color:red;"></i>
+                  </button>
+                </li>
+                  `;
+
+                    $(`#partyItem`).append(partyItem);
+                }
+                var mapContainer = document.getElementById('map'),
+                    mapOption = {
+                        center: new kakao.maps.LatLng(33.450701, 126.570667),
+                        level: 9,
+                    };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+                var geocoder = new kakao.maps.services.Geocoder();
+                var mapTypeControl = new kakao.maps.MapTypeControl();
+                map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPLEFT);
+                var zoomControl = new kakao.maps.ZoomControl();
+                map.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
+                var geocoder = new kakao.maps.services.Geocoder();
+
+                var markerImageUrl = 'https://cdn-icons-png.flaticon.com/512/9181/9181917.png',
+                    markerImageSize = new kakao.maps.Size(30, 30),
+                    markerImageOptions = {
+                        offset: new kakao.maps.Point(25, 25),
+                    };
+
+                for (var i = 0; i < addresses.length; i++) {
+                    geocoder.addressSearch(addresses[i], function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            var marker = new kakao.maps.Marker({
+                                map: map,
+                                position: coords,
+                                image: new kakao.maps.MarkerImage(
+                                    markerImageUrl,
+                                    markerImageSize,
+                                    markerImageOptions,
+                                ),
+                            });
+                            map.setCenter(coords);
+                        }
+                    });
+                }
+            },
+        });
+    }
 
     function updateWishList(partyId) {
         $.ajax({

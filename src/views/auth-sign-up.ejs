@@ -70,9 +70,9 @@
                 <!-- 성명 입력 -->
                 <div class="user-input">
                     <h3 class="list">이름<span id="name-error"></span></h3>
-                    <span class="box int-id"
-                        ><input type="text" id="input-name" class="int check" maxlength="20"
-                    /></span>
+                    <span class="box int-id">
+                        <input type="text" id="input-name" class="int check" maxlength="20" />
+                    </span>
                 </div>
 
                 <!-- 성별 선택 -->
@@ -90,27 +90,22 @@
                 <div class="user-input">
                     <h3 class="list">휴대폰 번호( - 제외)<span id="phone-num-error"></span></h3>
                     <span class="box int-id"
-                        ><input
-                            type="number"
-                            pattern="[0-9]*"
-                            id="input-phone"
-                            class="int check"
-                            maxlength="11"
+                        ><input pattern="[0-9]*" id="input-phone" class="int check" maxlength="11"
                     /></span>
                 </div>
                 <!-- 주소 입력 -->
                 <div class="user-input">
-                    <h3 class="list">자택 주소<span id="addressError"></span></h3>
+                    <h3 class="list">주소<span id="addressError"></span></h3>
                     <div id="address" class="int-id">
                         <span>
                             <input
-                            type="button"
-                            id="addressButton"
-                            class="d_form mini"
-                            onclick="findAddr()"
-                            value="주소 검색"
-                            readonly
-                        />
+                                type="button"
+                                id="addressButton"
+                                class="d_form mini"
+                                onclick="findAddr()"
+                                value="주소 검색"
+                                readonly
+                            />
                             <input
                                 type="text"
                                 id="input-address-1"
@@ -143,7 +138,14 @@
     let join = document.join;
     let input = document.querySelectorAll('.check');
 
-    let errorId = ['email-error', 'pw-error', 'pw-check-error', 'name-error', 'phone-num-error', 'sex-error'];
+    let errorId = [
+        'email-error',
+        'pw-error',
+        'pw-check-error',
+        'name-error',
+        'phone-num-error',
+        'sex-error',
+    ];
     let error = document.querySelectorAll('.list > span');
 
     // 오류문구 초기화 메서드
@@ -172,7 +174,16 @@
         let pwLimit = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/;
         if (!pwLimit.test(input[1].value)) {
             document.getElementById(errorId[1]).innerHTML =
-                '10~20자의 문자와 숫자 조합으로 작성해주세요.'
+                '10~20자의 문자와 숫자 조합으로 작성해주세요.';
+        }
+    };
+
+    // 이름 입력문자 유효성검사
+    join['input-name'].onblur = function () {
+        innerReset(error); // 초기화 메서드 호출
+        let nameLimit = /^[a-zA-Z가-힣]{1,20}$/;
+        if (!nameLimit.test(input[3].value)) {
+            document.getElementById(errorId[3]).innerHTML = '이름은 문자열만 입력 가능합니다.';
         }
     };
 
@@ -212,7 +223,7 @@
         if (document.getElementById('mail-select').value == '이메일 선택') {
             document.getElementById(errorId[0]).innerHTML = ' 이메일을 선택해주세요.';
             return false;
-        }  
+        }
 
         // 성별 공백 확인
         if (document.getElementById('input-sex').value == '선택') {
@@ -241,11 +252,13 @@
         // 정규식 변수 모음
         let emailLimit = /^[a-zA-Z0-9._-]+$/;
         let pwLimit = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9~!@#$%^&*()_-]{10,20}$/;
+        let nameLimit = /^[a-zA-Z가-힣]{1,20}$/;
         let pnumLimit = /^01[0|1|6|7|8|9]{1}[0-9]{8}$/;
 
         // email 아이디 유효성검사
         if (!emailLimit.test(input[0].value)) {
-            document.getElementById(errorId[0]).innerHTML = '올바른 이메일 형식이 아닙니다.';
+            document.getElementById(errorId[0]).innerHTML = 
+                '올바른 이메일 형식이 아닙니다.';
             join.email.focus();
             return false;
         }
@@ -254,6 +267,14 @@
         if (!pwLimit.test(input[1].value)) {
             document.getElementById(errorId[1]).innerHTML =
                 '10~20자의 문자와 숫자를 조합하여야 합니다.';
+            join.pw.focus();
+            return false;
+        }
+
+        // 이름 유효성검사
+        if (!nameLimit.test(input[3].value)) {
+            document.getElementById(errorId[3]).innerHTML = 
+                '이름은 문자열만 입력 가능합니다.';
             join.pw.focus();
             return false;
         }
