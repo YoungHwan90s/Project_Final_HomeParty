@@ -10,6 +10,9 @@ button > i::before {
 
 .partyPage .mainHeader .title {
   font-size: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--borderColor);
+  margin-top: 50px;
 }
 
 .partyPage .tagList {
@@ -25,6 +28,7 @@ button > i::before {
   align-items: center;
   margin-top: 16px;
 }
+
 
 .partyPage .headcountList {
   display: flex;
@@ -71,6 +75,8 @@ button > i::before {
 .partyPage .partyImageSection {
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid var(--borderColor);
+  padding-bottom: 30px;
 }
 
 .partyPage .partyImageList {
@@ -166,10 +172,16 @@ button > i::before {
   grid-area: region;
   padding-top: 24px;
   border-top: 1px solid var(--borderColor);
+  height: 500px;
+
 }
 
-.partyPage .regionSection p {
-  margin-top: 8px;
+.partyPage .regionSection .title {
+  margin-bottom: 10px;
+}
+
+.partyPage .regionSection .address {
+  margin-bottom: 20px;
 }
 
 .partyPage .hostSection {
@@ -282,6 +294,16 @@ button > i::before {
   position: relative;
 }
 
+.partyDetail .column3 {
+  border-bottom: 1px solid var(--borderColor);
+  padding-bottom: 30px;
+}
+.partyDetail .crrDescription {
+  font-size: 0.7rem;
+  font-style: italic;
+  margin-top: 20px;
+}
+
 .partyDetail .memberList {
   position: absolute;
   top: 100%;
@@ -331,6 +353,14 @@ button > i::before {
   overflow: hidden;
 }
 
+.partyDetail .partyIntro {
+  margin-bottom: 15px;
+}
+
+.partyDetail .partyIntroDetaile {
+  min-height: 300px;
+} 
+
 .partyDetail .profile {
   width: 100%;
   height: 100%;
@@ -361,6 +391,11 @@ button > i::before {
   color: var(--whiteColor);
   background-color: var(--primaryColor);
   border-color: var(--primaryColor);
+}
+
+#map {
+  width: 100%; 
+  height: 80%;
 }
 
 /* partyEdit */

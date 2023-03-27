@@ -44,10 +44,10 @@
                     const date = new Date(data.createdAt);
 
                     const thumbnailHtml = ` ${thumbnailList.length === 0 
-                        ? `/imgs/temporary.png` 
+                        ? `/imgs/party-thembnail-default.jpg` 
                         : `${thumbnailList[0].thumbnail}`}`;
                     
-                    const profileHtml = ` ${!profile ? `/imgs/temporary.png` : `${profile}`}`;
+                    const profileHtml = ` ${!profile ? `/imgs/party-thembnail-default.jpg` : `${profile}`}`;
 
                     const Info = `
                         <a href="/party/${data.id}">

@@ -24,6 +24,9 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
+
+                console.log(response)
+
                 const {
                     id: partyId,
                     hostId,
@@ -45,7 +48,7 @@
                 maxMembers = maxMember;
                 const userWishListMatch = wishList.find((user) => user.userId == userId);
 
-                user.profile = user.profile ?? `/imgs/temporary.png`;
+                user.profile = user.profile ?? `/imgs/account.png`;
 
                 const tagHtml =
                     tag.length > 0
@@ -65,12 +68,12 @@
                               .join('')
                         : `
                             <li class="partyImageItem">
-                                <img src="/imgs/temporary.png" alt="" class="partyImage" />
+                                <img src="/imgs/party-thembnail-default.jpg" alt="" class="partyImage" />
                             </li>`;
 
                 const html = `
                 <header class="mainHeader">
-                    <h2 class="title" style="padding-top: 100px;">
+                    <h2 class="title">
                         ${title}
                     </h2>
 
@@ -115,6 +118,10 @@
                     </div>
                 </header>
 
+                <div class="column3">
+                    <p class="crrDescription">현재인원은 호스트가 승인한 인원만 반영됩니다.</p>    
+                </div>
+
                 <div class="mainSection">
                     <section class="partyImageSection">
                         <h3 class="a11yHidden">파티 이미지</h3>
@@ -143,8 +150,8 @@
 
                     <div class="partyInfoWrapper">
                         <section class="IntroduceSection">
-                            <h3 class="a11yHidden">파티 소개</h3>
-                            <p>
+                            <h3 class="partyIntro">[파티 소개]</h3>
+                            <p class="partyIntroDetaile">
                                 ${content}
                             </p>
                         </section>
@@ -164,11 +171,11 @@
 
                         <section class="regionSection">
                             <h3 class="title">지역</h3>
-                            <p>
+                            <p class="address">
                                 ${address}
                             </p>
                             <!-- 지도 삽입 -->
-                            <div id="map" style="width: 400px; height: 400px"></div>
+                            <div id="map"></div>
                         </section>
 
                         <section class="hostSection">
@@ -270,7 +277,7 @@
                         $('.memberList').append(partyMemberZeroHtml);
                     }
                     partyMember.forEach((item) => {
-                        item.user.profile = item.user.profile ?? '/imgs/temporary.png';
+                        item.user.profile = item.user.profile ?? '/imgs/account.png';
 
                         let partyMemberHtml;
 
