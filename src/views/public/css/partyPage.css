@@ -172,7 +172,7 @@ button > i::before {
   grid-area: region;
   padding-top: 24px;
   border-top: 1px solid var(--borderColor);
-  height: 500px;
+  height: 150px;
 
 }
 
@@ -400,8 +400,8 @@ button > i::before {
 
 /* partyEdit */
 .partyEdit {
-  padding: 40px;
-  margin: 50px auto;
+  padding: 25px 40px;
+  margin: 40px auto;
   border: 1px solid var(--borderColor);
 }
 
