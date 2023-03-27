@@ -250,7 +250,12 @@
                     });
                 }
 
-                if (status === '마감' && hostId !== userId) {
+                let currentDate = new Date();
+                currentDate.setUTCHours(currentDate.getUTCHours() + 9);
+                let dateString = currentDate.toISOString().substring(0, 10);
+                let newDate = new Date(dateString);
+
+                if (status === '마감' && date < dateString && hostId !== userId) {
                     const buttonEdit = `<a href="/party-review/${partyId}" class="goToPartyEdit">리뷰 작성</a>`;
                     $('.partyPage').prepend(buttonEdit);
                 }
