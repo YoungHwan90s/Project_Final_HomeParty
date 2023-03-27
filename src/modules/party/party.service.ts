@@ -303,6 +303,12 @@ export class PartyService {
                     partyMember.status = status;
                     partyMember.party.currMember += 1;
 
+                    if (partyMember.party.currMember === partyMember.party.maxMember) {
+                        await queryRunner.manager.update(Party, partyId, {
+                            status: "마감"
+                        })
+                    }
+
                     await queryRunner.manager.update(Party, partyId, {
                         currMember: partyMember.party.currMember,
                     });
@@ -360,6 +366,12 @@ export class PartyService {
                 if (partyMember.status === '거절' && status === '승낙') {
                     partyMember.status = status;
                     partyMember.party.currMember += 1;
+
+                    if (partyMember.party.currMember === partyMember.party.maxMember) {
+                        await queryRunner.manager.update(Party, partyId, {
+                            status: "마감"
+                        })
+                    }
 
                     await queryRunner.manager.update(Party, partyId, {
                         currMember: partyMember.party.currMember,
@@ -426,6 +438,7 @@ export class PartyService {
 
         const party = await this.partyRepository.find({
             where: { status: '모집중', deletedAt: null },
+            
         });
 
         for (let i = 0; i < party.length; i++) {
