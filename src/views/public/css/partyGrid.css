@@ -210,11 +210,6 @@ border-radius: 50%;
   --partyListColumn: 3;
 }
 
-/* wishListPage */
-.partyWishList .mapWrapper {
-  display: none;
-}
-
 /* partySearch */
 .partySearchForm fieldset {
   gap: 4px;
@@ -223,6 +218,22 @@ border-radius: 50%;
 .partySearchForm .partyWhen {
   min-width: 90px;
 }
+}
+
+@media screen and (max-width: 760px) {
+  /* wishListPage */
+  .partyWishList .mainSection {
+    gap: 0;
+  }
+
+  .partyWishList .mapWrapper {
+    display: none;
+  }
+
+  .partyWishList .partyListWrapper {
+    max-width: initial;
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 576px) {
