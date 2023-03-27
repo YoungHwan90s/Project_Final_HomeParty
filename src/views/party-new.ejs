@@ -1,11 +1,13 @@
 <main class="partyPage partyMake partyEdit main container">
     <h1 class="party-make-head">파티 만들기</h1>
-    <form class="partyMakeForm">
+    <form class="partyMakeForm" name="newParty" id="newParty">
         <header class="mainHeader">
-            <h2 class="title">
+            <h2 class="title list">
                 <!-- Backend -->
                 <label for="partyTitle" class="a11yHidden">제목 입력</label>
                 <input type="text" placeholder="파티 제목" id="partyTitle" class="partyTitle" />
+                <span id="title-error"></span>
+
             </h2>
 
             <div class="tagListWrapper">
@@ -18,7 +20,7 @@
             </div>
 
             <dl class="headcountList">
-                <div class="headcountItem">
+                <div class="headcountItem list">
                     <dt>
                         <label for="partyTotalMemeber">모집 총 인원 : </label>
                     </dt>
@@ -32,14 +34,15 @@
                         />
                         명
                     </dd>
+                    <span id="maxNumber-error">모집인원을 입력해주세요</span>
                 </div>
             </dl>
         </header>
 
         <div class="mainSection">
             <section class="partyImageSection">
-                <h3 class="title">파티 이미지 등록</h3>
-
+                <h3 class="title list">파티 이미지 등록<span id="image-error">이미지를 등록해주세요</span>
+                </h3>
                 <ul class="partyImageList">
                     <li class="partyImageItem">
                         <label for="partyImage1">
@@ -111,7 +114,8 @@
             <div class="partyInfoWrapper">
                 <section class="IntroduceSection">
                     <h3 class="title">
-                        <label for="partyIntroduce">파티 소개</label>
+                        <label class="list" for="partyIntroduce">파티 소개<span id="intro-error">파티 소개글을 입력해주세요</span>
+                        </label>
                     </h3>
                     <p>
                         <textarea
@@ -123,7 +127,8 @@
                 </section>
 
                 <section class="calendarSection">
-                    <h3 class="title">날짜 선택</h3>
+                    <h3 class="title list">날짜 선택<span id="date-error">닐짜를 선택해주세요</span>
+                    </h3>
                     <div class="datePickerWrapper">
                         <input type="text" class="datePicker" placeholder="Select date" readonly />
                         <div class="calendar"></div>
@@ -131,7 +136,8 @@
                 </section>
 
                 <section class="regionSection">
-                    <h3 class="title">지역</h3>
+                    <h3 class="title list">지역<span id="address-error">주소를 입력해주세요</span>
+                    </h3>
                     <div class="addressSearchWrapper">
                         <input
                             type="button"
@@ -251,9 +257,54 @@
         }
     });
 
+    let newParty = document.newParty;
+    let errorId = [
+        'title-error',
+        'maxNumber-error',
+        'image-error',
+        'intro-error',
+        'date-error',
+        'address-error',
+    ];
+    let error = document.querySelectorAll('.list > span');
+
+    function innerReset(error) {
+        for (let i = 0; i < error.length; i++) {
+            error[i].innerHTML = '';
+        }
+    }
+
+    innerReset(error);
+
+
     // 등록하기 버튼 눌렸을 때
     partyMakeForm.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        let errorStr = [
+            ' 파티 제목을',
+            ' 모집 인원을',
+            ' 이미지를',
+            ' 파티 소개를',
+            ' 날짜를',
+            ' 도로명 주소를',
+            ' 상세 주소를',
+        ];
+
+        innerReset(error);
+
+        if(!$("#partyTitle").val().trim()) {
+            document.getElementById(errorId[0]).innerHTML = errorStr[0] + ' 입력해 주세요.';
+            $("#partyTitle").focus();
+            return false;
+        }
+
+
+        if(!uploadedFiles.length) {
+            document.getElementById(errorId[2]).innerHTML = errorStr[2] + ' 등록 해주세요.';
+            $("#partyImage1").focus();
+            return false;
+        }
 
         $.ajax({
             type: 'POST',
