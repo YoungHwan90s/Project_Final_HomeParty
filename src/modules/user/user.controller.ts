@@ -22,12 +22,12 @@ export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly partyService: PartyService,
-        ) {}
+    ) {}
 
     @UseGuards(JwtAuthGuard)
     @Get('/')
     @HttpCode(200)
-    async getUserInfo(@Req() req, @Res() res): Promise<User>  {
+    async getUserInfo(@Req() req, @Res() res): Promise<User> {
         const user = req.user;
         return res.json({ user });
     }
@@ -44,10 +44,9 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Delete('/')
     @HttpCode(204)
-    async deleteUser(@Req() req, @Res() res) {
+    async deleteUser(@Req() req) {
         const user = req.user;
-        await this.userService.deleteUser(user);
-        return await res.json({});
+        return await this.userService.deleteUser(user);
     }
 
     @UseGuards(JwtAuthGuard)

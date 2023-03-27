@@ -116,6 +116,7 @@ export class UserService {
         }
         return await this.userRepository.findOne({
             where: where,
+            relations: ['kakao']
         });
     }
 
