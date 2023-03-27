@@ -7,10 +7,12 @@
                 <legend class="a11yHidden">파티 검색 폼</legend>
                 <input
                     type="text"
+                    tabindex="1"
                     name="partyWhere"
                     placeholder="어디에서"
                     class="partyWhere"
                     id="partyWhere"
+                    onkeyup="enter()"
                 />
 
                 <div class="divider" aria-hidden="true"></div>
@@ -19,6 +21,7 @@
                     <div class="datePickerWrapper">
                         <input
                             type="text"
+                            tabindex="2"
                             id="partyWhen"
                             class="datePicker"
                             placeholder="Select date"
@@ -26,21 +29,25 @@
                         />
                         <div class="calendar"></div>
                     </div>
-                    <button id="clearButton" style="display: none">❌</button>
+                    <button id="clearButton" style="display: none; border:none; background-color:white">❌</button>
                 </div>
 
                 <div class="divider" aria-hidden="true"></div>
 
                 <input
                     type="text"
+                    tabindex="3"
                     name="partyName"
                     placeholder="파티명"
                     class="partyName"
                     id="partyName"
+                    onkeyup="enter()"
                 />
 
                 <button
+                    tabindex="4"
                     onclick="partySearch()"
+                    id="partySubmitButton"
                     class="partySubmitButton"
                     aria-label="파티 검색하기 버튼"
                 >
@@ -58,6 +65,7 @@
     let page = 1;
     let totalCount;
     let userId;
+
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
@@ -83,6 +91,24 @@
         }
         if ($('#partyWhen').hasClass('active')) {
             $('#clearButton').hide();
+        }
+    });
+
+    const placeInput = $("#partyWhere");
+    const nameInput = $("#partyName");
+    const input = $.merge(placeInput, nameInput);
+
+    input.on("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        $("#partySubmitButton").click();
+        }
+    });
+
+    input.on("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        $("#partySubmitButton").click();
         }
     });
 
@@ -252,7 +278,7 @@
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
                     );
-
+                    console.log(status)
                     //prettier-ignore
                     const thumbnailHtml = `
                     ${thumbnailList.length === 0 
