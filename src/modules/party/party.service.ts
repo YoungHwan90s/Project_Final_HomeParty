@@ -443,4 +443,14 @@ export class PartyService {
             relations: ['party', 'party.thumbnail', 'party.partyMember'],
         });
     }
+
+    async statusParty(userId: number, partyId: number){
+        const party = await this.partyRepository.findOne({ where: { id: partyId } });
+            if (party.status !== '마감') {
+            party.status = '마감';
+            } else {
+            party.status = '모집중';
+            }
+        await this.partyRepository.save(party);
+      }
 }
