@@ -564,6 +564,10 @@ button > i::before {
   margin-top: 32px;
 }
 
+.status-btn:hover {
+  color: red;
+}
+
 /* ------------------------------ wide tab size ----------------------------- */
 @media screen and (max-width: 1024px) {
   /* partyDetail */
