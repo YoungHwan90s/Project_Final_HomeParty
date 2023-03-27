@@ -54,15 +54,15 @@
                     <img class="img-fluid rounded-circle mb-4" src="${
                         data.profile
                     }" alt="..." style="width: 15%; height: 15%;" />
-                        <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${data.name} 입니다.</h1>
-                        <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
+                        <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${data.name}입니다.</h1>
+                        <p class="text-black-50 mb-0" id="sign-up-date">가입년도:${date.getFullYear()}</p>
                         <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
                         <h1 class="text-black fs-3 fw-bolder" >소개</h1>
                         <p class="text-black-50 mb-0" id="host-email">📧 : ${data.email}</p>
-                        <p class="text-black-50 mb-0" id="host-email">♀︎♂ : ${data.sex}</p>
                         <p class="text-black-50 mb-0" id="host-email" style="margin-right : 20%; margin-left: 20%; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;"> ${
-                            data.introduction ? data.introduction : '자기소개를 입력해주세요.'
+                            data.introduction ? data.introduction : '자기 소개를 입력해주세요.'
                         }</p>
+                        <p class="text-black-50 mb-0" id="host-email">♀︎♂ : ${data.sex}</p>
                     `;
                 $(`#userInfo`).append(Info);
 

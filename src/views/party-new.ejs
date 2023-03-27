@@ -14,7 +14,12 @@
                 <ul class="tagList">
                     <li class="tagInputWrapper">
                         <label for="partyTag" class="a11yHidden">태그 입력</label>
-                        <input type="text" id="partyTag" class="partyTag" placeholder="태그 입력" />
+                        <input
+                            type="text"
+                            id="partyTag"
+                            class="partyTag"
+                            placeholder="Enter키로 태그 입력"
+                        />
                     </li>
                 </ul>
             </div>
@@ -31,6 +36,8 @@
                             class="partyTotalMemeber"
                             pattern="[0-9]*"
                             placeholder="0"
+                            min="2"
+                            max="300"
                         />
                         명
                     </dd>
@@ -116,6 +123,7 @@
                     <h3 class="title">
                         <label class="list" for="partyIntroduce">파티 소개<span id="intro-error">파티 소개글을 입력해주세요</span>
                         </label>
+                        <span style="font-size: small; color:lightgrey"><xmp>(Enter 입력 시 나오는 </br>은 줄바꿈 기능이니 무시하시면 됩니다.)</xmp></span>
                     </h3>
                     <p>
                         <textarea
@@ -172,7 +180,7 @@
         </div>
 
         <!-- <button onclick="saveImage()" class="partyFormSubmit btn_primary btn_point">등록하기</button> -->
-        <button type="submit" class="partyFormSubmit btn_primary btn_point">등록하기</button>
+        <button type="submit" id="enterBtn" class="partyFormSubmit btn_primary btn_point">등록하기</button>
         <div class="button-padding" style="padding-bottom: 50px"></div>
     </form>
 </main>
@@ -246,6 +254,10 @@
 
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
+        if (e.target.matches('.partyIntroduce')) {
+            e.target.value += '</br>'
+            return
+        }
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
 
         e.preventDefault(); // enter키 눌렸을 때 submit 이벤트 방지
@@ -328,6 +340,7 @@
         });
 
         function saveParty(image) {
+            
             // tag 배열로 뽑아오기
             const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
             // 파티 만들기 ajax
@@ -361,6 +374,7 @@
             });
         }
     });
+
 
     function addTag(value) {
         if (value.trim() === '') return;
