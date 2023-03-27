@@ -366,6 +366,7 @@ button > i::before {
 /* partyEdit */
 .partyEdit {
   padding: 40px;
+  margin: 50px auto;
   border: 1px solid var(--borderColor);
 }
 
