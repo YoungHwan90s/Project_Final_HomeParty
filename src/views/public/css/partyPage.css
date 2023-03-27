@@ -184,6 +184,15 @@ button > i::before {
   margin-bottom: 20px;
 }
 
+.regionSections {
+  grid-area: region;
+  padding-top: 24px;
+  border-top: 1px solid var(--borderColor);
+  height: 500px;
+  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
 .partyPage .hostSection {
   grid-area: host;
   padding-top: 24px;

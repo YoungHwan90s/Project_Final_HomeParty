@@ -206,15 +206,9 @@ border-radius: 50%;
 
 @media screen and (max-width: 768px) {
 /* partyWish */
-.partyWish.partyParty {
+.partyWish .partyParty {
   --partyListColumn: 3;
 }
-
-/* wishListPage */
-.partyWishList .mapWrapper {
-  display: none;
-}
-
 /* partySearch */
 .partySearchForm fieldset {
   gap: 4px;
@@ -229,6 +223,11 @@ border-radius: 50%;
 /* partyWish */
 .partyWish.partyParty {
   --partyListColumn: 1;
+}
+
+/* wishListPage */
+.partyWishList .mapWrapper {
+  display: none;
 }
 
 /* wishListPage */
