@@ -8,7 +8,6 @@ import {
     Patch,
     Post,
     Query,
-    Render,
     Req,
     Res,
     UseGuards,
@@ -39,6 +38,7 @@ export class PartyController {
 
     @Get('/list')
     async getParties(@Query('page') page: number): Promise<Party[]>  {
+        
         return await this.partyService.getParties(page);
     }
 

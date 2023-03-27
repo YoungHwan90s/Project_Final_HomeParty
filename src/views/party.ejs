@@ -85,6 +85,7 @@
         $('#partyWhen').val('');
         $(this).hide();
     });
+
     $(document).click(function (e) {
         if ($(e.target).attr('id') === 'partyWhen') {
             return;
@@ -278,7 +279,6 @@
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
                     );
-                    console.log(status)
                     //prettier-ignore
                     const thumbnailHtml = `
                     ${thumbnailList.length === 0 

@@ -7,7 +7,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, Not, Repository, UpdateResult } from 'typeorm';
+import { DataSource, DeleteResult, LessThan, MoreThan, MoreThanOrEqual, Not, Repository, UpdateResult } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
 import { PartialUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
@@ -192,7 +192,13 @@ export class UserService {
 
     async getWishList(userId: number): Promise<WishList[]> {
         const wishList = await this.wishListRepository.find({
-            where: { userId },
+            where: { 
+                userId, 
+                deletedAt: null,
+                party: {
+                    status: "모집중"
+                }
+             },
             relations: ['party', 'party.thumbnail', 'party.tag'],
         });
         return wishList;
@@ -234,6 +240,13 @@ export class UserService {
     }
 
     async userPartyHistory(id: number): Promise<any> {
+
+        let currentDate = new Date();
+        currentDate.setUTCHours(currentDate.getUTCHours() + 9);
+        currentDate.setDate(currentDate.getDate() - 1);
+        let dateString = currentDate.toISOString().substring(0, 10);
+        let newDate = new Date(dateString);
+
         let user = await this.userRepository.findOne({
             where: {
                 id,
@@ -241,7 +254,7 @@ export class UserService {
                 partyMember: {
                     status: '승낙',
                     party: {
-                        status: '마감',
+                        date: LessThan(newDate)
                     },
                 },
             },
@@ -252,6 +265,13 @@ export class UserService {
     }
 
     async userApplyPartyList(id: number): Promise<any> {
+
+        let currentDate = new Date();
+        currentDate.setUTCHours(currentDate.getUTCHours() + 9);
+        currentDate.setDate(currentDate.getDate() - 1);
+        let dateString = currentDate.toISOString().substring(0, 10);
+        let newDate = new Date(dateString);
+
         let user = await this.userRepository.findOne({
             where: {
                 id,
@@ -259,13 +279,13 @@ export class UserService {
                 partyMember: {
                     status: Not('호스트'),
                     party: {
-                        status: '모집중',
+                        date: MoreThanOrEqual(newDate)
                     },
                 },
             },
             relations: ['partyMember', 'partyMember.party', 'partyMember.party.thumbnail'],
         });
-
+        
         return user;
     }
 }

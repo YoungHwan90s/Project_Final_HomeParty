@@ -6,7 +6,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { DataSource, DeleteResult, LessThan, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -420,20 +420,21 @@ export class PartyService {
         return removedParty;
     }
 
-    @Cron('0 0 0 * * *')
+    @Cron('0 0 15 * * *')
+    // 매일 UTC 15:00 실행 => 한국시간 24:00
     async updateCompletionStatus() {
-        const currentDate = new Date();
+        let currentDate = new Date();
+        currentDate.setUTCHours(currentDate.getUTCHours() + 9);
+        currentDate.setDate(currentDate.getDate() - 1);
+        let dateString = currentDate.toISOString().substring(0, 10);
+        let newDate = new Date(dateString);
 
-        const party = await this.partyRepository.find({
-            where: { status: '모집중', deletedAt: null },
-        });
+        const party = await this.partyRepository.update(
+            { status: '모집중', date: LessThan(newDate) },
+            { status: '마감' },
+        );
 
-        for (let i = 0; i < party.length; i++) {
-            if (party[i].date <= currentDate) {
-                party[i].status = '마감';
-                await this.partyRepository.save(party[i]);
-            }
-        }
+        return party;
     }
 
     async getUserHost(id: number): Promise<PartyMember[]> {

@@ -75,7 +75,7 @@
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id
+                userId = userInfo.id
                 getParties(userId)
             } else {
                 getParties(0)
@@ -240,17 +240,6 @@
             },
         });
     }
-
-    $(document).ready(function () {
-            getMyInfo(function (userInfo) {
-                if (userInfo) {
-                    let userId = userInfo.id
-                    getParties(userId)
-                } else {
-                    getParties(0)
-                }
-            });
-        });
 
     function getParties(userId) {
         $.ajax({
