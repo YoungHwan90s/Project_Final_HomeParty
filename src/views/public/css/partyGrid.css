@@ -197,8 +197,7 @@
   .partyGrid .partyList .partyParty {
     --partyListColumn: 1;
   }
-  
-  /* wishListPage */
+
   .partyWishList .mapWrapper {
     display: none;
   }
