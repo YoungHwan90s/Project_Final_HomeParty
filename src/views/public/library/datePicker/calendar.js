@@ -106,7 +106,10 @@ class Calendar {
   }
 
   async init() {
-    this.setDate();
+    const today = new Date();
+    this.currentYear = today.getFullYear();
+    this.currentMonth = today.getMonth();
+    await this.setDate();
   }
 
   getDate(index) {
