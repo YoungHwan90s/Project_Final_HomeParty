@@ -16,8 +16,6 @@
                 />
 
                 <div class="divider" aria-hidden="true"></div>
-                <div class="divider" aria-hidden="true"></div>
-
                 <div class="partyWhen">
                     <div class="datePickerWrapper">
                         <input
@@ -34,8 +32,6 @@
                 </div>
 
                 <div class="divider" aria-hidden="true"></div>
-                <div class="divider" aria-hidden="true"></div>
-
                 <input
                     type="text"
                     tabindex="3"
@@ -70,10 +66,6 @@
 </main>
 
 <script>
-    let page = 1;
-    let totalCount;
-    let userId;
-
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
@@ -114,7 +106,7 @@
         }
     });
 
-    function partySearch(userId) {
+    function partySearch() {
         const address = $('#partyWhere').val();
         const date = $('#partyWhen').val();
         const title = $('#partyName').val();
@@ -244,10 +236,10 @@
         });
     }
 
-    function getParties(userId, page) {
+    function getParties() {
         $.ajax({
             type: 'GET',
-            url: `/user/party-applied?page=${page}`,
+            url: `/user/party-applied`,
             data: {},
             headers: {
                     authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -357,22 +349,4 @@
             },
         });
     }
-
-    window.addEventListener('scroll', () => {
-        // 문서의 총 높이
-        const totalHeight = document.documentElement.scrollHeight;
-
-        // 브라우저 창의 높이
-        const windowHeight = window.innerHeight;
-
-        // 스크롤된 거리
-        const scrollDistance = window.scrollY;
-
-        // 스크롤이 문서의 하단에 도달했는지 확인
-        if (scrollDistance + windowHeight >= totalHeight) {
-            // 페이지 번호 증가
-            page++;
-            getParties(userId, page);
-        }
-    });
 </script>

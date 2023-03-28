@@ -30,7 +30,12 @@
                         />
                         <div class="calendar"></div>
                     </div>
-                    <button id="clearButton" style="display: none; border:none; background-color:white">❌</button>
+                    <button
+                        id="clearButton"
+                        style="display: none; border: none; background-color: white"
+                    >
+                        ❌
+                    </button>
                 </div>
 
                 <div class="divider" aria-hidden="true"></div>
@@ -60,25 +65,22 @@
     <div class="mainSection">
         <div class="user-menu-title">
             <i class="fa-solid fa-champagne-glasses"></i>
-            <a >과거 조회</a>
-            <hr/>
+            <a>과거 조회</a>
+            <hr />
         </div>
         <ul class="partyList partyGrid"></ul>
     </div>
 </main>
 
 <script>
-    let page = 1;
-    let totalCount;
-    let userId;
-
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                userId = userInfo.id
-                getParties(userId)
+                getParties();
             } else {
-                getParties(0)
+                customAlert('로그인 후 이용가능합니다.', function () {
+                    window.location.replace('/login');
+                });
             }
         });
     });
@@ -91,6 +93,7 @@
         $('#partyWhen').val('');
         $(this).hide();
     });
+
     $(document).click(function (e) {
         if ($(e.target).attr('id') === 'partyWhen') {
             return;
@@ -100,18 +103,18 @@
         }
     });
 
-    const placeInput = $("#partyWhere");
-    const nameInput = $("#partyName");
+    const placeInput = $('#partyWhere');
+    const nameInput = $('#partyName');
     const input = $.merge(placeInput, nameInput);
 
-    input.on("keyup", function(event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        $("#partySubmitButton").click();
+    input.on('keyup', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $('#partySubmitButton').click();
         }
     });
 
-    function partySearch(userId) {
+    function partySearch() {
         const address = $('#partyWhere').val();
         const date = $('#partyWhen').val();
         const title = $('#partyName').val();
@@ -137,7 +140,7 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                let partyList = response.result.partyMember
+                let partyList = response.result.partyMember;
 
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['party']['id'];
@@ -148,10 +151,11 @@
                     const date = partyList[i]['party']['date'];
                     const status = partyList[i]['party']['status'];
                     const thumbnailList = partyList[i]['party']['thumbnail'];
-                    
+
                     const thumbnailHtml = `
-                        ${thumbnailList.length === 0 
-                            ?  `<li class="thumbnailItem">
+                        ${
+                            thumbnailList.length === 0
+                                ? `<li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
                                             src="/imgs/party-thembnail-default.jpg"
@@ -159,8 +163,10 @@
                                             class="thumbnailImage"
                                         />
                                     </div>
-                                </li>` 
-                            : thumbnailList.map(({ thumbnail }) => `
+                                </li>`
+                                : thumbnailList
+                                      .map(
+                                          ({ thumbnail }) => `
                                 <li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
@@ -170,7 +176,9 @@
                                         />
                                     </div>
                                 </li>
-                            `).join('')
+                            `,
+                                      )
+                                      .join('')
                         }`;
 
                     const partyItem = `
@@ -241,17 +249,17 @@
         });
     }
 
-    function getParties(userId) {
+    function getParties() {
         $.ajax({
             type: 'GET',
             url: `/user/party-history`,
             data: {},
             headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
             success: function (response) {
-                let partyList = response.partyMember
+                let partyList = response.partyMember;
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['party']['id'];
                     const title = partyList[i]['party']['title'];
@@ -261,10 +269,11 @@
                     const date = partyList[i]['party']['date'];
                     const status = partyList[i]['party']['status'];
                     const thumbnailList = partyList[i]['party']['thumbnail'];
-                    
+
                     const thumbnailHtml = `
-                        ${thumbnailList.length === 0 
-                            ?  `<li class="thumbnailItem">
+                        ${
+                            thumbnailList.length === 0
+                                ? `<li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
                                             src="/imgs/party-thembnail-default.jpg"
@@ -272,8 +281,10 @@
                                             class="thumbnailImage"
                                         />
                                     </div>
-                                </li>` 
-                            : thumbnailList.map(({ thumbnail }) => `
+                                </li>`
+                                : thumbnailList
+                                      .map(
+                                          ({ thumbnail }) => `
                                 <li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
@@ -283,7 +294,9 @@
                                         />
                                     </div>
                                 </li>
-                            `).join('')
+                            `,
+                                      )
+                                      .join('')
                         }`;
 
                     const partyItem = `
@@ -353,22 +366,4 @@
             },
         });
     }
-
-    window.addEventListener('scroll', () => {
-        // 문서의 총 높이
-        const totalHeight = document.documentElement.scrollHeight;
-
-        // 브라우저 창의 높이
-        const windowHeight = window.innerHeight;
-
-        // 스크롤된 거리
-        const scrollDistance = window.scrollY;
-
-        // 스크롤이 문서의 하단에 도달했는지 확인
-        if (scrollDistance + windowHeight >= totalHeight) {
-            // 페이지 번호 증가
-            page++;
-            getParties(userId, page);
-        }
-    });
 </script>
