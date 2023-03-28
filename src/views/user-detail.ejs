@@ -29,17 +29,25 @@
 <div class="mainSection">
     <ul class="partyList"></ul>
 </div>
+
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
 
-<!-- 카카오맵  -->
 <script>
+    let userId;
     $(document).ready(() => {
+        getMyInfo(function (userInfo) {
+            if (userInfo) {
+                userId = userInfo.id;
+            }
+            getreviewid();
+        });
+        
         const param = window.location.pathname.split('/')[2];
         const hostId = Number(param);
-
+        function getreviewid() {
         $.ajax({
             url: `/review/${hostId}`, // 리뷰 데이터 요청 URL
             type: 'GET',
@@ -50,10 +58,11 @@
             },
             success: function (data) {
                 const date = new Date(data.createdAt);
+                console.log(data.profile);
                 const Info = `
                     <img class="img-fluid rounded-circle mb-4" src="${
-                        data.profile
-                    }" alt="..." style="width: 15%; height: 15%;" />
+                        data.profile === null ? '/imgs/account.png' : data.profile
+                    }" alt="..." style="width: 190px; height: 180px;" />
                         <h1 class="text-black fs-3 fw-bolder">안녕하세요. ${data.name}입니다.</h1>
                         <p class="text-black-50 mb-0" id="sign-up-date">가입년도:${date.getFullYear()}</p>
                         <div class="border width" data-width="0.5px" role="presentation" style="margin-left: 40%;margin-right: 40%;margin-top:1%;margin-bottom:2%;" ></div>
@@ -67,12 +76,14 @@
                 $(`#userInfo`).append(Info);
 
                 let parties = data.party;
+
                 for (let i = 0; i < parties.length; i++) {
                     let party = parties[i];
                     thumbnails = party.thumbnail;
+                   
                     const thumbNail = `
                     <a href="/party/${party.id}">
-                        <img class="card-img" src="${thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
+                        <img class="card-img" src="${thumbnails.length === 0 ? '/imgs/party-thembnail-default.jpg' : thumbnails[0].thumbnail}" alt="Party thumbnail" style="margin-bottom:10%">
                         <div class="card-body">
                             <h5 class="card-title" style="font-weight: bold; font-family: Arial, sans-serif;">파티 제목: ${party.title}</h5>
                         <p class="card-text" style="color: #009900;">${party.status}</p>
@@ -86,14 +97,14 @@
 
                     for (let j = 0; j < reviewArr.length; j++) {
                         let reviewInfo = reviewArr[j];
-
+                       console.log(reviewInfo.user.profile);
                         const createdAt = new Date(reviewInfo.createdAt);
                         const signUpYear = createdAt.getFullYear();
                         const signUpMonth = `${signUpYear}년${createdAt.getMonth() + 1}월`;
                         const html = `
                         <div style="margin-top: 20%; width: 120%" >
                             <a href="/user-detail/${reviewInfo.user.id}">
-                                <img class="img-fluid rounded-circle me-4" src="${reviewInfo.user.profile}" alt="..." style="width: 35%;  float: left;"/>
+                                <img class="img-fluid rounded-circle me-4" src="${reviewInfo.user.profile === null ? '/imgs/account.png' : reviewInfo.user.profile }" alt="..." style="width: 120px; height: 125px;  float: left;"/>
                             </a>
                             <div>
                                 <h1 class="text-black fs-5 fw-bolder text-start" style="margin-bottom: 15px;">${reviewInfo.user.name}</h1>
@@ -107,8 +118,20 @@
                                                 <button type="button" class="btn btn-secondary"id="cancel${reviewInfo.id}" onclick="cancel(${reviewInfo.id})" >취소</button>
                                             </div>
                                     </div>
-                                <button type="button" class="btn btn-success" onclick="editreviewbtn(${reviewInfo.id})" id="oneditform${reviewInfo.id}" style="margin-top : 5%">수정</button>
-                                <button type="button" class="btn btn-danger" id="delreviewbtn${reviewInfo.id}" onclick="delreviewbtn(${reviewInfo.id})" style="margin-top : 5%">삭제</button>
+                                    <button type="button" 
+                                            class="btn btn-success" 
+                                            onclick="editreviewbtn(${reviewInfo.id})" 
+                                            id="oneditform${reviewInfo.id}" 
+                                            style="margin-top : 5%; ${userId !== reviewInfo.user.id ? 'display:none' : ''}">
+                                            수정
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-danger" 
+                                            id="delreviewbtn${reviewInfo.id}" 
+                                            onclick="delreviewbtn(${reviewInfo.id})" 
+                                            style="margin-top : 5%; ${userId !== reviewInfo.user.id ? 'display:none' : ''}">
+                                            삭제
+                                    </button>
                             </div>
                         </div
                     `;
@@ -117,7 +140,7 @@
                 }
             },
         });
-    });
+    }});
 
     // 서버로 데이터 전송
     function reviewcreate(hostid) {

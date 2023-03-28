@@ -39,7 +39,9 @@ header{
    border-radius: 4px;
 }
 
-#idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, #addressError, #email-error, #sex-error {
+#idError, #pw-error, #pw-check-error, #name-error, #phone-num-error, 
+#addressError, #email-error, #sex-error, #title-error, #maxNumber-error, 
+#image-error, #intro-error, #date-error, #address-error {
    width:0px auto;
    display : inline-block;
    color : red;
@@ -48,6 +50,7 @@ header{
    font-weight: normal;
    margin-left : 10px;
 }
+
 #container-signup, #footer {
    margin: 0 auto;
 }

@@ -1,4 +1,4 @@
-<main class="partySearch main container">
+<main class="partySearch main container-fluid">
     <header class="partySearchBar mainHeader">
         <h2 class="a11yHidden">파티 검색</h2>
 
@@ -85,6 +85,7 @@
         $('#partyWhen').val('');
         $(this).hide();
     });
+
     $(document).click(function (e) {
         if ($(e.target).attr('id') === 'partyWhen') {
             return;
@@ -161,7 +162,7 @@
                         ?  `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
-                                        src="/imgs/temporary.png"
+                                        src="/imgs/party-thembnail-default.jpg"
                                         alt=""
                                         class="thumbnailImage"
                                     />
@@ -278,14 +279,14 @@
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
                     );
-                    console.log(status)
+                    
                     //prettier-ignore
                     const thumbnailHtml = `
                     ${thumbnailList.length === 0 
                         ?  `<li class="thumbnailItem">
                                 <div class="thumbnailRatio">
                                     <img
-                                        src="/imgs/temporary.png"
+                                        src="/imgs/party-thembnail-default.jpg"
                                         alt=""
                                         class="thumbnailImage"
                                     />

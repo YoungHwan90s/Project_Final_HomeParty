@@ -1,9 +1,14 @@
 <main class="partyWishList main container">
+    <div class="user-menu-title" style="margin-top: 50px">
+        <i class="fa-solid fa-heart-circle-plus"></i>
+        <a>찜! 목록</a>
+        <hr />
+    </div>
     <div class="mainSection">
         <div class="mapWrapper">
             <div class="mapBox">
                 <!-- Backend 지도 넣어주세요 -->
-                <div id="map" style="width: 70%; height: 70%"></div>
+                <div id="map" style="width: 45%; height: 70%"></div>
             </div>
         </div>
 
@@ -77,7 +82,7 @@
                                       <div class="thumbnailRatio">
                                           <a href="/party/${partyId}">
                                           <img
-                                            src="/imgs/temporary.png"
+                                            src="/imgs/party-thembnail-default.jpg"
                                             alt=""
                                             class="thumbnailImage"
                                           />
@@ -191,6 +196,7 @@
                         }
                     });
                 }
+                getMapWidth();
             },
         });
     }
@@ -222,4 +228,16 @@
             },
         });
     }
+
+  function getMapWidth() {
+    const GAP = 60;
+    const CONTAINER_PADDING = 30;
+    const partyWishListWidth = document.querySelector('.partyWishList').offsetWidth;
+    const partyListWrapperWidth = document.querySelector('.partyListWrapper').offsetWidth;
+    const map = document.querySelector('.partyWishList #map');
+    
+    map.style.width = `${partyWishListWidth - partyListWrapperWidth - GAP - CONTAINER_PADDING}px`;
+  }
+
+  window.addEventListener('resize', getMapWidth);
 </script>

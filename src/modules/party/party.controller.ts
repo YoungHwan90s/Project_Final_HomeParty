@@ -39,6 +39,7 @@ export class PartyController {
 
     @Get('/list')
     async getParties(@Query('page') page: number): Promise<Party[]>  {
+        
         return await this.partyService.getParties(page);
     }
 
@@ -101,5 +102,12 @@ export class PartyController {
     async deleteParty(@Req() req, @Param('partyId') partyId: number): Promise<Party> {
         const { id: userId } = req.user;
         return await this.partyService.deleteParty(userId, partyId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Patch('/status/:partyId')
+    async statusParty(@Req() req, @Param('partyId') partyId: number) {
+        const { id: userId } = req.user;
+        return await this.partyService.statusParty(userId, partyId);
     }
 }

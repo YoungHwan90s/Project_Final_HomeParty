@@ -1,205 +1,249 @@
 /* partyGrid */
 .partyGrid.partyList {
-    --partyListColumn: 6;
-    display: grid;
-    grid-template-columns: repeat(var(--partyListColumn, 1), minmax(0, 1fr));
-    gap: 20px;
-  }
-  
+  --partyListColumn: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--partyListColumn, 1), minmax(0, 1fr));
+  gap: 20px;
+}
+
 .partyGrid .partyItem {
-  position: relative;
+position: relative;
 }
 
 .partyGrid .thumbnailWrapper {
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
+position: relative;
+border-radius: 4px;
+overflow: hidden;
 }
 
 .partyGrid .thumbnailList {
-  display: flex;
-  transition: transform calc(var(--duration) * 1ms) ease-out;
-  transform: translate3D(calc(var(--currentSlide) * -100%), 0, 0);
+display: flex;
+transition: transform calc(var(--duration) * 1ms) ease-out;
+transform: translate3D(calc(var(--currentSlide) * -100%), 0, 0);
 }
 
 .partyGrid .thumbnailItem {
-  flex-shrink: 0;
-  width: 100%;
-  height: 0;
-  padding-bottom: 100%;
+flex-shrink: 0;
+width: 100%;
+height: 0;
+padding-bottom: 100%;
 }
 
 .partyGrid .thumbnailImage {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+position: absolute;
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 
 .partyGrid .thumbnailButton {
-  position: absolute;
-  top: 50%;
-  z-index: var(--carouselIndex);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  background-color: #fff;
-  border: 0;
-  border-radius: 50%;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-50%);
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-  pointer-events: none;
+position: absolute;
+top: 50%;
+z-index: var(--carouselIndex);
+display: flex;
+justify-content: center;
+align-items: center;
+width: 24px;
+height: 24px;
+background-color: #fff;
+border: 0;
+border-radius: 50%;
+opacity: 0;
+visibility: hidden;
+transform: translateY(-50%);
+transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+pointer-events: none;
 }
 
 .partyGrid .thumbnailButton.prev {
-  left: 8px;
+left: 8px;
 }
 
 .partyGrid .thumbnailButton.next {
-  right: 8px;
+right: 8px;
 }
 
 .partyGrid .thumbnailWrapper:hover .thumbnailButton {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
+opacity: 1;
+visibility: visible;
+pointer-events: all;
 }
 
 .partyGrid .partyInfoList {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 12px;
-  font-size: 15px;
+display: flex;
+flex-direction: column;
+gap: 6px;
+margin-top: 12px;
+font-size: 15px;
 }
 
 .partyGrid .partyTitle dd {
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+font-weight: 600;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .partyGrid .partyHeadcount {
-  display: flex;
+display: flex;
 }
 
 .partyGrid .partyInfoItem {
-  display: flex;
-  gap: 2px;
+display: flex;
+gap: 2px;
 }
 
 .partyGrid .partyInfoItem dt,
 .partyGrid .partyInfoItem:not(.partyTitle) dd {
-  flex-shrink: 0;
-  color: var(--primaryColor);
+flex-shrink: 0;
+color: var(--primaryColor);
 }
 
 .partyGrid .partyInfoItem dt:nth-of-type(n + 2)::before {
-  content: "/";
+content: "/";
 }
 
 .partyGrid .partyLikeButton {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: var(--partyGridLikeButtonIndex);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  font-size: 20px;
-  color: var(--blackColor);
-  border: 0;
-  border-radius: 50%;
-  background-color: transparent;
+position: absolute;
+top: 8px;
+right: 8px;
+z-index: var(--partyGridLikeButtonIndex);
+display: flex;
+justify-content: center;
+align-items: center;
+width: 24px;
+height: 24px;
+font-size: 20px;
+color: var(--blackColor);
+border: 0;
+border-radius: 50%;
+background-color: transparent;
+}
+
+/* wishListPage */
+.partyWishList .mainSection {
+position: relative;
+display: flex;
+gap: 60px;
+}
+
+.partyWishList .mapWrapper {
+order: 2;
+flex-shrink: 1;
+}
+
+.partyWishList .mapBox {
+position: fixed;
+width: 100%;
+height: 100vh;
+}
+
+.partyWishList .partyListWrapper {
+order: 1;
+flex-grow: 0;
+max-width: 600px;
+}
+
+.partyWishList .partyGrid.partyList {
+--partyListColumn: 2;
 }
 
 /* partySearch */
 .partySearchForm {
-  text-align: center;
-  margin-top: 20px;
+text-align: center;
+margin-top: 20px;
 }
 
 .partySearchForm fieldset {
-  display: inline-flex;
-  gap: 8px;
-  padding: 8px;
-  margin: 0 auto;
-  border: 1px solid var(--borderColor);
-  border-radius: 1000px;
-  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.15);
-  background-color: var(--whiteColor);
+display: inline-flex;
+gap: 8px;
+padding: 8px;
+margin: 0 auto;
+border: 1px solid var(--borderColor);
+border-radius: 1000px;
+box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.15);
+background-color: var(--whiteColor);
 }
 
 .partySearchForm input {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  border: 0;
+position: relative;
+width: 100%;
+text-align: center;
+border: 0;
 }
 
 .partySearchForm .divider {
-  width: 1px;
-  background-color: var(--borderColor);
+width: 1px;
+background-color: var(--borderColor);
 }
 
 .partySearchForm .partyWhen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
 }
 
 .partySearchForm .partyWhen .datePickerWrapper,
 .partySearchForm .partyWhen .datePicker {
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 }
 
 .partySubmitButton {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  font-size: 16px;
-  color: var(--whiteColor);
-  background-color: var(--pointColor);
-  border: 0;
-  border-radius: 50%;
+flex-shrink: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 32px;
+height: 32px;
+font-size: 16px;
+color: var(--whiteColor);
+background-color: var(--pointColor);
+border: 0;
+border-radius: 50%;
 }
 
 @media screen and (max-width: 1800px) {
-  /* partyGrid */
-  .partyGrid.partyList {
-    --partyListColumn: 3;
+/* partyGrid */
+.partyGrid.partyList {
+  --partyListColumn: 3;
+}
+
+/* partySearch */
+.partySearchForm fieldset {
+  gap: 4px;
+}
+
+.partySearchForm .partyWhen {
+  min-width: 90px;
+}
+}
+
+@media screen and (max-width: 760px) {
+  /* wishListPage */
+  .partyWishList .mainSection {
+    gap: 0;
   }
 
-  /* wishListPage */
   .partyWishList .mapWrapper {
     display: none;
   }
 
-  /* partySearch */
-  .partySearchForm fieldset {
-    gap: 4px;
-  }
-
-  .partySearchForm .partyWhen {
-    min-width: 90px;
+  .partyWishList .partyListWrapper {
+    max-width: initial;
+    width: 100%;
   }
 }
 
 @media screen and (max-width: 576px) {
-  /* partyGrid */
-  .partyGrid .partyList .partyParty {
-    --partyListColumn: 1;
-  }
+/* partyGrid */
+.partyGrid.partyList {
+  --partyListColumn: 1;
+}
+
+/* wishListPage */
+.partyWishList .partyGrid.partyList {
+  --partyListColumn: 1;
+}
 }

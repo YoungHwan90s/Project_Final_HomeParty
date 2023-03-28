@@ -75,7 +75,7 @@
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
             if (userInfo) {
-                let userId = userInfo.id
+                userId = userInfo.id
                 getParties(userId)
             } else {
                 getParties(0)
@@ -154,7 +154,7 @@
                             ?  `<li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
-                                            src="/imgs/temporary.png"
+                                            src="/imgs/party-thembnail-default.jpg"
                                             alt=""
                                             class="thumbnailImage"
                                         />
@@ -241,17 +241,6 @@
         });
     }
 
-    $(document).ready(function () {
-            getMyInfo(function (userInfo) {
-                if (userInfo) {
-                    let userId = userInfo.id
-                    getParties(userId)
-                } else {
-                    getParties(0)
-                }
-            });
-        });
-
     function getParties(userId) {
         $.ajax({
             type: 'GET',
@@ -278,7 +267,7 @@
                             ?  `<li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
-                                            src="/imgs/temporary.png"
+                                            src="/imgs/party-thembnail-default.jpg"
                                             alt=""
                                             class="thumbnailImage"
                                         />

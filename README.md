@@ -250,7 +250,7 @@
     </td>
     <td>
       <p align="center">
-        <img src="https://user-images.githubusercontent.com/118159813/227430883-e5223d40-964e-478c-a235-42c07a306ad7.png" width="150" />
+        <img src="https://user-images.githubusercontent.com/118159813/228235431-835a76da-ec72-498d-af33-cd5e19a4d921.png" width="150" />
       </p>
     </td>
     <td>
@@ -265,7 +265,7 @@
     </td>
     <td>
       <p align="center">
-        <img src="https://user-images.githubusercontent.com/118159813/227431014-d8d403ed-667b-4d0f-8989-ae2e41ec13c0.png" width="150" />
+        <img src="https://user-images.githubusercontent.com/118159813/227882768-df4a0c2a-dd2b-43d0-a623-cf8ea05b6e7b.png" width="150" />
       </p>
     </td>
   </tr>

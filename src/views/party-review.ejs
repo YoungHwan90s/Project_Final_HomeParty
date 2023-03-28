@@ -44,16 +44,16 @@
                     const date = new Date(data.createdAt);
 
                     const thumbnailHtml = ` ${thumbnailList.length === 0 
-                        ? `/imgs/temporary.png` 
+                        ? `/imgs/party-thembnail-default.jpg` 
                         : `${thumbnailList[0].thumbnail}`}`;
                     
-                    const profileHtml = ` ${!profile ? `/imgs/temporary.png` : `${profile}`}`;
+                    const profileHtml = ` ${!profile ? `/imgs/party-thembnail-default.jpg` : `${profile}`}`;
 
                     const Info = `
                         <a href="/party/${data.id}">
                             <img class="img-fluid rounded-circle mb-4" src="${
                                 thumbnailHtml
-                            }" alt="..." style="width: 15%; height: 15%;" />
+                            }" alt="..." style="width: 165px; height: 155px;" />
                         </a>
                         <h1 class="text-black fs-3 fw-bolder">"${data.title}" 파티를 잘 즐기셨나요?</h1>
                         <p class="text-black-50 mb-0" id="sign-up-date">가입날짜:${date.getFullYear()}</p>
@@ -67,7 +67,7 @@
                     const replyform = `
                         <div class="card mb-2" style="margin-top: 2%; margin-left: 20%; margin-right: 20%;">
                             <div class="card-header bg-light">
-                                    <i class="fa fa-comment fa"></i> REPLY
+                                    <i class="fa fa-comment fa"></i> 
                             </div>
                             <div class="card-body">
                                 <ul class="list-group list-group-flush">
@@ -114,12 +114,15 @@
             },
             success: function (response) {
                 // 서버로부터 응답 받은 후 처리할 코드 작성
-                alert('리뷰가 등록되었습니다.');
-                location.reload();
+                customAlert('리뷰가 등록되었습니다.', function () {
+                        location.reload();
+                    });
             },
             error: function (error) {
                 // 서버로부터 오류 응답 받은 후 처리할 코드 작성
-                alert('올바르지않은 값입니다.');
+                customAlert('올바르지않은 값입니다.', function () {
+                        location.reload();
+                    });
             },
         });
     }
