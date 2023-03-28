@@ -318,7 +318,7 @@ button > i::before {
   left: 0px;
   z-index: 999;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 60px;
   width: 100%;
   padding: 40px 60px;
