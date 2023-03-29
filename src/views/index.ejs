@@ -49,15 +49,19 @@
         <script src="/library/carousel/carousel.js"></script>
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script
-        type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services"></script>
-        <link href="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.css" rel="stylesheet">
+            type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=70d8ff63eb262881fd470f567a2259ab&libraries=services"
+        ></script>
+        <link
+            href="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.css"
+            rel="stylesheet"
+        />
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/common.js" defer></script>
 
-        <link rel="shortcut icon" href="/imgs/balloon.gif">
+        <link rel="shortcut icon" href="/imgs/balloon.gif" />
         <title>모아바 | HOMEPARTY</title>
     </head>
     <body>
@@ -65,7 +69,7 @@
 
         <header class="main-header" id="main-header"></header>
 
-        <!-- body -->    
+        <!-- body -->
         <% if (components === 'main') { %> <%-include('main.ejs') %><% } %> 
         <% if (components === 'party') { %> <%-include('party.ejs') %><% } %> 
         <% if (components ==='login') { %> <%-include('auth-login.ejs') %><% } %>
@@ -83,7 +87,6 @@
         <% if (components === 'user-host') {%><%-include('user-host.ejs') %><% } %>
         <% if (components === 'user-party') {%><%-include('user-party.ejs') %><% } %>
         <% if (components === 'user-history') {%><%-include('user-history.ejs') %><% } %>
-        
         <% if (components === 'admin-user') {%><%-include('admin-user.ejs') %><% } %>
         <% if (components === 'admin-party') {%><%-include('admin-party.ejs') %><% } %>
         <% if (components === 'admin-review') {%><%-include('admin-review.ejs') %><% } %>
@@ -107,14 +110,11 @@
             </script>
             <% } %>
 
-    </body>
-</html>
-
-<script>
-    $(document).ready(function () {
-        getMyInfo(function (userInfo) {
-            if (userInfo) {
-                let html = `<nav class="nav container">
+        <script>
+            $(document).ready(function () {
+                getMyInfo(function (userInfo) {
+                    if (userInfo) {
+                        let html = `<nav class="nav container">
                                     <a href="/" class="nav__logo">
                                         <img src="" alt="" class="nav__logo-img">
                                         모아바
@@ -142,9 +142,9 @@
                                         <i class='bx bx-grid-alt'></i>
                                     </div>
                                 </nav>`;
-                $('#main-header').append(html);
-            } else {
-                let html = `<nav class="nav container">
+                        $('#main-header').append(html);
+                    } else {
+                        let html = `<nav class="nav container">
                                     <a href="/" class="nav__logo">
                                         <img src="" alt="" class="nav__logo-img">
                                         모아바
@@ -169,75 +169,81 @@
                                         <i class='bx bx-grid-alt'></i>
                                     </div>
                                 </nav>`;
-                $('#main-header').append(html);
-            }
-            /*=============== SHOW MENU ===============*/
-            const navMenu = document.getElementById('nav-menu'),
-                navToggle = document.getElementById('nav-toggle'),
-                navClose = document.getElementById('nav-close');
+                        $('#main-header').append(html);
+                    }
+                    /*=============== SHOW MENU ===============*/
+                    const navMenu = document.getElementById('nav-menu'),
+                        navToggle = document.getElementById('nav-toggle'),
+                        navClose = document.getElementById('nav-close');
 
-            if (navToggle) {
-                navToggle.addEventListener('click', () => {
-                    navMenu.classList.add('show-menu');
+                    if (navToggle) {
+                        navToggle.addEventListener('click', () => {
+                            navMenu.classList.add('show-menu');
+                        });
+                    }
+
+                    if (navClose) {
+                        navClose.addEventListener('click', () => {
+                            navMenu.classList.remove('show-menu');
+                        });
+                        !navMenu.addEventListener('click', () => {
+                            navMenu.classList.remove('show-menu');
+                        });
+                    }
+
+                    /*=============== REMOVE MENU MOBILE ===============*/
+                    const navLink = document.querySelectorAll('.nav__link');
+
+                    function linkAction() {
+                        const navMenu = document.getElementById('nav-menu');
+                        navMenu.classList.remove('show-menu');
+                    }
+
+                    navLink.forEach((n) => n.addEventListener('click', linkAction));
+
+                    /*=============== CHANGE BACKGROUND HEADER ===============*/
+                    function scrollHeader() {
+                        const header = document.getElementById('main-header');
+
+                        if (this.scrollY >= 50) header.classList.add('scroll-header');
+                        else header.classList.remove('scroll-header');
+                    }
+                    window.addEventListener('scroll', scrollHeader);
+
+                    /*=============== SHOW SCROLL UP ===============*/
+                    // function scrollUp() {
+                    //     const scrollUpButton = document.getElementById('scroll-up');
+                    //     //스크롤이 350 뷰포트 높이보다 높을때, a 태그에 show-scroll 클래스를 scroll-top 클래스랑 같이 더함
+                    //     if (this.scrollY >= 350) scrollUpButton.classList.add('show-scroll');
+                    //     else scrollUpButton.classList.remove('show-scroll');
+                    // }
+                    // window.addEventListener('scroll', scrollUp);
+
+                    /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
+                    const sections = document.querySelectorAll('section[id]');
+
+                    function scrollActive() {
+                        const scrollY = window.pageYOffset;
+
+                        sections.forEach((current) => {
+                            const sectionHeight = current.offsetHeight,
+                                sectionTop = current.offsetTop - 58,
+                                sectionId = current.getAttribute('id');
+
+                            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                                document
+                                    .querySelector('.nav__menu a[href*=' + sectionId + ']')
+                                    .classList.add('active-link');
+                            } else {
+                                document
+                                    .querySelector('.nav__menu a[href*=' + sectionId + ']')
+                                    .classList.remove('active-link');
+                            }
+                        });
+                    }
+                    window.addEventListener('scroll', scrollActive);
                 });
-            }
-
-            if (navClose) {
-                navClose.addEventListener('click', () => {
-                    navMenu.classList.remove('show-menu');
-                });
-                !navMenu.addEventListener('click', () => {
-                    navMenu.classList.remove('show-menu');
-                })
-            }
-
-            /*=============== REMOVE MENU MOBILE ===============*/
-            const navLink = document.querySelectorAll('.nav__link');
-
-            function linkAction() {
-                const navMenu = document.getElementById('nav-menu');
-                navMenu.classList.remove('show-menu');
-            }
-            
-            navLink.forEach((n) => n.addEventListener('click', linkAction));
-
-            /*=============== CHANGE BACKGROUND HEADER ===============*/
-            function scrollHeader() {
-                const header = document.getElementById('main-header');
-
-                if (this.scrollY >= 50) header.classList.add('scroll-header');
-                else header.classList.remove('scroll-header');
-            }
-            window.addEventListener('scroll', scrollHeader);
-
-            /*=============== SHOW SCROLL UP ===============*/
-            // function scrollUp() {
-            //     const scrollUpButton = document.getElementById('scroll-up');
-            //     //스크롤이 350 뷰포트 높이보다 높을때, a 태그에 show-scroll 클래스를 scroll-top 클래스랑 같이 더함
-            //     if (this.scrollY >= 350) scrollUpButton.classList.add('show-scroll');
-            //     else scrollUpButton.classList.remove('show-scroll');
-            // }
-            // window.addEventListener('scroll', scrollUp);
-
-            /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
-            const sections = document.querySelectorAll('section[id]');
-
-            function scrollActive() {
-            const scrollY = window.pageYOffset
-
-            sections.forEach(current => {
-                const sectionHeight = current.offsetHeight,
-                sectionTop = current.offsetTop - 58,
-                sectionId = current.getAttribute('id')
-
-                if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
-                } else {
-                    document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
-                }
-            })
-            }
-            window.addEventListener('scroll', scrollActive)
-        });
-    });
-</script>
+            });
+        </script>
+    </body>
+</html>
