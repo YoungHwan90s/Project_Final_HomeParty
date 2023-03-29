@@ -377,6 +377,7 @@
             customAlert('로그인 후 이용가능합니다.', function () {
                 window.location.replace('/login');
             });
+            return
         }
         if (currMembers === maxMembers) {
             customAlert('파티 정원이 초과하였습니다.', function () {
@@ -529,6 +530,7 @@
             customAlert('로그인 후 이용가능합니다.', function () {
                 window.location.replace('/login');
             });
+            return
         }
         let askPartyDeleteAgain = confirm('파티를 삭제하시겠습니까?');
         if (askPartyDeleteAgain) {
