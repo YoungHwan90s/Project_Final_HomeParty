@@ -114,10 +114,14 @@ export class UserService {
         else {
             where = { email: data, deletedAt: null };
         }
-        return await this.userRepository.findOne({
+        const user = await this.userRepository.findOne({
             where: where,
             relations: ['kakao']
         });
+
+        delete user.password
+        
+        return user
     }
 
     async resetPassword(data: ResetPasswordDTO): Promise<UpdateResult> {
