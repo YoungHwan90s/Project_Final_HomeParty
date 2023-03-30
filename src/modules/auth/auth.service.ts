@@ -15,6 +15,9 @@ export class AuthService {
         await this.cacheService.set(IdkeyForRefreshToken, refreshToken);
 
         const EmailkeyForUser = user.email;
+        
+        delete user.password
+
         const userInfo = JSON.stringify(user);
         await this.cacheService.set(EmailkeyForUser, userInfo);
 
