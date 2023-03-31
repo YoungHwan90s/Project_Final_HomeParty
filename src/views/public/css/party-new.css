@@ -332,3 +332,34 @@
         width: 100%;
     }
 }
+
+.popular-tag {
+    font-size: 13px; 
+    color:red; 
+    margin-top:10px; 
+    padding-left:10px;
+}
+
+.popular-tag span {
+    display: inline-block; 
+    vertical-align: middle;
+}
+
+.popular-tag ul {
+    display: inline-block; 
+    cursor: pointer; 
+    margin-top: 0; 
+    margin-left: 10px; 
+    padding-left: 0; 
+    list-style: none;
+
+}
+
+.popular-tag li::before {
+    content: "#";
+}
+
+.popular-tag li {
+    display: inline-block; 
+    margin-right: 8px;
+}

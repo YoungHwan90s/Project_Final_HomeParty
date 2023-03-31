@@ -1,46 +1,57 @@
 <main class="partyPage partyMake partyEdit main container">
     <h1 class="party-make-head">파티 만들기</h1>
     <form class="partyMakeForm">
-            <h2 class="title list">
-                <!-- Backend -->
-                <label for="partyTitle" class="a11yHidden">제목 입력</label>
-                <input type="text" placeholder="파티 제목" id="partyTitle" class="partyTitle" />
-                <span id="title-error"></span>
-            </h2>
+        <h2 class="title list">
+            <!-- Backend -->
+            <label for="partyTitle" class="a11yHidden">제목 입력</label>
+            <input type="text" placeholder="파티 제목" id="partyTitle" class="partyTitle" />
+            <span id="title-error"></span>
+        </h2>
 
-            <div class="tagListWrapper">
-                <ul class="tagList">
-                    <li class="tagInputWrapper">
-                        <label for="partyTag" class="a11yHidden">태그 입력</label>
-                        <input
-                            type="text"
-                            id="partyTag"
-                            class="partyTag"
-                            placeholder="Enter키로 태그 입력"
-                        />
-                    </li>
-                </ul>
+        <div class="tagListWrapper">
+            <ul class="tagList">
+                <li class="tagInputWrapper">
+                    <label for="partyTag" class="a11yHidden">태그 입력</label>
+                    <input
+                        type="text"
+                        id="partyTag"
+                        class="partyTag"
+                        placeholder="Enter키로 태그 입력"
+                    />
+                </li>
+            </ul>
+        </div>
+
+        <div class="popular-tag">
+            <span>인기태그</span>
+            <ul class="top-tags">
+                <li id="top-tags-0"></li>
+                <li id="top-tags-1"></li>
+                <li id="top-tags-2"></li>
+                <li id="top-tags-3"></li>
+                <li id="top-tags-4"></li>
+            </ul>
+        </div>
+
+        <dl class="headcountList">
+            <div class="headcountItem list">
+                <dt>
+                    <label for="partyTotalMemeber">모집 총 인원 : </label>
+                </dt>
+                <dd>
+                    <input
+                        id="partyTotalMemeber"
+                        class="partyTotalMemeber"
+                        pattern="[0-9]*"
+                        placeholder="0"
+                        min="2"
+                        max="300"
+                    />
+                    명
+                </dd>
+                <span id="maxNumber-error"></span>
             </div>
-
-            <dl class="headcountList">
-                <div class="headcountItem list">
-                    <dt>
-                        <label for="partyTotalMemeber">모집 총 인원 : </label>
-                    </dt>
-                    <dd>
-                        <input
-                            id="partyTotalMemeber"
-                            class="partyTotalMemeber"
-                            pattern="[0-9]*"
-                            placeholder="0"
-                            min="2"
-                            max="300"
-                        />
-                        명
-                    </dd>
-                    <span id="maxNumber-error"></span>
-                </div>
-            </dl>
+        </dl>
 
         <div class="mainSection">
             <section class="partyImageSection">
@@ -116,8 +127,9 @@
             <div class="partyInfoWrapper">
                 <section class="IntroduceSection">
                     <h3 class="title">
-                        <label class="list" for="partyIntroduce">파티 소개<span id="intro-error"></span></label>
-
+                        <label class="list" for="partyIntroduce"
+                            >파티 소개<span id="intro-error"></span
+                        ></label>
                     </h3>
                     <p>
                         <textarea
@@ -129,7 +141,8 @@
                 </section>
 
                 <section class="calendarSection">
-                    <h3 class="title list">날짜 선택<span id="date-error">닐짜를 선택해주세요</span>
+                    <h3 class="title list">
+                        날짜 선택<span id="date-error">닐짜를 선택해주세요</span>
                     </h3>
                     <div class="datePickerWrapper">
                         <input type="text" class="datePicker" placeholder="Select date" readonly />
@@ -171,7 +184,9 @@
                 </section>
             </div>
         </div>
-        <button type="submit" id="enterBtn" class="partyFormSubmit btn_primary btn_point">등록하기</button>
+        <button type="submit" id="enterBtn" class="partyFormSubmit btn_primary btn_point">
+            등록하기
+        </button>
         <div class="button-padding" style="padding-bottom: 50px"></div>
     </form>
 </main>
@@ -179,12 +194,34 @@
 <script>
     $(document).ready(function () {
         getMyInfo(function (userInfo) {
-            userInfo ??
-                customAlert('로그인 후 이용 가능합니다.', function () {
-                    window.location.replace('/login');
-                });
+            userInfo
+                ? getToptTags()
+                : customAlert('로그인 후 이용 가능합니다.', function () {
+                      window.location.replace('/login');
+                  });
         });
     });
+
+    function getToptTags() {
+        $.ajax({
+            type: 'GET',
+            url: 'api/party/top-tags',
+            success: function (response) {
+                for (i = 0; i < response.length; i++) {
+                    $(`#top-tags-${i}`).append(response[i].tagName);
+                }
+            },
+            error: function (response) {
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
+            },
+        });
+    }
+
+    document.querySelector('.top-tags').addEventListener('click', (e)=> {
+        console.log(e)
+    })
 
     const partyMakeForm = document.querySelector('.partyMakeForm');
     const formData = new FormData();
@@ -246,8 +283,8 @@
     partyMakeForm.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
         if (e.target.matches('.partyIntroduce')) {
-            e.target.value += '\n'
-            return
+            e.target.value += '\n';
+            return;
         }
         if (e.keyCode === 229 || e.isComposing) return; // enter keydown 이벤트 감지시 한글 입력 깨지는 문제 해결
 
@@ -275,7 +312,7 @@
             error[i].innerHTML = '';
         }
     }
-    
+
     innerReset(error);
 
     // 등록하기 버튼 눌렸을 때
@@ -294,51 +331,52 @@
 
         innerReset(error);
 
-        if(!$("#partyTitle").val().trim()) {
+        if (!$('#partyTitle').val().trim()) {
             document.getElementById(errorId[0]).innerHTML = errorStr[0] + ' 입력해 주세요.';
-            $("#partyTitle").focus();
+            $('#partyTitle').focus();
             return false;
         }
 
-        if(!$("#partyTotalMemeber").val() || $("#partyTotalMemeber").val() < 1) {
+        if (!$('#partyTotalMemeber').val() || $('#partyTotalMemeber').val() < 1) {
             document.getElementById(errorId[1]).innerHTML = errorStr[1] + ' 입력해 주세요.';
-            $("#partyTotalMemeber").focus();
+            $('#partyTotalMemeber').focus();
             return false;
         }
 
-        if($("#partyTotalMemeber").val().trim() < 2) {
-            document.getElementById(errorId[1]).innerHTML = errorStr[1] + ' 2명 이상 입력해 주세요.';
-            $("#partyTotalMemeber").focus();
+        if ($('#partyTotalMemeber').val().trim() < 2) {
+            document.getElementById(errorId[1]).innerHTML =
+                errorStr[1] + ' 2명 이상 입력해 주세요.';
+            $('#partyTotalMemeber').focus();
             return false;
         }
 
-        if(!uploadedFiles.length) {
+        if (!uploadedFiles.length) {
             document.getElementById(errorId[2]).innerHTML = errorStr[2] + ' 등록 해주세요.';
-            $("#partyTotalMemeber").focus();
+            $('#partyTotalMemeber').focus();
             return false;
         }
 
-        if(!$("#partyIntroduce").val().trim()) {
+        if (!$('#partyIntroduce').val().trim()) {
             document.getElementById(errorId[3]).innerHTML = errorStr[3] + ' 입력해 주세요.';
-            $("#partyImage1").focus();
+            $('#partyImage1').focus();
             return false;
         }
 
-        if(!$('.datePicker').val().trim()) {
+        if (!$('.datePicker').val().trim()) {
             document.getElementById(errorId[4]).innerHTML = errorStr[4] + ' 입력해 주세요.';
-            $("#partyImage1").focus();
+            $('#partyImage1').focus();
             return false;
         }
 
-        if(!$("#partyAddressDetail").val().trim()) {
+        if (!$('#partyAddressDetail').val().trim()) {
             document.getElementById(errorId[5]).innerHTML = errorStr[5] + ' 입력해 주세요.';
-            $("#partyAddressDetail").focus();
+            $('#partyAddressDetail').focus();
             return false;
         }
 
-        if(!$("#partyAddressDetails").val().trim()) {
+        if (!$('#partyAddressDetails').val().trim()) {
             document.getElementById(errorId[5]).innerHTML = errorStr[6] + ' 입력해 주세요.';
-            $("#partyAddressDetail").focus();
+            $('#partyAddressDetail').focus();
             return false;
         }
 
@@ -364,7 +402,6 @@
         });
 
         function saveParty(image) {
-            
             // tag 배열로 뽑아오기
             const tagList = [...e.target.querySelectorAll('.tag')].map((tag) => tag.textContent);
             // 파티 만들기 ajax
@@ -398,7 +435,6 @@
             });
         }
     });
-
 
     function addTag(value) {
         if (value.trim() === '') return;
@@ -441,4 +477,5 @@
             },
         }).open();
     }
+
 </script>
