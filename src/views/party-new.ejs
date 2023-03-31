@@ -220,7 +220,7 @@
     }
 
     document.querySelector('.top-tags').addEventListener('click', (e)=> {
-        console.log(e)
+        addTag(e.target.outerText)
     })
 
     const partyMakeForm = document.querySelector('.partyMakeForm');
