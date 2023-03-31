@@ -10,9 +10,10 @@ import { Party } from '../party/entity/party.entity';
 import { PartyMember } from '../party/entity/party-member.entity';
 import { Kakao } from './entity/kakao.entitiy';
 import { CacheService } from 'src/util/cache/cache.service';
+import { Tag } from '../party/entity/tag.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User, WishList, Party, PartyMember, Kakao]), AuthModule],
+    imports: [TypeOrmModule.forFeature([User, WishList, Party, PartyMember, Kakao, Tag]), AuthModule],
     controllers: [UserController],
     providers: [UserService, PartyService, CacheService],
     exports: [UserService],

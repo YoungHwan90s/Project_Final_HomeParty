@@ -21,6 +21,8 @@ export class PartyService {
     constructor(
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
+        @InjectRepository(Tag) private tagRepository: Repository<Tag>,
+
         private readonly dataSource: DataSource,
     ) {}
 
@@ -74,6 +76,14 @@ export class PartyService {
         return await this.partyRepository.findOne({
             relations: ['thumbnail', 'partyMember', 'tag', 'wishList', 'partyMember.user', 'user'],
             where: { id: partyId, deletedAt: null },
+        });
+    }
+
+    async getTopTags(): Promise<Tag[]> {
+        return await this.tagRepository.find({
+            where: { deletedAt: null },
+            order: { freq: 'DESC' },
+            take: 5,
         });
     }
 
@@ -305,8 +315,8 @@ export class PartyService {
 
                     if (partyMember.party.currMember === partyMember.party.maxMember) {
                         await queryRunner.manager.update(Party, partyId, {
-                            status: "마감"
-                        })
+                            status: '마감',
+                        });
                     }
 
                     await queryRunner.manager.update(Party, partyId, {
@@ -369,8 +379,8 @@ export class PartyService {
 
                     if (partyMember.party.currMember === partyMember.party.maxMember) {
                         await queryRunner.manager.update(Party, partyId, {
-                            status: "마감"
-                        })
+                            status: '마감',
+                        });
                     }
 
                     await queryRunner.manager.update(Party, partyId, {
@@ -456,13 +466,13 @@ export class PartyService {
         });
     }
 
-    async statusParty(userId: number, partyId: number){
+    async statusParty(userId: number, partyId: number) {
         const party = await this.partyRepository.findOne({ where: { id: partyId } });
-            if (party.status !== '마감') {
+        if (party.status !== '마감') {
             party.status = '마감';
-            } else {
+        } else {
             party.status = '모집중';
-            }
+        }
         await this.partyRepository.save(party);
-      }
+    }
 }

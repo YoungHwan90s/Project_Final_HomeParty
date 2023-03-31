@@ -18,10 +18,11 @@ import { PartyService } from '../party/party.service';
 import { PartyMember } from '../party/entity/party-member.entity';
 import { KakaoStrategy } from './strategies/kakao.strategy';
 import { Kakao } from '../user/entity/kakao.entitiy';
+import { Tag } from '../party/entity/tag.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, WishList, Party, PartyMember, Kakao]),
+        TypeOrmModule.forFeature([User, WishList, Party, PartyMember, Kakao, Tag]),
         PassportModule.register({
             session: false,
         }),
