@@ -22,7 +22,6 @@ export class PartyService {
         @InjectRepository(Party) private partyRepository: Repository<Party>,
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
         @InjectRepository(Tag) private tagRepository: Repository<Tag>,
-
         private readonly dataSource: DataSource,
     ) {}
 
@@ -165,6 +164,8 @@ export class PartyService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
+        let updatedParty: Party;
+
         try {
             const { addThumbnail, removeThumbnail, addTagName, removeTagName } = data;
             let party = await queryRunner.manager.findOne(Party, {
@@ -238,7 +239,7 @@ export class PartyService {
                 }
             }
 
-            await queryRunner.manager.save(Party, party);
+            updatedParty = await queryRunner.manager.save(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
             await queryRunner.rollbackTransaction();
@@ -248,6 +249,7 @@ export class PartyService {
         } finally {
             await queryRunner.release();
         }
+        return updatedParty;
     }
 
     async applyParty(user: User, partyId: number): Promise<PartyMember> {
