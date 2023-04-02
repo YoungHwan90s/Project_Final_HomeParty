@@ -7,7 +7,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, LessThan, MoreThan, MoreThanOrEqual, Not, Repository, UpdateResult } from 'typeorm';
+import { DataSource, LessThan, MoreThanOrEqual, Not, Repository, UpdateResult } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
 import { PartialUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
@@ -89,7 +89,7 @@ export class UserService {
         return await this.userRepository.update(id, { profile });
     }
 
-    async validateUser(email: string, password: string) {
+    async validateUser(email: string, password: string): Promise<User> {
         const user = await this.userRepository.findOne({
             where: { email, deletedAt: null },
         });
@@ -143,7 +143,7 @@ export class UserService {
     async updateUser(user: User, data: PartialUserDto): Promise<UpdateResult> {
         await this.cacheService.del(user.email);
 
-        return this.userRepository.update(user.id, {
+        return await this.userRepository.update(user.id, {
             name: data.name,
             sex: data.sex,
             phone: data.phone,
@@ -154,7 +154,7 @@ export class UserService {
         });
     }
 
-    async deleteUser(user: User) {
+    async deleteUser(user: User): Promise<User[]> {
         try {
             const IdkeyForRefreshToken = String(user.id);
             await this.cacheService.del(IdkeyForRefreshToken);
@@ -165,19 +165,20 @@ export class UserService {
                 relations: ['party', 'wishList', 'partyMember', 'review', 'kakao'],
             });
 
-            return this.userRepository.softRemove(userWithRelations);
+            return await this.userRepository.softRemove(userWithRelations);
         } catch (error) {
             throw new BadRequestException('잘못된 요청입니다. 다시 시도하여 주시기 바랍니다.');
         }
     }
 
-    async updateWishList(user: User, partyId: number) {
+    async updateWishList(user: User, partyId: number): Promise<number> {
         const checkWishList = await this.wishListRepository.findOne({
             where: { partyId, userId: user.id },
         });
 
         if (checkWishList) {
             await this.wishListRepository.softRemove(checkWishList);
+            await this.cacheService.del('parties');
 
             return 1;
         } else {
@@ -190,12 +191,13 @@ export class UserService {
             wishList.user = user;
 
             await this.wishListRepository.save(wishList);
+            await this.cacheService.del('parties');
         }
         return 0;
     }
 
     async getWishList(userId: number): Promise<WishList[]> {
-        const wishList = await this.wishListRepository.find({
+        return await this.wishListRepository.find({
             where: { 
                 userId, 
                 deletedAt: null,
@@ -205,7 +207,6 @@ export class UserService {
              },
             relations: ['party', 'party.thumbnail', 'party.tag'],
         });
-        return wishList;
     }
 
     async findEmail(data): Promise<string> {
@@ -243,7 +244,7 @@ export class UserService {
         return reviewInfo;
     }
 
-    async userPartyHistory(id: number): Promise<any> {
+    async userPartyHistory(id: number): Promise<User> {
 
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
@@ -268,7 +269,7 @@ export class UserService {
         return user;
     }
 
-    async userApplyPartyList(id: number): Promise<any> {
+    async userApplyPartyList(id: number): Promise<User> {
 
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
@@ -291,5 +292,52 @@ export class UserService {
         });
         
         return user;
+    }
+
+    async searchUserAppliedParties(
+        id: number,
+        date: Date,
+        address: string,
+        title: string,
+    ): Promise<User[]> {
+
+        let currentDate = new Date();
+        currentDate.setUTCHours(currentDate.getUTCHours() + 9);
+        currentDate.setDate(currentDate.getDate() - 1);
+        let dateString = currentDate.toISOString().substring(0, 10);
+        let newDate = new Date(dateString);
+
+        let query = this.userRepository.createQueryBuilder('user');
+
+        query = query
+            .leftJoinAndSelect('user.partyMember', 'partyMember')
+            .leftJoinAndSelect('partyMember.party', 'party')
+            .leftJoinAndSelect('party.thumbnail', 'thumbnail')
+            .where('user.id = :id', { id })
+            .andWhere('party.deletedAt IS NULL')
+            .andWhere('partyMember.status != :status', { status: '호스트' })
+            .andWhere('party.date >= :newDate', { newDate })
+            .orderBy('party.createdAt', 'DESC');
+
+        if (!isNaN(date.getTime())) {
+            let month =
+                date.getMonth() + 1 < 10
+                    ? `0${(date.getMonth() + 1).toString()}`
+                    : (date.getMonth() + 1).toString();
+            let day =
+                date.getDate() < 10 ? `0${date.getDate().toString()}` : date.getDate().toString();
+            const year = date.getFullYear().toString();
+
+            const dateStr = `${year}-${month}-${day}`;
+            query = query.andWhere(`party.date= :date`, { date: dateStr });
+        }
+        if (address) {
+            query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
+        }
+        if (title) {
+            query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
+        }
+
+        return query.getMany();
     }
 }

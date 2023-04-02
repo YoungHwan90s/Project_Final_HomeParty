@@ -1,45 +1,4 @@
 <main class="partyPage partyMake partyEdit main container">
-    <form class="partyMakeForm">
-        <h2 class="title list">
-            <!-- Backend -->
-            <label for="partyTitle" class="a11yHidden">제목 입력</label>
-            <input type="text" placeholder="제목을 입력하세요" id="partyTitle" class="partyTitle" />
-            <span id="title-error"></span>
-        </h2>
-
-        <div class="tagListWrapper">
-            <ul class="tagList">
-                <li class="tagInputWrapper">
-                    <label for="partyTag" class="a11yHidden">태그 입력</label>
-                    <input
-                        type="text"
-                        id="partyTag"
-                        class="partyTag"
-                        placeholder="Enter키로 태그 입력"
-                    />
-                </li>
-            </ul>
-        </div>
-
-        <dl class="headcountList">
-            <div class="headcountItem">
-                <dt>
-                    <label class="list" for="partyTotalMemeber">모집 총 인원: </label>
-                </dt>
-                <dd>
-                    <input
-                        id="partyTotalMemeber"
-                        class="partyTotalMemeber"
-                        pattern="[0-9]*"
-                        placeholder="0"
-                        min="2"
-                        max="300"
-                    />
-                    명
-                    <span id="maxNumber-error"></span>
-                </dd>
-            </div>
-        </dl>
     <form action="" class="partyMakeForm">
         <header class="mainHeader">
             <h2 class="title">
@@ -490,7 +449,7 @@
                     refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
                 },
                 success: function (response) {
-                    customAlert('파티가 성공적으로 등록되었습니다.', function () {
+                    customAlert('파티가 성공적으로 수정되었습니다.', function () {
                         window.location.replace('/party');
                     });
                 },

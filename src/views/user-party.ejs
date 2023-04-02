@@ -12,7 +12,6 @@
                     placeholder="어디에서"
                     class="partyWhere"
                     id="partyWhere"
-                    onkeyup="enter()"
                 />
 
                 <div class="divider" aria-hidden="true"></div>
@@ -28,7 +27,12 @@
                         />
                         <div class="calendar"></div>
                     </div>
-                    <button id="clearButton" style="display: none; border:none; background-color:white">❌</button>
+                    <button
+                        id="clearButton"
+                        style="display: none; border: none; background-color: white"
+                    >
+                        ❌
+                    </button>
                 </div>
 
                 <div class="divider" aria-hidden="true"></div>
@@ -39,7 +43,6 @@
                     placeholder="파티명"
                     class="partyName"
                     id="partyName"
-                    onkeyup="enter()"
                 />
 
                 <button
@@ -54,12 +57,11 @@
             </fieldset>
         </form>
     </header>
-    </header>
     <div class="mainSection">
         <div class="user-menu-title">
             <i class="fa-solid fa-champagne-glasses"></i>
-            <a >진행중 파티</a>
-            <hr/>
+            <a>진행중 파티</a>
+            <hr />
         </div>
         <ul class="partyList partyGrid"></ul>
     </div>
@@ -95,14 +97,14 @@
         }
     });
 
-    const placeInput = $("#partyWhere");
-    const nameInput = $("#partyName");
+    const placeInput = $('#partyWhere');
+    const nameInput = $('#partyName');
     const input = $.merge(placeInput, nameInput);
 
-    input.on("keyup", function(event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        $("#partySubmitButton").click();
+    input.on('keyup', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $('#partySubmitButton').click();
         }
     });
 
@@ -111,7 +113,7 @@
         const date = $('#partyWhen').val();
         const title = $('#partyName').val();
 
-        let webUrl = '/party?';
+        let webUrl = '/search-party-applied?';
         if (address) {
             webUrl += `address=${address}&`;
         }
@@ -123,30 +125,43 @@
         }
         webUrl = webUrl.slice(0, -1);
 
+        if (!date && !address && !title) {
+            window.location.replace('/user-party');
+        }
+
         $.ajax({
             type: 'GET',
-            url: `/api${webUrl}`,
+            url: `/user${webUrl}`,
             data: {},
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                let partyList = response.result.partyMember
+                let partyList = response.result;
 
-                for (let i = 0; i < partyList.length; i++) {
-                    const partyId = partyList[i]['party']['id'];
-                    const title = partyList[i]['party']['title'];
-                    const maxMember = partyList[i]['party']['maxMember'];
-                    const currMember = partyList[i]['party']['currMember'];
-                    const thumbnails = partyList[i]['party']['thumbnail'];
-                    const date = partyList[i]['party']['date'];
-                    const status = partyList[i]['party']['status'];
-                    const thumbnailList = partyList[i]['party']['thumbnail'];
-                    
+                if (!partyList.length) {
+                    $('.partyList').empty();
+                   
+                    return;
+                }
+                $('.partyList').empty();
+
+                let appliedParties = partyList[0]['partyMember'];
+
+                for (let i = 0; i < appliedParties.length; i++) {
+                    const partyId = appliedParties[i]['party']['id'];
+                    const title = appliedParties[i]['party']['title'];
+                    const maxMember = appliedParties[i]['party']['maxMember'];
+                    const currMember = appliedParties[i]['party']['currMember'];
+                    const thumbnails = appliedParties[i]['party']['thumbnail'];
+                    const date = appliedParties[i]['party']['date'];
+                    const status = appliedParties[i]['party']['status'];
+                    const thumbnailList = appliedParties[i]['party']['thumbnail'];
                     const thumbnailHtml = `
-                        ${thumbnailList.length === 0 
-                            ?  `<li class="thumbnailItem">
+                        ${
+                            thumbnailList.length === 0
+                                ? `<li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
                                             src="/imgs/party-thembnail-default.jpg"
@@ -154,8 +169,10 @@
                                             class="thumbnailImage"
                                         />
                                     </div>
-                                </li>` 
-                            : thumbnailList.map(({ thumbnail }) => `
+                                </li>`
+                                : thumbnailList
+                                      .map(
+                                          ({ thumbnail }) => `
                                 <li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
@@ -165,7 +182,9 @@
                                         />
                                     </div>
                                 </li>
-                            `).join('')
+                            `,
+                                      )
+                                      .join('')
                         }`;
 
                     const partyItem = `
@@ -242,11 +261,11 @@
             url: `/user/party-applied`,
             data: {},
             headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                    refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
-                },
+                authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
+            },
             success: function (response) {
-                let partyList = response.partyMember
+                let partyList = response.partyMember;
 
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['party']['id'];
@@ -257,10 +276,11 @@
                     const date = partyList[i]['party']['date'];
                     const status = partyList[i]['party']['status'];
                     const thumbnailList = partyList[i]['party']['thumbnail'];
-                    
+
                     const thumbnailHtml = `
-                        ${thumbnailList.length === 0 
-                            ?  `<li class="thumbnailItem">
+                        ${
+                            thumbnailList.length === 0
+                                ? `<li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
                                             src="/imgs/party-thembnail-default.jpg"
@@ -268,8 +288,10 @@
                                             class="thumbnailImage"
                                         />
                                     </div>
-                                </li>` 
-                            : thumbnailList.map(({ thumbnail }) => `
+                                </li>`
+                                : thumbnailList
+                                      .map(
+                                          ({ thumbnail }) => `
                                 <li class="thumbnailItem">
                                     <div class="thumbnailRatio">
                                         <img
@@ -279,7 +301,9 @@
                                         />
                                     </div>
                                 </li>
-                            `).join('')
+                            `,
+                                      )
+                                      .join('')
                         }`;
 
                     const partyItem = `

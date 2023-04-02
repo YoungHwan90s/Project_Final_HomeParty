@@ -6,7 +6,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, LessThanOrEqual, Repository } from 'typeorm';
+import { DataSource, DeleteResult, LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -15,6 +15,7 @@ import { Party } from './entity/party.entity';
 import { Thumbnail } from './entity/thumbnail.entity';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { Cron } from '@nestjs/schedule';
+import { CacheService } from 'src/util/cache/cache.service';
 
 @Injectable()
 export class PartyService {
@@ -23,6 +24,7 @@ export class PartyService {
         @InjectRepository(PartyMember) private partyMemberRepository: Repository<PartyMember>,
         @InjectRepository(Tag) private tagRepository: Repository<Tag>,
         private readonly dataSource: DataSource,
+        private readonly cacheService: CacheService,
     ) {}
 
     async searchParties(date: Date, address: string, title: string): Promise<Party[]> {
@@ -32,7 +34,8 @@ export class PartyService {
             .leftJoinAndSelect('party.thumbnail', 'thumbnail')
             .leftJoinAndSelect('party.wishList', 'wishList')
             .where('party.deletedAt IS NULL')
-            .andWhere('party.status = :status', { status: '모집중' });
+            .andWhere('party.status = :status', { status: '모집중' })
+            .orderBy('party.createdAt', 'DESC');
 
         if (!isNaN(date.getTime())) {
             let month =
@@ -53,18 +56,38 @@ export class PartyService {
             query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
         }
 
-        const result = await query.getMany();
-        return result;
+        return query.getMany();
     }
 
     async getParties(page: number): Promise<Party[]> {
-        return await this.partyRepository.find({
-            where: { deletedAt: null, status: '모집중' },
-            relations: ['thumbnail', 'wishList'],
-            order: { createdAt: 'DESC' },
-            take: 12,
-            skip: (page - 1) * 12,
-        });
+        let parties: Party[];
+
+        if (page === 1) {
+            const cachedParties = await this.cacheService.get('parties');
+            if (cachedParties) {
+                parties = JSON.parse(cachedParties);
+            } else {
+                parties = await this.partyRepository.find({
+                    where: { deletedAt: null, status: '모집중' },
+                    relations: ['thumbnail', 'wishList'],
+                    order: { createdAt: 'DESC' },
+                    take: 12,
+                    skip: (page - 1) * 12,
+                });
+                const stringifyParties = JSON.stringify(parties);
+                // 파티 캐시 처리 (페이지=1)
+                await this.cacheService.set('parties', stringifyParties);
+            }
+        } else {
+            parties = await this.partyRepository.find({
+                where: { deletedAt: null, status: '모집중' },
+                relations: ['thumbnail', 'wishList'],
+                order: { createdAt: 'DESC' },
+                take: 12,
+                skip: (page - 1) * 12,
+            });
+        }
+        return parties;
     }
 
     async getPartyById(partyId: number): Promise<Party> {
@@ -154,6 +177,8 @@ export class PartyService {
                 '파티신청에 실패하였습니다. 파티정보를 다시 확인하시고 시도하여 주시기 바랍니다.',
             );
         } finally {
+            // 새로 추가 시 - 파티 캐시 삭제
+            await this.cacheService.del('parties');
             await queryRunner.release();
         }
         return createdParty;
@@ -247,6 +272,18 @@ export class PartyService {
                 '파티수정에 실패하였습니다. 파티정보를 다시 확인하시고 시도하여 주시기 바랍니다.',
             );
         } finally {
+            const cachedParty = await this.cacheService.get('parties');
+            if (cachedParty) {
+                const parseCachedParty = JSON.parse(cachedParty);
+                const isItCachedParty = parseCachedParty.find(
+                    (party) => party.id === updatedParty.id,
+                );
+
+                // 업데이트 시 - 파티가 캐싱 되어있다면 캐시 삭제
+                if (isItCachedParty) {
+                    await this.cacheService.del('parties');
+                }
+            }
             await queryRunner.release();
         }
         return updatedParty;
@@ -441,9 +478,22 @@ export class PartyService {
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw new NotAcceptableException(
-                '파티삭제에 실패하였습니다.잠시 후 다시 시도하여 주시기 바랍니다.',
+                '파티삭제에 실패하였습니다. 잠시 후 다시 시도하여 주시기 바랍니다.',
             );
         } finally {
+            const cachedParty = await this.cacheService.get('parties');
+            if (cachedParty) {
+                const parseCachedParty = JSON.parse(cachedParty);
+
+                const isItCachedParty = parseCachedParty.find(
+                    (party) => party.id === removedParty.id,
+                );
+
+                // 삭제 시 - 파티가 캐싱 되어있다면 캐시 삭제
+                if (isItCachedParty) {
+                    await this.cacheService.del('parties');
+                }
+            }
             await queryRunner.release();
         }
         return removedParty;
@@ -451,7 +501,7 @@ export class PartyService {
 
     @Cron('*/3 * * * * *')
     // 매일 UTC 15:00 실행 => 한국시간 24:00
-    async updateCompletionStatus() {
+    async updateCompletionStatus(): Promise<UpdateResult> {
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
         currentDate.setDate(currentDate.getDate() - 1);
@@ -459,12 +509,10 @@ export class PartyService {
         let dateString = currentDate.toISOString().substring(0, 10);
         let newDate = new Date(dateString);
 
-        const party = await this.partyRepository.update(
+        return await this.partyRepository.update(
             { status: '모집중', date: LessThanOrEqual(newDate) },
             { status: '마감' },
         );
-
-        return party;
     }
 
     async getUserHost(id: number): Promise<PartyMember[]> {
@@ -474,13 +522,57 @@ export class PartyService {
         });
     }
 
-    async statusParty(userId: number, partyId: number) {
-        const party = await this.partyRepository.findOne({ where: { id: partyId } });
-        if (party.status !== '마감') {
-            party.status = '마감';
-        } else {
-            party.status = '모집중';
+    async statusParty(partyId: number): Promise<Party> {
+        try {
+            const party = await this.partyRepository.findOne({ where: { id: partyId } });
+            if (party.status !== '마감') {
+                party.status = '마감';
+            } else {
+                party.status = '모집중';
+            }
+            return await this.partyRepository.save(party);
+        } catch (error) {
+            throw new NotAcceptableException(
+                '파티 상태변경에 실패하였습니다. 잠시 후 다시 시도하여 주시기 바랍니다.',
+            );
         }
-        await this.partyRepository.save(party);
+    }
+
+    async searchUserHostParties(
+        id: number,
+        date: Date,
+        address: string,
+        title: string,
+    ): Promise<PartyMember[]> {
+        let query = this.partyMemberRepository.createQueryBuilder('partyMember');
+
+        query = query
+            .leftJoinAndSelect('partyMember.party', 'party')
+            .leftJoinAndSelect('party.thumbnail', 'thumbnail')
+            .where('party.deletedAt IS NULL')
+            .andWhere('partyMember.user.id = :id', { id })
+            .andWhere('partyMember.status = :status', { status: '호스트' })
+            .orderBy('party.createdAt', 'DESC');
+
+        if (!isNaN(date.getTime())) {
+            let month =
+                date.getMonth() + 1 < 10
+                    ? `0${(date.getMonth() + 1).toString()}`
+                    : (date.getMonth() + 1).toString();
+            let day =
+                date.getDate() < 10 ? `0${date.getDate().toString()}` : date.getDate().toString();
+            const year = date.getFullYear().toString();
+
+            const dateStr = `${year}-${month}-${day}`;
+            query = query.andWhere(`party.date= :date`, { date: dateStr });
+        }
+        if (address) {
+            query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
+        }
+        if (title) {
+            query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
+        }
+
+        return query.getMany();
     }
 }
