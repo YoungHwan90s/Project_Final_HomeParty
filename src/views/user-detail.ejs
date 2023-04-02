@@ -58,7 +58,6 @@
             },
             success: function (data) {
                 const date = new Date(data.createdAt);
-                console.log(data.profile);
                 const Info = `
                     <img class="img-fluid rounded-circle mb-4" src="${
                         data.profile === null ? '/imgs/account.png' : data.profile
@@ -97,7 +96,6 @@
 
                     for (let j = 0; j < reviewArr.length; j++) {
                         let reviewInfo = reviewArr[j];
-                       console.log(reviewInfo.user.profile);
                         const createdAt = new Date(reviewInfo.createdAt);
                         const signUpYear = createdAt.getFullYear();
                         const signUpMonth = `${signUpYear}년${createdAt.getMonth() + 1}월`;

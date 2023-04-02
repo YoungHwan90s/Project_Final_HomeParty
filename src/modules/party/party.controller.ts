@@ -21,10 +21,14 @@ import { PartyMember } from './entity/party-member.entity';
 import { Party } from './entity/party.entity';
 import { Tag } from './entity/tag.entity';
 import { PartyService } from './party.service';
+import { CacheService } from 'src/util/cache/cache.service';
 
 @Controller('/api/party')
 export class PartyController {
-    constructor(private readonly partyService: PartyService) {}
+    constructor(
+        private readonly partyService: PartyService,
+        private readonly cacheService: CacheService,
+    ) {}
 
     @Get('/')
     @HttpCode(200)
@@ -33,15 +37,31 @@ export class PartyController {
         @Query('address') address: string,
         @Query('title') title: string,
         @Res() res,
-    ):Promise<Party[]> {
-        const result = await this.partyService.searchParties( date, address, title )
-        return res.send({result});
+    ): Promise<Party[]> {
+        const result = await this.partyService.searchParties(date, address, title);
+        return res.send({ result });
     }
 
     @Get('/list')
     @HttpCode(200)
-    async getParties(@Query('page') page: number): Promise<Party[]>  {
-        return await this.partyService.getParties(page);
+    async getParties(@Query('page') page: number): Promise<Party[]> {
+        let parties: Party[];
+
+        if (page === 1) {
+            const cachedParties = await this.cacheService.get('parties');
+            if (cachedParties) {
+                parties = JSON.parse(cachedParties);
+            } else {
+                parties = await this.partyService.getParties(page);
+                const stringifyParties = JSON.stringify(parties);
+                // 파티 캐시 처리 (페이지=1)
+                await this.cacheService.set('parties', stringifyParties);
+            }
+        } else {
+            parties = await this.partyService.getParties(page);
+        }
+
+        return parties;
     }
 
     @Get('/top-tags')
@@ -54,8 +74,12 @@ export class PartyController {
     @Post('/')
     @HttpCode(201)
     async createParty(@Req() req, @Body() partyInfo: CreatePartyDto): Promise<Party> {
-        let user = req.user;
-        return this.partyService.createParty(user, partyInfo);
+        const user = req.user;
+        const newParty = await this.partyService.createParty(user, partyInfo);
+        // 새로 추가 시 - 파티 캐시 삭제
+        await this.cacheService.del('parties');
+
+        return newParty;
     }
 
     @Get('/:partyId')
@@ -68,7 +92,20 @@ export class PartyController {
     @Patch(':partyId')
     @HttpCode(200)
     async updateParty(@Param('partyId') partyId: number, @Body() data: UpdatePartyDto) {
-        return await this.partyService.updateParty(partyId, data);
+        const updatedParty = await this.partyService.updateParty(partyId, data);
+       
+        const cachedParty = await this.cacheService.get('parties');
+        if (cachedParty) {
+            const parseCachedParty = JSON.parse(cachedParty);
+            const isItCachedParty = parseCachedParty.find((party) => party.id === updatedParty.id);
+
+            // 업데이트 시 - 파티가 캐싱 되어있다면 캐시 삭제
+            if (isItCachedParty) {
+                await this.cacheService.del('parties');
+            }
+        }
+
+        return updatedParty;
     }
 
     @UseGuards(JwtAuthGuard)
@@ -76,7 +113,20 @@ export class PartyController {
     @HttpCode(200)
     async deleteParty(@Req() req, @Param('partyId') partyId: number): Promise<Party> {
         const { id: userId } = req.user;
-        return await this.partyService.deleteParty(userId, partyId);
+
+        const deletedParty = await this.partyService.deleteParty(userId, partyId);
+
+        const cachedParty = await this.cacheService.get('parties');
+        const parseCachedParty = JSON.parse(cachedParty);
+
+        const isItCachedParty = parseCachedParty.find((party) => party.id === deletedParty.id);
+
+        // 삭제 시 - 파티가 캐싱 되어있다면 캐시 삭제
+        if (isItCachedParty) {
+            await this.cacheService.del('parties');
+        }
+
+        return deletedParty;
     }
 
     @UseGuards(JwtAuthGuard)
