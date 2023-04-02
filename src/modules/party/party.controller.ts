@@ -8,7 +8,6 @@ import {
     Patch,
     Post,
     Query,
-    Render,
     Req,
     Res,
     UseGuards,
@@ -42,11 +41,11 @@ export class PartyController {
     @Get('/list')
     @HttpCode(200)
     async getParties(@Query('page') page: number): Promise<Party[]>  {
-        
         return await this.partyService.getParties(page);
     }
 
     @Get('/top-tags')
+    @HttpCode(200)
     async getTopTags(): Promise<Tag[]> {
         return this.partyService.getTopTags();
     }

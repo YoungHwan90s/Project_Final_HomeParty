@@ -6,7 +6,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, LessThan, Repository } from 'typeorm';
+import { DataSource, DeleteResult, LessThanOrEqual, Repository } from 'typeorm';
 import { Tag } from './entity/tag.entity';
 import { User } from '../user/entity/user.entity';
 import { CreatePartyDto } from './dto/create-party.dto';
@@ -118,10 +118,12 @@ export class PartyService {
                     });
                     if (tag) {
                         tag.freq += 1;
+                        await queryRunner.manager.update(Tag, tag.id, { freq: tag.freq });
                     }
                     if (!tag) {
                         tag = new Tag();
                         tag.tagName = partyInfo.tagName[i];
+                        await queryRunner.manager.save(Tag, tag);
                     }
 
                     newTags.push(tag);
@@ -419,16 +421,19 @@ export class PartyService {
             }
 
             if (party.tag?.length) {
-                for (let i = 0; i <= party.tag.length; i++) {
+                for (let i = 0; i < party.tag.length; i++) {
                     party.tag[i].freq -= 1;
                     if (party.tag[i].freq <= 0) {
                         await queryRunner.manager.softRemove(Tag, party.tag[i]);
+                    } else {
+                        await queryRunner.manager.update(
+                            Tag,
+                            { id: party.tag[i].id },
+                            { freq: party.tag[i].freq },
+                        );
                     }
-
-                    await queryRunner.manager.save(party.tag[i]);
                 }
             }
-
             removedParty = await queryRunner.manager.softRemove(Party, party);
             await queryRunner.commitTransaction();
         } catch (error) {
@@ -442,17 +447,18 @@ export class PartyService {
         return removedParty;
     }
 
-    @Cron('0 0 15 * * *')
+    @Cron('*/3 * * * * *')
     // 매일 UTC 15:00 실행 => 한국시간 24:00
     async updateCompletionStatus() {
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
         currentDate.setDate(currentDate.getDate() - 1);
+
         let dateString = currentDate.toISOString().substring(0, 10);
         let newDate = new Date(dateString);
 
         const party = await this.partyRepository.update(
-            { status: '모집중', date: LessThan(newDate) },
+            { status: '모집중', date: LessThanOrEqual(newDate) },
             { status: '마감' },
         );
 
