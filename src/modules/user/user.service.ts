@@ -248,7 +248,6 @@ export class UserService {
 
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
-        currentDate.setDate(currentDate.getDate() - 1);
         let dateString = currentDate.toISOString().substring(0, 10);
         let newDate = new Date(dateString);
 

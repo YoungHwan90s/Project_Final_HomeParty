@@ -269,6 +269,10 @@
             },
             success: function (response) {
                 let partyList = response.partyMember;
+                if (!partyList.length) {
+                    return;
+                }
+
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['party']['id'];
                     const title = partyList[i]['party']['title'];
