@@ -294,7 +294,7 @@ export class UserService {
         return user;
     }
 
-    async searchUserAppliedParties(
+    async searchUserPartyApplied(
         id: number,
         date: Date,
         address: string,
@@ -317,6 +317,51 @@ export class UserService {
             .andWhere('party.deletedAt IS NULL')
             .andWhere('partyMember.status != :status', { status: '호스트' })
             .andWhere('party.date >= :newDate', { newDate })
+            .orderBy('party.createdAt', 'DESC');
+
+        if (!isNaN(date.getTime())) {
+            let month =
+                date.getMonth() + 1 < 10
+                    ? `0${(date.getMonth() + 1).toString()}`
+                    : (date.getMonth() + 1).toString();
+            let day =
+                date.getDate() < 10 ? `0${date.getDate().toString()}` : date.getDate().toString();
+            const year = date.getFullYear().toString();
+
+            const dateStr = `${year}-${month}-${day}`;
+            query = query.andWhere(`party.date= :date`, { date: dateStr });
+        }
+        if (address) {
+            query = query.andWhere(`party.address LIKE :address`, { address: `%${address}%` });
+        }
+        if (title) {
+            query = query.andWhere(`party.title LIKE :title`, { title: `%${title}%` });
+        }
+
+        return query.getMany();
+    }
+
+    async searchUserPartyHistory(
+        id: number,
+        date: Date,
+        address: string,
+        title: string,
+    ): Promise<User[]> {
+        let currentDate = new Date();
+        currentDate.setUTCHours(currentDate.getUTCHours() + 9);
+        currentDate.setDate(currentDate.getDate() - 1);
+        let dateString = currentDate.toISOString().substring(0, 10);
+        let newDate = new Date(dateString);
+        let query = this.userRepository.createQueryBuilder('user');
+
+        query = query
+            .leftJoinAndSelect('user.partyMember', 'partyMember')
+            .leftJoinAndSelect('partyMember.party', 'party')
+            .leftJoinAndSelect('party.thumbnail', 'thumbnail')
+            .where('user.id = :id', { id })
+            .andWhere('party.deletedAt IS NULL')
+            .andWhere('partyMember.status != :status', { status: '호스트' })
+            .andWhere('party.date < :newDate', { newDate })
             .orderBy('party.createdAt', 'DESC');
 
         if (!isNaN(date.getTime())) {

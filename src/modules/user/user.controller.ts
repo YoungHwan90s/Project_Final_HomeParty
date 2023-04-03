@@ -122,7 +122,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Get('/search-party-applied')
     @HttpCode(200)
-    async searchUserAppliedParties(
+    async searchUserPartyApplied(
         @Query('date') date: Date,
         @Query('address') address: string,
         @Query('title') title: string,
@@ -130,7 +130,22 @@ export class UserController {
         @Res() res,
     ): Promise<User[]> {
         const { id } = req.user
-        const result = await this.userService.searchUserAppliedParties(id, date, address, title);
+        const result = await this.userService.searchUserPartyApplied(id, date, address, title);
+        return res.json({ result });
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/search-party-history')
+    @HttpCode(200)
+    async searchUserPartyHistory(
+        @Query('date') date: Date,
+        @Query('address') address: string,
+        @Query('title') title: string,
+        @Req() req,
+        @Res() res,
+    ): Promise<User[]> {
+        const { id } = req.user
+        const result = await this.userService.searchUserPartyHistory(id, date, address, title);
         return res.json({ result });
     }
 

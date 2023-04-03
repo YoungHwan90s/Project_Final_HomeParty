@@ -98,3 +98,8 @@ time {
   pointer-events: none !important;
   color: gray !important;
 }
+
+.party-history .pastDay {
+  pointer-events: auto !important;
+  color: grey !important;
+}
