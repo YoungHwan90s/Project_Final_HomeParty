@@ -7,7 +7,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, LessThan, MoreThanOrEqual, Not, Repository, UpdateResult } from 'typeorm';
+import { DataSource, LessThan, MoreThan, Not, Repository, UpdateResult } from 'typeorm';
 import { ResetPasswordDTO } from '../auth/dto/reset-password.dto';
 import { PartialUserDto } from './dto/update-user.dto';
 import { User } from './entity/user.entity';
@@ -283,7 +283,7 @@ export class UserService {
                 partyMember: {
                     status: Not('호스트'),
                     party: {
-                        date: MoreThanOrEqual(newDate)
+                        date: MoreThan(newDate)
                     },
                 },
             },
