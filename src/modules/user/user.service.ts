@@ -105,6 +105,7 @@ export class UserService {
     }
 
     async getUser(data: number | string): Promise<User> {
+        console.log(data)
         let where;
         // 인자 값 id 일 때
         if (typeof data === 'number') {
@@ -118,8 +119,6 @@ export class UserService {
             where: where,
             relations: ['kakao']
         });
-
-        delete user.password
         
         return user
     }
