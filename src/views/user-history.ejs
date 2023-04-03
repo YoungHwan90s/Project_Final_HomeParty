@@ -13,7 +13,6 @@
                     placeholder="어디에서"
                     class="partyWhere"
                     id="partyWhere"
-                    onkeyup="enter()"
                 />
 
                 <div class="divider" aria-hidden="true"></div>
@@ -28,7 +27,7 @@
                             placeholder="Select date"
                             readonly
                         />
-                        <div class="calendar"></div>
+                        <div class="calendar party-history"></div>
                     </div>
                     <button
                         id="clearButton"
@@ -47,7 +46,6 @@
                     placeholder="파티명"
                     class="partyName"
                     id="partyName"
-                    onkeyup="enter()"
                 />
 
                 <button
@@ -119,7 +117,7 @@
         const date = $('#partyWhen').val();
         const title = $('#partyName').val();
 
-        let webUrl = '/party?';
+        let webUrl = '/search-party-history?';
         if (address) {
             webUrl += `address=${address}&`;
         }
@@ -131,26 +129,37 @@
         }
         webUrl = webUrl.slice(0, -1);
 
+        if (!date && !address && !title) {
+            window.location.replace('/user-history');
+        }
+
         $.ajax({
             type: 'GET',
-            url: `/api${webUrl}`,
+            url: `/user${webUrl}`,
             data: {},
             headers: {
                 authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                let partyList = response.result.partyMember;
+                let partyList = response.result;
+                if (!partyList.length) {
+                    $('.partyList').empty();
+                    return;
+                }
+                $('.partyList').empty();
 
-                for (let i = 0; i < partyList.length; i++) {
-                    const partyId = partyList[i]['party']['id'];
-                    const title = partyList[i]['party']['title'];
-                    const maxMember = partyList[i]['party']['maxMember'];
-                    const currMember = partyList[i]['party']['currMember'];
-                    const thumbnails = partyList[i]['party']['thumbnail'];
-                    const date = partyList[i]['party']['date'];
-                    const status = partyList[i]['party']['status'];
-                    const thumbnailList = partyList[i]['party']['thumbnail'];
+                let partyHistory = partyList[0]['partyMember'];
+
+                for (let i = 0; i < partyHistory.length; i++) {
+                    const partyId = partyHistory[i]['party']['id'];
+                    const title = partyHistory[i]['party']['title'];
+                    const maxMember = partyHistory[i]['party']['maxMember'];
+                    const currMember = partyHistory[i]['party']['currMember'];
+                    const thumbnails = partyHistory[i]['party']['thumbnail'];
+                    const date = partyHistory[i]['party']['date'];
+                    const status = partyHistory[i]['party']['status'];
+                    const thumbnailList = partyHistory[i]['party']['thumbnail'];
 
                     const thumbnailHtml = `
                         ${
@@ -185,7 +194,7 @@
                         <li class="partyItem">
                             <div class="thumbnailWrapper carousel">
                                 <a href="party/${partyId}" class="partyLink thumbnailLink">
-                                    <ul class="thumbnailList carouselList">
+                                    <ul class="thumbnailList carouselList" style="filter: grayscale(100%)">
                                         ${thumbnailHtml}
                                     </ul>
                                 </a>

@@ -12,7 +12,6 @@
                     placeholder="어디에서"
                     class="partyWhere"
                     id="partyWhere"
-                    onkeyup="enter()"
                 />
 
                 <div class="divider" aria-hidden="true"></div>
@@ -29,7 +28,12 @@
                         />
                         <div class="calendar"></div>
                     </div>
-                    <button id="clearButton" style="display: none; border:none; background-color:white">❌</button>
+                    <button
+                        id="clearButton"
+                        style="display: none; border: none; background-color: white"
+                    >
+                        ❌
+                    </button>
                 </div>
 
                 <div class="divider" aria-hidden="true"></div>
@@ -41,7 +45,6 @@
                     placeholder="파티명"
                     class="partyName"
                     id="partyName"
-                    onkeyup="enter()"
                 />
 
                 <button
@@ -95,21 +98,21 @@
         }
     });
 
-    const placeInput = $("#partyWhere");
-    const nameInput = $("#partyName");
+    const placeInput = $('#partyWhere');
+    const nameInput = $('#partyName');
     const input = $.merge(placeInput, nameInput);
 
-    input.on("keyup", function(event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        $("#partySubmitButton").click();
+    input.on('keyup', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $('#partySubmitButton').click();
         }
     });
 
-    input.on("keyup", function(event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        $("#partySubmitButton").click();
+    input.on('keyup', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $('#partySubmitButton').click();
         }
     });
 
@@ -129,6 +132,10 @@
             webUrl += `title=${title}&`;
         }
         webUrl = webUrl.slice(0, -1);
+
+        if (!date && !address && !title) {
+            window.location.replace('/party');
+        }
 
         $.ajax({
             type: 'GET',
@@ -279,7 +286,7 @@
                     const isWishListMatchWithParty = wishList.find(
                         (party) => party.userId === userId,
                     );
-                    
+
                     //prettier-ignore
                     const thumbnailHtml = `
                     ${thumbnailList.length === 0 
