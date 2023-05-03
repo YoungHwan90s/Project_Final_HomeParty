@@ -219,9 +219,9 @@
         });
     }
 
-    document.querySelector('.top-tags').addEventListener('click', (e)=> {
-        addTag(e.target.outerText)
-    })
+    document.querySelector('.top-tags').addEventListener('click', (e) => {
+        addTag(e.target.outerText);
+    });
 
     const partyMakeForm = document.querySelector('.partyMakeForm');
     const formData = new FormData();
@@ -395,9 +395,11 @@
                 saveParty(image);
             },
             error: function (response) {
-                customAlert(response.responseJSON.message, function () {
-                    window.location.reload();
-                });
+                if (response.responseJSON.message.includes('Validation failed')) {
+                    customAlert('이미지 전체 크기는 2MB를 넘을 수 없습니다.');
+                } else {
+                    customAlert(response.responseJSON.message);
+                }
             },
         });
 
@@ -477,5 +479,4 @@
             },
         }).open();
     }
-
 </script>

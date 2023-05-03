@@ -268,10 +268,11 @@
                 refreshtoken: `${sessionStorage.getItem('refreshToken')}`,
             },
             success: function (response) {
-                let partyList = response.partyMember;
-                if (!partyList.length) {
+                if(!response.length) {
                     return;
                 }
+
+                let partyList = response[0]['partyMember'];
 
                 for (let i = 0; i < partyList.length; i++) {
                     const partyId = partyList[i]['party']['id'];

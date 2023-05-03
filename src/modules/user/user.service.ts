@@ -105,7 +105,6 @@ export class UserService {
     }
 
     async getUser(data: number | string): Promise<User> {
-        console.log(data)
         let where;
         // 인자 값 id 일 때
         if (typeof data === 'number') {
@@ -243,14 +242,14 @@ export class UserService {
         return reviewInfo;
     }
 
-    async userPartyHistory(id: number): Promise<User> {
+    async userPartyHistory(id: number): Promise<User[]> {
 
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
         let dateString = currentDate.toISOString().substring(0, 10);
         let newDate = new Date(dateString);
 
-        let user = await this.userRepository.findOne({
+        let user = await this.userRepository.find({
             where: {
                 id,
                 deletedAt: null,
