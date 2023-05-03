@@ -46,7 +46,15 @@ function customAlert(text, confirmCallback) {
     $('#alertText').text(text);
     $('#alertModal').modal('show');
     if (confirmCallback) {
-        $('#alertModal .btn-confirm').click(confirmCallback);
+        $('#alertModal .btn-confirm').click(function () {
+            confirmCallback();
+            $('#alertModal').modal('hide'); // 모달창 닫기
+        });
+    } else {
+        // 확인 버튼에 대한 클릭 이벤트 핸들러 추가
+        $('#alertModal .btn-confirm').click(function () {
+            $('#alertModal').modal('hide'); // 모달창 닫기
+        });
     }
 }
 

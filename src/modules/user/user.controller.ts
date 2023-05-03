@@ -91,7 +91,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Get('/party-history')
     @HttpCode(200)
-    async userPartyHistory(@Req() req): Promise<User> {
+    async userPartyHistory(@Req() req): Promise<User[]> {
         const { id } = req.user;
         return await this.userService.userPartyHistory(id);
     }

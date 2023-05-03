@@ -37,7 +37,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
                 }
                 if (verifyRefreshToken === true) {
                     const newAccessToken = await this.authService.generateAccessToken(
-                        decodedAccessToken.id, decodedAccessToken.email
+                        decodedAccessToken.id,
+                        decodedAccessToken.email,
                     );
 
                     res.header('authorization', `Bearer ${newAccessToken}`);
