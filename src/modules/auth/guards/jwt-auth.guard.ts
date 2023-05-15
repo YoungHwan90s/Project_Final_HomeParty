@@ -22,19 +22,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         try {
             const decodedAccessToken = await this.authService.verifyAccessToken(token);
+
             if (decodedAccessToken.type === true) {
                 return super.canActivate(context);
             }
-
             if (decodedAccessToken.type === false) {
                 const verifyRefreshToken = await this.authService.verifyRefreshToken(
                     refreshToken,
                     decodedAccessToken.id,
                 );
-
-                if (verifyRefreshToken === false) {
-                    return false;
-                }
                 if (verifyRefreshToken === true) {
                     const newAccessToken = await this.authService.generateAccessToken(
                         decodedAccessToken.id,
@@ -44,6 +40,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
                     res.header('authorization', `Bearer ${newAccessToken}`);
 
                     return super.canActivate(context);
+                }
+                if (verifyRefreshToken === false) {
+                    return false;
                 }
             } else {
                 return false;
