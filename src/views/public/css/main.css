@@ -318,7 +318,7 @@ img {
   font-weight: var(--font-bold);
 }
 .nav__logo-img {
-  width: .75rem;
+  width: 2.5rem;
 }
 .nav__toggle { 
   display: inline-flex;
