@@ -10,6 +10,7 @@ import {
     UnauthorizedException,
     UsePipes,
     Get,
+    NotFoundException,
 } from '@nestjs/common';
 import { MailService } from '../../util/node-mailer/mail.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -36,6 +37,7 @@ import { Token } from 'aws-sdk/clients/cloudwatchlogs';
 import { Email } from 'aws-sdk/clients/organizations';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { KakaoAuthGuard } from './guards/kakao-auth.guard';
+import { NotFoundError } from 'rxjs';
 
 @Controller('auth')
 export class AuthController {
@@ -117,9 +119,12 @@ export class AuthController {
         if (user) {
             const randomNum = Math.floor(Math.random() * 1000010);
             const randomNumtoString = String(randomNum);
-            await this.cacheService.set(data.email, randomNumtoString, 120);
 
-            this.mailService.sendMail(data.email, randomNum);
+            await this.cacheService.set(data.email, randomNumtoString, 300);
+            await this.mailService.sendMail(data.email, randomNum);
+        }
+        if (!user) {
+            throw new NotFoundException('회원이 존재하지 않습니다.');
         }
 
         return res.send({});

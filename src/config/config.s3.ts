@@ -26,6 +26,6 @@ export const multerOptionsFactory = (configService: ConfigService): MulterOption
                 done(null, `${originalName}_${Date.now()}${ext}`);
             },
         }),
-        limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+        limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
     };
 };

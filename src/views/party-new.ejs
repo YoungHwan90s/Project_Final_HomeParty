@@ -395,7 +395,8 @@
                 saveParty(image);
             },
             error: function (response) {
-                if (response.responseJSON.message.includes('Validation failed')) {
+                console.log(response.responseJSON)
+                if (response.responseJSON.message === 'File too large') {
                     customAlert('이미지 전체 크기는 2MB를 넘을 수 없습니다.');
                 } else {
                     customAlert(response.responseJSON.message);

@@ -501,7 +501,7 @@ export class PartyService {
 
     @Cron('*/3 * * * * *')
     // 매일 UTC 15:00 실행 => 한국시간 24:00
-    async updateCompletionStatus(): Promise<UpdateResult> {
+    async updatePartyStatusToClosed(): Promise<UpdateResult> {
         let currentDate = new Date();
         currentDate.setUTCHours(currentDate.getUTCHours() + 9);
         currentDate.setDate(currentDate.getDate() - 1);

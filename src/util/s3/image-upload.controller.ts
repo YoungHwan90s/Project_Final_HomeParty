@@ -18,12 +18,12 @@ export class ImageUploadController {
     @UseInterceptors(FilesInterceptor('files[]'))
     async uploadFiles(
         @UploadedFiles(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 2000000 }),
-                    // new FileTypeValidator({ fileType: 'image/jpeg' }),
-                ],
-            }),
+            // new ParseFilePipe({
+            //     validators: [
+            //         new MaxFileSizeValidator({ maxSize: 2000000 }),
+            //         // new FileTypeValidator({ fileType: 'image/jpeg' }),
+            //     ],
+            // }),
         )
         files: Express.MulterS3.File[],
     ): Promise<string[]> {
@@ -33,7 +33,6 @@ export class ImageUploadController {
             const url = await this.imageUploadService.uploadFile(file);
             urls.push(url);
         }
-
         return urls;
     }
 }
