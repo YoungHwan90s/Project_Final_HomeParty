@@ -5,7 +5,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 export class MailService {
     constructor(private readonly mailerService: MailerService) {}
 
-    sendMail(email, authenticationCdoe): boolean {
+    async sendMail(email, authenticationCdoe): Promise<boolean> {
         this.mailerService
             .sendMail({
                 to: email,

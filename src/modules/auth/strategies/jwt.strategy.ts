@@ -29,10 +29,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             user = JSON.parse(cachedUser);
             return user;
         } 
-        else {
+        if (!cachedUser) {
             user = await this.userService.getUser(id);
             if (!user) {
-                throw new UnauthorizedException('로그인 후 이용 가능합니다.');
+                throw new UnauthorizedException('회원이 존재하지 않거나 입력하신 정보가 올바르지 않습니다.');
             }
             return user;
         }
